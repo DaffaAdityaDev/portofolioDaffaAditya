@@ -7,20 +7,26 @@ import weblinkSvg from '../../public/svg/weblink.svg'
 const Project = ({ data }: { data: any }) =>  {
   let isOdd = true;
   return (
-    <div className=''>
-      <h1 className='text-4xl font-bold pb-4'>Some Thing i&apos;ve done</h1>
-      {data.slice(0,3).map((data: any, index: number) => {
-          const { title, description, image, link, id, tech } = data;
+    <div className='pt-20'>
+      <h2 className='text-4xl font-bold'>Project</h2>
+      <p className='opacity-80 pb-4'>Some i have done</p>
+      <div className='flex flex-wrap justify-center gap-5 w-full'>
+      {data.map((data: any, index: number) => {
+          const { title, description, image, link, github, id, tech } = data;
           return (
-            <div className='bg-gray-900 h-[600px] w-1/2 px-10 rounded-lg mb-2 py-10'  key={id}>
+            <div className='bg-slate-800 h-[600px] max-w-[30rem] px-10 rounded-lg py-10' key={id}>
               <div className='h-full flex flex-wrap flex-col justify-between'>
                 <div>
                   <h1 className='font-bold text-3xl'>{title}</h1>
-                  <p className='text-gray-500'>{description}</p>
+                  <p className='text-white opacity-80 normal'>{description}</p>
                   <div className='bg-gradient-to-r from-blue-500 to-transparent w-1/3 h-1 rounded-full mt-3'></div>
                 </div>
-                <div className='h-50 w-full overflow-hidden rounded-xl'>
-                  <img className='rounded-xl hover:scale-150 ease-in-out duration-150' src={image} alt='project'/>
+                <div className='h-50 relative w-full overflow-hidden rounded-xl'>
+                  <a href={link}>
+                    <div className='z-10 absolute peer hover:bg-black hover:bg-opacity-60 
+                    text-transparent hover:text-white text-lg font-bold flex items-center justify-center w-full h-full'>Open Page</div>
+                    <img className='z-0 rounded-xl peer-hover:scale-150 ease-in-out duration-500 w-full h-60' src={image} alt='project'/>
+                  </a>
                 </div>
                 <div>
                   <p className='text-center'>Tech Stack</p>
@@ -52,7 +58,8 @@ const Project = ({ data }: { data: any }) =>  {
             </div>
           )
       })}
-        
+
+      </div>
     </div>
   )
 }

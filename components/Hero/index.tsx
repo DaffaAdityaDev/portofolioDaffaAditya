@@ -20,20 +20,20 @@ const Hero: NextPage = () =>  {
         <p className='text-2xl mt-10'>🎓 Currently an Software Engineer Student at Bina Sarana Informatika.</p>
         <p className='text-2xl'>🚀 Exploring opportunities and side projects.</p>
         <div className='flex flex-wrap sm:justify-center'>
-          <div className=' mt-5 p-2 rounded-tl-lg rounded-br-lg hover:-translate-y-1 hover:scale-110 hover:bg-sky-900/50 duration-300 cursor-pointer'>
+          <div className=' mt-5 p-2 mr-3 rounded-lg rounded-br-lg hover:-translate-y-1 hover:scale-110 hover:bg-sky-700/50 duration-300 cursor-pointer'>
             <a href="https://github.com/DaffaAdityaDev" rel="noopener noreferrer" target="_blank" className='flex items-center'>
               <Image src={githubSvg} alt="github" width={30} height={30}/>
               <p className='pl-1 text-2xl'>Github</p>
             </a>
           </div>
-          <div className='mt-5 p-2 rounded-tl-lg rounded-br-lg hover:-translate-y-1 hover:scale-110 hover:bg-sky-900/50 duration-300'>
+          <div className='mt-5 p-2 rounded-lg rounded-br-lg hover:-translate-y-1 hover:scale-110 hover:bg-sky-900/50 duration-300'>
             <a href="https://www.linkedin.com/in/daffaadityarahman-14b588192/" rel="noopener noreferrer" target="_blank" className="flex items-center" >
               <Image src={linkedIn} alt="github" width={30} height={30} className="bg-white"/>
               <p className='pl-1 text-2xl'>LinkedIn</p>
             </a>
           </div>
-          <div className='mt-5 p-2 rounded-tl-lg rounded-br-lg hover:-translate-y-1 hover:scale-110 hover:bg-sky-900/50 duration-300'>
-            <a href="daffaaditya.me@gmail.com" target="_blank" className='flex items-center'>
+          <div className='mt-5 p-2 rounded-lg mx-3 rounded-br-lg hover:-translate-y-1 hover:scale-110 hover:bg-sky-900/50 duration-300'>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=daffaaditya.me@gmail.com" target="_blank" rel="noreferrer" className='flex items-center'>
               <Image src={email} alt="github" width={30} height={30} className="invert sepia-0 saturate-750 hue-rotate-137 brightness-101 contrast-105"/>
             <p className='pl-1 text-2xl'>Email</p>
             </a>

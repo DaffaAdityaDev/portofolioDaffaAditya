@@ -3,9 +3,8 @@ import type { NextPage } from 'next'
 import Image from 'next/image'
 
 const AboutMe:NextPage = () => {
-
-  return (
-    <div className='flex sm:flex-col'>
+    return (
+    <div className='flex flex-wrap'>
       <div className="flex-1">
         <h2 className='text-2xl font-bold'>About Me</h2>
         <h1 className='text-5xl font-bold pr-3'>Student who passion on Technology</h1>

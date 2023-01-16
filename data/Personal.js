@@ -5,6 +5,7 @@ const Personal = [
         "title" : "Netflix",
         "description" : "a clone page of Netflix using hooks and nextjs, using TMDB API for data. you also can search specific movie on search bar",
         "link" : "https://tailwindcss.com/docs/flex-direction",
+        "github" : "",
         "tech" : ["React", "Nextjs", "Hooks", "TMDB API"],
     },
     {
@@ -13,6 +14,7 @@ const Personal = [
         "title" : "Netflix",
         "description" : "a clone page of Netflix using hooks and nextjs, using TMDB API for data. you also can search specific movie on search bar",
         "link" : "https://tailwindcss.com/docs/flex-direction",
+        "github" : "",
         "tech" : ["React", "Nextjs", "Hooks", "TMDB API"],
     },
     {
@@ -21,6 +23,7 @@ const Personal = [
         "title" : "Netflix",
         "description" : "a clone page of Netflix using hooks and nextjs, using TMDB API for data. you also can search specific movie on search bar",
         "link" : "https://tailwindcss.com/docs/flex-direction",
+        "github" : "",
         "tech" : ["React", "Nextjs", "Hooks", "TMDB API"],
     },
     {
@@ -29,6 +32,7 @@ const Personal = [
         "title" : "Netflix",
         "description" : "a clone page of Netflix using hooks and nextjs, using TMDB API for data. you also can search specific movie on search bar",
         "link" : "https://tailwindcss.com/docs/flex-direction",
+        "github" : "",
         "tech" : ["React", "Nextjs", "Hooks", "TMDB API"],
     }
 ];
