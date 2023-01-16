@@ -4,12 +4,13 @@ import Backend from '../../public/svg/database.svg'
 import Ui from '../../public/svg/design.svg'
 import Github from '../../public/svg/github.svg'
 import Image from 'next/image'
+import { NextPage } from 'next'
 
-const Technologies = () => {
+const Technologies:NextPage = () => {
   return (
     <div>
       <h2 className='font-bold text-4xl pt-20 bg-clip-text text-transparent bg-gradient-to-r from-white'>Skills</h2>
-      <p className='opacity-80'>I've worked with a range a technologies in the web development world.From Front-end To design</p>
+      <p className='opacity-80'>I&apos;ve worked with a range a technologies in the web development world.From Front-end To design</p>
       <div className='flex flex-wrap justify-between gap-5 pt-5'>
         <div>
           <Image src={Frontend} alt='github' width={30} height={30} />
