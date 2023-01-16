@@ -12,7 +12,7 @@ const BlogCard = ({title, datePublished, slug, timeRead, description}: any) => {
         <div>
           <h1>{title}</h1>
           <p>{description}</p>
-          <p className='mt-4'>Read more -></p>
+          {/* <p className='mt-4'>Read more -></p> */}
         </div>
       </div>
     </Link>
