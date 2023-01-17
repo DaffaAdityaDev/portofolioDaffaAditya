@@ -15,7 +15,7 @@ const Project = ({ data }: { data: any }) =>  {
       {data.map((data: any, index: number) => {
           const { title, description, image, link, github, id, tech } = data;
           return (
-            <div className='bg-slate-800 h-[600px] max-w-[30rem] px-10 rounded-lg py-10' key={id}>
+            <div className='bg-slate-800 h-[600px] max-w-[28rem] px-10 rounded-lg py-10' key={id}>
               <div className='h-full flex flex-wrap flex-col justify-between'>
                 <div>
                   <h1 className='font-bold text-3xl'>{title}</h1>
