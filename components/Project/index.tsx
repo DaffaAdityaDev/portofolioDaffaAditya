@@ -11,11 +11,11 @@ const Project = ({ data }: { data: any }) =>  {
       <div className='bg-gradient-to-r from-blue-500 to-transparent w-1/6 h-1 rounded-full mb-2'></div>
       <h2 className='text-4xl font-bold'>Project</h2>
       <p className='opacity-80 pb-4 text-2xl'>Some i have done</p>
-      <div className='flex flex-wrap justify-center gap-5 w-full'>
+      <div className='flex flex-wrap justify-center w-full'>
       {data.map((data: any, index: number) => {
           const { title, description, image, link, github, id, tech } = data;
           return (
-            <div className='bg-slate-800 h-[600px] max-w-[28rem] px-10 rounded-lg py-10' key={id}>
+            <div className='bg-slate-800 h-[600px] max-w-[30rem] px-10 rounded-lg py-10 m-3' key={id}>
               <div className='h-full flex flex-wrap flex-col justify-between'>
                 <div>
                   <h1 className='font-bold text-3xl'>{title}</h1>
