@@ -12,6 +12,7 @@ import BlogLayout from '../Layouts/BlogLayout'
 import HomeLayout from '../Layouts/HomeLayout'
 import Contact from '../components/Contact'
 import Technologies from '../components/Technologies'
+import WorkExperience from '../components/WorkExperience'
 
 const graphcms = new GraphQLClient("https://api-ap-northeast-1.graphcms.com/v2/cl4il4eos41je01z69eikf0ly/master");
 
@@ -34,12 +35,13 @@ const Home: NextPage = ({ posts }: any) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className='container max-w-screen-lg'>
+      <div className='container max-w-[1200px]'>
         <Navbar />
         <Hero />
         <AboutMe />
         <Project data={data}/>
         <Technologies/>
+        <WorkExperience/>
         
         {/* <BlogLayout>
           {posts.slice(0,3).map((post: any) => (

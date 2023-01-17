@@ -21,8 +21,9 @@ const Navbar: NextPage = () => {
           </Link>
         </li>
         <li>
-            <a href="https://drive.google.com/file/d/1hXrrN-IEVPQ4P0I5UjXNXMtmr1zBKo5G/view?usp=sharing"
-            className='bg-sky-500/10 rounded-md text-sky-400 border-solid border-2 p-2'>Resume</a>
+          <a href="https://drive.google.com/file/d/16bp1lgGaVHe670IO1bR7khk01h6GaXdC/view?usp=share_link"
+          className='bg-sky-500/10 rounded-md text-sky-400 border-solid border-2 p-2' target
+          ='_blank' rel='noreferrer'>Resume</a>
         </li>
       </ul>
     </div>

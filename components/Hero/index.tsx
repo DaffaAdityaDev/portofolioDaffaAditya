@@ -7,18 +7,20 @@ import Image from 'next/image';
 
 const Hero: NextPage = () =>  {
   return (
-    <div className="block h-screen grid content-center w">
+    <div className="block h-screen grid content-center">
       <div className='-mt-60'>
         <p className='font-medium text-2xl text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-sky-800 '>Hi There!, my name is</p>
-        <h1 className="text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-500">
+        <h1 className="text-7xl font-bold bg-clip-text text-transparent 
+        bg-gradient-to-r from-white to-slate-500 md:text-5xl sm:text-4xl">
             Daffa Aditya Rahman
         </h1>
-        <h1 className="text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-500 pb-4">
+        <h1 className="text-7xl font-bold bg-clip-text text-transparent 
+        bg-gradient-to-r from-white to-slate-500 pb-4 md:text-5xl sm:text-4xl">
             I&apos;m a Software Engineer
         </h1>
-        <p className='text-3xl text-white/50'>A self-taught software engineer who develop, build and Explore tehcnologies.</p>
-        <p className='text-2xl mt-10'>🎓 Currently an Software Engineer Student at Bina Sarana Informatika.</p>
-        <p className='text-2xl'>🚀 Exploring opportunities and side projects.</p>
+        <p className='text-3xl text-white/50 md:text-2xl sm:text-xl'>A self-taught software engineer who develop, build and Explore tehcnologies.</p>
+        <p className='text-2xl mt-10 md:text-xl sm:text-lg'>🎓 Currently an Software Engineer Student at Bina Sarana Informatika.</p>
+        <p className='text-2xl md:text-xl sm:text-lg'>🚀 Exploring opportunities and side projects.</p>
         <div className='flex flex-wrap sm:justify-center'>
           <div className=' mt-5 p-2 mr-3 rounded-lg rounded-br-lg hover:-translate-y-1 hover:scale-110 hover:bg-sky-700/50 duration-300 cursor-pointer'>
             <a href="https://github.com/DaffaAdityaDev" rel="noopener noreferrer" target="_blank" className='flex items-center'>
