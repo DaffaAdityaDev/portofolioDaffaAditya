@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-function popUpForm({ popUpHandler, popUp, setPopUp }  : 
+function PopUpForm({ popUpHandler, popUp, setPopUp }  : 
   { popUpHandler: () => void, popUp: boolean, setPopUp: (arg0: boolean) => void }) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -63,4 +63,4 @@ function popUpForm({ popUpHandler, popUp, setPopUp }  :
   )
 }
 
-export default popUpForm
+export default PopUpForm

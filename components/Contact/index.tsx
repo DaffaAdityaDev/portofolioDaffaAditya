@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import PopUpForm from './popUpForm/popUpForm'
+import popUpForm from './PopUpForm/PopUpForm'
+import PopUpForm from './PopUpForm/PopUpForm'
 
 const Contact = () => {
   const [popUp, setPopUp] = useState(false)
