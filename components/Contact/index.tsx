@@ -7,7 +7,7 @@ const Contact = () => {
   function popUpHandler() {
     setPopUp(!popUp)
   }
-  console.log(popUp)
+  // console.log(popUp)
 
   return(
     <div className='flex flex-col justify-center items-center h-screen'>
