@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import popUpForm from './PopUpForm/PopUpForm'
 import PopUpForm from './PopUpForm/PopUpForm'
 
 const Contact = () => {
