@@ -5,6 +5,7 @@ import spiner from '../../public/svg/spinner.svg'
 import spinerOneThird from '../../public/svg/spinner-one-third.svg'
 import confirm from '../../public/svg/confirm.svg'
 import alert from '../../public/svg/alert.svg'
+import emailsvg from '../../public/svg/email.svg'
 import Image from 'next/image'
 
 function PopUpForm({ popUpHandler, popUp, setPopUp }  : 
@@ -27,7 +28,7 @@ function PopUpForm({ popUpHandler, popUp, setPopUp }  :
     //send email directly to gmail
     event.preventDefault()
     setLoading(true)
-    emailjs.sendForm('service_xxxhn0b', 'template_mgesihk', form.current, '43UknkSlJ7aFi3pFD')
+    emailjs.sendForm(process.env.NEXT_PUBLIC_SERVICE_ID as string, 'template_mgesihk', form.current, process.env.NEXT_PUBLIC_PUBLIC_KEY)
       .then((result) => {
         setSuccess(true)
         setLoading(false)
@@ -88,10 +89,20 @@ function PopUpForm({ popUpHandler, popUp, setPopUp }  :
                   </div>}
                 </div>
               </div>
-              <div className='flex w-full justify-end'>
-                <button className='py-3 border-solid border-2 border-sky-500 rounded-lg
-                w-32 text-center'
-                onClick={popUpHandler}>Close</button>
+              <div className='flex justify-center'>
+                <div className='p-2 rounded-lg rounded-br-lg hover:-translate-y-1 hover:scale-110 hover:bg-sky-900/50 duration-300 h-full items-center'>
+                  <a href="https://mail.google.com/mail/?view=cm&fs=1&to=daffaaditya.me@gmail.com" target="_blank" rel="noreferrer" className='flex items-center'>
+                  <div className='w-10 h-10'>
+                    <Image src={emailsvg} alt="github" width={50} height={50} className="w-10 h-10 invert sepia-0 saturate-750 hue-rotate-137 brightness-101 contrast-105"/>
+                  </div>
+                  <p className='pl-1 text-2xl'>Email</p>
+                  </a>
+                </div>
+                <div className='flex w-full justify-end items-center'>
+                  <button className='py-3 border-solid border-2 border-sky-500 rounded-lg
+                  w-32 text-center'
+                  onClick={popUpHandler}>Close</button>
+                </div>
               </div>
             </div>
           </div> 
