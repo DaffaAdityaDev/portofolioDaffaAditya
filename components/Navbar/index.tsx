@@ -15,10 +15,8 @@ const Navbar: NextPage = () => {
             <a>Blog</a>
           </Link>
         </li> */}
-        <li>
-          <Link href="/blog/hello-world">
-            <a>QnA</a>
-          </Link>
+        <li className='cursor-pointer'>
+          <a>QnA</a>
         </li>
         <li>
           <a href="https://drive.google.com/file/d/16bp1lgGaVHe670IO1bR7khk01h6GaXdC/view?usp=share_link"
