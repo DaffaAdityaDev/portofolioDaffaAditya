@@ -4,8 +4,8 @@ import Image from 'next/image'
 
 const AboutMe:NextPage = () => {
     return (
-    <div className='flex flex-wrap md:flex-col'>
-      <div className="flex-1">
+    <div className='flex flex-wrap md:flex-col bg-sky-700 border-sky-700 border-2 bg-opacity-20 p-5 rounded-lg '>
+      <div className="flex-1 ">
         <h2 className='text-4xl font-bold'>About Me</h2>
         <h1 className='text-2xl font-bold pr-3'>Student who have passion on Technology</h1>
         <p className='text-1xl font-normal pb-5'>Hey! I&apos;m Daffa Aditya Rahman, I&apos;m 
