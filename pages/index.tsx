@@ -5,26 +5,27 @@ import Hero from '../components/Hero'
 import Navbar from '../components/Navbar'
 import Project from '../components/Project'
 import data from '../data/Personal.js';
-import BlogCard from '../components/BlogCard/BlogCard'
-import { GraphQLClient } from 'graphql-request'
-import QUEARYALLBLOG from "../Middleware/get-blog-api";
-import BlogLayout from '../Layouts/BlogLayout'
-import HomeLayout from '../Layouts/HomeLayout'
+// import BlogCard from '../components/BlogCard/BlogCard'
+// import { GraphQLClient } from 'graphql-request'
+// import QUEARYALLBLOG from "../Middleware/get-blog-api";
+// import BlogLayout from '../Layouts/BlogLayout'
+// import HomeLayout from '../Layouts/HomeLayout'
 import Contact from '../components/Contact'
 import Technologies from '../components/Technologies'
 import WorkExperience from '../components/WorkExperience'
+import CourseTaken from '../components/CourseTaken'
 
-const graphcms = new GraphQLClient("https://api-ap-northeast-1.graphcms.com/v2/cl4il4eos41je01z69eikf0ly/master");
+// const graphcms = new GraphQLClient("https://api-ap-northeast-1.graphcms.com/v2/cl4il4eos41je01z69eikf0ly/master");
 
-export async function getStaticProps() {
-  const {posts} = await graphcms.request(QUEARYALLBLOG);
-  return {
-      props: {
-          posts
-      },
-      revalidate: 10,
-  }
-}
+// export async function getStaticProps() {
+//   const {posts} = await graphcms.request(QUEARYALLBLOG);
+//   return {
+//       props: {
+//           posts
+//       },
+//       revalidate: 10,
+//   }
+// }
 
 const Home: NextPage = ({ posts }: any) => {
   return (
@@ -42,6 +43,7 @@ const Home: NextPage = ({ posts }: any) => {
         <Project data={data}/>
         <Technologies/>
         <WorkExperience/>
+        <CourseTaken/>
         
         {/* <BlogLayout>
           {posts.slice(0,3).map((post: any) => (

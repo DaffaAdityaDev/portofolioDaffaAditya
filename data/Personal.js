@@ -2,7 +2,7 @@ const Personal = [
     {
         "id": 0,
         "image" : "/image/galeribunga.jpg",
-        "title" : "Netflix",
+        "title" : "Galeri Bunga",
         "description" : "a Short page fully animated using GSAP and styled with less",
         "link" : "https://galeribunga.netlify.app/",
         "github" : "https://github.com/DaffaAdityaDev/galeriBunga",

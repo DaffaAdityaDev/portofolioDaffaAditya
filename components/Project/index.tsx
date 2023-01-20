@@ -19,7 +19,7 @@ const Project = ({ data }: { data: any }) =>  {
               <div className='h-full flex flex-wrap flex-col justify-between'>
                 <div>
                   <h1 className='font-bold text-3xl'>{title}</h1>
-                  <p className='text-white opacity-80 normal'>{description}</p>
+                  <p className='text-white opacity-80 normal h-16'>{description}</p>
                   <div className='bg-gradient-to-r from-blue-500 to-transparent w-1/3 h-1 rounded-full mt-3'></div>
                 </div>
                 <div className='h-60 relative w-full overflow-hidden rounded-xl'>
