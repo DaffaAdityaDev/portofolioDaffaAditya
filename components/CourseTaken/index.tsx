@@ -14,8 +14,8 @@ function CourseTaken() {
         <div className='w-1/2 sm:w-full'>
             {Course.map((data, index) => {
                 return (
-                    <>
-                    <a href={data.source} key={index} target="_blank" rel="noreferrer">
+                <div key={index.toString()}>
+                    <a href={data.source}  target="_blank" rel="noreferrer">
                         <div className='flex justify-between w-full items-center text-lg group'>
                             <div>
                                 <h2 className='font-bold'>{data.course}</h2>
@@ -28,7 +28,7 @@ function CourseTaken() {
                         </div>
                     </a>
                     <div className='bg-gradient-to-r mt-5 from-sky-400 via-violet-500 to-blue-500 w-full h-1 rounded-full mb-2'></div>
-                    </>
+                </div>
                 )
             })}
             
