@@ -10,7 +10,7 @@ const Course = [
       course: "Belajar Dasar Pemrograman JavaScript",
       source: "https://www.dicoding.com/certificates/53XE0JVY0XRN",
       organization: "Dicoding",
-      year: "2021"
+      year: "2022"
    },
    {
       course: "Full-Stack Course",
