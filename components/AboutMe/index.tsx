@@ -9,7 +9,7 @@ const AboutMe:NextPage = () => {
         <h2 className='text-4xl font-bold'>About Me</h2>
         <h1 className='text-2xl font-bold pr-3'>Student who have passion on Technology</h1>
         <p className='text-1xl font-normal pb-5'>Hey! I&apos;m Daffa Aditya Rahman, I&apos;m 
-        Student who majoring in Software Engineering. I&apos;m 
+          third year Student who majoring in Software Engineering. I&apos;m 
           Passionated On Technologies and Programming. <br/> 
           I&apos;m Currently Learning anything what excited me,
         </p>
