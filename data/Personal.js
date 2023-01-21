@@ -23,7 +23,7 @@ const Personal = [
         "title" : "Netflix dumy",
         "description" : "a clone page of Netflix using hooks and nextjs, using TMDB API for data. you also can search specific movie on search bar",
         "link" : "https://netflixdumy.netlify.app/",
-        "github" : "https://github.com/DaffaAdityaDev/ChatYuk",
+        "github" : "https://github.com/DaffaAdityaDev/Netflix_dumy",
         "tech" : ["Nextjs", "Axios","Hooks", "TMDB API"],
     },
     {
