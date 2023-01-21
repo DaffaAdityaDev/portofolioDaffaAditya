@@ -14,6 +14,7 @@ import Contact from '../components/Contact'
 import Technologies from '../components/Technologies'
 import WorkExperience from '../components/WorkExperience'
 import CourseTaken from '../components/CourseTaken'
+import Footer from '../components/Footer'
 
 // const graphcms = new GraphQLClient("https://api-ap-northeast-1.graphcms.com/v2/cl4il4eos41je01z69eikf0ly/master");
 
@@ -44,6 +45,8 @@ const Home: NextPage = ({ posts }: any) => {
         <Technologies/>
         <WorkExperience/>
         <CourseTaken/>
+        <Contact/>
+        <Footer />
         
         {/* <BlogLayout>
           {posts.slice(0,3).map((post: any) => (
@@ -59,7 +62,6 @@ const Home: NextPage = ({ posts }: any) => {
             </div>
           ))}
         </BlogLayout> */}
-        <Contact/>
       </div>
     </>
   )

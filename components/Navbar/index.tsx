@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 const Navbar: NextPage = () => {
   return (
-    <div className='p-4 pb-6'>
+    <div className='p-4 pb-6 border-2 border-slate-900 border-b-sky-600 bg-slate-900 '>
       <ul className="flex justify-end gap-x-5">
         <li className=''>
           <Link href="/">
