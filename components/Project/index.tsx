@@ -18,12 +18,12 @@ const Project = ({ data }: { data: any }) =>  {
           selectedProjectType === 'web' ? (
             <>
               <button className="rounded-full bg-blue-700 h-9 w-26 px-6" onClick={e => setProjectType("web")}>Web</button>
-              <button className="rounded-full bg-blue-500 h-9 w-26 px-6" onClick={e => setProjectType("android")}>Android</button>
+              <button className="rounded-full bg-blue-500 h-9 w-26 px-6" onClick={e => setProjectType("mobile")}>Mobile</button>
             </>
           ) : (
             <>
               <button className="rounded-full bg-blue-500 h-9 w-26 px-6" onClick={e => setProjectType("web")}>Web</button>
-              <button className="rounded-full bg-blue-700 h-9 w-26 px-6" onClick={e => setProjectType("android")}>Android</button>
+              <button className="rounded-full bg-blue-700 h-9 w-26 px-6" onClick={e => setProjectType("mobile")}>Mobile</button>
             </>
           )
         }

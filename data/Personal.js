@@ -47,7 +47,7 @@ const Personal = [
         "link" : "https://github.com/DaffaAdityaDev/Compos_Submission",
         "github" : "https://github.com/DaffaAdityaDev/Compos_Submission",
         "tech" : ["Kotlin", "Jetpack Compose", "Android", "Lifecycle"],
-        "type" : "android"
+        "type" : "mobile"
     },
     {
         "id": 5,
@@ -57,7 +57,7 @@ const Personal = [
         "link" : "https://github.com/DaffaAdityaDev/AplikasiGithubUser/tree/rebuild",
         "github" : "https://github.com/DaffaAdityaDev/AplikasiGithubUser/tree/rebuild",
         "tech" : ["Kotlin", "Retrofit", "Android", "GithubAPI"],
-        "type" : "android"
+        "type" : "mobile"
     },
     {
         "id": 6,
@@ -67,7 +67,7 @@ const Personal = [
         "link" : "https://github.com/DaffaAdityaDev/YourStory",
         "github" : "https://github.com/DaffaAdityaDev/YourStory",
         "tech" : ["Kotlin", "Retrofit", "GMap", "CameraX"],
-        "type" : "android"
+        "type" : "mobile"
     }
 ];
 

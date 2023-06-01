@@ -47,7 +47,7 @@ const Technologies:NextPage = () => {
           <div className='group w-44'>
             <h2 className='font-bold text-4xl group-hover:bg-clip-text 
               group-hover:text-transparent  group-hover:bg-gradient-to-r 
-              group-hover:from-sky-400  group-hover:to-violet-500'>Android</h2>
+              group-hover:from-sky-400  group-hover:to-violet-500'>Mobile</h2>
             <p className='font-normal text-lg'>Intent and Fragment</p>
             <p className='font-normal text-lg'>Kotlin</p>
             <p className='font-normal text-lg'>Room</p>

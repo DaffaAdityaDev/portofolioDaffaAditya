@@ -46,7 +46,7 @@ const Home: NextPage = ({ posts }: any) => {
         <Technologies/>
         <Experience ExperienceData={ExperienceData}/>
         <CourseTaken/>
-        <Contact/>
+        <Contact />
         <Footer />
         
         {/* <BlogLayout>
