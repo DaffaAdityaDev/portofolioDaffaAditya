@@ -26,7 +26,9 @@ const Project = ({ data }: { data: any }) =>  {
                   <a href={link} target='_blank' rel='noreferrer'>
                     <div className='z-10 absolute peer hover:bg-black hover:bg-opacity-60 
                     text-transparent hover:text-white text-lg font-bold flex items-center justify-center w-full h-full'>Open Page</div>
-                    <img className='z-0 rounded-xl peer-hover:scale-150 peer-hover:blur-sm ease-in-out duration-500 w-full h-60' src={image} alt='project'/>
+                    <img className='z-0 rounded-xl peer-hover:scale-150 peer-hover:blur-sm ease-in-out duration-500 w-full h-60' 
+                    src={image} alt='project' loading='lazy'
+                    />
                   </a>
                 </div>
                 <div>
