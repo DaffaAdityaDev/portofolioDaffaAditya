@@ -7,6 +7,7 @@ const Personal = [
         "link" : "https://galeribunga.netlify.app/",
         "github" : "https://github.com/DaffaAdityaDev/galeriBunga",
         "tech" : ["Gatsby", "GSAP", "LESS", "locomotive scroll"],
+        "type" : "web"
     },
     {
         "id": 1,
@@ -16,6 +17,7 @@ const Personal = [
         "link" : "https://teslaminiweb.netlify.app/",
         "github" : "https://github.com/DaffaAdityaDev/tesla_web",
         "tech" : ["React", "MaterialUI", "styled components", "react reveal"],
+        "type" : "web"
     },
     {
         "id": 2,
@@ -25,6 +27,7 @@ const Personal = [
         "link" : "https://netflixdumy.netlify.app/",
         "github" : "https://github.com/DaffaAdityaDev/Netflix_dumy",
         "tech" : ["Nextjs", "Axios","Hooks", "TMDB API"],
+        "type" : "web"
     },
     {
         "id": 3,
@@ -34,6 +37,37 @@ const Personal = [
         "link" : "https://chatyuk.netlify.app/",
         "github" : "https://github.com/DaffaAdityaDev/ChatYuk",
         "tech" : ["React", "ChakraUI", "Hooks", "Firebase"],
+        "type" : "web"
+    },
+    {
+        "id": 4,
+        "image" : "/image/ComposeComic.gif",
+        "title" : "Android Komik",
+        "description" : "a compose UI for android using jetpack compose and CRUD function for displaying comic data",
+        "link" : "https://github.com/DaffaAdityaDev/Compos_Submission",
+        "github" : "https://github.com/DaffaAdityaDev/Compos_Submission",
+        "tech" : ["Kotlin", "Jetpack Compose", "Android", "Lifecycle"],
+        "type" : "android"
+    },
+    {
+        "id": 5,
+        "image" : "/image/githubUser.gif",
+        "title" : "Github User",
+        "description" : "a android app that using github api for searching user and displaying their profile and follower and following",
+        "link" : "https://github.com/DaffaAdityaDev/AplikasiGithubUser/tree/rebuild",
+        "github" : "https://github.com/DaffaAdityaDev/AplikasiGithubUser/tree/rebuild",
+        "tech" : ["Kotlin", "Retrofit", "Android", "GithubAPI"],
+        "type" : "android"
+    },
+    {
+        "id": 6,
+        "image" : "/image/yourStory.gif",
+        "title" : "YourStory",
+        "description" : "a android app where you can share you story and see other people story, using REST API, cameraX, Gallery and google map",
+        "link" : "https://github.com/DaffaAdityaDev/YourStory",
+        "github" : "https://github.com/DaffaAdityaDev/YourStory",
+        "tech" : ["Kotlin", "Retrofit", "GMap", "CameraX"],
+        "type" : "android"
     }
 ];
 

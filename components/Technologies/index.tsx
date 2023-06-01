@@ -3,6 +3,7 @@ import Frontend from '../../public/svg/react.svg'
 import Backend from '../../public/svg/database.svg'
 import Ui from '../../public/svg/design.svg'
 import Github from '../../public/svg/github.svg'
+import Mobile from '../../public/svg/mobile_developer.svg'
 import Image from 'next/image'
 import { NextPage } from 'next'
 
@@ -39,6 +40,20 @@ const Technologies:NextPage = () => {
             <p className='font-normal text-lg'>Linux</p>
             <p className='font-normal text-lg'>Firebase</p>
             <p className='font-normal text-lg'>Express.JS</p>
+          </div>
+        </div>
+        <div>
+          <Image src={Mobile} alt='github' width={30} height={30} className='fill-white'/>
+          <div className='group w-44'>
+            <h2 className='font-bold text-4xl group-hover:bg-clip-text 
+              group-hover:text-transparent  group-hover:bg-gradient-to-r 
+              group-hover:from-sky-400  group-hover:to-violet-500'>Android</h2>
+            <p className='font-normal text-lg'>Intent and Fragment</p>
+            <p className='font-normal text-lg'>Kotlin</p>
+            <p className='font-normal text-lg'>Room</p>
+            <p className='font-normal text-lg'>Retrofit</p>
+            <p className='font-normal text-lg'>AndroidX</p>
+            <p className='font-normal text-lg'>Jetpack Compose</p>
           </div>
         </div>
         <div>

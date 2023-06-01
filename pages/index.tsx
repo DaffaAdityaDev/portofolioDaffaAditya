@@ -5,6 +5,7 @@ import Hero from '../components/Hero'
 import Navbar from '../components/Navbar'
 import Project from '../components/Project'
 import data from '../data/Personal.js';
+import ExperienceData from '../data/Experience.js';
 // import BlogCard from '../components/BlogCard/BlogCard'
 // import { GraphQLClient } from 'graphql-request'
 // import QUEARYALLBLOG from "../Middleware/get-blog-api";
@@ -12,7 +13,7 @@ import data from '../data/Personal.js';
 // import HomeLayout from '../Layouts/HomeLayout'
 import Contact from '../components/Contact'
 import Technologies from '../components/Technologies'
-import WorkExperience from '../components/WorkExperience'
+import Experience from '../components/Experience'
 import CourseTaken from '../components/CourseTaken'
 import Footer from '../components/Footer'
 
@@ -43,7 +44,7 @@ const Home: NextPage = ({ posts }: any) => {
         <AboutMe />
         <Project data={data}/>
         <Technologies/>
-        <WorkExperience/>
+        <Experience ExperienceData={ExperienceData}/>
         <CourseTaken/>
         <Contact/>
         <Footer />

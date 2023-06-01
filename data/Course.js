@@ -1,5 +1,19 @@
 const Course = [
    {
+      course: "Belajar Membuat Aplikasi Android dengan Jetpack Compose",
+      source: "https://www.dicoding.com/certificates/2VX3JRNJ3PYQ",
+      organization: "Dicoding",
+      year: "2023"
+
+   },
+   {
+      course: "Belajar Pengembangan Aplikasi Android Intermediate",
+      source: "https://www.dicoding.com/certificates/JMZV91O1RPN9",
+      organization: "Dicoding",
+      year: "2023"
+
+   },
+   {
       course: "JavaScript Algorithms and Data Structures",
       source: "https://www.freecodecamp.org/certification/fcc69fbe3fe-5900-4d24-b19e-a24be1c50320/javascript-algorithms-and-data-structures",
       organization: "freeCodeCamp",
