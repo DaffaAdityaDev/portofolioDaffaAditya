@@ -77,6 +77,7 @@ const Technologies:NextPage = () => {
             <p className='font-normal text-lg'>Github</p>
             <p className='font-normal text-lg'>Git</p>
             <p className='font-normal text-lg'>Docker</p>
+            <p className='font-normal text-lg'>Microservice</p>
           </div>
         </div>
       </div>
