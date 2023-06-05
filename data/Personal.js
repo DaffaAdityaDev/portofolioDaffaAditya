@@ -41,7 +41,7 @@ const Personal = [
     },
     {
         "id": 4,
-        "image" : "/image/ComposeComic.gif",
+        "image" : "/image/ComposeComic-min.gif",
         "title" : "Android Komik",
         "description" : "a compose UI for android using jetpack compose and CRUD function for displaying comic data",
         "link" : "https://github.com/DaffaAdityaDev/Compos_Submission",
@@ -51,7 +51,7 @@ const Personal = [
     },
     {
         "id": 5,
-        "image" : "/image/githubUser.gif",
+        "image" : "/image/githubUser-min.gif",
         "title" : "Github User",
         "description" : "a android app that using github api for searching user and displaying their profile and follower and following",
         "link" : "https://github.com/DaffaAdityaDev/AplikasiGithubUser/tree/rebuild",
@@ -61,7 +61,7 @@ const Personal = [
     },
     {
         "id": 6,
-        "image" : "/image/yourStory.gif",
+        "image" : "/image/yourStory-min.gif",
         "title" : "YourStory",
         "description" : "a android app where you can share you story and see other people story, using REST API, cameraX, Gallery and google map",
         "link" : "https://github.com/DaffaAdityaDev/YourStory",
