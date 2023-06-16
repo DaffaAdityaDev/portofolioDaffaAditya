@@ -3,8 +3,8 @@ import Personal from '../../data/Personal';
 import githubSvg from '../../public/svg/github.svg';
 import linkedIn from '../../public/svg/linkedin.svg';
 import email from '../../public/svg/email.svg';
+import Bangkit from '../../public/svg/bangkit.svg'
 import Image from 'next/image';
-
 const Hero: NextPage = () =>  {
   return (
     <div className="block h-screen grid content-center">
@@ -19,8 +19,8 @@ const Hero: NextPage = () =>  {
             I&apos;m a Software Engineer
         </h1>
         <p className='text-3xl text-white/50 md:text-2xl sm:text-xl'>A self-taught software engineer who develop, build and Explore tehcnologies.</p>
-        <p className='text-2xl mt-10 md:text-xl sm:text-lg'>🎓 Currently an Software Engineer Student at Bina Sarana Informatika.</p>
-        <p className='text-2xl md:text-xl sm:text-lg'>🚀 Exploring opportunities and side projects.</p>
+        <p className='text-2xl mt-10 md:text-xl sm:text-lg'>🎓 Software Engineer Student at Bina Sarana Informatika.</p>
+        <p className='text-2xl md:text-xl sm:text-lg flex align-middle gap-2'><Image src={Bangkit} alt="github" width={30} height={30}/> Bangkit Mobile Developer Cohort.</p>
         <div className='flex flex-wrap sm:justify-center'>
           <div className=' mt-5 p-2 mr-3 rounded-lg rounded-br-lg hover:-translate-y-1 hover:scale-110 hover:bg-sky-700/50 duration-300 cursor-pointer'>
             <a href="https://github.com/DaffaAdityaDev" rel="noopener noreferrer" target="_blank" className='flex items-center'>
