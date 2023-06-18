@@ -1,6 +1,6 @@
 const Experience = [
     {
-        title: "Bangkit Academy",
+        title: "Bangkit Academy Mobile Developer Cohort",
         company: "Google, Tokopedia, Gojek, & Traveloka",
         time: "2023",
     },
