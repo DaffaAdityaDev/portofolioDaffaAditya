@@ -18,7 +18,7 @@ const AboutMe:NextPage = () => {
           <a href='https://www.dicoding.com/certificates/JMZV91O1RPN9' rel="noreferrer" target='_blank'> mobile app development </a>
         </span>and 
         <span className="text-green-400 font-bold">
-          <a href='https://www.freecodecamp.org/certification/fcc69fbe3fe-5900-4d24-b19e-a24be1c50320/responsive-web-design' rel="noreferrer" target='_blank'> web development.</a>
+          <a href='https://www.freecodecamp.org/certification/fcc69fbe3fe-5900-4d24-b19e-a24be1c50320/front-end-development-libraries' rel="noreferrer" target='_blank'> web development.</a>
         </span> I&apos;m enthusiastic about honing my skills in these 
         areas and staying up to date with the latest advancements.
         </p>
