@@ -41,6 +41,16 @@ const Personal = [
     },
     {
         "id": 4,
+        "image" : "/image/recyclops-min.gif",
+        "title" : "Recyclops",
+        "description" : "bangkit academy startup idea for helping people to shorting trash and find nearest trash bank, using machine learning and google map",
+        "link" : "https://github.com/DaffaAdityaDev/recyclops",
+        "github" : "https://github.com/DaffaAdityaDev/recyclops",
+        "tech" : ["RestAPI", "TensorFlow", "GMap", "CameraX"],
+        "type" : "mobile"
+    },
+    {
+        "id": 5,
         "image" : "/image/ComposeComic-min.gif",
         "title" : "Android Komik",
         "description" : "a compose UI for android using jetpack compose and CRUD function for displaying comic data",
@@ -50,7 +60,7 @@ const Personal = [
         "type" : "mobile"
     },
     {
-        "id": 5,
+        "id": 6,
         "image" : "/image/githubUser-min.gif",
         "title" : "Github User",
         "description" : "a android app that using github api for searching user and displaying their profile and follower and following",
@@ -60,7 +70,7 @@ const Personal = [
         "type" : "mobile"
     },
     {
-        "id": 6,
+        "id": 7,
         "image" : "/image/yourStory-min.gif",
         "title" : "YourStory",
         "description" : "a android app where you can share you story and see other people story, using REST API, cameraX, Gallery and google map",
@@ -68,7 +78,8 @@ const Personal = [
         "github" : "https://github.com/DaffaAdityaDev/YourStory",
         "tech" : ["Kotlin", "Retrofit", "GMap", "CameraX"],
         "type" : "mobile"
-    }
+    },
+    
 ];
 
 export default Personal;
