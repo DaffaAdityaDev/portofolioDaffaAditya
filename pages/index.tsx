@@ -16,6 +16,7 @@ import Technologies from '../components/Technologies'
 import Experience from '../components/Experience'
 import CourseTaken from '../components/CourseTaken'
 import Footer from '../components/Footer'
+import { Fade } from "react-awesome-reveal";
 
 // const graphcms = new GraphQLClient("https://api-ap-northeast-1.graphcms.com/v2/cl4il4eos41je01z69eikf0ly/master");
 
@@ -45,13 +46,23 @@ const Home: NextPage = ({ posts }: any) => {
       <div className='container max-w-[1200px]'>
         <Navbar />
         <Hero />
-        <AboutMe />
+        <Fade triggerOnce>
+          <AboutMe />
+        </Fade>
         <Project data={data}/>
-        <Technologies/>
+        <Fade triggerOnce>
+          <Technologies/>
+        </Fade>
         <Experience ExperienceData={ExperienceData}/>
-        <CourseTaken/>
-        <Contact />
-        <Footer />
+        <Fade triggerOnce>
+          <CourseTaken/>
+        </Fade>
+        <Fade triggerOnce>
+          <Contact />
+        </Fade>
+        <Fade triggerOnce>
+          <Footer />
+        </Fade>
         
         {/* <BlogLayout>
           {posts.slice(0,3).map((post: any) => (

@@ -19,12 +19,12 @@ const Technologies:NextPage = () => {
           <div className='group w-44'>
             <h2 className='font-bold text-4xl group-hover:bg-clip-text 
              group-hover:text-transparent group-hover:bg-gradient-to-r 
-             group-hover:from-sky-400  group-hover:to-violet-500'>Front-End</h2>
-            <p className='font-normal text-lg'>HTML & CSS</p>
+             group-hover:from-sky-400  group-hover:to-violet-500'>Framework</h2>
             <p className='font-normal text-lg'>React.JS</p>
+            <p className='font-normal text-lg'>Vue.JS</p>
             <p className='font-normal text-lg'>Next.JS</p>
+            <p className='font-normal text-lg'>Laravel</p>
             <p className='font-normal text-lg'>Axios</p>
-            <p className='font-normal text-lg'>Sass</p>
             <p className='font-normal text-lg'>Tailwind</p>
           </div>
         </div>

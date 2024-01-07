@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Card from './Card'
-
+import { Fade } from "react-awesome-reveal";
 const Project = ({ data }: { data: any }) =>  {
   const [selectedProjectType, setSelectedProjectType] = useState('web')
 
@@ -10,25 +10,28 @@ const Project = ({ data }: { data: any }) =>  {
 
   return (
     <div className='pt-20'>
-      <div className='bg-gradient-to-r from-blue-500 to-transparent w-1/6 h-1 rounded-full mb-2'></div>
-      <h2 className='text-4xl font-bold'>Project</h2>
-      <p className='opacity-80 pb-4 text-2xl'>Some i have done</p>
-      <div className='flex w-full justify-center gap-4'>
-        {
-          selectedProjectType === 'web' ? (
-            <>
-              <button className="rounded-full bg-blue-700 h-9 w-26 px-6" onClick={e => setProjectType("web")}>Web</button>
-              <button className="rounded-full bg-blue-500 h-9 w-26 px-6" onClick={e => setProjectType("mobile")}>Mobile</button>
-            </>
-          ) : (
-            <>
-              <button className="rounded-full bg-blue-500 h-9 w-26 px-6" onClick={e => setProjectType("web")}>Web</button>
-              <button className="rounded-full bg-blue-700 h-9 w-26 px-6" onClick={e => setProjectType("mobile")}>Mobile</button>
-            </>
-          )
-        }
-        
-      </div>
+      <Fade triggerOnce>
+
+        <div className='bg-gradient-to-r from-blue-500 to-transparent w-1/6 h-1 rounded-full mb-2'></div>
+        <h2 className='text-4xl font-bold'>Project</h2>
+        <p className='opacity-80 pb-4 text-2xl'>Some i have done</p>
+        <div className='flex w-full justify-center gap-4'>
+          {
+            selectedProjectType === 'web' ? (
+              <>
+                <button className="rounded-full bg-blue-700 h-9 w-26 px-6" onClick={e => setProjectType("web")}>Web</button>
+                <button className="rounded-full bg-blue-500 h-9 w-26 px-6" onClick={e => setProjectType("mobile")}>Mobile</button>
+              </>
+            ) : (
+              <>
+                <button className="rounded-full bg-blue-500 h-9 w-26 px-6" onClick={e => setProjectType("web")}>Web</button>
+                <button className="rounded-full bg-blue-700 h-9 w-26 px-6" onClick={e => setProjectType("mobile")}>Mobile</button>
+              </>
+            )
+          }
+          
+        </div>
+      </Fade>
       <div className='flex flex-wrap justify-center w-full'>
       {data.map((data: any, index: number) => {
           const { title, description, image, link, github, id, tech, type } = data;
