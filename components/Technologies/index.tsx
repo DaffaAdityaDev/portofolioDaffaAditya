@@ -1,88 +1,119 @@
-import React from 'react'
-import Frontend from '../../public/svg/react.svg'
-import Backend from '../../public/svg/database.svg'
-import Ui from '../../public/svg/design.svg'
-import Github from '../../public/svg/github.svg'
-import Mobile from '../../public/svg/mobile_developer.svg'
-import Image from 'next/image'
-import { NextPage } from 'next'
+import React from "react";
+import Frontend from "../../public/svg/react.svg";
+import Backend from "../../public/svg/database.svg";
+import Ui from "../../public/svg/design.svg";
+import Github from "../../public/svg/github.svg";
+import Mobile from "../../public/svg/mobile_developer.svg";
+import Image from "next/image";
+import { NextPage } from "next";
 
-const Technologies:NextPage = () => {
+const Technologies: NextPage = () => {
   return (
     <div>
-      <div className='bg-gradient-to-r mt-20 from-blue-500 to-transparent w-1/6 h-1 rounded-full mb-2'></div>
-      <h2 className='font-bold text-4xl bg-clip-text text-transparent bg-gradient-to-r from-white antialiased'>Skills</h2>
-      <p className='opacity-80 text-lg md:text-base'>I&apos;ve worked with a range a technologies in the web development world.From Front-end To design</p>
-      <div className='flex flex-wrap justify-between gap-5 pt-5'>
+      <div className="mt-20 mb-2 h-1 w-1/6 rounded-full bg-gradient-to-r from-blue-500 to-transparent"></div>
+      <h2 className="bg-gradient-to-r from-white bg-clip-text text-4xl font-bold text-transparent antialiased">
+        Skills
+      </h2>
+      <p className="text-lg opacity-80 md:text-base">
+        I&apos;ve worked with a range a technologies in the web development
+        world.From Front-end To design
+      </p>
+      <div className="flex flex-wrap justify-between gap-5 pt-5">
         <div>
-          <Image src={Frontend} alt='github' width={30} height={30} />
-          <div className='group w-44'>
-            <h2 className='font-bold text-4xl group-hover:bg-clip-text 
-             group-hover:text-transparent group-hover:bg-gradient-to-r 
-             group-hover:from-sky-400  group-hover:to-violet-500'>Framework</h2>
-            <p className='font-normal text-lg'>React.JS</p>
-            <p className='font-normal text-lg'>Vue.JS</p>
-            <p className='font-normal text-lg'>Next.JS</p>
-            <p className='font-normal text-lg'>Laravel</p>
-            <p className='font-normal text-lg'>Axios</p>
-            <p className='font-normal text-lg'>Tailwind</p>
+          <Image src={Frontend} alt="github" width={30} height={30} />
+          <div className="group w-44">
+            <h2
+              className="text-4xl font-bold group-hover:bg-gradient-to-r 
+             group-hover:from-sky-400 group-hover:to-violet-500 
+             group-hover:bg-clip-text  group-hover:text-transparent"
+            >
+              Framework
+            </h2>
+            <p className="text-lg font-normal">React.JS</p>
+            <p className="text-lg font-normal">Vue.JS</p>
+            <p className="text-lg font-normal">Next.JS</p>
+            <p className="text-lg font-normal">Laravel</p>
+            <p className="text-lg font-normal">Axios</p>
+            <p className="text-lg font-normal">Tailwind</p>
           </div>
         </div>
         <div>
-          <Image src={Backend} alt='github' width={30} height={30} />
-          <div className='group w-44'>
-            <h2 className='font-bold text-4xl group-hover:bg-clip-text 
-              group-hover:text-transparent  group-hover:bg-gradient-to-r 
-              group-hover:from-sky-400  group-hover:to-violet-500'>Back-End</h2>
-            <p className='font-normal text-lg'>MongoDB</p>
-            <p className='font-normal text-lg'>Node.JS</p>
-            <p className='font-normal text-lg'>MYSQL</p>
-            <p className='font-normal text-lg'>Linux</p>
-            <p className='font-normal text-lg'>Firebase</p>
-            <p className='font-normal text-lg'>Express.JS</p>
+          <Image src={Backend} alt="github" width={30} height={30} />
+          <div className="group w-44">
+            <h2
+              className="text-4xl font-bold group-hover:bg-gradient-to-r 
+              group-hover:from-sky-400  group-hover:to-violet-500 
+              group-hover:bg-clip-text  group-hover:text-transparent"
+            >
+              Back-End
+            </h2>
+            <p className="text-lg font-normal">MongoDB</p>
+            <p className="text-lg font-normal">Node.JS</p>
+            <p className="text-lg font-normal">MYSQL</p>
+            <p className="text-lg font-normal">Linux</p>
+            <p className="text-lg font-normal">Firebase</p>
+            <p className="text-lg font-normal">Express.JS</p>
           </div>
         </div>
         <div>
-          <Image src={Mobile} alt='github' width={30} height={30} className='fill-white'/>
-          <div className='group w-44'>
-            <h2 className='font-bold text-4xl group-hover:bg-clip-text 
-              group-hover:text-transparent  group-hover:bg-gradient-to-r 
-              group-hover:from-sky-400  group-hover:to-violet-500'>Mobile</h2>
-            <p className='font-normal text-lg'>Intent and Fragment</p>
-            <p className='font-normal text-lg'>Kotlin</p>
-            <p className='font-normal text-lg'>Room</p>
-            <p className='font-normal text-lg'>Retrofit</p>
-            <p className='font-normal text-lg'>AndroidX</p>
-            <p className='font-normal text-lg'>Jetpack Compose</p>
+          <Image
+            src={Mobile}
+            alt="github"
+            width={30}
+            height={30}
+            className="fill-white"
+          />
+          <div className="group w-44">
+            <h2
+              className="text-4xl font-bold group-hover:bg-gradient-to-r 
+              group-hover:from-sky-400  group-hover:to-violet-500 
+              group-hover:bg-clip-text  group-hover:text-transparent"
+            >
+              Mobile
+            </h2>
+            <p className="text-lg font-normal">Intent and Fragment</p>
+            <p className="text-lg font-normal">Kotlin</p>
+            <p className="text-lg font-normal">Room</p>
+            <p className="text-lg font-normal">Retrofit</p>
+            <p className="text-lg font-normal">AndroidX</p>
+            <p className="text-lg font-normal">Jetpack Compose</p>
           </div>
         </div>
         <div>
-          <Image src={Ui} alt='github' width={30} height={30} />
-          <div className='group w-44'>
-            <h2 className='font-bold text-4xl group-hover:bg-clip-text 
-              group-hover:text-transparent  group-hover:bg-gradient-to-r 
-              group-hover:from-sky-400  group-hover:to-violet-500'>UI/UX</h2>
-            <p className='font-normal text-lg'>Photoshop</p>
-            <p className='font-normal text-lg'>Figma</p>
-            <p className='font-normal text-lg'>Web Vital</p>
-            <p className='font-normal text-lg'>Responsive Design</p>
+          <Image src={Ui} alt="github" width={30} height={30} />
+          <div className="group w-44">
+            <h2
+              className="text-4xl font-bold group-hover:bg-gradient-to-r 
+              group-hover:from-sky-400  group-hover:to-violet-500 
+              group-hover:bg-clip-text  group-hover:text-transparent"
+            >
+              UI/UX
+            </h2>
+            <p className="text-lg font-normal">Photoshop</p>
+            <p className="text-lg font-normal">Figma</p>
+            <p className="text-lg font-normal">Web Vital</p>
+            <p className="text-lg font-normal">Responsive Design</p>
           </div>
         </div>
         <div>
-          <Image src={Github} alt='github' width={30} height={30} />
-          <div className='group w-44'>
-            <h2 className='font-bold text-4xl group-hover:bg-clip-text 
-              group-hover:text-transparent  group-hover:bg-gradient-to-r 
-              group-hover:from-sky-400  group-hover:to-violet-500'>DevOps</h2>
-            <p className='font-normal text-lg'>Github</p>
-            <p className='font-normal text-lg'>Git</p>
-            <p className='font-normal text-lg'>Docker</p>
-            <p className='font-normal text-lg'>Microservice</p>
+          <Image src={Github} alt="github" width={30} height={30} />
+          <div className="group w-44">
+            <h2
+              className="text-4xl font-bold group-hover:bg-gradient-to-r 
+              group-hover:from-sky-400  group-hover:to-violet-500 
+              group-hover:bg-clip-text  group-hover:text-transparent"
+            >
+              DevOps
+            </h2>
+            <p className="text-lg font-normal">Github</p>
+            <p className="text-lg font-normal">Git</p>
+            <p className="text-lg font-normal">Docker</p>
+            <p className="text-lg font-normal">Microservice</p>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Technologies
+export default Technologies;

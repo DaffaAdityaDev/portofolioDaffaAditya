@@ -1,11 +1,17 @@
-import React from 'react'
-import Link from 'next/link'
+import React from "react";
+import Link from "next/link";
 
-const BlogCard = ({title, datePublished, slug, timeRead, description}: any) => {
+const BlogCard = ({
+  title,
+  datePublished,
+  slug,
+  timeRead,
+  description,
+}: any) => {
   return (
-    <Link href={'/blog/' + slug}>
-      <div className='flex mt-5 cursor-pointer hover:border border-inherit'>
-        <div className='pr-8'>
+    <Link href={"/blog/" + slug}>
+      <div className="mt-5 flex cursor-pointer border-inherit hover:border">
+        <div className="pr-8">
           <p>{datePublished}</p>
           <p>{timeRead}</p>
         </div>
@@ -16,7 +22,7 @@ const BlogCard = ({title, datePublished, slug, timeRead, description}: any) => {
         </div>
       </div>
     </Link>
-  )
-}
+  );
+};
 
-export default BlogCard
+export default BlogCard;
