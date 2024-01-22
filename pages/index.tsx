@@ -43,7 +43,7 @@ const Home: NextPage = ({ posts }: any) => {
         />
         <meta property="og:image" content="/image/Profile.jpg" />
         <meta property="og:url" content="https://daffaaditya.netlify.app" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/svg/selflogo.svg" />
       </Head>
 
       <div className="container max-w-[1200px] font-primary text-white">

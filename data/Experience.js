@@ -1,5 +1,10 @@
 const Experience = [
   {
+    title: "Software Engineer (Internship)",
+    company: "Ombudsman Republik Indonesia",
+    time: "2023",
+  },
+  {
     title: "Frontend Developer (Internship)",
     company: "PT. Quantum Leap",
     time: "2023",

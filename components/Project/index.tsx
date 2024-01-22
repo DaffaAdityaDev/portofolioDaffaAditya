@@ -13,7 +13,7 @@ const Project = ({ data }: { data: any }) => {
       <Fade triggerOnce>
         <div className="mb-2 h-1 w-1/6 rounded-full bg-gradient-to-r from-blue-500 to-transparent"></div>
         <h2 className="text-4xl font-bold">Project</h2>
-        <p className="pb-4 text-2xl opacity-80">Some i have done</p>
+        <p className="pb-4 text-2xl opacity-80">Side project</p>
         <div className="flex w-full justify-center gap-4">
           {selectedProjectType === "web" ? (
             <>
