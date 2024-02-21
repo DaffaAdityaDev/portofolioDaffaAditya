@@ -24,7 +24,7 @@ function Navbar() {
   }, []);
 
   return (
-    <div className="fixed top-4 z-50 flex w-full justify-center ">
+    <div className="fixed top-4 z-50 flex w-full justify-center">
       <div
         className={`relative flex items-center justify-between border-gray-400 border-opacity-0 py-4 transition-all h-12 duration-500 ease-in-out   ${
           scrolled
@@ -44,7 +44,7 @@ function Navbar() {
             <Image src={Github} alt="Github" width={30} height={30} />
           </a>
         </div>
-        <div className="absolute right-1/2 transform translate-x-1/2">
+        <div className="absolute right-1/2 transform translate-x-1/2 text-white">
           <a href="/about">About</a>
         </div>
         <div className={` ${scrolled ? "mr-2" : ""}`}>
