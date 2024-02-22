@@ -13,7 +13,7 @@ export async function getStaticProps() {
     },
   };
 }
-const Blog = ({ allPostsData }: IBlogProps) => {
+const Blog = ({ allPostsData }: any) => {
   console.log(allPostsData);
   return (
     <div className="grid grid-cols-12 text-white">
@@ -26,22 +26,15 @@ const Blog = ({ allPostsData }: IBlogProps) => {
       </div>
       <div className="col-start-2 col-span-10">
         <div className="grid grid-cols-2 gap-4">
-          {allPostsData.map(({ id, date, title }) => (
-            // <li key={id}>
-            //   {title}
-              
-            //   <br />
-            //   {id}
-            //   <br />
-            //   {date}
-            //   <button>
-            //     <Link href={`blog/post/${id}`}>Read more</Link>
-            //   </button>
-            // </li>
+          {allPostsData.map(({ id, image, date, title, timeToRead, description } : IBlogProps) => (
             <div key={id}>
               <BlogCard
-                
                 id={id}
+                image={image}
+                title={title}
+                description={description}
+                date={date}
+                timeToRead={timeToRead}
               />
             </div>
           ))}

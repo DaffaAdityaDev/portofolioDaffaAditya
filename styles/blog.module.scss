@@ -1,0 +1,66 @@
+.blogPost {
+    max-width:  800px;
+    margin:  0 auto;
+    padding:  2rem;
+    border-radius:  10px;
+    box-shadow:  0  4px  6px rgba(0,  0,  0,  0.1);
+    // background-color: #1a1a1a; // Dark background color
+    color: #f9f9f9; // Light text color for dark background
+
+    // Directly targeting elements within .blogPost
+    h1, h2, h3, h4, h5, h6, p, ul, ol, blockquote, code, pre {
+        margin-bottom:  1.5rem;
+    }
+
+    h1 { font-size:  2.5rem; }
+    h2 { font-size:  2.25rem; }
+    h3 { font-size:  2rem; }
+    h4 { font-size:  1.75rem; }
+    h5 { font-size:  1.5rem; }
+    h6 { font-size:  1.25rem; }
+
+    p {
+        font-size:  1.1rem;
+        line-height:  1.6;
+    }
+
+    ul { 
+        list-style: disc;
+        margin-left:  2rem;
+    }
+    ol { list-style: decimal; }
+
+    blockquote {
+        margin:  2rem  0;
+        padding:  1rem;
+        border-left:  4px solid #ddd;
+        font-style: italic;
+    }
+
+    code, pre {
+        background-color: #282828; // Darker background for code blocks
+        padding:  1rem;
+        border-radius:  4px;
+        font-family: 'Courier New', Courier, monospace;
+        overflow-x: auto;
+    }
+
+    // Responsive styles
+    @media (max-width:  640px) {
+        p, h2, h3, h4, h5, h6 {
+            font-size:  1rem;
+        }
+    }
+
+    @media (min-width:  641px) and (max-width:  1024px) {
+        p, h2, h3, h4, h5, h6 {
+            font-size:  1.1rem;
+        }
+    }
+
+    @media (min-width:  1025px) {
+        p, h2, h3, h4, h5, h6 {
+            font-size:  1.1rem;
+        }
+    }
+}

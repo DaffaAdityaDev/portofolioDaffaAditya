@@ -1,24 +1,44 @@
 import Link from 'next/link'
 import React from 'react'
+import Date from '../../Date'
 
 function BlogCard({
     id,
-}) {
+    image,
+    title,
+    description,
+    date,
+    timeToRead,
+} : IBlogProps)  {
+    const timeToReadFormated = formatTimeToRead(timeToRead);
+
+    function formatTimeToRead(minutes: number): string {
+        if (minutes >=  60) {
+            const hours = Math.floor(minutes /  60);
+            return `${hours} hour${hours >  1 ? 's' : ''}`;
+        } else {
+            return `${minutes} minute${minutes >  1 ? 's' : ''}`;
+        }
+    }
   return (
-    <div>
+    <Link href={`blog/post/${id}`}>
         <div className='w'>
-            <img className='w-full h-full' src="https://networkertheme.com/networker/wp-content/uploads/sites/2/demo-image-00001-1920x1024.jpg" alt="profile" />
+            <img className='w-full h-full' src={image} alt="profile" />
         </div>
-        <div>
-            <h1 className='text-2xl font-bold'>Blog Title</h1>
-            <p className='text-md font-thin'>Blog Description</p>
-            <p>Published Date</p>
-            <p>Time to read</p>
-            <button>
-                <Link href={`blog/post/${id}`}>Read more</Link>
-            </button>
+        <div className='flex flex-col'>
+            <h1 className='text-2xl font-bold line-clamp-2 h-[3em]'>{title}</h1>
+            <p className='text-md font-thin my-2 line-clamp-2 h-[3em]'>{description}</p>  
+            <div className='flex justify-between'>
+                <div>
+                    <p>{timeToReadFormated}</p>
+                    <Date dateString={date} />
+                </div>
+                <button className='w-fit self-end border-2 border-sky-500 p-2 rounded-lg hover:bg-sky-700'>
+                    Read more
+                </button>
+            </div>
         </div>
-    </div>
+    </Link>
   )
 }
 
