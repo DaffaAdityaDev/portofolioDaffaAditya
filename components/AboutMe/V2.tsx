@@ -53,8 +53,8 @@ function AboutMe() {
                 Bangkit Academy 2023{" "}
               </a>
             </span>
-            as Mobile Development Cohort. Also, I've had the privilege of
-            building software for an
+            {/* as Mobile Development Cohort. Also, I've had the privilege of
+            building software for an */}
             <span className="font-bold text-teal-400 ">
               <a
                 href="https://ombudsman.go.id/"

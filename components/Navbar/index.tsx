@@ -7,7 +7,7 @@ const Navbar: NextPage = () => {
       <ul className="flex justify-end gap-x-5">
         <li className="">
           <Link href="/">
-            <a>Home</a>
+            Home
           </Link>
         </li>
         {/* <li>

@@ -1,38 +1,52 @@
 import { GraphQLClient, gql } from "graphql-request";
-import BlogCard from "../../components/BlogCard/BlogCard";
+import BlogCard from "../../components/Blog/BlogCard";
 import React from "react";
 import Navbar from "../../components/Navbar";
-import QUEARYALLBLOG from "../../Middleware/get-blog-api";
-
-const graphcms = new GraphQLClient(
-  "https://api-ap-northeast-1.graphcms.com/v2/cl4il4eos41je01z69eikf0ly/master",
-);
+import { getSortedPostsData } from '../../lib/posts'
+import Link from 'next/link'
 
 export async function getStaticProps() {
-  const { posts } = await graphcms.request(QUEARYALLBLOG);
+  const allPostsData = getSortedPostsData();
   return {
     props: {
-      posts,
+      allPostsData,
     },
-    revalidate: 10,
   };
 }
-
-const Blog = ({ posts }: any) => {
+const Blog = ({ allPostsData }: IBlogProps) => {
+  console.log(allPostsData);
   return (
-    <div className="">
-      <Navbar />
-      {posts.map((post: any) => (
-        <div className="" key={post.title}>
-          <BlogCard
-            title={post.title}
-            author={post.author}
-            key={post.id}
-            datePublished={post.datePublished}
-            slug={post.slug}
-          />
+    <div className="grid grid-cols-12 text-white">
+      <div className="col-start-2 col-span-10">
+        <Navbar />
+      </div>
+      <div className="col-start-2 cols-span-4">
+        <p>THE MOST</p>
+        <p>Recent Articles</p>
+      </div>
+      <div className="col-start-2 col-span-10">
+        <div className="grid grid-cols-2 gap-4">
+          {allPostsData.map(({ id, date, title }) => (
+            // <li key={id}>
+            //   {title}
+              
+            //   <br />
+            //   {id}
+            //   <br />
+            //   {date}
+            //   <button>
+            //     <Link href={`blog/post/${id}`}>Read more</Link>
+            //   </button>
+            // </li>
+            <div key={id}>
+              <BlogCard
+                
+                id={id}
+              />
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
     </div>
   );
 };

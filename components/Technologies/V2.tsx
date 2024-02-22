@@ -6,7 +6,7 @@ function Technologies() {
       <div className="relative top-32 left-0 z-10">
         <h2 className="w-full text-center text-5xl font-bold ">Technologies</h2>
         <p className="z-10 w-full text-center text-2xl ">
-          I'm a Full Stack Developer
+          {/* I'm a Full Stack Developer */}
         </p>
       </div>
       <div className="-mt-20 flex h-full items-center justify-center gap-4">
