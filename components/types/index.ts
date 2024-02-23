@@ -1,4 +1,4 @@
-interface IBlogProps {
+export interface IBlogProps {
     id: string;
     image: string;
     title: string;
@@ -6,11 +6,13 @@ interface IBlogProps {
     date: string;
     timeToRead: number;
 }
-interface IParams {
+export interface IParams {
     id: string;
 }
 
-interface IBreadcrumbItem {
+export interface IBreadcrumbItem {
     title: string;
     href: string;
-  }
+}
+
+export {}

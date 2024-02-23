@@ -10,13 +10,13 @@ const Navbar: NextPage = () => {
             Home
           </Link>
         </li>
-        {/* <li>
+        <li>
           <Link href="/blog">
-            <a>Blog</a>
+            Blog
           </Link>
-        </li> */}
+        </li>
         <li className="cursor-pointer">
-          <a>QnA</a>
+          QnA
         </li>
         <li>
           <a

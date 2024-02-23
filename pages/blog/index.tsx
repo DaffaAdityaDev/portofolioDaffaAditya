@@ -4,6 +4,7 @@ import React from "react";
 import Navbar from "../../components/Navbar";
 import { getSortedPostsData } from '../../lib/posts'
 import Link from 'next/link'
+import { IBlogProps } from "../../components/types";
 
 export async function getStaticProps() {
   const allPostsData = getSortedPostsData();

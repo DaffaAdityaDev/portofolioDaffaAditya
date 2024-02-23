@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 import Date from '../../Date'
+import { IBlogProps } from '../../types';
 
 function BlogCard({
     id,
