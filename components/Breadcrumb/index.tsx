@@ -1,6 +1,7 @@
 // components/Breadcrumb/index.tsx
 import React from 'react';
 import BreadcrumbItem from './BreadcrumbItem';
+import { IBreadcrumbItem } from '../types';
 
 
 const Breadcrumb= ({ items } : { items: IBreadcrumbItem[]}) => {
