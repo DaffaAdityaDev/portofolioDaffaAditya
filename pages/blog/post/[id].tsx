@@ -2,6 +2,7 @@ import { getAllPostIds, getPostData } from '../../../lib/posts';
 import Breadcrumb from '../../../components/Breadcrumb';
 import styles from '../../../styles/blog.module.scss'
 import Navbar from '../../../components/Navbar';
+import Head from 'next/head';
 
 export async function getStaticPaths() {
   const paths = getAllPostIds();
@@ -24,9 +25,18 @@ export async function getStaticProps({ params } : any) {
 // Your page component here
 function Post({ postData } : any) {
   // Render your post data
-  console.log(postData);
+  // console.log(postData);
   return (
     <div className='grid grid-cols-12 text-white'>
+      <Head>
+        <title>{postData.title}</title>
+        <meta name="description" content={postData.description} />
+        <meta property="og:title" content={postData.title} />
+        <meta property="og:description" content={postData.description} />
+        <meta property="og:image" content={postData.image} />
+        <meta property="og:url" content={`https://yourwebsite.com/blog/${postData.id}`} />
+        <meta property="og:type" content="article" />
+      </Head>
       <div className='col-start-2 col-span-10'>
         <Navbar />
         <div className='my-4'>
