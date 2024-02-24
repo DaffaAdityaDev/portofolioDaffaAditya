@@ -23,7 +23,11 @@ function BlogCard({
     }
   return (
     <Link href={`blog/post/${id}`}>
-        <div className=' bg-neutral-900 rounded-lg'>
+        <div className=' bg-neutral-900 rounded-lg ' style={{
+    backgroundImage: "linear-gradient(calc(var(--rotation)), #888  0, #444  20%, transparent  80%)",
+    backgroundOrigin: "border-box",
+    backgroundClip: "padding-box, border-box",
+}}>
             <div className='relative'>
                 <div className='absolute  top-0 left-0 w-full h-full rounded-t-lg bg-gradient-to-r 
                     bg-clip-padding backdrop-filter backdrop-blur-lg opacity-0 hover:opacity-100 
@@ -32,7 +36,7 @@ function BlogCard({
                     </div>
                 <img className='w-full h-full rounded-t-lg' src={image} alt="profile" />
             </div>
-            <div className='flex flex-col p-2'>
+            <div className='flex flex-col p-3'>
                 <p className='text-2xl font-bold my-2 overflow-hidden h-[1.6em]' style={{
                     display: '-webkit-box',
                     WebkitBoxOrient: 'vertical',
@@ -48,9 +52,14 @@ function BlogCard({
                         <p>{timeToReadFormated}</p>
                         <Date dateString={date} />
                     </div>
-                    <button className='w-fit self-end border-2 border-sky-500 p-2 rounded-lg hover:bg-sky-700'>
+                    
+                    <button className="relative group inline-flex h-12 overflow-hidden rounded-lg p-[2px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
+                        <span className="absolute inset-[-1000%] group-hover:animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#0891b2_0%,#393BB2_50%,#e11d48_100%)]" />
+                        <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-lg bg-slate-950 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl ">
                         Read more
+                        </span>
                     </button>
+                    
                 </div>
             </div>
         </div>
@@ -59,3 +68,4 @@ function BlogCard({
 }
 
 export default BlogCard
+
