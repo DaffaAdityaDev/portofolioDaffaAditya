@@ -1,12 +1,11 @@
 ---
 title: 'How i design a video Sharing service'
 date: '2023-04-01'
-timeToRead:   10
-description: 'This article is designed to test all the styles in the blog.module.scss file.'
+timeToRead: 10
+description: 'Explore the architecture and features of a scalable video sharing service, including user authentication, video uploading, streaming, and more. Learn about design considerations, system architecture, and the importance of scalability and performance.'
 image: '/image/blogs/videoSharing/systemDesign.jpg'
 ---
 
-## Designing a video Sharing service that can scale
 
 In this blog, we will focus on creating the architecture and features that will be needed in this video Sharing service.
 

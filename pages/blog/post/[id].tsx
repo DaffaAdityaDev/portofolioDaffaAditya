@@ -50,7 +50,7 @@ function Post({ postData } : any) {
         </div>
         <div className='flex flex-col justify-center'>
           <img src={postData.image} alt="profile" />
-          <h1 className='text-4xl'>{postData.title}</h1>
+          <h1 className='text-4xl font-bold mt-6 text-center'>{postData.title}</h1>
         </div>
         <div className={styles.blogPost} dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
       </div>
