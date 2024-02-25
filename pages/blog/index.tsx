@@ -15,13 +15,13 @@ export async function getStaticProps() {
   };
 }
 const Blog = ({ allPostsData }: any) => {
-  console.log(allPostsData);
+  // console.log(allPostsData);
   const allPostsData1 = []
 
   for (let i = 0; i < 4; i++) {
     allPostsData1.push(allPostsData[0])
   }
-  console.log(allPostsData1);
+  // console.log(allPostsData1);
   return (
     <div className="grid grid-cols-12 text-white">
       <div className="col-start-2 col-span-10">
@@ -39,7 +39,7 @@ const Blog = ({ allPostsData }: any) => {
       </div>
       <div className="col-start-2 col-span-10">
         <div className="grid grid-cols-2 sm:grid-cols-1 gap-6">
-          {allPostsData1.map(({ id, image, date, title, timeToRead, description } : IBlogProps) => (
+          {allPostsData.map(({ id, image, date, title, timeToRead, description } : IBlogProps) => (
             <div key={id}>
               <BlogCard
                 id={id}
