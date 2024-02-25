@@ -23,11 +23,7 @@ function BlogCard({
     }
   return (
     <Link href={`blog/post/${id}`}>
-        <div className=' bg-neutral-900 rounded-lg ' style={{
-    backgroundImage: "linear-gradient(calc(var(--rotation)), #888  0, #444  20%, transparent  80%)",
-    backgroundOrigin: "border-box",
-    backgroundClip: "padding-box, border-box",
-}}>
+        <div className=' bg-neutral-900 rounded-lg'>
             <div className='relative'>
                 <div className='absolute  top-0 left-0 w-full h-full rounded-t-lg bg-gradient-to-r 
                     bg-clip-padding backdrop-filter backdrop-blur-lg opacity-0 hover:opacity-100 
