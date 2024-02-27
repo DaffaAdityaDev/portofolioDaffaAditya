@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import AboutMe from "../components/AboutMe";
 import Hero from "../components/Hero";
-import Navbar from "../components/Navbar"; 
+import Navbar from "../components/Navbar";
 import Project from "../components/Project";
 import data from "../data/Personal.js";
 import ExperienceData from "../data/Experience.js";
@@ -12,8 +12,6 @@ import Experience from "../components/Experience";
 import CourseTaken from "../components/CourseTaken";
 import Footer from "../components/Footer";
 import { Fade } from "react-awesome-reveal";
-
-
 
 const Home: NextPage = ({ posts }: any) => {
   return (
@@ -32,7 +30,7 @@ const Home: NextPage = ({ posts }: any) => {
       </Head>
 
       <div className="container max-w-[1200px] font-primary text-white">
-      <Navbar />
+        <Navbar />
         <Hero />
         <Fade triggerOnce>
           <AboutMe />

@@ -6,18 +6,12 @@ const Navbar: NextPage = () => {
     <div className="border-2 border-slate-900 border-b-sky-600 bg-slate-900 p-4 pb-6 ">
       <ul className="flex justify-end gap-x-5">
         <li className="">
-          <Link href="/">
-            Home
-          </Link>
+          <Link href="/">Home</Link>
         </li>
         <li>
-          <Link href="/blog">
-            Blog
-          </Link>
+          <Link href="/blog">Blog</Link>
         </li>
-        <li className="cursor-pointer">
-          QnA
-        </li>
+        <li className="cursor-pointer">QnA</li>
         <li>
           <a
             href="https://drive.google.com/file/d/16bp1lgGaVHe670IO1bR7khk01h6GaXdC/view?usp=share_link"

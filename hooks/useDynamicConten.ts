@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from "react";
 
 type LoadContent = () => JSX.Element | null;
 
@@ -14,14 +14,14 @@ function useDynamicContent(loadContent: LoadContent) {
           observer.unobserve(entry.target);
         }
       },
-      { threshold:   0.1 }
+      { threshold: 0.1 },
     );
 
     const currentRef = ref.current; // Capture the current value of ref.current
 
     if (currentRef) {
-        observer.observe(currentRef);
-      }
+      observer.observe(currentRef);
+    }
 
     return () => {
       if (currentRef) {
