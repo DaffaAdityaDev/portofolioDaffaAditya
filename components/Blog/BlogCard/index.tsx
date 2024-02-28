@@ -42,14 +42,16 @@ function BlogCard({
     <Link href={`blog/post/${id}`}>
       <div className=" rounded-lg bg-neutral-900">
         <div className="relative flex justify-center">
-          {/* <div className='absolute  top-0 left-0 w-full h-full rounded-t-lg bg-gradient-to-r 
-            bg-clip-padding backdrop-filter backdrop-blur-lg opacity-0 hover:opacity-100 
-            transition-opacity duration-300 flex justify-center items-center text-2xl sm:text-md font-bold'>
-                Read More
-            </div> */}
-          <p className="absolute my-10 mx-4 rounded-full p-4 text-center text-3xl font-bold backdrop-blur-xl">
+          <div
+            className="sm:text-md  absolute top-0 left-0 flex h-full w-full 
+            items-center justify-center rounded-t-lg bg-gradient-to-r bg-clip-padding 
+            text-2xl font-bold opacity-0 backdrop-blur-lg backdrop-filter transition-opacity duration-300 hover:opacity-100"
+          >
+            Read More
+          </div>
+          {/* <p className="absolute my-10 mx-4 rounded-full p-4 text-center text-3xl font-bold backdrop-blur-xl">
             {title}
-          </p>
+          </p> */}
           <img
             className="h-full w-full rounded-t-lg"
             src={image}
@@ -57,6 +59,7 @@ function BlogCard({
           />
         </div>
         <div className="flex flex-col p-3">
+          <h2 className="text-2xl font-bold">{title}</h2>
           <p
             className="text-md my-2 h-[3em] overflow-hidden font-thin"
             style={{

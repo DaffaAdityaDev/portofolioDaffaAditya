@@ -27,13 +27,13 @@ const Blog = ({ allPostsData }: any) => {
       <div className="col-span-10 col-start-2">
         <Navbar />
       </div>
-      <div className="relative flex flex-col justify-center items-center w-full col-start-2 col-span-10 my-8">
-        <div className="absolute top-0 left-0 w-full h-full transform translate-y-1/2 -z-10">
-          <div className="w-full h-[1px] border border-slate-700 mb-[2px]" />
-          <div className="w-full h-[1px] border border-slate-700" />
+      <div className="relative col-span-10 col-start-2 my-8 flex w-full flex-col items-center justify-center">
+        <div className="absolute top-0 left-0 -z-10 h-full w-full translate-y-1/2 transform">
+          <div className="mb-[2px] h-[1px] w-full border border-slate-700" />
+          <div className="h-[1px] w-full border border-slate-700" />
         </div>
-        <div className="bg-slate-900 p-2 text-center rounded-md">
-          <p className="font-bold text-2xl">Featured Posts</p>
+        <div className="rounded-md bg-slate-900 p-2 text-center">
+          <p className="text-2xl font-bold">Featured Posts</p>
           <p className="font-thin">Stay Informed with our featured Posts</p>
         </div>
       </div>

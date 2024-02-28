@@ -3,7 +3,7 @@ title: "How i design a video Sharing service"
 date: "2024-02-26"
 timeToRead: 10
 description: "Explore the architecture and features of a scalable video sharing service, including user authentication, video uploading, streaming, and more. Learn about design considerations, system architecture, and the importance of scalability and performance."
-image: "/image/blogs/videoSharing/systemDesign.jpg"
+image: "/image/blogs/videoSharing/systemDesign.webp"
 ---
 
 In this blog, we will focus on creating the architecture and features that will be needed in this video Sharing service.
@@ -41,7 +41,7 @@ if we use existing CDN cloud services to serve videos. then it would cost money 
 
 ### High-Level System Design
 
-![Image of video Sharing Service](/image/blogs/videoSharing/systemDesign.jpg)
+![Image of video Sharing Service](/image/blogs/videoSharing/systemDesign.webp)
 
 High-level design requires the following components:
 
@@ -115,7 +115,7 @@ Whenever a user sends a request to watch the video, the platform checks the view
 ### db Schema
 
 We can use PostgreSQL to store the metadata like user and video information. For this, we can maintain the following tables:
-![db Schema](/image/blogs/videoSharing/dbSchema.jpg)
+![db Schema](/image/blogs/videoSharing/dbSchema.webp)
 
 #### Metadata Replication: Master-Slave Architecture
 
@@ -133,7 +133,7 @@ Sharding is one of the way of scaling a relational database besides the master-s
 
 Sharding can increase the system complexity and we need an abstract system to handle the scaling and manageability challenges. so we going to use postgress-XL, which is an open-source distributed database management system. It is based on PostgreSQL and is designed to handle large-scale databases and high throughput. [postgressXL](https://www.postgres-xl.org/)
 
-![sharding](/image/blogs/videoSharing/sharding.jpg)
+![sharding](/image/blogs/videoSharing/sharding.webp)
 
 Here are some imporatnt features of postgress-XL:
 
