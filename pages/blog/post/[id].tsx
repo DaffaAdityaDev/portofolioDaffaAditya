@@ -3,6 +3,9 @@ import Breadcrumb from '../../../components/Breadcrumb';
 import styles from '../../../styles/blog.module.scss'
 import Navbar from '../../../components/Navbar';
 import Head from 'next/head';
+import Prism from 'prismjs';
+import 'prismjs/themes/prism-tomorrow.css'; // Import the theme you prefer
+import { useEffect } from 'react';
 
 export async function getStaticPaths() {
   const paths = getAllPostIds();
@@ -26,6 +29,10 @@ export async function getStaticProps({ params } : any) {
 function Post({ postData } : any) {
   // Render your post data
   // console.log(postData);
+  useEffect(() => {
+    Prism.highlightAll();
+  }, []);
+  
   return (
     <div className='grid grid-cols-12 text-white'>
       <Head>
