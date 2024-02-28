@@ -1,18 +1,18 @@
 export interface IBlogProps {
-    id: string;
-    image: string;
-    title: string;
-    description: string;
-    date: string;
-    timeToRead: number;
+  id: string;
+  image: string;
+  title: string;
+  description: string;
+  date: string;
+  timeToRead: number;
 }
 export interface IParams {
-    id: string;
+  id: string;
 }
 
 export interface IBreadcrumbItem {
-    title: string;
-    href: string;
+  title: string;
+  href: string;
 }
 
-export {}
+export {};
