@@ -27,7 +27,7 @@ const Blog = ({ allPostsData }: any) => {
       <div className="col-span-10 col-start-2">
         <Navbar />
       </div>
-      {/* <div className="relative flex flex-col justify-center items-center w-full col-start-2 col-span-10 my-8">
+      <div className="relative flex flex-col justify-center items-center w-full col-start-2 col-span-10 my-8">
         <div className="absolute top-0 left-0 w-full h-full transform translate-y-1/2 -z-10">
           <div className="w-full h-[1px] border border-slate-700 mb-[2px]" />
           <div className="w-full h-[1px] border border-slate-700" />
@@ -36,13 +36,13 @@ const Blog = ({ allPostsData }: any) => {
           <p className="font-bold text-2xl">Featured Posts</p>
           <p className="font-thin">Stay Informed with our featured Posts</p>
         </div>
-      </div> */}
-      <div className="col-start-0 col-span-12">
+      </div>
+      {/* <div className="col-start-0 col-span-12">
         <div className="relative grid h-20 grid-cols-12 py-20">
           <div className="col-start-0 absolute -z-10 col-span-12 h-full w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500  " />
           <p className="col-start-2">Blog Posts</p>
         </div>
-      </div>
+      </div> */}
       <div className="col-span-10 col-start-2">
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-1">
           {allPostsData.map(
