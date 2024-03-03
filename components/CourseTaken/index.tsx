@@ -39,7 +39,7 @@ function CourseTaken() {
                   <p className="font-semibold">{data.year}</p>
                 </div>
               </a>
-              <div className="mt-5 mb-2 h-1 w-full rounded-full bg-gradient-to-r from-sky-400 via-violet-500 to-blue-500"></div>
+              <div className="mb-2 mt-5 h-1 w-full rounded-full bg-gradient-to-r from-sky-400 via-violet-500 to-blue-500"></div>
             </div>
           );
         })}

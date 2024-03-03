@@ -6,7 +6,7 @@ import Linkedin from "/public/svg/linkedin.svg";
 function AboutMe() {
   return (
     <div className="mt-20 flex w-full flex-col items-center justify-center">
-      <div className="mx-auto mx-6 flex w-full flex-col items-center justify-center">
+      <div className="mx-6 mx-auto flex w-full flex-col items-center justify-center">
         <h2 className="mb-2 text-4xl font-bold">Hi, Daffa Aditya Rahman</h2>
         <p className="mb-4 text-xl">Software Developer | Web Enthusiast</p>
         <p className="text-md">

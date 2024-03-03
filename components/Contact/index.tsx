@@ -14,7 +14,7 @@ const Contact = () => {
       {popUp && (
         <div>
           <div
-            className="bg-sky-800opacity-10 fixed top-0 left-0 right-0 z-10 
+            className="bg-sky-800opacity-10 fixed left-0 right-0 top-0 z-10 
         h-full w-full"
           />
           <PopUpForm

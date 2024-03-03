@@ -75,14 +75,16 @@ export async function getStaticProps() {
 
 **When should I used getStaticProps?**
 These are the commons considerations for using getStaticProps:
+
 - The data required to render the page is available at build time ahead of a user's request.
 - The data comes from a headless CMS.
 - The page must be pre-rendered (for SEO) and be very fast to load. **getStaticProps** generates HTML and JSON files, both of which can be cached by a CDN for performance.
-- The data can be publicly cached (not user-specific). This condition can be bypassed in certain specific cases by using  a Middleware to rewrite the URL or path.
+- The data can be publicly cached (not user-specific). This condition can be bypassed in certain specific cases by using a Middleware to rewrite the URL or path.
 
 **When does getStaticProps run?**
 
 **getStaticProps** always runs on the server and never runs on the client.
+
 - **getStaticProps** always run during (Next Build).
 - **getStaticProps** runs in background when using **fallback: true**.
 - **getStaticProps** runs at request time when using **fallback: blocking**.
@@ -109,7 +111,7 @@ export async function getStaticProps() {
 
 **Sceneraio 2**: Your page path depends on external data
 
-Next.js allows you to pre-render pages with dynamic routes. This is useful when you want to pre-render a page but don't want to specify all the routes at build time. You can use the **getStaticPaths** function to specify the dynamic routes to pre-render based on the data. 
+Next.js allows you to pre-render pages with dynamic routes. This is useful when you want to pre-render a page but don't want to specify all the routes at build time. You can use the **getStaticPaths** function to specify the dynamic routes to pre-render based on the data.
 
 For example, you can create file called **[id].jsx** in the **pages/blog** directory. This will be used show the blog post with the specified id. by accessing the URL **/blog/1**, **/blog/2**, and so on. However, which id you want to pre-render at build time might depend on the external data. In this case, you can use the **getStaticPaths** function to specify the dynamic routes to pre-render based on the data. Here is an example of a page that uses static generation with data and dynamic routes:
 
@@ -149,15 +151,16 @@ export async function getStaticProps({ params }) {
 
 ## When should I use Static Generation?
 
-Currently, this page was using Static generation using data from markdown. This is useful because now this block can be indexed by search engines and can be cached by a CDN. i recommend using static Generation (with and without data) whenever possible because your page can be built once and served by CDN, make it much faster compare to server side rendering. 
+Currently, this page was using Static generation using data from markdown. This is useful because now this bloggit can be indexed by search engines and can be cached by a CDN. i recommend using static Generation (with and without data) whenever possible because your page can be built once and served by CDN, make it much faster compare to server side rendering.
 
 You can use Static Generation for many types of pages, including:
+
 - Marketing pages
 - Blog posts and portfolio
 - E-commerce product listings
 - Help and documentation
 
-## Conclusion 
+## Conclusion
 
 ![Image of video Sharing Service](/image/blogs/SSGInDetail/SSGEnd.webp)
 
@@ -166,5 +169,6 @@ You should ask yourself: "Can i pre-render this page ahdead of a user's request?
 On the other side, Static Generation is not a good idea if you cannot pre-render a page ahead of a user's request. For example, if you need to fetch data at request time, or if your page uses client-side data. or maybe you page shows frequently update data like stock price, or maybe you page is a user-specific page like dashboard. In these cases, you should choose Server Side Rendering.
 
 In cases like that, you can do one of the following:
+
 - Use Server Side Rendering: You can pre-render a page ahead of a user's request. You can use Server Side Rendering to fetch data at request time. It will be slower because the page cannot be cached by a CDN. But it will always be up-to-date.
 - Use Static Generation with Client-side data fetching: You can also pre-render a page ahead of a user's request. But you can also fetch data on the client side using JavaScript. it's call **Hydration**. the page will be faster because it can be cached by a CDN. But user may see a loading state while the data is being fetched.

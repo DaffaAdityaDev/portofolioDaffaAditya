@@ -36,7 +36,7 @@ const Hero: NextPage = () => {
           Mobile Developer Cohort.
         </p>
         <div className="flex flex-wrap sm:justify-center">
-          <div className=" mt-5 mr-3 cursor-pointer rounded-lg rounded-br-lg p-2 duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-sky-700/50">
+          <div className=" mr-3 mt-5 cursor-pointer rounded-lg rounded-br-lg p-2 duration-300 hover:-translate-y-1 hover:scale-110 hover:bg-sky-700/50">
             <a
               href="https://github.com/DaffaAdityaDev"
               rel="noopener noreferrer"

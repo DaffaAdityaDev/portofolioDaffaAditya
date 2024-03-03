@@ -3,7 +3,7 @@ import React from "react";
 function Technologies() {
   return (
     <div className="relative mt-32 h-[800px]">
-      <div className="relative top-32 left-0 z-10">
+      <div className="relative left-0 top-32 z-10">
         <h2 className="w-full text-center text-5xl font-bold ">Technologies</h2>
         <p className="z-10 w-full text-center text-2xl ">
           {/* I'm a Full Stack Developer */}
@@ -68,7 +68,7 @@ function Technologies() {
       </div>
 
       <div
-        className='absolute right-0 bottom-0 z-0 h-full w-full
+        className='absolute bottom-0 right-0 z-0 h-full w-full
         bg-black bg-[url("https://img.freepik.com/free-photo/gradient-3d-fluid-background_23-2150499029.jpg?w=1480&t=st=1704688258~exp=1704688858~hmac=a348fb00c787107fb2d180fd9085bbce713877ab3db8e17da92c9d4d6185683b")] bg-cover bg-center'
       />
       <div
@@ -76,11 +76,11 @@ function Technologies() {
         bg-gradient-to-b from-black"
       />
       <div
-        className="absolute right-0 bottom-0 z-0 h-full w-full
+        className="absolute bottom-0 right-0 z-0 h-full w-full
         bg-gradient-to-t from-black opacity-20"
       />
       <div
-        className="absolute right-0 bottom-0 z-0 h-1/3 w-full
+        className="absolute bottom-0 right-0 z-0 h-1/3 w-full
         bg-gradient-to-t from-black"
       />
     </div>

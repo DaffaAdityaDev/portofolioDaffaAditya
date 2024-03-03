@@ -1,9 +1,7 @@
-import { GraphQLClient, gql } from "graphql-request";
 import BlogCard from "../../components/Blog/BlogCard";
 import React from "react";
 import Navbar from "../../components/Navbar";
 import { getSortedPostsData } from "../../lib/posts";
-import Link from "next/link";
 import { IBlogProps } from "../../components/types";
 
 export async function getStaticProps() {
@@ -28,7 +26,7 @@ const Blog = ({ allPostsData }: any) => {
         <Navbar />
       </div>
       <div className="relative col-span-10 col-start-2 my-8 flex w-full flex-col items-center justify-center">
-        <div className="absolute top-0 left-0 -z-10 h-full w-full translate-y-1/2 transform">
+        <div className="absolute left-0 top-0 -z-10 h-full w-full translate-y-1/2 transform">
           <div className="mb-[2px] h-[1px] w-full border border-slate-700" />
           <div className="h-[1px] w-full border border-slate-700" />
         </div>
@@ -37,12 +35,6 @@ const Blog = ({ allPostsData }: any) => {
           <p className="font-thin">Stay Informed with our featured Posts</p>
         </div>
       </div>
-      {/* <div className="col-start-0 col-span-12">
-        <div className="relative grid h-20 grid-cols-12 py-20">
-          <div className="col-start-0 absolute -z-10 col-span-12 h-full w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500  " />
-          <p className="col-start-2">Blog Posts</p>
-        </div>
-      </div> */}
       <div className="col-span-10 col-start-2">
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-1">
           {allPostsData.map(

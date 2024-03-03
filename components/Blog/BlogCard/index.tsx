@@ -2,6 +2,7 @@ import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import Date from "../../Date";
 import { IBlogProps } from "../../types";
+import Image from "next/image";
 
 function BlogCard({
   id,
@@ -43,7 +44,7 @@ function BlogCard({
       <div className=" rounded-lg bg-neutral-900">
         <div className="relative flex justify-center">
           <div
-            className="sm:text-md  absolute top-0 left-0 flex h-full w-full 
+            className="sm:text-md  absolute left-0 top-0 flex h-full w-full 
             items-center justify-center rounded-t-lg bg-gradient-to-r bg-clip-padding 
             text-2xl font-bold opacity-0 backdrop-blur-lg backdrop-filter transition-opacity duration-300 hover:opacity-100"
           >
@@ -52,10 +53,15 @@ function BlogCard({
           {/* <p className="absolute my-10 mx-4 rounded-full p-4 text-center text-3xl font-bold backdrop-blur-xl">
             {title}
           </p> */}
-          <img
+          <Image
             className="h-full w-full rounded-t-lg"
             src={image}
             alt="profile"
+            width={900}
+            height={500}
+            loading="lazy"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            quality={50}
           />
         </div>
         <div className="flex flex-col p-3">

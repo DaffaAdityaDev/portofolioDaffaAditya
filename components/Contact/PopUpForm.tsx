@@ -58,15 +58,15 @@ function PopUpForm({
 
   return (
     <div
-      className="fixed top-0 left-0 right-0 z-20 h-full w-full
+      className="fixed left-0 right-0 top-0 z-20 h-full w-full
         text-white backdrop-blur-sm"
     >
       <div
-        className="absolute top-1/2 left-1/2 w-1/2 min-w-[35rem] max-w-[50rem] -translate-y-1/2
-        -translate-x-1/2 rounded-lg md:min-w-[25rem]"
+        className="absolute left-1/2 top-1/2 w-1/2 min-w-[35rem] max-w-[50rem] -translate-x-1/2
+        -translate-y-1/2 rounded-lg md:min-w-[25rem]"
       >
         <div className="h-full w-full rounded-lg bg-gradient-to-tr from-sky-500 via-violet-500 to-blue-500 p-1">
-          <div className="h-full w-full rounded-lg bg-slate-800 py-10 px-10">
+          <div className="h-full w-full rounded-lg bg-slate-800 px-10 py-10">
             <h1 className="pb-5 text-center text-3xl font-bold">Contact</h1>
             <p className="pb-5 text-center text-2xl">
               Feel free to get in touch and talk more about your projects.

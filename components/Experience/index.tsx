@@ -4,7 +4,7 @@ import { Fade } from "react-awesome-reveal";
 const index = ({ ExperienceData }: { ExperienceData: any }) => {
   return (
     <div className="mt-10 w-full">
-      <div className="mt-20 mb-2 h-1 w-1/6 rounded-full bg-gradient-to-r from-blue-500 to-transparent"></div>
+      <div className="mb-2 mt-20 h-1 w-1/6 rounded-full bg-gradient-to-r from-blue-500 to-transparent"></div>
       <Fade triggerOnce>
         <h2 className="mb-5 text-3xl font-bold">Experience</h2>
       </Fade>
@@ -29,7 +29,7 @@ const index = ({ ExperienceData }: { ExperienceData: any }) => {
                   </p>
                 </div>
               </div>
-              <div className="mt-5 mb-2 h-1 w-full rounded-full bg-gradient-to-r from-sky-400 via-violet-500 to-blue-500"></div>
+              <div className="mb-2 mt-5 h-1 w-full rounded-full bg-gradient-to-r from-sky-400 via-violet-500 to-blue-500"></div>
             </Fade>
           </>
         );

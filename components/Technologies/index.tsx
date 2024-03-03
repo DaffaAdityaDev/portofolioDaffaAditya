@@ -10,7 +10,7 @@ import { NextPage } from "next";
 const Technologies: NextPage = () => {
   return (
     <div>
-      <div className="mt-20 mb-2 h-1 w-1/6 rounded-full bg-gradient-to-r from-blue-500 to-transparent"></div>
+      <div className="mb-2 mt-20 h-1 w-1/6 rounded-full bg-gradient-to-r from-blue-500 to-transparent"></div>
       <h2 className="bg-gradient-to-r from-white bg-clip-text text-4xl font-bold text-transparent antialiased">
         Skills
       </h2>
