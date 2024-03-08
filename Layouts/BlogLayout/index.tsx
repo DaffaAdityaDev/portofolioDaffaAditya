@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from "react";
+import React, { PropsWithChildren } from 'react';
 
 const BlogLayout = (props: PropsWithChildren) => {
   return (

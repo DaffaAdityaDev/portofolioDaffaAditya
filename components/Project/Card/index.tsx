@@ -1,9 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
-import React from "react";
-import Image from "next/image";
-import githubSvg from "../../../public/svg/github.svg";
-import weblinkSvg from "../../../public/svg/weblink.svg";
-import { Fade } from "react-awesome-reveal";
+import React from 'react';
+import Image from 'next/image';
+import githubSvg from '../../../public/svg/github.svg';
+import weblinkSvg from '../../../public/svg/weblink.svg';
+import { Fade } from 'react-awesome-reveal';
 function index({
   title,
   description,

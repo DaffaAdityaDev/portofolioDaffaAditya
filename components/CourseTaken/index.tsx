@@ -1,7 +1,7 @@
-import React from "react";
-import Course from "../../data/Course";
-import Arrow from "../../public/svg/arrow.svg";
-import Image from "next/image";
+import React from 'react';
+import Course from '../../data/Course';
+import Arrow from '../../public/svg/arrow.svg';
+import Image from 'next/image';
 
 function CourseTaken() {
   return (

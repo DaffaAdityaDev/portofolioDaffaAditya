@@ -1,7 +1,7 @@
-import React from "react";
-import Image from "next/image";
-import Github from "/public/svg/github.svg";
-import Linkedin from "/public/svg/linkedin.svg";
+import React from 'react';
+import Image from 'next/image';
+import Github from '/public/svg/github.svg';
+import Linkedin from '/public/svg/linkedin.svg';
 
 function AboutMe() {
   return (
@@ -24,7 +24,7 @@ function AboutMe() {
                 rel="noreferrer"
                 target="_blank"
               >
-                {" "}
+                {' '}
                 Daffa Aditya Rahman
               </a>
             </span>
@@ -37,8 +37,8 @@ function AboutMe() {
                 rel="noreferrer"
                 target="_blank"
               >
-                {" "}
-                Harvard CS50 Introduction to Computer Science.{" "}
+                {' '}
+                Harvard CS50 Introduction to Computer Science.{' '}
               </a>
             </span>
             Fast-forward to today, and I’ve had finished many projects and
@@ -49,8 +49,8 @@ function AboutMe() {
                 rel="noreferrer"
                 target="_blank"
               >
-                {" "}
-                Bangkit Academy 2023{" "}
+                {' '}
+                Bangkit Academy 2023{' '}
               </a>
             </span>
             {/* as Mobile Development Cohort. Also, I've had the privilege of
@@ -61,7 +61,7 @@ function AboutMe() {
                 rel="noreferrer"
                 target="_blank"
               >
-                {" "}
+                {' '}
                 Government
               </a>
             </span>
@@ -72,7 +72,7 @@ function AboutMe() {
                 rel="noreferrer"
                 target="_blank"
               >
-                {" "}
+                {' '}
                 IT Consultant Company
               </a>
             </span>

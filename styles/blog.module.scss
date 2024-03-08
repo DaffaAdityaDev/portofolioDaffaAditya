@@ -28,6 +28,7 @@
   }
   h2 {
     font-size: 2.3rem;
+    font-weight: 600;
   }
   h3 {
     font-size: 2rem;
@@ -46,6 +47,7 @@
     color: #f9f9f9; // Light text color for dark background
     text-decoration: none;
     border-bottom: 1px solid #f9f9f9; // Light text color for dark background
+    font-weight: 600;
   }
 
   p {
@@ -78,7 +80,7 @@
       background-color: #282828; // Darker background for code blocks
       padding: 1rem;
       border-radius: 4px;
-      font-family: "Courier New", Courier, monospace;
+      font-family: 'Courier New', Courier, monospace;
       overflow-x: auto;
     }
   }

@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import Card from "./Card";
-import { Fade } from "react-awesome-reveal";
+import React, { useState } from 'react';
+import Card from './Card';
+import { Fade } from 'react-awesome-reveal';
 const Project = ({ data }: { data: any }) => {
-  const [selectedProjectType, setSelectedProjectType] = useState("web");
+  const [selectedProjectType, setSelectedProjectType] = useState('web');
 
   function setProjectType(type: string) {
     setSelectedProjectType(type);
@@ -15,17 +15,17 @@ const Project = ({ data }: { data: any }) => {
         <h2 className="text-4xl font-bold">Project</h2>
         <p className="pb-4 text-2xl opacity-80">Side project</p>
         <div className="flex w-full justify-center gap-4">
-          {selectedProjectType === "web" ? (
+          {selectedProjectType === 'web' ? (
             <>
               <button
                 className="w-26 h-9 rounded-full bg-blue-700 px-6"
-                onClick={(e) => setProjectType("web")}
+                onClick={(e) => setProjectType('web')}
               >
                 Web
               </button>
               <button
                 className="w-26 h-9 rounded-full bg-blue-500 px-6"
-                onClick={(e) => setProjectType("mobile")}
+                onClick={(e) => setProjectType('mobile')}
               >
                 Mobile
               </button>
@@ -34,13 +34,13 @@ const Project = ({ data }: { data: any }) => {
             <>
               <button
                 className="w-26 h-9 rounded-full bg-blue-500 px-6"
-                onClick={(e) => setProjectType("web")}
+                onClick={(e) => setProjectType('web')}
               >
                 Web
               </button>
               <button
                 className="w-26 h-9 rounded-full bg-blue-700 px-6"
-                onClick={(e) => setProjectType("mobile")}
+                onClick={(e) => setProjectType('mobile')}
               >
                 Mobile
               </button>

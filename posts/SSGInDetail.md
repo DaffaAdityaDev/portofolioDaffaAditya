@@ -23,6 +23,7 @@ In Next.js, there are two types of static site generation that you can use to pr
 By default, Next.js pre-renders every pages using static generation without data. This means that Next.js generates the HTML for each page at build time. This is the fastest way to generate a static site. The HTML is generated once at build time and then served to the client. means that the server does not have to process the request, fetch the data, and then generate the HTML for each request. This makes the website faster and more scalable also it can be cache in CDN (content delivery network). Here is an example of a page that uses static generation without data:
 
 ```javascript
+{/* filePath: pages/index.jsx */}
 export default function Home() {
   return (
     <div>
@@ -46,9 +47,10 @@ In some cases, some pages require fetching external data for pre-rendering. Ther
 In this case, you can use the **getStaticProps** function to fetch the data at build time. The data is then used to pre-render the page. Here is an example of a page that uses static generation with data blog posts from a CMS (Content Management System):
 
 ```javascript
-// pages/blog/[id].jsx
+{/* filePath: pages/blog.jsx */}
+// pages/blog.jsx
 // posts will be populated at build time by getStaticProps()
-export default function Blog({ posts }) {
+export default function Blogs({ posts }) {
   return (
     <ul>
       {posts.map((post) => (
@@ -93,6 +95,7 @@ These are the commons considerations for using getStaticProps:
 when combine with **Incremental Static Regeneration**, **getStaticProps** can be used to update the static page after it has been generated. This is useful when the data changes over time. For example, you can use **getStaticProps** to fetch the latest blog posts from a CMS (Content Management System) and update the static page. consider the following example:
 
 ```javascript
+{/* filePath: pages/blog.jsx */}
 export async function getStaticProps() {
   const res = await fetch("https://yourblog.com/posts");
   const posts = await res.json();
@@ -116,6 +119,8 @@ Next.js allows you to pre-render pages with dynamic routes. This is useful when 
 For example, you can create file called **[id].jsx** in the **pages/blog** directory. This will be used show the blog post with the specified id. by accessing the URL **/blog/1**, **/blog/2**, and so on. However, which id you want to pre-render at build time might depend on the external data. In this case, you can use the **getStaticPaths** function to specify the dynamic routes to pre-render based on the data. Here is an example of a page that uses static generation with data and dynamic routes:
 
 ```javascript
+{/* filePath: pages/blog/[id].jsx */}
+
 // pages/blog/[id].jsx
 export default function Blog({ post }) {
   // Render post...

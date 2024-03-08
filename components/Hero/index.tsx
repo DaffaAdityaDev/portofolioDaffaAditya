@@ -1,10 +1,10 @@
-import type { NextPage } from "next";
-import Personal from "../../data/Personal";
-import githubSvg from "../../public/svg/github.svg";
-import linkedIn from "../../public/svg/linkedin.svg";
-import email from "../../public/svg/email.svg";
-import Bangkit from "../../public/svg/bangkit.svg";
-import Image from "next/image";
+import type { NextPage } from 'next';
+import Personal from '../../data/Personal';
+import githubSvg from '../../public/svg/github.svg';
+import linkedIn from '../../public/svg/linkedin.svg';
+import email from '../../public/svg/email.svg';
+import Bangkit from '../../public/svg/bangkit.svg';
+import Image from 'next/image';
 const Hero: NextPage = () => {
   return (
     <div className="block grid h-screen content-center">

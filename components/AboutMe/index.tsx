@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import type { NextPage } from "next";
-import Image from "next/image";
+import React, { useEffect, useState } from 'react';
+import type { NextPage } from 'next';
+import Image from 'next/image';
 
 const AboutMe: NextPage = () => {
   return (
@@ -18,7 +18,7 @@ const AboutMe: NextPage = () => {
               rel="noreferrer"
               target="_blank"
             >
-              {" "}
+              {' '}
               Daffa Aditya Rahman
             </a>
           </span>
@@ -32,8 +32,8 @@ const AboutMe: NextPage = () => {
               rel="noreferrer"
               target="_blank"
             >
-              {" "}
-              mobile app development{" "}
+              {' '}
+              mobile app development{' '}
             </a>
           </span>
           and
@@ -43,10 +43,10 @@ const AboutMe: NextPage = () => {
               rel="noreferrer"
               target="_blank"
             >
-              {" "}
+              {' '}
               web development.
             </a>
-          </span>{" "}
+          </span>{' '}
           I&apos;m enthusiastic about honing my skills in these areas and
           staying up to date with the latest advancements.
         </p>
@@ -62,8 +62,8 @@ const AboutMe: NextPage = () => {
               rel="noreferrer"
               target="_blank"
             >
-              {" "}
-              Harvard CS50{" "}
+              {' '}
+              Harvard CS50{' '}
             </a>
           </span>
           Introduction to Computer Science. Intrigued by programming, I decided
@@ -74,8 +74,8 @@ const AboutMe: NextPage = () => {
               rel="noreferrer"
               target="_blank"
             >
-              {" "}
-              Bina Sarana Informatika University.{" "}
+              {' '}
+              Bina Sarana Informatika University.{' '}
             </a>
           </span>
           Alongside my studies, I also explored mobile app development and web
@@ -86,8 +86,8 @@ const AboutMe: NextPage = () => {
               rel="noreferrer"
               target="_blank"
             >
-              {" "}
-              Bangkit Academy 2023{" "}
+              {' '}
+              Bangkit Academy 2023{' '}
             </a>
           </span>
           as Mobile Development cohort, where I continue to learn and stay up to

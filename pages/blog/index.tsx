@@ -1,8 +1,8 @@
-import BlogCard from "../../components/Blog/BlogCard";
-import React from "react";
-import Navbar from "../../components/Navbar";
-import { getSortedPostsData } from "../../lib/posts";
-import { IBlogProps } from "../../components/types";
+import BlogCard from '../../components/Blog/BlogCard';
+import React from 'react';
+import Navbar from '../../components/Navbar';
+import { getSortedPostsData } from '../../lib/posts';
+import { IBlogProps } from '../../components/types';
 
 export async function getStaticProps() {
   const allPostsData = getSortedPostsData();

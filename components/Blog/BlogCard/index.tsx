@@ -1,8 +1,8 @@
-import Link from "next/link";
-import React, { useState, useEffect } from "react";
-import Date from "../../Date";
-import { IBlogProps } from "../../types";
-import Image from "next/image";
+import Link from 'next/link';
+import React, { useState, useEffect } from 'react';
+import Date from '../../Date';
+import { IBlogProps } from '../../types';
+import Image from 'next/image';
 
 function BlogCard({
   id,
@@ -18,9 +18,9 @@ function BlogCard({
   function formatTimeToRead(minutes: number): string {
     if (minutes >= 60) {
       const hours = Math.floor(minutes / 60);
-      return `${hours} hour${hours > 1 ? "s" : ""}`;
+      return `${hours} hour${hours > 1 ? 's' : ''}`;
     } else {
-      return `${minutes} minute${minutes > 1 ? "s" : ""}`;
+      return `${minutes} minute${minutes > 1 ? 's' : ''}`;
     }
   }
 
@@ -41,7 +41,7 @@ function BlogCard({
 
   return (
     <Link href={`blog/post/${id}`}>
-      <div className=" rounded-lg bg-neutral-900">
+      <div className="h-full rounded-lg bg-neutral-900">
         <div className="relative flex justify-center">
           <div
             className="sm:text-md  absolute left-0 top-0 flex h-full w-full 
@@ -69,8 +69,8 @@ function BlogCard({
           <p
             className="text-md my-2 h-[3em] overflow-hidden font-thin"
             style={{
-              display: "-webkit-box",
-              WebkitBoxOrient: "vertical",
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
               WebkitLineClamp: 2,
             }}
           >
@@ -91,8 +91,8 @@ function BlogCard({
                 className="absolute inset-[-1000%] bg-[conic-gradient(from_90deg_at_50%_50%,#000000_0%,#000000_70%,#ffffff_100%)]"
                 style={{
                   transform: `rotate(${rotation}deg)`,
-                  transition: "transform 1s",
-                  animationFillMode: "forwards",
+                  transition: 'transform 1s',
+                  animationFillMode: 'forwards',
                 }}
               />
               <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-lg bg-black px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl ">

@@ -1,12 +1,12 @@
-import React, { useState, useRef, Ref } from "react";
-import emailjs from "@emailjs/browser";
-import { eventNames } from "process";
-import spiner from "../../public/svg/spinner.svg";
-import spinerOneThird from "../../public/svg/spinner-one-third.svg";
-import confirm from "../../public/svg/confirm.svg";
-import alert from "../../public/svg/alert.svg";
-import emailsvg from "../../public/svg/email.svg";
-import Image from "next/image";
+import React, { useState, useRef, Ref } from 'react';
+import emailjs from '@emailjs/browser';
+import { eventNames } from 'process';
+import spiner from '../../public/svg/spinner.svg';
+import spinerOneThird from '../../public/svg/spinner-one-third.svg';
+import confirm from '../../public/svg/confirm.svg';
+import alert from '../../public/svg/alert.svg';
+import emailsvg from '../../public/svg/email.svg';
+import Image from 'next/image';
 
 function PopUpForm({
   popUpHandler,
@@ -17,9 +17,9 @@ function PopUpForm({
   popUp: boolean;
   setPopUp: (arg0: boolean) => void;
 }) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -38,7 +38,7 @@ function PopUpForm({
     emailjs
       .sendForm(
         process.env.NEXT_PUBLIC_SERVICE_ID as string,
-        "template_mgesihk",
+        'template_mgesihk',
         form.current,
         process.env.NEXT_PUBLIC_PUBLIC_KEY,
       )

@@ -1,5 +1,5 @@
-import React from "react";
-import { Fade } from "react-awesome-reveal";
+import React from 'react';
+import { Fade } from 'react-awesome-reveal';
 
 const index = ({ ExperienceData }: { ExperienceData: any }) => {
   return (
