@@ -49,7 +49,7 @@ const Technologies: NextPage = () => {
             </h2>
             <p className="text-lg font-normal">MongoDB</p>
             <p className="text-lg font-normal">Node.JS</p>
-            <p className="text-lg font-normal">MYSQL</p>
+            <p className="text-lg font-normal">PostgreSQL</p>
             <p className="text-lg font-normal">Linux</p>
             <p className="text-lg font-normal">Firebase</p>
             <p className="text-lg font-normal">Express.JS</p>

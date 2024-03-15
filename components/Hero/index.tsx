@@ -25,8 +25,7 @@ const Hero: NextPage = () => {
           I&apos;m a Software Engineer
         </h1>
         <p className="text-3xl text-white/50 md:text-2xl sm:text-xl">
-          A self-taught software engineer who develop, build and Explore
-          tehcnologies.
+          A software engineer who develop, build and Explore tehcnologies.
         </p>
         <p className="mt-10 text-2xl md:text-xl sm:text-lg">
           🎓 Software Engineer Student at Bina Sarana Informatika.
