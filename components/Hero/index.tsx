@@ -1,3 +1,5 @@
+'use client';
+import { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import Personal from '../../data/Personal';
 import githubSvg from '../../public/svg/github.svg';
@@ -6,6 +8,21 @@ import email from '../../public/svg/email.svg';
 import Bangkit from '../../public/svg/bangkit.svg';
 import Image from 'next/image';
 const Hero: NextPage = () => {
+  const [showScrollBar, setShowScrollBar] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollBar(window.scrollY < 100);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    // Cleanup function to remove the event listener when the component unmounts
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
     <div className="block grid h-screen content-center">
       <div className="-mt-60">
@@ -81,6 +98,18 @@ const Hero: NextPage = () => {
             </a>
           </div>
         </div>
+      </div>
+      <div
+        className={`absolute bottom-10 left-1/2 flex h-10 w-10 flex-col items-center justify-center opacity-100 transition-opacity duration-700 ease-in ${
+          showScrollBar ? '!opacity-100' : '!opacity-0'
+        }`}
+      >
+        <img
+          src="/svg/scroll-bar.svg"
+          alt="scroll"
+          className={` animate-bounce `}
+        />
+        <p className="font-bold">scroll</p>
       </div>
     </div>
   );
