@@ -12,7 +12,7 @@ const index = ({ ExperienceData }: { ExperienceData: any }) => {
         const { title, company, time } = data;
         return (
           <>
-            <Fade triggerOnce>
+            <Fade triggerOnce key={title}>
               <div className="group flex justify-between">
                 <div>
                   <h3 className="group text-2xl font-bold">{title}</h3>

@@ -53,15 +53,15 @@ function BlogCard({
           {/* <p className="absolute my-10 mx-4 rounded-full p-4 text-center text-3xl font-bold backdrop-blur-xl">
             {title}
           </p> */}
-          <Image
+          <img
             className="h-full w-full rounded-t-lg"
             src={image}
             alt="profile"
-            width={900}
-            height={500}
-            loading="lazy"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            quality={50}
+            // width={900}
+            // height={500}
+            // loading="lazy"
+            // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            // quality={50}
           />
         </div>
         <div className="flex flex-col p-3">

@@ -55,17 +55,17 @@ function Post({ postData }: PostProps) {
         </div>
         <div className="flex flex-col justify-center">
           <div className="flex max-h-[600px] w-full items-center justify-center overflow-hidden">
-            <Image
+            <img
               src={postData.image}
-              priority
+              // priority
               alt="profile"
-              width={900}
-              height={600}
+              // width={900}
+              // height={600}
               // fill
               // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              quality={100}
-              placeholder="blur"
-              blurDataURL={postData.image}
+              // quality={100}
+              // placeholder="blur"
+              // blurDataURL={postData.image}
               className="h-full w-full object-contain"
             />
           </div>
