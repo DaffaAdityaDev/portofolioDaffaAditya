@@ -6,7 +6,8 @@ description: "Explore the architecture and features of a scalable video sharing 
 image: "/image/blogs/videoSharing/systemDesign.webp"
 ---
 
-In this blog, we will focus on creating the architecture and features that will be needed in this video Sharing service.
+In this blog, we will focus on creating the architecture and features that will be needed in this video Sharing service. If you are curious about implementation, check my Github:
+[Github Implementation](https://github.com/DaffaAdityaDev/streaming_video.git)
 
 **[Functional Requirements](#functionalRequirements)**
 
