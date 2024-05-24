@@ -35,23 +35,16 @@ function PopUpForm({
     //send email directly to gmail
     event.preventDefault();
     setLoading(true);
-    emailjs
-      .sendForm(
-        process.env.NEXT_PUBLIC_SERVICE_ID as string,
-        'template_mgesihk',
-        form.current,
-        process.env.NEXT_PUBLIC_PUBLIC_KEY,
-      )
-      .then(
-        (result) => {
-          setSuccess(true);
-          setLoading(false);
-        },
-        (error) => {
-          setLoading(false);
-          setError(true);
-        },
-      );
+    emailjs.sendForm('test', 'template_mgesihk', form.current, 'test').then(
+      (result) => {
+        setSuccess(true);
+        setLoading(false);
+      },
+      (error) => {
+        setLoading(false);
+        setError(true);
+      },
+    );
 
     event.target.reset();
   }
