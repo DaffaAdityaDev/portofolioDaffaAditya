@@ -11,6 +11,9 @@ const Navbar: NextPage = () => {
         <li>
           <Link href="/blog">Blog</Link>
         </li>
+        <li>
+          <Link href="/tutorial">Tutorial</Link>
+        </li>
         <li className="cursor-pointer">QnA</li>
         <li>
           <a

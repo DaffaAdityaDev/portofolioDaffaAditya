@@ -1,18 +1,20 @@
 const Personal = [
   {
     id: 0,
-    image: '/image/projects/animationombusman.gif',
+    image: '/image/projects/ombudsman.webp',
+    video: '/image/projects/ombudsman.gif',
     title: 'Ombusman Item Management',
     description:
-      'a clone page of Netflix using hooks and nextjs, using TMDB API for data. you also can search specific movie on search bar',
+      'Making a fullstack app for Ombudsman Item Management using Laravel and React',
     link: 'https://ombudsman.go.id/',
     github: 'https://ombudsman.go.id/',
-    tech: ['Laravel', 'Postgresql', 'Tailwind', 'SDLC'],
+    tech: ['Laravel', 'React', 'Tailwind', 'MySQL'],
     type: 'web',
   },
   {
     id: 1,
-    image: '/image/projects/animationqql.gif',
+    image: '/image/projects/qltech.webp',
+    video: '/image/projects/qltech.gif',
     title: 'qqltech Website',
     description:
       'Creating a website for quantum leap company using laravel and tailwindcss, also using postgre for database and REST API for fetching data.',
@@ -24,6 +26,7 @@ const Personal = [
   {
     id: 2,
     image: '/image/projects/chatyuk.jpg',
+    video: '/image/projects/chatyuk.jpg',
     title: 'ChatYuk',
     description: 'a original realtime app chat using firebase and react',
     link: 'https://chatyuk.netlify.app/',
@@ -34,6 +37,7 @@ const Personal = [
   {
     id: 3,
     image: '/image/projects/Animationnonton.gif',
+    video: '/image/projects/Animationnonton.gif',
     title: 'YukNonton',
     description:
       'a streaming platform. where you freely upload your own video and stories it will be converted to many resolution and bandwidth using FFMPEG hardware acceleration.',
@@ -45,6 +49,7 @@ const Personal = [
   {
     id: 4,
     image: '/image/projects/recyclops-min.gif',
+    video: '/image/projects/recyclops-min.gif',
     title: 'Recyclops',
     description:
       'bangkit academy startup idea for helping people to shorting trash and find nearest trash bank, using machine learning and google map',
@@ -56,6 +61,7 @@ const Personal = [
   {
     id: 5,
     image: '/image/projects/ComposeComic-min.gif',
+    video: '/image/projects/ComposeComic-min.gif',
     title: 'Android Komik',
     description:
       'a compose UI for android using jetpack compose and CRUD function for displaying comic data',
@@ -67,6 +73,7 @@ const Personal = [
   {
     id: 6,
     image: '/image/projects/githubUser-min.gif',
+    video: '/image/projects/githubUser-min.gif',
     title: 'Github User',
     description:
       'a android app that using github api for searching user and displaying their profile and follower and following',
@@ -78,6 +85,7 @@ const Personal = [
   {
     id: 7,
     image: '/image/projects/yourStory-min.gif',
+    video: '/image/projects/yourStory-min.gif',
     title: 'YourStory',
     description:
       'a android app where you can share you story and see other people story, using REST API, cameraX, Gallery and google map',

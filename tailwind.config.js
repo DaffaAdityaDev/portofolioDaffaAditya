@@ -1,35 +1,28 @@
-const defaultTheme = require('tailwindcss/defaultTheme');
+import { nextui } from "@nextui-org/react";
 
-module.exports = {
+const config = {
   content: [
-    './pages/**/*.{js,ts,jsx,tsx}',
-    './components/**/*.{js,ts,jsx,tsx}',
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}"
   ],
   theme: {
     extend: {
       fontFamily: {
-        serif: ['Raleway', ...defaultTheme.fontFamily.serif],
+        serif: ['Raleway', 'serif'],
         primary: ['Raleway', 'sans-serif'],
         secondary: ['Roboto', 'sans-serif'],
+        nunito: ['Nunito', 'sans-serif'],
       },
+      screens: {
+        'short': {'raw': '(max-height: 500px)'}
+      }
     },
-    container: {
-      center: true,
-      padding: '1rem',
-    },
-    screens: {
-      lg: { max: '1023px' },
-      // => @media (max-width: 1023px) { ... }
-
-      md: { max: '767px' },
-      // => @media (max-width: 767px) { ... }
-
-      sm: { max: '639px' },
-      // => @media (max-width: 639px) { ... }
-    },
-    plugins: [
-      // rest of the code
-      require('@tailwindcss/line-clamp'),
-    ],
   },
+  darkMode: "class",
+  plugins: [
+    nextui()],
 };
+
+export default config;

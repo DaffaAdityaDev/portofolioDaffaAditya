@@ -1,14 +1,17 @@
-import { getAllPostIds, getPostData } from '../../../lib/posts';
+import { getAllPostIds, getPostData } from '@/lib/posts';
 import Breadcrumb from '../../../components/Breadcrumb';
 import styles from '../../../styles/blog.module.scss';
-import Navbar from '../../../components/Navbar';
+import Navbar from '../../../components/Navbar/V2';
 import Head from 'next/head';
 import Prism from 'prismjs';
-import 'prismjs/themes/prism-tomorrow.css'; // Import the theme you prefer
+import 'prismjs/themes/prism-tomorrow.css';
 import 'prismjs/components/prism-json';
 import { MDXRemote } from 'next-mdx-remote';
-import Image from 'next/image';
-import React, { useState } from 'react';
+import { Card, CardBody, Button, Divider } from '@nextui-org/react';
+import React, { useState, useEffect } from 'react';
+import Footer from '@/components/Footer';
+import { useTheme } from 'next-themes';
+
 interface PostProps {
   postData: {
     title: string;
@@ -25,10 +28,14 @@ interface CustomImageProps {
   alt: string;
 }
 
-// Your page component here
+interface CodeBlockProps {
+  children: string;
+  className?: string;
+}
+
 function Post({ postData }: PostProps) {
   return (
-    <div className="grid grid-cols-12 text-white">
+    <div className="min-h-screen text-foreground bg-background">
       <Head>
         <title>{postData.title}</title>
         <meta name="description" content={postData.description} />
@@ -42,9 +49,9 @@ function Post({ postData }: PostProps) {
         <meta property="og:type" content="article" />
         <link rel="icon" href="/svg/selflogo.svg" />
       </Head>
-      <div className="col-span-10 col-start-2">
-        <Navbar />
-        <div className="my-4">
+      <Navbar />
+      <main className="max-w-[1024px] mx-auto px-4">
+        <div className="mt-20">
           <Breadcrumb
             items={[
               { title: 'Home', href: '/' },
@@ -52,51 +59,64 @@ function Post({ postData }: PostProps) {
               { title: postData.title, href: `/blog/post/${postData.id}` },
             ]}
           />
-        </div>
-        <div className="flex flex-col justify-center">
-          <div className="flex max-h-[600px] w-full items-center justify-center overflow-hidden">
-            <img
-              src={postData.image}
-              // priority
-              alt="profile"
-              // width={900}
-              // height={600}
-              // fill
-              // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              // quality={100}
-              // placeholder="blur"
-              // blurDataURL={postData.image}
-              className="h-full w-full object-contain"
+          
+          <Card className="border-none bg-transparent shadow-none my-8">
+            <CardBody className="p-0 overflow-visible">
+              <div className="flex flex-col justify-center">
+                <h1 className="mb-6 text-center text-4xl md:text-5xl font-bold tracking-tight">
+                  {postData.title}
+                </h1>
+                <img
+                  src={postData.image}
+                  alt={postData.title}
+                  className="w-full h-auto max-h-[600px] object-cover rounded-xl shadow-lg"
+                  loading="lazy"
+                />
+              </div>
+            </CardBody>
+          </Card>
+
+          <article className={styles.blogPost}>
+            <MDXRemote
+              {...postData.mdxSource}
+              components={{
+                code: CodeBlock,
+                img: CustomImage,
+                Card,
+                CardBody,
+                Button,
+                Divider,
+                table: (props) => (
+                  <div className="overflow-x-auto">
+                    <table {...props} />
+                  </div>
+                ),
+                li: (props) => {
+                  if (props.className?.includes('task-list-item')) {
+                    return (
+                      <li className="task-list-item">
+                        {props.children}
+                      </li>
+                    );
+                  }
+                  return <li {...props} />;
+                }
+              }}
             />
-          </div>
-          <h1 className="mt-6 text-center text-4xl font-bold">
-            {postData.title}
-          </h1>
+          </article>
         </div>
-        {/* <div
-          className={styles.blogPost}
-          dangerouslySetInnerHTML={{ __html: postData.contentHtml }}
-        /> */}
-        <div className={styles.blogPost}>
-          <MDXRemote
-            {...postData.mdxSource}
-            components={{ code: CodeBlock, img: CustomImage }}
-          />
-        </div>
-      </div>
+      </main>
+      <Footer />
     </div>
   );
 }
 
 const CustomImage = ({ src, alt }: CustomImageProps) => (
-  <Image
+  <img
     src={src}
-    alt={alt}
-    width={900}
-    height={500}
+    alt={alt || ''}
+    className="w-full h-auto my-4 rounded-lg object-contain"
     loading="lazy"
-    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-    quality={80}
   />
 );
 
@@ -120,96 +140,148 @@ export async function getStaticProps({ params }: any) {
 
 export default Post;
 
-const CodeBlock = ({ children, className }: any) => {
+const CodeBlock = ({ children, className }: CodeBlockProps) => {
+  const [isMounted, setIsMounted] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
-  const language = className?.replace(/language-/, '');
-  if (!language || !Prism.languages[language]) {
-    console.error(`Unsupported language: ${language}`);
-    return children; // Fallback to returning the raw code if language is not supported
-  }
+  const { theme } = useTheme();
 
-  // Extract file path from the children if it's a comment
-  const filePathMatch = children.match(/{.*?filePath: (.*?)\*\/}/);
-  const filePath = filePathMatch ? filePathMatch[1] : null;
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
-  // Check if children is defined before trimming
-  const code = children.replace(/{.*?filePath: (.*?)}/, '').trim(); // Directly use children here if defined, otherwise use an empty string
-  const highlightedCode = Prism.highlight(
-    code,
-    Prism.languages[language],
-    language,
-  );
+  // Extract file path and clean code
+  const filePathMatch = children.match(/\/\*\s*filePath:\s*(.*?)\s*\*\//);
+  const filePath = filePathMatch ? filePathMatch[1] : '';
+  const code = children
+    .replace(/\/\*\s*filePath:\s*(.*?)\s*\*\//, '')
+    .replace(/^\{\s*\}/, '')
+    .trim();
 
-  // Ensure className is applied correctly
-  const codeClassName = className
-    ? `language-${language} ${className}`
-    : `language-${language}`;
-
-  const programmingLanguage = language.toUpperCase();
-
-  const copyToClipboard = () => {
-    const el = document.createElement('textarea');
-    el.value = code;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-
-    setCopySuccess(true);
-    setTimeout(() => {
-      setCopySuccess(false);
-    }, 1000);
+  // Define theme-specific syntax highlighting colors
+  const syntaxTheme = {
+    dark: {
+      background: '#1d1f21',
+      text: '#c5c8c6',
+      comment: '#969896',
+      keyword: '#b294bb',
+      string: '#b5bd68',
+      number: '#de935f',
+      function: '#81a2be',
+      operator: '#8abeb7',
+      variable: '#cc6666'
+    },
+    light: {
+      background: '#f5f5f5',
+      text: '#1f2937',
+      comment: '#6e7781',
+      keyword: '#cf222e',
+      string: '#0a3069',
+      number: '#0550ae',
+      function: '#8250df',
+      operator: '#0550ae',
+      variable: '#953800'
+    }
   };
 
-  return (
-    <div className="rounded-md border-l-[1px] border-r-[1px] border-t-[1px] border-gray-700">
-      <div className="flex flex-wrap-reverse justify-between text-sm">
-        <div className="rounded-md bg-slate-900 p-2 text-white">
-          &gt;_ {programmingLanguage}
-        </div>
+  const currentTheme = theme === 'dark' ? syntaxTheme.dark : syntaxTheme.light;
+
+  // Add theme-specific styles to Prism
+  useEffect(() => {
+    if (isMounted) {
+      const style = document.createElement('style');
+      style.innerHTML = `
+        .token.comment { color: ${currentTheme.comment} !important; }
+        .token.keyword { color: ${currentTheme.keyword} !important; }
+        .token.string { color: ${currentTheme.string} !important; }
+        .token.number { color: ${currentTheme.number} !important; }
+        .token.function { color: ${currentTheme.function} !important; }
+        .token.operator { color: ${currentTheme.operator} !important; }
+        .token.variable { color: ${currentTheme.variable} !important; }
+      `;
+      document.head.appendChild(style);
+      return () => {
+        document.head.removeChild(style);
+      };
+    }
+  }, [theme, isMounted]);
+
+  if (!isMounted) {
+    return (
+      <div className="my-4">
         {filePath && (
-          <div className="rounded-md bg-slate-900 p-2 text-white">
+          <div
+            className={`
+              text-sm mb-0 px-4 py-1 rounded-t-lg
+              ${theme === 'dark' ? 'text-cyan-400 bg-[#1d1f21]' : 'text-cyan-600 bg-[#f5f5f5]'}
+            `}
+          >
             {filePath}
           </div>
         )}
+        <pre 
+          className={`
+            p-4 overflow-x-auto
+            ${theme === 'dark' ? 'bg-[#1d1f21]' : 'bg-[#f5f5f5]'}
+            ${filePath ? 'rounded-t-none rounded-b-lg' : 'rounded-lg'}
+          `}
+        >
+          <code>{code}</code>
+        </pre>
       </div>
-      <pre className={codeClassName}>
-        <code dangerouslySetInnerHTML={{ __html: highlightedCode }} />
+    );
+  }
 
-        <div className="">
-          <button
-            className="absolute bottom-0 right-0 m-1 rounded-md p-2 hover:bg-gray-700"
-            onClick={copyToClipboard}
-          >
-            <div className="relative h-6 w-6">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                className={`bi bi-clipboard  absolute left-0 top-0 h-full w-full transition-transform duration-700 ${
-                  copySuccess ? 'scale-150 opacity-100' : 'scale-0 opacity-0'
-                }`}
-                viewBox="0 0 16 16"
-              >
-                <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z" />
-              </svg>
+  const language = className?.replace(/language-/, '') || 'text';
 
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                className={`bi bi-clipboard absolute left-0 top-0 h-full w-full transition-transform duration-700 ${
-                  copySuccess ? 'scale-0 opacity-0' : 'scale-100 opacity-100'
-                }`}
-                viewBox="0 0 16 16"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"
-                />
-              </svg>
-            </div>
-          </button>
+  return (
+    <div className="my-4">
+      {filePath && (
+        <div
+          className={`
+            text-sm mb-0 px-4 py-1 rounded-t-lg
+            ${theme === 'dark' ? 'text-cyan-400 bg-[#1d1f21]' : 'text-cyan-600 bg-[#f5f5f5]'}
+          `}
+        >
+          {filePath}
         </div>
-      </pre>
+      )}
+      <Divider className="my-0 bg-default-400 h-[2px]" />
+      <div className="relative group">
+        <pre 
+          className={`
+            p-4 overflow-x-auto
+            ${theme === 'dark' ? 'bg-[#1d1f21]' : 'bg-[#f5f5f5]'}
+            ${filePath ? 'rounded-t-none rounded-b-lg' : 'rounded-lg'}
+          `}
+        >
+          <code
+            className={language}
+            dangerouslySetInnerHTML={{
+              __html: Prism.highlight(
+                code,
+                Prism.languages[language] || Prism.languages.text,
+                language
+              ),
+            }}
+          />
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(code);
+              setCopySuccess(true);
+              setTimeout(() => setCopySuccess(false), 2000);
+            }}
+            className={`
+              absolute right-2 top-2 opacity-0 group-hover:opacity-100
+              transition-opacity px-2 py-1 rounded text-sm
+              ${theme === 'dark' 
+                ? 'bg-[#282a2e] text-gray-300 hover:bg-[#373b41]' 
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}
+            `}
+          >
+            {copySuccess ? 'Copied!' : 'Copy'}
+          </button>
+        </pre>
+      </div>
     </div>
   );
 };

@@ -1,17 +1,39 @@
 import React from 'react';
+import { Link } from '@nextui-org/react';
 
 function Footer() {
   return (
-    <div className="flex w-full flex-col pb-5 text-center antialiased">
-      <p>Designed and Developed by Daffa Aditya Rahman</p>
+    <footer className="flex w-full flex-col pb-5 text-center antialiased text-default-900">
+      <p>
+        Designed and Developed by Daffa Aditya Rahman
+      </p>
       <p>
         Build With
-        <span className="mx-1 text-cyan-400">Next.JS</span>&
-        <span className="mx-1 text-sky-400">TailwindCSS.</span>
+        <Link 
+          href="#" 
+          className="mx-1 dark:text-cyan-500 text-cyan-400 cursor-default"
+          underline="none"
+        >
+          Next.JS
+        </Link>
+        &
+        <Link 
+          href="#" 
+          className="mx-1 dark:text-sky-500 text-sky-400 cursor-default"
+          underline="none"
+        >
+          NextUI.
+        </Link>
         Hosted on
-        <span className="mx-1 text-emerald-400">Netlify</span>
+        <Link 
+          href="#" 
+          className="mx-1 dark:text-emerald-500 text-emerald-400 cursor-default"
+          underline="none"
+        >
+          Vercel
+        </Link>
       </p>
-    </div>
+    </footer>
   );
 }
 

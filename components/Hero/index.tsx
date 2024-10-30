@@ -24,7 +24,7 @@ const Hero: NextPage = () => {
   }, []);
 
   return (
-    <div className="block grid h-screen content-center">
+    <div className="block grid h-screen content-center my-20">
       <div className="-mt-60">
         <p className="bg-gradient-to-r from-sky-400 to-sky-800 bg-clip-text text-2xl font-medium text-transparent ">
           Hi There!, my name is

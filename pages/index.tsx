@@ -1,17 +1,18 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import AboutMe from '../components/AboutMe';
-import Hero from '../components/Hero';
-import Navbar from '../components/Navbar';
-import Project from '../components/Project';
+import AboutMe from '../components/AboutMe/V3';
+import Hero from '../components/Hero/V3';
+import Navbar from '../components/Navbar/V2';
+import Project from '../components/Project/V3';
 import data from '../data/Personal.js';
 import ExperienceData from '../data/Experience.js';
-import Contact from '../components/Contact';
-import Technologies from '../components/Technologies';
+import Contact from '../components/Contact/V3';
+import Technologies from '../components/Technologies/V3';
 import Experience from '../components/Experience';
 import CourseTaken from '../components/CourseTaken';
 import Footer from '../components/Footer';
 import { Fade } from 'react-awesome-reveal';
+import React from 'react';
 
 const Home: NextPage = ({ posts }: any) => {
   return (
@@ -29,41 +30,30 @@ const Home: NextPage = ({ posts }: any) => {
         <link rel="icon" href="/svg/selflogo.svg" />
       </Head>
 
-      <div className="container max-w-[1200px] font-primary text-white">
+      <div className="font-primary text-white">
         <Navbar />
-        <Hero />
-        <Fade triggerOnce>
-          <AboutMe />
-        </Fade>
-        <Project data={data} />
-        <Fade triggerOnce>
-          <Technologies />
-        </Fade>
-        <Experience ExperienceData={ExperienceData} />
-        <Fade triggerOnce>
-          <CourseTaken />
-        </Fade>
-        <Fade triggerOnce>
-          <Contact />
-        </Fade>
-        <Fade triggerOnce>
-          <Footer />
-        </Fade>
-
-        {/* <BlogLayout>
-          {posts.slice(0,3).map((post: any) => (
-            <div className="" key={post.title}>
-                <BlogCard 
-                    title={post.title}
-                    key={post.id}
-                    datePublished={post.datePublished}
-                    slug={post.slug}
-                    timeRead={post.timeRead}
-                    description={post.description}
-                />
-            </div>
-          ))}
-        </BlogLayout> */}
+        <div className='flex flex-col items-center justify-center w-screen'>
+          <Hero />
+          <Project />
+          <Fade triggerOnce>
+            <AboutMe />
+          </Fade>
+          <Fade triggerOnce>
+            <Technologies />
+          </Fade>
+          <Fade className="w-full" triggerOnce>
+            <Experience ExperienceData={ExperienceData} />
+          </Fade>
+          <Fade className="w-full" triggerOnce>
+            <CourseTaken />
+          </Fade>
+          <Fade triggerOnce>
+            <Contact />
+          </Fade>
+          <Fade triggerOnce>
+            <Footer />
+          </Fade>
+        </div>
       </div>
     </>
   );

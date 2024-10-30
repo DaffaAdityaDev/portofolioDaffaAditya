@@ -1,124 +1,181 @@
 .blogPost {
-  max-width: 800px;
+  max-width: 680px;
   margin: 0 auto;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  // background-color: #1a1a1a; // Dark background color
-  color: #f9f9f9; // Light text color for dark background
+  padding: 2rem 1.5rem;
+  
+  // Use NextUI's theme variables
+  color: var(--nextui-colors-text);
+  background: var(--nextui-colors-background);
 
-  // Directly targeting elements within .blogPost
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  p,
-  ul,
-  ol,
-  blockquote,
-  code,
-  pre {
-    margin-bottom: 1.5rem;
+  // Typography scale
+  h1 { 
+    @apply text-4xl font-bold tracking-tight mb-8;
+    line-height: 1.2;
   }
-
-  h1 {
-    font-size: 3rem;
+  h2 { 
+    @apply text-3xl font-semibold mt-12 mb-6 tracking-tight;
+    line-height: 1.3;
   }
-  h2 {
-    font-size: 2.3rem;
-    font-weight: 600;
+  h3 { 
+    @apply text-2xl font-semibold mt-8 mb-4;
+    line-height: 1.4;
   }
-  h3 {
-    font-size: 2rem;
-  }
-  h4 {
-    font-size: 1.75rem;
-  }
-  h5 {
-    font-size: 1.5rem;
-  }
-  h6 {
-    font-size: 1.25rem;
+  h4, h5, h6 { 
+    @apply text-xl font-semibold mt-6 mb-4;
+    line-height: 1.5;
   }
 
-  a {
-    color: #f9f9f9; // Light text color for dark background
-    text-decoration: none;
-    border-bottom: 1px solid #f9f9f9; // Light text color for dark background
-    font-weight: 600;
-  }
-
+  // Paragraph styling
   p {
-    font-size: 1.1rem;
-    line-height: 1.6;
+    @apply text-lg leading-relaxed mb-6;
+    color: var(--nextui-colors-text);
+    font-family: var(--nextui-fonts-sans);
+    max-width: 65ch; // Optimal line length for readability
+  }
+
+  // Links with subtle underline
+  a {
+    color: var(--nextui-colors-primary);
+    text-decoration: none;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: 0% 100%;
+    background-repeat: no-repeat;
+    background-size: 0% 2px;
+    transition: background-size 0.3s;
+    
+    &:hover {
+      background-size: 100% 2px;
+    }
+  }
+
+  // Lists with proper spacing
+  ul, ol {
+    @apply my-6 pl-8;
+    li {
+      @apply text-lg leading-relaxed mb-2;
+      color: var(--nextui-colors-text);
+      
+      &::marker {
+        color: var(--nextui-colors-primary);
+      }
+      
+      // Nested lists
+      ul, ol {
+        @apply my-2;
+      }
+    }
   }
 
   ul {
-    list-style: disc;
-    margin-left: 2rem;
+    list-style-type: disc;
+    ul { list-style-type: circle; }
+    ul ul { list-style-type: square; }
   }
+
   ol {
-    list-style: decimal;
+    list-style-type: decimal;
+    ol { list-style-type: lower-alpha; }
+    ol ol { list-style-type: lower-roman; }
   }
 
-  li {
-    margin-left: 1rem;
+  // Code blocks and inline code
+  code:not(pre code) {
+    @apply px-1.5 py-0.5 rounded text-sm;
+    background: var(--nextui-colors-code);
+    color: var(--nextui-colors-primary);
+    font-family: var(--nextui-fonts-mono);
   }
 
+  // Tables
+  table {
+    @apply w-full my-8 border-collapse;
+    
+    th, td {
+      @apply px-4 py-2 border;
+      border-color: var(--nextui-colors-border);
+    }
+    
+    th {
+      @apply font-semibold bg-default-100;
+    }
+    
+    tr:nth-child(even) {
+      background: var(--nextui-colors-default-50);
+    }
+  }
+
+  // Horizontal rule
+  hr {
+    @apply border-0 h-px;
+  }
+
+  // Task lists
+  .task-list-item {
+    @apply list-none pl-0;
+    
+    input[type="checkbox"] {
+      @apply mr-2;
+    }
+  }
+
+  // Definition lists
+  dl {
+    @apply my-6;
+    
+    dt {
+      @apply font-semibold mb-1;
+    }
+    
+    dd {
+      @apply ml-4 mb-4;
+    }
+  }
+
+  // Footnotes
+  .footnotes {
+    @apply mt-12 pt-8 border-t;
+    border-color: var(--nextui-colors-border);
+    
+    ol {
+      @apply text-sm;
+    }
+  }
+
+  // Blockquotes with elegant styling
   blockquote {
-    margin: 2rem 0;
-    padding: 1rem;
-    border-left: 4px solid #ddd;
+    @apply my-8 pl-6 border-l-4;
+    border-color: var(--nextui-colors-primary);
+    background: var(--nextui-colors-default-50);
+    padding: 1.5rem;
+    border-radius: var(--nextui-radius-medium);
     font-style: italic;
-  }
 
-  code {
-    .language-javascript & {
-      color: #f9f9f9; // Light text color for dark background
-      background-color: #282828; // Darker background for code blocks
-      padding: 1rem;
-      border-radius: 4px;
-      font-family: 'Courier New', Courier, monospace;
-      overflow-x: auto;
+    p {
+      @apply mb-0;
     }
   }
 
-  // code, pre {
-  //     background-color: #282828; // Darker background for code blocks
-  //     padding:  1rem;
-  //     border-radius:  4px;
-  //     font-family: 'Courier New', Courier, monospace;
-  //     overflow-x: auto;
-  // }
-
-  // Responsive styles
-  @media (max-width: 640px) {
-    p,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-      font-size: 1rem;
+  // Images with proper spacing and loading
+  img {
+    @apply rounded-xl my-8 w-full;
+    max-height: 600px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    
+    &:hover {
+      transform: scale(1.01);
     }
   }
 
-  @media (min-width: 641px) and (max-width: 1024px) {
-    p,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-      font-size: 1.1rem;
-    }
+  // Responsive adjustments
+  @media (max-width: 768px) {
+    padding: 1.5rem 1rem;
+    
+    h1 { @apply text-3xl mb-6; }
+    h2 { @apply text-2xl mt-8 mb-4; }
+    h3 { @apply text-xl mt-6 mb-3; }
+    h4, h5, h6 { @apply text-lg mt-4 mb-2; }
+    
+    p, li { @apply text-base; }
   }
-
-  // @media (min-width:  1025px) {
-  //     p, h2, h3, h4, h5, h6 {
-  //         font-size:  1.1rem;
-  //     }
-  // }
 }

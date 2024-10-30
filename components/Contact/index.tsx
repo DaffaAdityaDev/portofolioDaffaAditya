@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PopUpForm from './PopUpForm';
 
 const Contact = () => {
   const [popUp, setPopUp] = useState(false);
@@ -17,11 +16,7 @@ const Contact = () => {
             className="bg-sky-800opacity-10 fixed left-0 right-0 top-0 z-10 
         h-full w-full"
           />
-          <PopUpForm
-            popUp={popUp}
-            setPopUp={setPopUp}
-            popUpHandler={popUpHandler}
-          />
+          
         </div>
       )}
       <h1 className="text-2xl font-bold ">Contact</h1>

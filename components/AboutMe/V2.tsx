@@ -8,7 +8,7 @@ function AboutMe() {
     <div className="mt-20 flex w-full flex-col items-center justify-center">
       <div className="mx-6 mx-auto flex w-full flex-col items-center justify-center">
         <h2 className="mb-2 text-4xl font-bold">Hi, Daffa Aditya Rahman</h2>
-        <p className="mb-4 text-xl">Software Developer | Web Enthusiast</p>
+        <p className="mb-4 text-xl">Software Developer</p>
         <p className="text-md">
           I build pixel-perfect design, costume Tooling and Efficient Code
         </p>

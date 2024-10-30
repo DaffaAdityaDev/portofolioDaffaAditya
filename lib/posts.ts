@@ -9,10 +9,16 @@ import { serialize } from 'next-mdx-remote/serialize';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 
-export function getSortedPostsData() {
+interface PostData {
+  id: string;
+  date: string;
+  [key: string]: any; // For other frontmatter fields
+}
+
+export function getSortedPostsData(limit?: number): PostData[] {
   // Get file names under /posts
   const fileNames = fs.readdirSync(postsDirectory);
-  const allPostsData = fileNames.map((fileName) => {
+  const allPostsData = fileNames.map((fileName): PostData => {
     // Remove ".md" from file name to get id
     const id = fileName.replace(/\.md$/, '');
 
@@ -24,19 +30,24 @@ export function getSortedPostsData() {
     const matterResult = matter(fileContents);
 
     // Combine the data with the id
-    return {
+    const postData: PostData = {
       id,
+      date: matterResult.data.date || '',  // Provide default empty string if date is missing
       ...matterResult.data,
     };
+    return postData;
   });
   // Sort posts by date
-  return allPostsData.sort((a, b) => {
+  const sortedPosts = allPostsData.sort((a, b) => {
     if (a.date < b.date) {
       return 1;
     } else {
       return -1;
     }
   });
+
+  // Return limited posts if limit is specified
+  return limit ? sortedPosts.slice(0, limit) : sortedPosts;
 }
 
 export function getAllPostIds() {
@@ -64,7 +75,7 @@ export function getAllPostIds() {
   });
 }
 
-export async function getPostData(id) {
+export async function getPostData(id: string) {
   const fullPath = path.join(postsDirectory, `${id}.md`);
   const fileContents = fs.readFileSync(fullPath, 'utf8');
 
@@ -91,4 +102,10 @@ export async function getPostData(id) {
     mdxSource,
     ...matterResult.data,
   };
+}
+
+// Add a new function to get total posts count
+export function getPostsCount() {
+  const fileNames = fs.readdirSync(postsDirectory);
+  return fileNames.length;
 }
