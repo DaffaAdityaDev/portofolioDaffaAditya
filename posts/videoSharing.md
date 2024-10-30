@@ -4,6 +4,7 @@ date: "2024-02-26"
 timeToRead: 10
 description: "Explore the architecture and features of a scalable video sharing service, including user authentication, video uploading, streaming, and more. Learn about design considerations, system architecture, and the importance of scalability and performance."
 image: "/image/blogs/videoSharing/systemDesign.webp"
+production: true
 ---
 
 In this blog, we will focus on creating the architecture and features that will be needed in this video Sharing service. If you are curious about implementation, check my Github:

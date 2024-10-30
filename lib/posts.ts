@@ -12,6 +12,7 @@ const postsDirectory = path.join(process.cwd(), 'posts');
 interface PostData {
   id: string;
   date: string;
+  production?: boolean;
   [key: string]: any; // For other frontmatter fields
 }
 
@@ -33,12 +34,17 @@ export function getSortedPostsData(limit?: number): PostData[] {
     const postData: PostData = {
       id,
       date: matterResult.data.date || '',  // Provide default empty string if date is missing
+      production: matterResult.data.production ?? true, // Default to true if not specified
       ...matterResult.data,
     };
     return postData;
   });
+
+  // Filter out posts where production is false
+  const productionPosts = allPostsData.filter(post => post.production !== false);
+
   // Sort posts by date
-  const sortedPosts = allPostsData.sort((a, b) => {
+  const sortedPosts = productionPosts.sort((a, b) => {
     if (a.date < b.date) {
       return 1;
     } else {
@@ -106,6 +112,6 @@ export async function getPostData(id: string) {
 
 // Add a new function to get total posts count
 export function getPostsCount() {
-  const fileNames = fs.readdirSync(postsDirectory);
-  return fileNames.length;
+  const allPosts = getSortedPostsData();
+  return allPosts.length;
 }

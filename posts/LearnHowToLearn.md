@@ -5,6 +5,7 @@ timeToRead: 1
 description:
   "The Art of Learning, the most important skill everyone should have."
 image: "/image/blogs/nextjs14Improvement/thumbnail.webp"
+production: false
 ---
 
 I was the kid who could master complex video games in days but struggled to pass basic math. I can back this up, in my elementary to high school education, I was always the "dumb" kid in class. I was always the kid that was getting bullied for not knowing something. and my grades reflect that. across all subject i've only got Minimum Competency Standards or around 60-70% for most of my subjects.

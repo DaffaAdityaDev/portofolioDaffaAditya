@@ -5,6 +5,7 @@ timeToRead: 20
 description: "Get a deep dive static site generation, Learn how it's making website faster and more scalable. and how it's
 setting a new standard for web development."
 image: "/image/blogs/SSGInDetail/SSGThumnail.webp"
+production: true
 ---
 
 In this blog, We will discuss the Static Site Generation in detail. We will learn how it's making website faster and more scalable. and how it's setting a new standard for web development. how may you ask "Static Site Generation" is making website faster and more scalable?. Most of the websites are built using the traditional server-side rendering (SSR) approach. In SSR, the server generates the HTML for each request.

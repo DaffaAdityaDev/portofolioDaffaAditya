@@ -6,6 +6,7 @@ description:
   "Since the release of Next.js 14, there have been a lot of improvements and new features. Like Turbopack, Server Action
   and more. In this blog, we will discuss all the new features and improvements in Next.js 14."
 image: "/image/blogs/nextjs14Improvement/thumbnail.webp"
+production: true
 ---
 
 For couple of month i was working with outsite of Next.js, now i'm back to Next.js and i'm really excited to see the new features and improvements in Next.js 14. last time i was working with Next.js 12 and i was really impressed with the performance and the developer experience.
