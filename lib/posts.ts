@@ -6,15 +6,9 @@ import html from 'remark-html';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-tomorrow.css'; // Import the theme you prefer // Import the theme you prefer
 import { serialize } from 'next-mdx-remote/serialize';
+import type { PostData } from 'types/blog';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
-
-interface PostData {
-  id: string;
-  date: string;
-  production?: boolean;
-  [key: string]: any; // For other frontmatter fields
-}
 
 export function getSortedPostsData(limit?: number): PostData[] {
   // Get file names under /posts

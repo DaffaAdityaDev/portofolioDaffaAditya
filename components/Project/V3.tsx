@@ -38,23 +38,19 @@ const ProjectCard = ({ project }: { project: Project }) => {
       onMouseLeave={handleMouseLeave}
     >
       <CardBody className="p-0 overflow-hidden">
-        <div className="relative group aspect-video">
+        <div className="relative group h-60">
           {/* Static Image */}
-          <Image
+          <img
             alt={project.title}
             className="object-cover w-full h-full"
             src={project.image}
-            layout="fill"
-            priority
           />
           {/* Hover Video - Absolute positioned */}
-          <Image
+          <img
             className={`absolute inset-0 object-cover w-full h-full transition-opacity duration-300 ${
               isHovered ? 'opacity-100' : 'opacity-0'
             }`}
             src={project.video}
-            layout="fill"
-            priority
             alt={`${project.title} animation`}
           />
         </div>

@@ -1,9 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import Image from 'next/image';
 import githubSvg from '../../../public/svg/github.svg';
 import weblinkSvg from '../../../public/svg/weblink.svg';
 import { Fade } from 'react-awesome-reveal';
+
 function index({
   title,
   description,
@@ -21,6 +21,12 @@ function index({
   id: number;
   tech: string[];
 }) {
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    const target = e.target as HTMLImageElement;
+    target.src = '/image/fallback.webp';
+    target.onerror = null;
+  };
+
   return (
     <Fade triggerOnce>
       <div
@@ -39,31 +45,30 @@ function index({
             <a href={link} target="_blank" rel="noreferrer">
               <div
                 className="peer absolute z-10 flex h-full 
-            w-full items-center justify-center text-lg font-bold text-transparent hover:bg-black hover:bg-opacity-60 hover:text-white"
+                w-full items-center justify-center text-lg font-bold text-transparent hover:bg-black hover:bg-opacity-60 hover:text-white"
               >
                 Open Page
               </div>
               <img
-                className="z-0 h-60 w-full rounded-xl object-scale-down duration-500 ease-in-out peer-hover:scale-150 peer-hover:blur-sm"
+                className="z-0 h-60 w-full rounded-xl object-cover duration-500 ease-in-out peer-hover:scale-150 peer-hover:blur-sm"
                 src={image}
-                alt="project"
+                alt={`${title} project preview`}
                 loading="lazy"
+                onError={handleImageError}
               />
             </a>
           </div>
           <div>
             <p className="text-center font-bold">Tech Stack</p>
             <div className="flex flex-row items-center justify-center justify-items-center">
-              {tech.map((tech: any, index: number) => {
-                return (
-                  <p
-                    className="mx-2 text-center font-medium text-gray-300"
-                    key={index}
-                  >
-                    {tech}
-                  </p>
-                );
-              })}
+              {tech.map((tech: string, index: number) => (
+                <p
+                  className="mx-2 text-center font-medium text-gray-300"
+                  key={index}
+                >
+                  {tech}
+                </p>
+              ))}
             </div>
           </div>
           <div className="flex flex-row justify-center gap-10">
@@ -74,7 +79,7 @@ function index({
               className="duration-300 ease-out hover:scale-125"
             >
               <div className="flex h-full flex-row content-center items-center justify-center">
-                <Image src={weblinkSvg} alt="weblink" width={30} height={30} />
+                <img src={weblinkSvg} alt="weblink" width={30} height={30} />
                 <p className="pl-2">Page</p>
               </div>
             </a>
@@ -85,7 +90,7 @@ function index({
               className="duration-300 ease-out hover:scale-125"
             >
               <div className="flex h-full flex-row content-center items-center justify-center">
-                <Image src={githubSvg} alt="github" width={30} height={30} />
+                <img src={githubSvg} alt="github" width={30} height={30} />
                 <p className="pl-2">Code</p>
               </div>
             </a>

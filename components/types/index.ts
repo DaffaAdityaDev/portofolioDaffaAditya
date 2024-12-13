@@ -5,6 +5,7 @@ export interface IBlogProps {
   description: string;
   date: string;
   timeToRead: number;
+  
 }
 export interface IParams {
   id: string;

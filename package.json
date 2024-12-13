@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "devturbo": "next dev --turbo",
+    "dev:turbo": "next dev --turbo",
     "build": "next build",
+    "build:prod": "NODE_ENV=production next build && next-sitemap",
     "start": "next start",
     "lint": "next lint",
     "format:check": "prettier --check . --ignore-path .prettierignore",
@@ -15,6 +16,7 @@
     "@nextui-org/react": "^2.4.8",
     "@tailwindcss/typography": "^0.5.15",
     "clsx": "^2.1.0",
+    "critters": "^0.0.25",
     "date-fns": "^3.3.1",
     "framer-motion": "^11.11.10",
     "gray-matter": "^4.0.3",

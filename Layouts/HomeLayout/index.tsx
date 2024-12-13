@@ -1,10 +1,11 @@
 import React from 'react';
 
-function HomeLayout({ children }: any) {
+function HomeLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="container">
-      <h1 className="text-sky-400">hio</h1>
-      {children}
+    <div className="min-h-screen bg-background">
+      <div>
+        <main>{children}</main>
+      </div>
     </div>
   );
 }

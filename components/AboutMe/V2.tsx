@@ -1,5 +1,4 @@
 import React from 'react';
-import Image from 'next/image';
 import Github from '/public/svg/github.svg';
 import Linkedin from '/public/svg/linkedin.svg';
 
@@ -96,7 +95,7 @@ function AboutMe() {
                   rel="noopener noreferrer"
                   className="mr-2 flex flex-row items-center gap-2 font-bold"
                 >
-                  <Image src={Github} alt="Github" width={30} height={30} />
+                  <img src={Github} alt="Github" width={30} height={30} />
                   Github
                 </a>
                 <a
@@ -105,13 +104,7 @@ function AboutMe() {
                   rel="noopener noreferrer"
                   className="mr-2 flex flex-row items-center gap-2 font-bold"
                 >
-                  <Image
-                    src={Linkedin}
-                    alt="Linkedin"
-                    width={30}
-                    height={30}
-                    className="bg-white"
-                  />
+                  <img src={Linkedin} alt="Linkedin" width={30} height={30} className="bg-white" />
                   Linkedin
                 </a>
               </div>

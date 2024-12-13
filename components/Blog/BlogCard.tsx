@@ -4,6 +4,9 @@ import { useRouter } from 'next/router';
 import Date from '../Date';
 import { IBlogProps } from '../types';
 import Link from 'next/link';
+import PageTransition from '../PageTransition';
+import { useAnimation } from '@/contexts/AnimationContext';
+
 function BlogCard({
   id,
   image,
@@ -11,9 +14,10 @@ function BlogCard({
   description,
   date,
   timeToRead,
+
 }: IBlogProps) {
-  const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
+  
 
   function formatTimeToRead(minutes: number): string {
     if (minutes >= 60) {
@@ -26,13 +30,12 @@ function BlogCard({
   useEffect(() => {
     setIsMounted(true);
   }, []);
+  
 
   return (
-    <Link href={`blog/post/${id}`} className='w-full h-full'>
-      <Card 
-        isPressable 
+   <>
+      <div 
         className="bg-default-100 h-full"
-        shadow="sm"
       >
       <div className="relative group">
         <Image
@@ -46,7 +49,7 @@ function BlogCard({
         </div>
       </div>
       
-      <CardBody className="p-3">
+      <div className="p-3">
         <h2 className="text-2xl font-bold text-foreground">{title}</h2>
         <div className="flex flex-col justify-between h-full">
           <p
@@ -83,9 +86,9 @@ function BlogCard({
             )}
           </div>
         </div>
-      </CardBody>
-      </Card>
-    </Link>
+      </div>
+      </div>
+    </>
   );
 }
 

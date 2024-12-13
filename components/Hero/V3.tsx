@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react'
-import { Image, Button, Link } from "@nextui-org/react";
+import { Button, Link } from "@nextui-org/react";
 import ContactButton from '../ui/ContactButton';
 
 function Index() {
@@ -41,16 +41,10 @@ function Index() {
           {/* Right column - Image */}
           <div className="lg:col-span-5">
             <div className="relative aspect-square max-w-[500px] mx-auto hidden md:hidden lg:block">
-              <Image
-                isBlurred
+              <img
                 src="/svg/selflogo.svg"
                 alt="Profile logo"
-                classNames={{
-                  wrapper: "w-full h-full",
-                  img: "w-full h-full object-contain"
-                }}
-                radius="none"
-                className="z-0"
+                className="w-full h-full object-contain z-0"
               />
               {/* Decorative background */}
               <div 

@@ -7,16 +7,29 @@ import {
   NavbarMenuToggle,
   NavbarMenu,
   NavbarMenuItem,
-  Link,
   Button,
   Modal,
   ModalContent,
   ModalHeader,
   ModalBody,
 } from "@nextui-org/react";
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useTheme } from "next-themes";
 import { FaGithub } from "react-icons/fa";
 import { MoonIcon, SunIcon } from "../icons";
+import { motion } from 'framer-motion';
+import { opacity } from '../PageTransition/anim';
+import { useAnimation } from '@/contexts/AnimationContext';
+
+const anim = (variants: any) => {
+    return {
+        initial: "initial",
+        animate: "enter",
+        exit: "exit",
+        variants
+    }
+}
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -24,6 +37,8 @@ function Navbar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const router = useRouter();
+  const { setIsAnimating, setPrevPath, startPageTransition } = useAnimation();
 
   const menuItems = [
     { name: "Home", href: "/", comingSoon: false },
@@ -53,12 +68,22 @@ function Navbar() {
     };
   }, []);
 
-  const handleMenuItemClick = (comingSoon: boolean, e: React.MouseEvent) => {
+  const handleLinkClick = async (e: React.MouseEvent, href: string, comingSoon: boolean) => {
+    e.preventDefault();
+    
     if (comingSoon) {
-      e.preventDefault();
       setIsModalOpen(true);
+      setIsMenuOpen(false);
+      return;
     }
+
+    const currentScroll = window.scrollY;
+    sessionStorage.setItem('scrollPosition', currentScroll.toString());
+
     setIsMenuOpen(false);
+    startPageTransition(router.asPath);
+    
+    await router.push(href, undefined, { scroll: false });
   };
 
   if (!mounted) return null;
@@ -91,25 +116,26 @@ function Navbar() {
 
           <NavbarContent className="hidden sm:flex" justify="start">
             <NavbarBrand>
-              <Link
-                href="https://github.com/DaffaAdityaDev"
-                isExternal
-                className={`flex items-center gap-1 sm:gap-2 font-bold transition-all ${
+              
+                <Link
+                  href="https://github.com/DaffaAdityaDev"
+                  className={`flex items-center gap-1 sm:gap-2 font-bold transition-all ${
                   scrolled ? 'scale-90' : 'scale-100'
                 }`}
-              >
-                <FaGithub className='w-8 h-8 sm:w-10 sm:h-10 fill-foreground' />
-              </Link>
+                >
+                  <FaGithub className='w-8 h-8 sm:w-10 sm:h-10 fill-foreground' />
+                </Link>
+             
             </NavbarBrand>
           </NavbarContent>
 
           <NavbarContent className="hidden sm:flex gap-2 md:gap-4" justify="center">
             {menuItems.map((item, index) => (
-              <NavbarItem key={`${item.name}-${index}`}>
+              <NavbarItem className='h-full' key={`${item.name}-${index}`}>
                 <Link 
-                  className="text-foreground text-sm md:text-base" 
                   href={item.href}
-                  onClick={(e) => handleMenuItemClick(item.comingSoon, e)}
+                  onClick={(e) => handleLinkClick(e, item.href, item.comingSoon)}
+                  className="text-foreground text-sm md:text-base h-full flex items-center justify-center"
                 >
                   {item.name}
                 </Link>
@@ -134,7 +160,8 @@ function Navbar() {
             <NavbarItem>
               <Link
                 href="https://drive.google.com/file/d/16bp1lgGaVHe670IO1bR7khk01h6GaXdC/view?usp=share_link"
-                isExternal
+                target="_blank"
+                rel="noopener noreferrer"
                 className={`rounded-full bg-foreground px-2 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-background transition-all duration-500 ease-in-out ${
                   scrolled ? 'scale-90' : 'scale-100'
                 }`}
@@ -148,19 +175,20 @@ function Navbar() {
             {menuItems.map((item, index) => (
               <NavbarMenuItem key={`${item.name}-${index}`}>
                 <Link
-                  className="text-foreground w-full"
                   href={item.href}
-                  size="lg"
-                  onClick={(e) => handleMenuItemClick(item.comingSoon, e)}
+                  className="text-foreground w-full"
+                  onClick={(e) => handleLinkClick(e, item.href, item.comingSoon)}
                 >
                   {item.name}
                 </Link>
               </NavbarMenuItem>
             ))}
+           
           </NavbarMenu>
         </NextUINavbar>
       </div>
 
+  
       <Modal 
         isOpen={isModalOpen} 
         onOpenChange={setIsModalOpen}

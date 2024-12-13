@@ -6,7 +6,7 @@ import githubSvg from '../../public/svg/github.svg';
 import linkedIn from '../../public/svg/linkedin.svg';
 import email from '../../public/svg/email.svg';
 import Bangkit from '../../public/svg/bangkit.svg';
-import Image from 'next/image';
+
 const Hero: NextPage = () => {
   const [showScrollBar, setShowScrollBar] = useState(true);
 
@@ -48,7 +48,7 @@ const Hero: NextPage = () => {
           🎓 Software Engineer Student at Bina Sarana Informatika.
         </p>
         <p className="flex gap-2 align-middle text-2xl md:text-xl sm:text-lg">
-          <Image src={Bangkit} alt="github" width={30} height={30} /> Bangkit
+          <img src={Bangkit} alt="github" className="w-[30px] h-[30px]" /> Bangkit
           Mobile Developer Cohort.
         </p>
         <div className="flex flex-wrap sm:justify-center">
@@ -59,7 +59,7 @@ const Hero: NextPage = () => {
               target="_blank"
               className="flex items-center"
             >
-              <Image src={githubSvg} alt="github" width={30} height={30} />
+              <img src={githubSvg} alt="github" className="w-[30px] h-[30px]" />
               <p className="pl-1 text-2xl">Github</p>
             </a>
           </div>
@@ -70,7 +70,7 @@ const Hero: NextPage = () => {
               target="_blank"
               className="flex items-center"
             >
-              <Image
+              <img
                 src={linkedIn}
                 alt="github"
                 width={30}
@@ -87,12 +87,12 @@ const Hero: NextPage = () => {
               rel="noreferrer"
               className="flex items-center"
             >
-              <Image
+              <img
                 src={email}
                 alt="github"
                 width={30}
                 height={30}
-                className="saturate-750 hue-rotate-137 brightness-101 contrast-105 invert sepia-0"
+                className="w-[30px] h-[30px] saturate-750 hue-rotate-137 brightness-101 contrast-105 invert sepia-0"
               />
               <p className="pl-1 text-2xl">Email</p>
             </a>

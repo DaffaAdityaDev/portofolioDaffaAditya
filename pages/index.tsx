@@ -12,9 +12,11 @@ import Experience from '../components/Experience';
 import CourseTaken from '../components/CourseTaken';
 import Footer from '../components/Footer';
 import { Fade } from 'react-awesome-reveal';
-import React from 'react';
+import React, { ReactElement } from 'react';
+import HomeLayout from '../Layouts/HomeLayout';
+import PageTransition from '@/components/PageTransition';
 
-const Home: NextPage = ({ posts }: any) => {
+const Home: NextPage = () => {
   return (
     <>
       <Head>
@@ -29,9 +31,9 @@ const Home: NextPage = ({ posts }: any) => {
         <meta property="og:url" content="https://daffaaditya.netlify.app" />
         <link rel="icon" href="/svg/selflogo.svg" />
       </Head>
-
+      <PageTransition>
       <div className="font-primary text-white">
-        <Navbar />
+       
         <div className='flex flex-col items-center justify-center w-screen'>
           <Hero />
           <Project />
@@ -53,10 +55,12 @@ const Home: NextPage = ({ posts }: any) => {
           <Fade triggerOnce>
             <Footer />
           </Fade>
+          </div>
         </div>
-      </div>
+      </PageTransition>
     </>
   );
 };
+
 
 export default Home;
