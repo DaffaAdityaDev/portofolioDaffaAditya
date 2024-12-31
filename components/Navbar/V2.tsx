@@ -43,7 +43,6 @@ function Navbar() {
   const menuItems = [
     { name: "Home", href: "/", comingSoon: false },
     { name: "Blog", href: "/blog", comingSoon: false },
-    { name: "Tutorial", href: "#", comingSoon: true },
     { name: "QnA", href: "#", comingSoon: true },
     { name: "About", href: "#", comingSoon: true },
   ];
