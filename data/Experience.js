@@ -1,5 +1,10 @@
 const Experience = [
   {
+    title: 'Frontend Engineer',
+    company: 'PT Global Sukses Solusi Tbk (Run System)',
+    time: '2025',
+  },
+  {
     title: 'Software Engineer (Internship)',
     company: 'Ombudsman Republik Indonesia',
     time: '2023',

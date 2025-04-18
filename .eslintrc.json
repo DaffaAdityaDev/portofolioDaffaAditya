@@ -4,5 +4,12 @@
     "@next/next/no-title-in-document-head": "off",
     "@next/next/no-img-element": "off",
     "react/no-unescaped-entities": "off"
+  },
+  "settings": {
+    "next": {
+      "rootDir": "./",
+      "pagesDirectory": "pages",
+      "appDirectory": "app"
+    }
   }
 }
