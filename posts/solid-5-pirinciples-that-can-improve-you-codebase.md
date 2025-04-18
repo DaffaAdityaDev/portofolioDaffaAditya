@@ -4,7 +4,7 @@ date: "2025-02-18"
 timeToRead: 10
 description: "SOLID intended to make mostly for OOP to make codebase more understandable, flexible, and maintainable."
 image: "/image/blogs/default-thumbnail.webp"
-production: true
+production: false
 ---
 
 # SOLID for Developers

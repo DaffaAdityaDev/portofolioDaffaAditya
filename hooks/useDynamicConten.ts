@@ -1,7 +1,6 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, JSX } from 'react';
 
 type LoadContent = () => JSX.Element | null;
-
 function useDynamicContent(loadContent: LoadContent) {
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);

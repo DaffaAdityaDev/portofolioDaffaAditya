@@ -39,8 +39,7 @@ const Personal = [
     image: '/image/projects/Animationnonton.gif',
     video: '/image/projects/Animationnonton.gif',
     title: 'YukNonton',
-    description:
-      'a streaming platform. where you freely upload your own video and stories it will be converted to many resolution and bandwidth using FFMPEG hardware acceleration.',
+    description: 'Video streaming platform with FFMPEG-powered resolution conversion',
     link: 'https://daffaaditya.netlify.app/blog/post/videoSharing',
     github: 'https://github.com/DaffaAdityaDev/streaming_video',
     tech: ['NextJS', 'ExpressJs', 'Prisma', 'FFMPEG', 'WebSockets'],
