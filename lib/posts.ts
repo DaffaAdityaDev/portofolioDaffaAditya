@@ -1,18 +1,16 @@
 import fs from 'fs';
 import path from 'path';
+import crypto from 'crypto';
 import matter from 'gray-matter';
-import { remark } from 'remark';
-import html from 'remark-html';
-import Prism from 'prismjs';
-import 'prismjs/themes/prism-tomorrow.css'; // Import the theme you prefer // Import the theme you prefer
 import { serialize } from 'next-mdx-remote/serialize';
+import rehypePrism from 'rehype-prism-plus';
 import type { PostData } from 'types/blog';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 
 export function getSortedPostsData(limit?: number): PostData[] {
   // Get file names under /posts
-  const fileNames = fs.readdirSync(postsDirectory);
+  const fileNames = fs.readdirSync(postsDirectory).filter(file => file.endsWith('.md'));
   const allPostsData = fileNames.map((fileName): PostData => {
     // Remove ".md" from file name to get id
     const id = fileName.replace(/\.md$/, '');
@@ -51,7 +49,7 @@ export function getSortedPostsData(limit?: number): PostData[] {
 }
 
 export function getAllPostIds() {
-  const fileNames = fs.readdirSync(postsDirectory);
+  const fileNames = fs.readdirSync(postsDirectory).filter(file => file.endsWith('.md'));
 
   // Returns an array that looks like this:
   // [
@@ -81,20 +79,53 @@ export async function getPostData(id: string) {
 
   // Use gray-matter to parse the post metadata section
   // const matterResult = matter(fileContents);
-
-  // // Use remark to convert markdown into HTML string
-  // const processedContent = await remark()
-  //   .use(html)
-  //   .process(matterResult.content);
-  // const contentHtml = processedContent.toString();
-
-  // // Apply Prism syntax highlighting to the HTML content
-  // const highlightedHtml = Prism.highlight(contentHtml, Prism.languages.markup, 'markup');
   // Use gray-matter to parse the post metadata section
   const matterResult = matter(fileContents);
 
   // Serialize the markdown content for client-side rendering
-  const mdxSource = await serialize(matterResult.content);
+  // Check for cache
+  const cacheDir = path.resolve(process.cwd(), 'posts', '.cache');
+  /*
+  if (!fs.existsSync(cacheDir)) {
+    try {
+      fs.mkdirSync(cacheDir, { recursive: true });
+    } catch (e) {
+      // Ignore existing directory error
+    }
+  }
+  */
+
+  const hash = crypto.createHash('sha256').update(matterResult.content).digest('hex');
+  const cacheFile = path.join(cacheDir, hash);
+  
+  let mdxSource;
+  
+  try {
+    if (fs.existsSync(cacheFile)) {
+      mdxSource = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
+    }
+  } catch (error) {
+    console.warn(`Failed to read cache for ${id}:`, error);
+  }
+
+  if (!mdxSource) {
+    mdxSource = await serialize(matterResult.content, {
+      mdxOptions: {
+        rehypePlugins: [rehypePrism as any],
+        development: false,
+      },
+    });
+    // Only write cache if we are strictly in a generation script or if safe?
+    // For now, let's allow writing but wrap in try-catch to prevent build failure on race conditions
+    try {
+        if (!fs.existsSync(cacheDir)) {
+             fs.mkdirSync(cacheDir, { recursive: true });
+        }
+        fs.writeFileSync(cacheFile, JSON.stringify(mdxSource));
+    } catch (err) {
+        // console.warn('Failed to write cache:', err);
+    }
+  }
 
   // Combine the data with the id and contentHtml
   return {

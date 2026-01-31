@@ -3,7 +3,7 @@ import { Card, CardBody, Link, Divider, Button } from '@nextui-org/react';
 import Course from '../../data/Course';
 import Arrow from '../../public/svg/arrow.svg';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { Fade } from 'react-awesome-reveal';
 
 function CourseTaken() {
@@ -13,7 +13,7 @@ function CourseTaken() {
   const initialItems = Course.slice(0, 3);
   const additionalItems = Course.slice(3);
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { 
       opacity: 0, 
       y: 20,
@@ -29,6 +29,26 @@ function CourseTaken() {
       transition: {
         duration: 0.5,
         ease: "easeOut"
+      }
+    }
+  };
+
+  const containerVariants: Variants = {
+    visible: {
+      opacity: 1,
+      height: 'auto',
+      transition: {
+        staggerChildren: 0.1,
+        when: "beforeChildren"
+      }
+    },
+    hidden: {
+      opacity: 0,
+      height: 0,
+      transition: {
+        when: "afterChildren",
+        staggerChildren: 0.05,
+        staggerDirection: -1
       }
     }
   };
@@ -94,25 +114,7 @@ function CourseTaken() {
             initial="hidden"
             animate="visible"
             exit="hidden"
-            variants={{
-              visible: {
-                opacity: 1,
-                height: 'auto',
-                transition: {
-                  staggerChildren: 0.1,
-                  when: "beforeChildren"
-                }
-              },
-              hidden: {
-                opacity: 0,
-                height: 0,
-                transition: {
-                  when: "afterChildren",
-                  staggerChildren: 0.05,
-                  staggerDirection: -1
-                }
-              }
-            }}
+            variants={containerVariants}
           >
             {additionalItems.map((data) => (
               <motion.div
