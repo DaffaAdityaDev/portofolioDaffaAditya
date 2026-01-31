@@ -5,8 +5,9 @@ const BentoGrid = () => {
   const [time, setTime] = useState<string>('');
 
   useEffect(() => {
-    setTime(new Date().toLocaleTimeString());
-    const timer = setInterval(() => setTime(new Date().toLocaleTimeString()), 1000);
+    const getJakartaTime = () => new Date().toLocaleTimeString('en-US', { timeZone: 'Asia/Jakarta' });
+    setTime(getJakartaTime());
+    const timer = setInterval(() => setTime(getJakartaTime()), 1000);
     return () => clearInterval(timer);
   }, []);
 
@@ -22,7 +23,7 @@ const BentoGrid = () => {
         <div>
           <div className="text-neutral-500 text-xs font-mono mb-1">LOCAL_TIME</div>
           <div className="text-2xl font-bold text-white font-mono">{time}</div>
-          <div className="text-neutral-500 text-xs font-mono mt-1">SAN FRANCISCO, US</div>
+          <div className="text-neutral-500 text-xs font-mono mt-1">JAKARTA, INDONESIA</div>
         </div>
       </div>
 

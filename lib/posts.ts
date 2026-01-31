@@ -32,8 +32,13 @@ export function getSortedPostsData(limit?: number): PostData[] {
     return postData;
   });
 
-  // Filter out posts where production is false
-  const productionPosts = allPostsData.filter(post => post.production !== false);
+  // Filter out posts where production is false logic
+  const productionPosts = allPostsData.filter(post => {
+    if (process.env.NODE_ENV === 'production') {
+      return post.production !== false;
+    }
+    return true;
+  });
 
   // Sort posts by date
   const sortedPosts = productionPosts.sort((a, b) => {
@@ -64,7 +69,17 @@ export function getAllPostIds() {
   //     }
   //   }
   // ]
-  return fileNames.map((fileName) => {
+  const filteredFileNames = fileNames.filter((fileName) => {
+    if (process.env.NODE_ENV === 'production') {
+      const fullPath = path.join(postsDirectory, fileName);
+      const fileContents = fs.readFileSync(fullPath, 'utf8');
+      const matterResult = matter(fileContents);
+      return matterResult.data.production !== false;
+    }
+    return true;
+  });
+
+  return filteredFileNames.map((fileName) => {
     return {
       params: {
         id: fileName.replace(/\.md$/, ''),
