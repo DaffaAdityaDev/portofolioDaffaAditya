@@ -1,20 +1,13 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import AboutMe from '../components/AboutMe/V3';
-import Hero from '../components/Hero/V3';
-import Navbar from '../components/Navbar/V2';
-import Project from '../components/Project/V3';
-import data from '../data/Personal.js';
-import ExperienceData from '../data/Experience.js';
-import Contact from '../components/Contact/V3';
-import Technologies from '../components/Technologies/V3';
-import Experience from '../components/Experience';
-import CourseTaken from '../components/CourseTaken';
-import Footer from '../components/Footer';
-import { Fade } from 'react-awesome-reveal';
-import React, { ReactElement } from 'react';
-import HomeLayout from '../Layouts/HomeLayout';
-import PageTransition from '@/components/PageTransition';
+import Navbar from '@/components/V4/Navbar';
+import Hero from '@/components/V4/Hero';
+import TechStack from '@/components/V4/TechStack';
+import Projects from '@/components/V4/Projects';
+import Experience from '@/components/V4/Experience';
+import Contact from '@/components/V4/Contact';
+import Footer from '@/components/V4/Footer';
+import Marquee from '@/components/V4/Marquee';
 
 const Home: NextPage = () => {
   return (
@@ -31,36 +24,43 @@ const Home: NextPage = () => {
         <meta property="og:url" content="https://daffaaditya.netlify.app" />
         <link rel="icon" href="/svg/selflogo.svg" />
       </Head>
-      <PageTransition>
-      <div className="font-primary text-white">
-       
-        <div className='flex flex-col items-center justify-center w-screen'>
+
+      <div className="min-h-screen bg-[#0a0a0a] text-white font-sans selection:bg-red-600 selection:text-white overflow-x-hidden relative flex flex-col">
+        
+        <Navbar />
+
+        <main className="flex-1 relative">
           <Hero />
-          <Project />
-          <Fade triggerOnce>
-            <AboutMe />
-          </Fade>
-          <Fade triggerOnce>
-            <Technologies />
-          </Fade>
-          <Fade className="w-full" triggerOnce>
-            <Experience ExperienceData={ExperienceData} />
-          </Fade>
-          <Fade className="w-full" triggerOnce>
-            <CourseTaken />
-          </Fade>
-          <Fade triggerOnce>
-            <Contact />
-          </Fade>
-          <Fade triggerOnce>
-            <Footer />
-          </Fade>
-          </div>
-        </div>
-      </PageTransition>
+          <TechStack />
+          <Projects />
+          <Experience />
+          <Contact />
+        </main>
+
+        {/* Footer Marquee */}
+        <Marquee text="FRONTEND ENGINEER /// REACT SPECIALIST /// SYSTEM ARCHITECT /// UI/UX DESIGNER /// AVAILABLE FOR HIRE ///" />
+
+        <Footer />
+
+        <style>{`
+          @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          @keyframes marquee-reverse {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0); }
+          }
+          .animate-marquee {
+            animation: marquee 20s linear infinite;
+          }
+          .animate-marquee-reverse {
+            animation: marquee-reverse 20s linear infinite;
+          }
+        `}</style>
+      </div>
     </>
   );
 };
-
 
 export default Home;

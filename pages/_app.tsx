@@ -34,7 +34,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
               <link rel="icon" href="/svg/selflogo.svg" />
             </Head>
 
-            <Navbar />
+
           
             
             <AnimatePresence mode="wait" initial={false}>

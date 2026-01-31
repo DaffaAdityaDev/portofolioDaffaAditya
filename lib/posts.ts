@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import crypto from 'crypto';
+
 import matter from 'gray-matter';
 import { serialize } from 'next-mdx-remote/serialize';
 import rehypePrism from 'rehype-prism-plus';
@@ -83,49 +83,12 @@ export async function getPostData(id: string) {
   const matterResult = matter(fileContents);
 
   // Serialize the markdown content for client-side rendering
-  // Check for cache
-  const cacheDir = path.resolve(process.cwd(), 'posts', '.cache');
-  /*
-  if (!fs.existsSync(cacheDir)) {
-    try {
-      fs.mkdirSync(cacheDir, { recursive: true });
-    } catch (e) {
-      // Ignore existing directory error
-    }
-  }
-  */
-
-  const hash = crypto.createHash('sha256').update(matterResult.content).digest('hex');
-  const cacheFile = path.join(cacheDir, hash);
-  
-  let mdxSource;
-  
-  try {
-    if (fs.existsSync(cacheFile)) {
-      mdxSource = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
-    }
-  } catch (error) {
-    console.warn(`Failed to read cache for ${id}:`, error);
-  }
-
-  if (!mdxSource) {
-    mdxSource = await serialize(matterResult.content, {
-      mdxOptions: {
-        rehypePlugins: [rehypePrism as any],
-        development: false,
-      },
-    });
-    // Only write cache if we are strictly in a generation script or if safe?
-    // For now, let's allow writing but wrap in try-catch to prevent build failure on race conditions
-    try {
-        if (!fs.existsSync(cacheDir)) {
-             fs.mkdirSync(cacheDir, { recursive: true });
-        }
-        fs.writeFileSync(cacheFile, JSON.stringify(mdxSource));
-    } catch (err) {
-        // console.warn('Failed to write cache:', err);
-    }
-  }
+  const mdxSource = await serialize(matterResult.content, {
+    mdxOptions: {
+      rehypePlugins: [rehypePrism as any],
+      development: false,
+    },
+  });
 
   // Combine the data with the id and contentHtml
   return {
