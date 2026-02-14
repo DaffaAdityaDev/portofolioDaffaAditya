@@ -7,10 +7,10 @@ import { useRouter } from 'next/router'
 import * as gtag from '../lib/gtag'
 import { siteConfig } from '../config/metadata.config';
 import { AnimatePresence, motion } from 'framer-motion';
-import Navbar from '@/components/Navbar/V2';
+import Navbar from '@/components/organisms/NavbarLegacy/V2';
 import { NextUIProvider } from "@nextui-org/react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import PageTransition from '@/components/PageTransition';
+import PageTransition from '@/components/molecules/PageTransition';
 import { AnimationProvider, useAnimation } from '@/contexts/AnimationContext';
 
 function MyApp({ Component, pageProps, router }: AppProps) {

@@ -17,9 +17,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTheme } from "next-themes";
 import { FaGithub } from "react-icons/fa";
-import { MoonIcon, SunIcon } from "../icons";
+import { MoonIcon, SunIcon } from "../../atoms/icons";
 import { motion } from 'framer-motion';
-import { opacity } from '../PageTransition/anim';
+import { opacity } from '../../molecules/PageTransition/anim';
 import { useAnimation } from '@/contexts/AnimationContext';
 
 const anim = (variants: any) => {

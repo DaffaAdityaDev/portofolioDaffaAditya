@@ -46,7 +46,7 @@ const BentoGrid = () => {
             <span className="text-xs font-mono text-neutral-600 border border-neutral-800 px-2 py-1 rounded-full">STACK.json</span>
          </div>
          <div className="grid grid-cols-4 gap-4 mt-4">
-            {['React', 'TypeScript', 'Next.js', 'Tailwind', 'Node.js', 'GraphQL', 'PostgreSQL', 'Docker'].map(tech => (
+            {['Next.js', 'TypeScript', 'Golang', 'AI Agent', 'Node.js', 'GraphQL', 'PostgreSQL', 'Docker'].map(tech => (
                <div key={tech} className="flex items-center gap-2">
                   <div className="w-1 h-1 bg-neutral-600"></div>
                   <span className="text-sm font-mono text-neutral-300">{tech}</span>

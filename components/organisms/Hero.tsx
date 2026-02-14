@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowRight, Square, Circle, Triangle } from 'lucide-react';
-import GridLine from './GridLine';
+import GridLine from '../atoms/GridLine';
 import BentoGrid from './BentoGrid';
 
 const HeroContent = () => (
@@ -10,10 +10,10 @@ const HeroContent = () => (
         <span className="text-red-500 text-xs font-bold font-mono tracking-widest uppercase">Software Engineer</span>
       </div>
       
-      <h1 className="text-6xl lg:text-8xl font-black text-white leading-[0.85] tracking-tighter uppercase mix-blend-difference">
+      <h1 className="lg:text-8xl text-6xl font-black text-white leading-[0.85] tracking-tighter uppercase mix-blend-difference">
         Daffa <br />
         Aditya <br />
-        <span className="text-transparent bg-clip-text bg-gradient-to-r from-neutral-500 to-white">Rahman.</span>
+        {/* <span className="text-transparent bg-clip-text bg-gradient-to-r from-neutral-500 to-white">Rahman.</span> */}
       </h1>
       
       <p className="max-w-md text-neutral-400 text-lg leading-relaxed font-mono">
@@ -45,7 +45,7 @@ const Hero = () => (
   <section id="hero" className="relative pt-16 flex flex-col lg:flex-row min-h-screen">
     
     {/* Left Section: Content */}
-    <div className="w-full lg:w-1/2 p-6 lg:p-12 xl:p-20 border-r border-neutral-800 relative flex items-center">
+    <div className="w-full lg:w-1/2 p-12 border-r border-neutral-800 relative flex items-center">
        <GridLine className="top-12 opacity-50" />
        <GridLine className="bottom-12 opacity-50" />
        <GridLine vertical className="left-12 opacity-50" />

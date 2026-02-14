@@ -1,5 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
+import { MARQUEE_TEXT } from '@/constant/constant';
+import Marquee from '../atoms/Marquee';
 
 const Navbar = () => {
   const router = useRouter();
@@ -43,12 +45,10 @@ const Navbar = () => {
 
         {/* Marquee Filler */}
         <div className="hidden md:flex flex-1 items-center overflow-hidden border-r border-neutral-800 relative bg-[#0a0a0a]">
-          <div className="absolute inset-0 flex items-center opacity-30">
-             <div className="animate-marquee whitespace-nowrap text-xs font-mono text-neutral-500">
-                SOFTWARE ENGINEER /// REACT SPECIALIST /// TYPESCRIPT EXPERT /// FULL STACK DEVELOPER /// SYSTEM ARCHITECT /// 
-                SOFTWARE ENGINEER /// REACT SPECIALIST /// TYPESCRIPT EXPERT /// FULL STACK DEVELOPER /// SYSTEM ARCHITECT /// 
-             </div>
-          </div>
+             {/* <div className="animate-marquee whitespace-nowrap text-xs font-mono text-neutral-500">
+                {MARQUEE_TEXT} {MARQUEE_TEXT}
+             </div> */}
+             <Marquee text={MARQUEE_TEXT} opacity={0.2} />
         </div>
 
         {/* Nav Links */}

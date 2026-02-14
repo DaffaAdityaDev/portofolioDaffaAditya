@@ -1,11 +1,11 @@
 'use client';
 import { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
-import Personal from '../../data/Personal';
-import githubSvg from '../../public/svg/github.svg';
-import linkedIn from '../../public/svg/linkedin.svg';
-import email from '../../public/svg/email.svg';
-import Bangkit from '../../public/svg/bangkit.svg';
+import Personal from '@/data/Personal';
+import githubSvg from '../../../public/svg/github.svg';
+import linkedIn from '../../../public/svg/linkedin.svg';
+import email from '../../../public/svg/email.svg';
+import Bangkit from '../../../public/svg/bangkit.svg';
 
 const Hero: NextPage = () => {
   const [showScrollBar, setShowScrollBar] = useState(true);
