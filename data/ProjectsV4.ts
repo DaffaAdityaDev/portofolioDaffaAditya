@@ -11,7 +11,8 @@ export const projectsData = [
     link: "https://runsystem.io/",
     image: "/image/projects/platform.webp",
     color: "from-blue-600 to-indigo-900",
-    tech: ["Nextjs", "TypeScript", "Component Library"]
+    tech: ["Nextjs", "TypeScript", "Component Library"],
+    nature: "work"
   },
   {
     id: 2,
@@ -25,7 +26,8 @@ export const projectsData = [
     link: "https://accountingplus.id/",
     image: "/image/projects/accplus.webp",
     color: "from-blue-600 to-indigo-900",
-    tech: ["Nextjs", "TypeScript", "TanStack Query"] // Mapping tags to tech for backward compatibility if needed
+    tech: ["Nextjs", "TypeScript", "TanStack Query"], // Mapping tags to tech for backward compatibility if needed
+    nature: "work"
   },
   {
     id: 3,
@@ -39,7 +41,8 @@ export const projectsData = [
     link: "https://ombudsman.go.id/",
     image: "/image/projects/ombudsman.webp",
     color: "from-blue-600 to-indigo-900",
-    tech: ["React", "TypeScript", "TanStack Query"] // Mapping tags to tech for backward compatibility if needed
+    tech: ["React", "TypeScript", "TanStack Query"], // Mapping tags to tech for backward compatibility if needed
+    nature: "work"
   },
   {
     id: 4,
@@ -53,7 +56,8 @@ export const projectsData = [
     link: "https://qqltech.com/",
     image: "/image/projects/qltech.webp",
     color: "from-purple-600 to-fuchsia-900",
-    tech: ["Laravel", "Vuejs", "PostgreSQL"]
+    tech: ["Laravel", "Vuejs", "PostgreSQL"],
+    nature: "work"
   },
   {
     id: 5,
@@ -66,7 +70,8 @@ export const projectsData = [
     featured: true,
     link: "https://github.com/DaffaAdityaDev/recyclops",
     color: "from-green-600 to-emerald-900",
-    tech: ["React Native", "Expo"]
+    tech: ["React Native", "Expo"],
+    nature: "side"
   },
  
 ];

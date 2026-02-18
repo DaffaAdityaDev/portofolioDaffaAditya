@@ -2,66 +2,87 @@ import React, { useState } from 'react';
 import { projectsData } from '@/data/ProjectsV4';
 import CursorPreview from '@/components/molecules/CursorPreview';
 import ProjectRow from '@/components/molecules/ProjectRow';
-import { Maximize2, Minimize2 } from 'lucide-react';
+
+
+import { AnimatePresence, motion } from 'framer-motion';
 
 const Projects = () => {
   const [hoveredProject, setHoveredProject] = useState<typeof projectsData[0] | null>(null);
-  const [view, setView] = useState<'home'>('home');
-  const [filter, setFilter] = useState('ALL');
-  const [compactMode, setCompactMode] = useState(false);
+  const [activeTab, setActiveTab] = useState<'work' | 'side'>('work');
 
-  // --- DERIVED DATA ---;
+  // @ts-ignore
+  const workProjects = projectsData.filter(p => p.nature === 'work' || !p.nature); // Default to work if undefined for robustness
+  // @ts-ignore
+  const sideProjects = projectsData.filter(p => p.nature === 'side');
 
-  // Grouping for Archive View
-  const groupedProjects = projectsData.reduce((acc, project) => {
-    // @ts-ignore
-    if (!acc[project.year]) acc[project.year] = [];
-    // @ts-ignore
-    acc[project.year].push(project);
-    return acc;
-  }, {} as Record<string, typeof projectsData>);
-
-  const sortedYears = Object.keys(groupedProjects).sort((a, b) => Number(b) - Number(a));
-  const categories = ['ALL', 'WEB_APP', 'WEBSITE', 'MOBILE', 'DASHBOARD'];
-
-  // const handleViewAll = () => setView('archive');
+  const displayedProjects = activeTab === 'work' ? workProjects : sideProjects;
 
   return (
     <>
       <CursorPreview hoveredProject={hoveredProject} />
 
- 
-        <section id="works" className="relative py-20 px-6 lg:px-20 border-t border-neutral-800">
-           <div className="flex items-end justify-between mb-8 border-b border-zinc-800 pb-4">
-              <div>
-                 <h2 className="text-sm font-mono text-zinc-500 mb-2">/// SECTION_02</h2>
-                 <h1 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight">Past Projects</h1>
-              </div>
-           </div>
-          
-          <div className="flex flex-col border-t border-zinc-900">
-            {projectsData.map((project) => (
-              <ProjectRow 
-                key={project.id} 
-                project={project} 
-                compact={false} 
-                onHover={setHoveredProject} 
-              />
-            ))}
+      <section id="works" className="relative py-20 px-6 lg:px-20 border-t border-neutral-800">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 border-b border-zinc-800 pb-4 gap-4">
+          <div>
+            <h2 className="text-sm font-mono text-zinc-500 mb-2">/// SECTION_02</h2>
+            <h1 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight">Past Projects</h1>
           </div>
-          
-           {/* Pagination / End Marker */}
-           {/* <div className="mt-12 flex justify-center">
-              <button 
-                onClick={handleViewAll} 
-                className="flex items-center gap-2 px-4 py-2 border border-zinc-800 bg-zinc-900/50 text-[10px] font-mono text-zinc-500 uppercase hover:text-white hover:border-zinc-600 transition-colors"
-              >
-                 <span>View_Full_Log</span>
-                 <div className="w-1 h-4 bg-zinc-700 animate-pulse"></div>
-              </button>
-           </div> */}
-        </section>
-     
+
+          <div className="flex items-center gap-1 bg-zinc-900/50 p-1 rounded-lg border border-zinc-800/50 backdrop-blur-sm relative">
+            <button
+              onClick={() => setActiveTab('work')}
+              className={`relative z-10 px-4 py-2 text-xs font-mono uppercase transition-colors duration-300 cursor-pointer ${
+                activeTab === 'work' ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'
+              }`}
+            >
+              Work Projects
+            </button>
+            <button
+              onClick={() => setActiveTab('side')}
+              className={`relative z-10 px-4 py-2 text-xs font-mono uppercase transition-colors duration-300 cursor-pointer ${
+                activeTab === 'side' ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'
+              }`}
+            >
+              Side Projects
+            </button>
+            
+            {/* Sliding Indicator */}
+            <div 
+              className={`absolute top-1 bottom-1 rounded-md bg-zinc-800 border border-zinc-700 transition-all duration-300 ease-out ${
+                activeTab === 'work' ? 'left-1 w-[calc(50%-4px)]' : 'left-[calc(50%+2px)] w-[calc(50%-4px)]'
+              }`}
+            ></div>
+          </div>
+        </div>
+        
+        <div className="flex flex-col border-t border-zinc-900 overflow-hidden min-h-[300px]">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="flex flex-col"
+            >
+              {displayedProjects.map((project) => (
+                <ProjectRow 
+                  key={project.id} 
+                  project={project} 
+                  compact={false} 
+                  onHover={setHoveredProject} 
+                />
+              ))}
+              
+              {displayedProjects.length === 0 && (
+                <div className="py-20 text-center text-zinc-600 font-mono text-sm uppercase">
+                    No projects found in this category.
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </section>
     </>
   );
 };
