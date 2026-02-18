@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardBody, CardFooter, Button, Image } from '@nextui-org/react';
 import { useRouter } from 'next/router';
-import Date from '../Date';
-import { IBlogProps } from '../types';
+import Date from '@/components/atoms/Date';
+import { IBlogProps } from '@/components/atoms/types';
 import Link from 'next/link';
-import PageTransition from '../PageTransition';
+import PageTransition from '@/components/molecules/PageTransition';
 import { useAnimation } from '@/contexts/AnimationContext';
 
 function BlogCard({

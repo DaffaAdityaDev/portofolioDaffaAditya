@@ -2,7 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
-import GridLine from '../GridLine';
+import GridLine from '@/components/atoms/GridLine';
 import { useTheme } from 'next-themes';
 import { Card, CardBody, Button, Divider } from '@nextui-org/react';
 

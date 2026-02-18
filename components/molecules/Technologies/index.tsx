@@ -1,9 +1,9 @@
 import React from 'react';
-import Frontend from '../../public/svg/react.svg';
-import Backend from '../../public/svg/database.svg';
-import Ui from '../../public/svg/design.svg';
-import Github from '../../public/svg/github.svg';
-import Mobile from '../../public/svg/mobile_developer.svg';
+import Frontend from '@/public/svg/react.svg';
+import Backend from '@/public/svg/database.svg';
+import Ui from '@/public/svg/design.svg';
+import Github from '@/public/svg/github.svg';
+import Mobile from '@/public/svg/mobile_developer.svg';
 import Image from 'next/image';
 import { NextPage } from 'next';
 

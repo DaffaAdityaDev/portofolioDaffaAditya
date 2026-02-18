@@ -1,7 +1,7 @@
 import React from 'react';
 import BlogCard from './BlogCard';
-import { IBlogProps } from '@/components/types';
-import GridLine from '../GridLine';
+import { IBlogProps } from '@/components/atoms/types';
+import GridLine from '@/components/atoms/GridLine';
 
 interface BlogListProps {
   posts: IBlogProps[];

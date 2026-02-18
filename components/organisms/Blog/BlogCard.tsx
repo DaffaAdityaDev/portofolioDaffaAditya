@@ -1,8 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { ArrowRight, Calendar, Clock } from 'lucide-react';
-import { IBlogProps } from '@/components/types';
-import DateComponent from '@/components/Date';
+import { IBlogProps } from '@/components/atoms/types';
+import DateComponent from '@/components/atoms/Date';
 
 const BlogCard = (props: IBlogProps) => {
   const { id, title, description, date, timeToRead, image } = props;

@@ -1,8 +1,8 @@
 import React from 'react';
 import Head from 'next/head';
-import Navbar from '../../../components/Navbar/V2';
-import Footer from '../../../components/Footer';
-import Breadcrumb from '../../../components/Breadcrumb';
+import Navbar from '@/components/organisms/Navbar';
+import Footer from '@/components/organisms/Footer';
+import Breadcrumb from '@/components/molecules/Breadcrumb';
 import styles from '../../../styles/blog.module.scss';
 import { Card, CardBody, Button, Divider } from '@nextui-org/react';
 import { useTheme } from 'next-themes';

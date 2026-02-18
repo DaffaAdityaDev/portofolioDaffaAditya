@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
-import Marquee from '../Marquee';
+import Marquee from '@/components/atoms/Marquee';
 
 interface BlogLayoutProps {
   children: React.ReactNode;

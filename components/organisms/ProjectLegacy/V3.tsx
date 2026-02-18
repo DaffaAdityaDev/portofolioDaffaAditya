@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import Image from 'next/image'
 import {Card, CardBody, CardFooter, Button, Tabs, Tab} from '@nextui-org/react'
-import Personal from '../../data/Personal'
+import Personal from '@/data/Personal'
 
 const projectTypes = ['Web', 'Mobile', 'UI/UX']
 

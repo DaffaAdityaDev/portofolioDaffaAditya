@@ -1,12 +1,12 @@
 import React, { useState, useCallback } from 'react';
-import { IBlogProps } from '../../components/types';
+import { IBlogProps } from '@/components/atoms/types';
 import { getSortedPostsData, getPostsCount } from '../../lib/posts';
 import Head from 'next/head';
 import BlogLayout from '@/components/organisms/Blog/BlogLayout';
 import BlogList from '@/components/organisms/Blog/BlogList';
 import Footer from '@/components/organisms/Footer';
 import Navbar from '@/components/organisms/Navbar';
-import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
+import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 
 const POSTS_PER_PAGE = 6; 
 

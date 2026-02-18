@@ -1,5 +1,5 @@
 import React from 'react';
-import image from '../../public/images/hero.jpg';
+import image from '@/public/images/hero.jpg';
 function Hero() {
   return (
     <div className="relative h-screen pt-60">

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Card, CardBody, Link, Divider, Button } from '@nextui-org/react';
-import Course from '../../data/Course';
-import Arrow from '../../public/svg/arrow.svg';
+import Course from '@/data/Course';
+import Arrow from '@/public/svg/arrow.svg';
 import Image from 'next/image';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { Fade } from 'react-awesome-reveal';

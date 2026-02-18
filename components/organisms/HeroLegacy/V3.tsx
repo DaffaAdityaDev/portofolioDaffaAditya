@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { Button, Link } from "@nextui-org/react";
-import ContactButton from '../ui/ContactButton';
+import ContactButton from '@/components/ui/ContactButton';
 
 function Index() {
   return (
