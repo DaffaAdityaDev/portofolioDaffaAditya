@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { projectsData } from '@/data/ProjectsV4';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 
@@ -19,6 +20,11 @@ const CursorPreview: React.FC<CursorPreviewProps> = ({ hoveredProject }) => {
   const y = useSpring(cursorY, springConfig);
 
   const [activeProject, setActiveProject] = useState<Project | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     if (hoveredProject) {
@@ -36,7 +42,7 @@ const CursorPreview: React.FC<CursorPreviewProps> = ({ hoveredProject }) => {
     return () => window.removeEventListener('mousemove', moveCursor);
   }, [cursorX, cursorY]);
 
-  return (
+  const content = (
     <motion.div 
       className="fixed pointer-events-none z-[100] w-[300px] h-[200px] rounded-lg overflow-hidden hidden lg:block border border-zinc-800 shadow-2xl bg-zinc-900"
       style={{ 
@@ -78,6 +84,10 @@ const CursorPreview: React.FC<CursorPreviewProps> = ({ hoveredProject }) => {
       </div>
     </motion.div>
   );
+
+  if (!isMounted) return null;
+
+  return createPortal(content, document.body);
 };
 
 export default CursorPreview;
