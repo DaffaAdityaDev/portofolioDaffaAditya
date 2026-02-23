@@ -4,7 +4,7 @@ import Navbar from '../Navbar';
 import Footer from '../Footer';
 import GridLine from '@/components/atoms/GridLine';
 import { useTheme } from 'next-themes';
-import { Card, CardBody, Button, Divider } from '@nextui-org/react';
+import { Card, CardBody, Button, Divider } from '@heroui/react';
 import { motion } from 'framer-motion';
 
 // --- Code Block Component ---

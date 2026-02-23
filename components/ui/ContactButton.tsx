@@ -1,4 +1,4 @@
-import { Button, Link, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Tooltip } from "@nextui-org/react";
+import { Button, Link, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Tooltip } from "@heroui/react";
 import { FaLinkedin } from "react-icons/fa";
 import { MdEmail, MdContentCopy } from "react-icons/md";
 import { IoDocument } from "react-icons/io5";
@@ -66,7 +66,7 @@ function ContactButton() {
                 <div className="flex flex-col gap-4">
                   <p>You can reach me at:</p>
                   <div className="flex items-center gap-2 p-2 bg-default-100 rounded-lg">
-                    <p className="flex-grow font-medium">{email}</p>
+                    <p className="grow font-medium">{email}</p>
                     <Tooltip
                       content={copied ? "Copied!" : "Copy to clipboard"}
                       placement="right"

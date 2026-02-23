@@ -8,7 +8,7 @@ import * as gtag from '../lib/gtag'
 import { siteConfig } from '../config/metadata.config';
 import { AnimatePresence, motion } from 'framer-motion';
 import Navbar from '@/components/organisms/Navbar';
-import { NextUIProvider } from "@nextui-org/react";
+import { HeroUIProvider } from "@heroui/react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import PageTransition from '@/components/molecules/PageTransition';
 
@@ -16,7 +16,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
 
   return (
     <NextThemesProvider attribute="class" defaultTheme="dark">
-      <NextUIProvider>
+      <HeroUIProvider>
         <>
             <Head>
               <title>{siteConfig.title}</title>
@@ -27,9 +27,6 @@ function MyApp({ Component, pageProps, router }: AppProps) {
               <meta property="og:url" content={siteConfig.url} />
               <link rel="icon" href="/svg/selflogo.svg" />
             </Head>
-
-
-          
             
             <Navbar />
             <AnimatePresence mode="wait" initial={false}>
@@ -39,7 +36,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
             </AnimatePresence>
 
           </>
-      </NextUIProvider>
+      </HeroUIProvider>
     </NextThemesProvider>
   );
 }
