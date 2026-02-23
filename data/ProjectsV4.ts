@@ -73,5 +73,33 @@ export const projectsData = [
     tech: ["React Native", "Expo"],
     nature: "side"
   },
+  {
+    id: 6,
+    image: "/image/projects/artifyo.webp",
+    title: "ARTIFYO",
+    description: "Portofolio website for Artifyo design",
+    year: "2025",
+    type: "FREELANCE",
+    category: "FREELANCE",
+    featured: true,
+    link: "https://artifyo.id/",
+    color: "from-green-600 to-emerald-900",
+    tech: ["Nextjs", "TypeScript", "Tailwind CSS"],
+    nature: "freelance"
+  },
+  {
+    id: 7,
+    image: '/image/projects/aliman.webp',
+    title: 'Aliman Bulus',
+    description: 'Aliman application help to manage the accounting of santri student.',
+    year: "2025",
+    type: "WEBSITE",
+    category: "WEBSITE",
+    featured: true,
+    link: "https://alimanbulus.net/",
+    color: "from-green-600 to-emerald-900",
+    tech: ["Nextjs", "Nodejs", "PostgreSQL", "Tailwind CSS"],
+    nature: "freelance"
+  }
  
 ];

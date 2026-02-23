@@ -2,11 +2,17 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { MARQUEE_TEXT } from '@/constant/constant';
 import Marquee from '../atoms/Marquee';
+import { resumeLink } from '@/data/ContactV4';
 
 const Navbar = () => {
   const router = useRouter();
 
-  const handleNavigation = async (item: { label: string; id?: string; path?: string }) => {
+  const handleNavigation = async (item: { label: string; id?: string; path?: string; externalPath?: string }) => {
+    if (item.externalPath) {
+      window.open(item.externalPath, '_blank', 'noopener,noreferrer');
+      return;
+    }
+
     if (item.path) {
       await router.push(item.path);
       return;
@@ -26,9 +32,9 @@ const Navbar = () => {
 
   const navItems = [
     { label: 'INDEX', id: 'hero' },
-    { label: 'WORKS', id: 'works' },
     { label: 'BLOG', path: '/blog' },
-    { label: 'CONTACT', id: 'contact' }
+    { label: 'CONTACT', id: 'contact' },
+    { label: 'RESUME', externalPath: resumeLink }
   ];
 
   return (

@@ -16,7 +16,7 @@ const Experience = () => {
           <div className="space-y-4 text-neutral-400 leading-relaxed">
             <p>
               I'm a well-rounded Software Engineer with a passion for solving complex and ambiguous problems. 
-              With experience across the full software development life cycle—from design to deployment—I 
+              With experience across the full software development life cycle from design to deployment, I 
               thrive in environments that challenge me to think critically and innovate.
             </p>
             

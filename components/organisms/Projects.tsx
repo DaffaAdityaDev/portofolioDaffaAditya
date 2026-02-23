@@ -8,14 +8,16 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 const Projects = () => {
   const [hoveredProject, setHoveredProject] = useState<typeof projectsData[0] | null>(null);
-  const [activeTab, setActiveTab] = useState<'work' | 'side'>('work');
+  const [activeTab, setActiveTab] = useState<'work' | 'freelance' | 'side'>('work');
 
   // @ts-ignore
-  const workProjects = projectsData.filter(p => p.nature === 'work' || !p.nature); // Default to work if undefined for robustness
+  const workProjects = projectsData.filter(p => !p.nature || p.nature === 'work');
+  // @ts-ignore
+  const freelanceProjects = projectsData.filter(p => p.nature === 'freelance');
   // @ts-ignore
   const sideProjects = projectsData.filter(p => p.nature === 'side');
 
-  const displayedProjects = activeTab === 'work' ? workProjects : sideProjects;
+  const displayedProjects = activeTab === 'work' ? workProjects : activeTab === 'freelance' ? freelanceProjects : sideProjects;
 
   return (
     <>
@@ -28,14 +30,22 @@ const Projects = () => {
             <h1 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight">Past Projects</h1>
           </div>
 
-          <div className="flex items-center gap-1 bg-zinc-900/50 p-1 rounded-lg border border-zinc-800/50 backdrop-blur-sm relative">
+          <div className="grid grid-cols-3 gap-1 bg-zinc-900/50 p-1 rounded-lg border border-zinc-800/50 backdrop-blur-sm relative min-w-[360px]">
             <button
               onClick={() => setActiveTab('work')}
               className={`relative z-10 px-4 py-2 text-xs font-mono uppercase transition-colors duration-300 cursor-pointer ${
                 activeTab === 'work' ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'
               }`}
             >
-              Work Projects
+              Work
+            </button>
+            <button
+              onClick={() => setActiveTab('freelance')}
+              className={`relative z-10 px-4 py-2 text-xs font-mono uppercase transition-colors duration-300 cursor-pointer ${
+                activeTab === 'freelance' ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'
+              }`}
+            >
+              Freelance
             </button>
             <button
               onClick={() => setActiveTab('side')}
@@ -43,13 +53,15 @@ const Projects = () => {
                 activeTab === 'side' ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'
               }`}
             >
-              Side Projects
+              Side
             </button>
             
             {/* Sliding Indicator */}
             <div 
               className={`absolute top-1 bottom-1 rounded-md bg-zinc-800 border border-zinc-700 transition-all duration-300 ease-out ${
-                activeTab === 'work' ? 'left-1 w-[calc(50%-4px)]' : 'left-[calc(50%+2px)] w-[calc(50%-4px)]'
+                activeTab === 'work' ? 'left-1 w-[calc(33.33%-5px)]' : 
+                activeTab === 'freelance' ? 'left-[calc(33.33%+3px)] w-[calc(33.33%-5px)]' : 
+                'left-[calc(66.66%+1px)] w-[calc(33.33%-5px)]'
               }`}
             ></div>
           </div>

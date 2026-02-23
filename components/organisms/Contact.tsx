@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
-import { contactData } from '@/data/ContactV4';
+import { contactData, resumeLink } from '@/data/ContactV4';
 
 const Contact = () => {
   return (
@@ -18,7 +18,7 @@ const Contact = () => {
         </div>
 
         {/* Contact Grid */}
-        <div className="grid md:grid-cols-3 gap-[1px] bg-neutral-800 border border-neutral-800 mb-12">
+        <div className="grid md:grid-cols-3 gap-px bg-neutral-800 border border-neutral-800 mb-12">
           {contactData.map((contact, idx) => (
             <div key={idx} className="bg-[#0a0a0a] p-8 hover:bg-neutral-900 transition-colors group">
               <div className="text-neutral-500 group-hover:text-white transition-colors mb-4 flex justify-center">
@@ -31,9 +31,23 @@ const Contact = () => {
         </div>
 
         {/* CTA */}
-        <button className="h-16 px-12 bg-white text-black font-bold tracking-tight hover:bg-neutral-200 transition-colors flex items-center gap-3 mx-auto text-lg">
-          START A PROJECT <ArrowRight size={24} />
-        </button>
+        <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
+          <a 
+            href="mailto:daffaaditya.me@gmail.com"
+            className="group h-14 lg:h-16 px-8 lg:px-12 bg-white text-black font-bold tracking-tight hover:bg-neutral-200 transition-all flex items-center gap-3 text-base lg:text-lg w-full md:w-auto justify-center"
+          >
+            START A PROJECT <ArrowRight className="group-hover:translate-x-1 transition-transform" size={24} />
+          </a>
+          
+          <a 
+            href={resumeLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group h-14 lg:h-16 px-8 lg:px-12 bg-transparent border border-neutral-700 text-white font-bold tracking-tight hover:bg-neutral-800 transition-all flex items-center gap-3 text-base lg:text-lg w-full md:w-auto justify-center"
+          >
+            RESUME <ArrowRight className="group-hover:-rotate-45 transition-transform duration-300" size={24} />
+          </a>
+        </div>
 
       </div>
 
