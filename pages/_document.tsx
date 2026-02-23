@@ -38,7 +38,7 @@ export default function Document() {
           </>
         )}
       </Head>
-      <body className="h-screen">
+      <body className="bg-[#0a0a0a] text-white overflow-x-hidden">
         <Main />
         <NextScript />
       </body>

@@ -14,7 +14,7 @@ const Navbar = () => {
     }
 
     if (item.path) {
-      await router.push(item.path);
+      await router.push(item.path, undefined, { scroll: false });
       return;
     }
 
@@ -38,12 +38,12 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-[#0a0a0a] border-b border-neutral-800">
+    <nav className="fixed top-0 left-0 w-full z-100 bg-[#0a0a0a] border-b border-neutral-800">
       <div className="flex justify-between items-stretch h-16">
         {/* Brand */}
         <div 
-          className="flex items-center px-6 border-r border-neutral-800 bg-neutral-900 cursor-pointer"
-          onClick={() => router.push('/')}
+          className="flex items-center px-6 border-r border-neutral-800 bg-neutral-900 cursor-pointer w-auto whitespace-nowrap"
+          onClick={() => router.push('/', undefined, { scroll: false })}
         >
           {/* <div className="w-6 h-6 bg-red-600 rounded-sm mr-3 animate-pulse"></div> */}
           <span className="font-bold text-lg tracking-tight text-white">DAFFA ADITYA</span>

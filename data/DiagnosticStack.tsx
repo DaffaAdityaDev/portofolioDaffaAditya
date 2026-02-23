@@ -52,9 +52,9 @@ export const diagnosticStack = [
       { name: "TypeScript", version: "v5.4", status: "Compiled" },
       { name: "Zustand", version: "v4.1", status: "Active" },
       { name: "TailwindCSS", version: "v4.1", status: "Active" },
-      { name: "Framer Motion", version: "v11.0", status: "Active" },
-      { name: "Shadcn UI", version: "v0.1", status: "Active" },
-      { name: "Lucide Icons", version: "v0.1", status: "Active" },
+      { name: "TanStack Query", version: "v5.0", status: "Active" },
+      { name: "Micro-Frontends", version: "Architecture", status: "Active" },
+      { name: "NPM Packages", version: "Library", status: "Active" },
     ]
   },
   {

@@ -8,38 +8,24 @@ const Experience = () => {
       
       <div className="grid lg:grid-cols-2 gap-16">
         
-        {/* Left: About */}
-        <div>
-          <div className="text-xs font-mono text-neutral-500 mb-2">[ ABOUT ]</div>
-          <h2 className="text-4xl lg:text-6xl font-black tracking-tighter uppercase mb-8">BACKGROUND</h2>
-          
-          <div className="space-y-4 text-neutral-400 leading-relaxed">
-            <p>
-              I'm a well-rounded Software Engineer with a passion for solving complex and ambiguous problems. 
-              With experience across the full software development life cycle from design to deployment, I 
-              thrive in environments that challenge me to think critically and innovate.
-            </p>
+        {/* Left: Section Header */}
+        <div className="flex flex-col justify-between">
+          <div>
+            <div className="text-xs font-mono text-neutral-500 mb-2">[ CAREER ]</div>
+            <h2 className="text-4xl lg:text-6xl font-black tracking-tighter uppercase mb-6">EXPERIENCE</h2>
             
-            <p>
-              My expertise spans a wide range of technologies, allowing me to adapt and tackle projects 
-              of varying complexity with precision and efficiency. Currently based in Jakarta, Indonesia.
-            </p>
-            
-            <p>
-              Whether it's optimizing code performance or building user-friendly applications, I am 
-              dedicated to delivering high-quality solutions that meet and exceed expectations.
+            <p className="max-w-md text-neutral-400 font-mono text-sm leading-relaxed">
+              /// SYSTEM_LOG: Career trajectory.<br /><br />
+              Bridging the gap between ambitious design and complex technical constraints. A chronological record of roles, responsibilities, and impact across the industry.
             </p>
           </div>
-
-          <div className="mt-8 grid grid-cols-2 gap-4">
-            <div className="border border-neutral-800 p-4">
-              <div className="text-2xl font-bold font-mono">15+</div>
-              <div className="text-xs text-neutral-600 font-mono">PROJECTS</div>
-            </div>
-            <div className="border border-neutral-800 p-4">
-              <div className="text-2xl font-bold font-mono">3+</div>
-              <div className="text-xs text-neutral-600 font-mono">YEARS_EXP</div>
-            </div>
+          
+          <div className="hidden lg:block mt-auto pb-8">
+            <div className="w-16 h-px bg-white/20 mb-4"></div>
+            <p className="text-xs font-mono text-neutral-500 uppercase">
+              ENV: PRODUCTION<br/>
+              AVAILABLE FOR HIRE: TRUE
+            </p>
           </div>
         </div>
 

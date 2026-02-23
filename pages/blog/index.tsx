@@ -5,7 +5,6 @@ import Head from 'next/head';
 import BlogLayout from '@/components/organisms/Blog/BlogLayout';
 import BlogList from '@/components/organisms/Blog/BlogList';
 import Footer from '@/components/organisms/Footer';
-import Navbar from '@/components/organisms/Navbar';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 
 const POSTS_PER_PAGE = 6; 
@@ -64,7 +63,7 @@ const Blog = ({
       </Head>
 
       <div className="min-h-screen bg-[#0a0a0a] text-white font-sans selection:bg-red-600 selection:text-white flex flex-col">
-        <Navbar />
+        
         
         <main className="flex-1 pt-16">
            <BlogList posts={posts} />

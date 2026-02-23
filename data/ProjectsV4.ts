@@ -70,7 +70,7 @@ export const projectsData = [
     featured: true,
     link: "https://github.com/DaffaAdityaDev/recyclops",
     color: "from-green-600 to-emerald-900",
-    tech: ["React Native", "Expo"],
+    tech: ["Android Native", "Firebase"],
     nature: "side"
   },
   {

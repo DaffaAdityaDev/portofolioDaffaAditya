@@ -5,6 +5,7 @@ import Footer from '../Footer';
 import GridLine from '@/components/atoms/GridLine';
 import { useTheme } from 'next-themes';
 import { Card, CardBody, Button, Divider } from '@nextui-org/react';
+import { motion } from 'framer-motion';
 
 // --- Code Block Component ---
 const CodeBlock = ({ children, className }: any) => {
@@ -26,7 +27,7 @@ const CodeBlock = ({ children, className }: any) => {
   };
 
   return (
-    <div className="my-6 border border-neutral-800 bg-[#000] rounded-sm relative group">
+    <div className="my-6 border border-neutral-800 bg-black rounded-sm relative group">
       <div className="flex items-center justify-between px-3 py-1 border-b border-neutral-800 bg-neutral-900/50 text-xs font-mono text-neutral-500">
         <span>CODE</span>
         <button 
@@ -102,26 +103,45 @@ export default function PostLayoutV4({ meta, children }: { meta: any, children: 
           <GridLine vertical className="right-6 lg:right-20 opacity-30" />
 
           {/* Hero Section */}
-          <div className="px-6 lg:px-20 py-20 border-b border-neutral-800 relative z-10">
-            <div className="inline-block border border-neutral-800 bg-neutral-900/50 px-3 py-1 mb-6">
-               <span className="text-neutral-500 text-xs font-bold font-mono tracking-widest uppercase">
-                  {meta.date ? new Date(meta.date).toLocaleDateString() : 'BLOG POST'}
-               </span>
-            </div>
+          <div className="relative z-10 w-full flex flex-col items-center">
+            {meta.image && (
+              <div className="w-full h-[40vh] lg:h-[60vh] relative overflow-hidden border-b border-neutral-800">
+                <img 
+                  src={meta.image} 
+                  alt={meta.title} 
+                  className="w-full h-full object-cover opacity-60"
+                  style={{ viewTransitionName: `blog-image-${meta.id}` }}
+                />
+                <div 
+                  className="absolute inset-0 bg-linear-to-t from-[#0a0a0a] via-[#0a0a0a]/50 to-transparent z-10" 
+                />
+              </div>
+            )}
             
-            <h1 className="text-4xl lg:text-6xl font-black uppercase tracking-tighter leading-tight max-w-4xl">
-              {meta.title}
-            </h1>
-            
-            <div className="mt-8 flex items-center gap-4 text-xs font-mono text-neutral-500 uppercase">
-              <span>By Daffa Aditya</span>
-              <span>•</span>
-              <span>{meta.timeToRead || '5'} min read</span>
+            <div className={`px-6 lg:px-20 pb-12 w-full max-w-6xl relative z-20 ${meta.image ? '-mt-32' : 'py-20'}`}>
+              <div className="inline-block border border-neutral-800 bg-[#0a0a0a] px-3 py-1 mb-6 shadow-xl">
+                 <span className="text-neutral-500 text-xs font-bold font-mono tracking-widest uppercase">
+                    {meta.date ? new Date(meta.date).toLocaleDateString() : 'BLOG POST'}
+                 </span>
+              </div>
+              
+              <h1 
+                className="text-4xl lg:text-6xl font-black uppercase tracking-tighter leading-[1.1] max-w-4xl"
+                style={{ viewTransitionName: `blog-title-${meta.id}` }}
+              >
+                {meta.title}
+              </h1>
+              
+              <div className="mt-8 flex items-center gap-4 text-xs font-mono text-neutral-500 uppercase">
+                <span>By Daffa Aditya</span>
+                <span>•</span>
+                <span>{meta.timeToRead || '5'} min read</span>
+              </div>
             </div>
           </div>
 
           {/* Content */}
-          <div className="px-6 lg:px-20 py-12 lg:py-20 relative z-10 grid lg:grid-cols-12 gap-12">
+          <div className="px-6 lg:px-20 relative z-10 grid lg:grid-cols-12 gap-12">
              <div className="lg:col-span-8 lg:col-start-3">
                <article>
                  {children}
