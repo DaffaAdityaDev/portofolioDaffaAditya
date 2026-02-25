@@ -63,12 +63,12 @@ const AboutMeV4 = () => {
                <span className="text-xs font-mono text-neutral-500 uppercase">Projects</span>
              </div>
              <div className="p-4 bg-neutral-900/30 border border-neutral-800 flex flex-col items-center justify-center text-center">
-               <span className="block text-3xl font-black text-white mb-1">10+</span>
+               <span className="block text-3xl font-black text-white mb-1">5+</span>
                <span className="text-xs font-mono text-neutral-500 uppercase">Tech Stacks</span>
              </div>
              <div className="p-4 bg-neutral-900/30 border border-neutral-800 flex flex-col items-center justify-center text-center">
-               <span className="block text-3xl font-black text-white mb-1">4</span>
-               <span className="text-xs font-mono text-neutral-500 uppercase">Certifications</span>
+               <span className="block text-3xl font-black text-white mb-1">100+</span>
+               <span className="text-xs font-mono text-neutral-500 uppercase">Cup of Coffee</span>
              </div>
           </div>
         </div>
