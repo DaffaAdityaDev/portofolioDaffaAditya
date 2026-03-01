@@ -1,6 +1,6 @@
 export const experienceData = [
   { 
-    year: '2025 - NOW (1+ year)', 
+    year: '2024 - NOW (1+ year)', 
     role: 'Frontend Engineer', 
     company: 'PT Global Sukses Solusi Tbk (Run System)', 
     description: 'Pushing the boundaries of enterprise-grade solutions by building robust, scalable frontend architectures. Bridging the gap between design and complex technical constraints to deliver polished, production-ready software.' 
