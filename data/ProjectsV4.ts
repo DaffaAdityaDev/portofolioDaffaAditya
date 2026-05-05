@@ -79,7 +79,7 @@ export const projectsData = [
     title: "ARTIFYO",
     description: "Portofolio website for Artifyo design",
     year: "2025",
-    type: "FREELANCE",
+    type: "WEBSITE",
     category: "FREELANCE",
     featured: true,
     link: "https://artifyo.id/",

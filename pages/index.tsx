@@ -1,26 +1,30 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import dynamic from 'next/dynamic';
 import Hero from '@/components/organisms/Hero';
-import TechStack from '@/components/molecules/TechStack';
-import Projects from '@/components/organisms/Projects';
-import Experience from '@/components/organisms/Experience';
-import Contact from '@/components/organisms/Contact';
-import Footer from '@/components/organisms/Footer';
-import Marquee from '@/components/atoms/Marquee';
-import AboutMe from '@/components/organisms/AboutMe';
 
+// Above the fold components stay as static imports for LCP
+import Marquee from '@/components/atoms/Marquee';
 import { MARQUEE_TEXT } from '@/constant/constant';
+
+// Below the fold components are lazy-loaded
+const AboutMe = dynamic(() => import('@/components/organisms/AboutMe'), { ssr: true });
+const Experience = dynamic(() => import('@/components/organisms/Experience'), { ssr: true });
+const Projects = dynamic(() => import('@/components/organisms/Projects'), { ssr: true });
+const TechStack = dynamic(() => import('@/components/molecules/TechStack'), { ssr: true });
+const Contact = dynamic(() => import('@/components/organisms/Contact'), { ssr: true });
+const Footer = dynamic(() => import('@/components/organisms/Footer'), { ssr: true });
 
 const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Daffa Aditya Rahman</title>
-        <meta name="description" content="Daffa Aditya Personal Website" />
+        <title>Daffa Aditya Rahman | Software Engineer</title>
+        <meta name="description" content="Portfolio of Daffa Aditya Rahman, a Software Engineer specialized in high-performance web solutions and industrial-grade UI/UX." />
         <meta property="og:title" content="Daffa Aditya Rahman" />
         <meta
           property="og:description"
-          content="Daffa Aditya Personal Website"
+          content="Software Engineer Portfolio - Crafting functional and user-centric web solutions."
         />
         <meta property="og:image" content="/image/Profile.jpg" />
         <meta property="og:url" content="https://daffaaditya.netlify.app" />
@@ -42,8 +46,6 @@ const Home: NextPage = () => {
         <Marquee text={MARQUEE_TEXT} border={true} type="light" />
 
         <Footer />
-
-
       </div>
     </>
   );

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { ArrowRight, Check } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { contactData, resumeLink } from '@/data/ContactV4';
+import { FADE_IN_UP_CONTAINER, FADE_IN_UP_ITEM } from '@/constant/animations';
 
 const Contact = () => {
   const [copied, setCopied] = useState(false);
@@ -13,21 +15,27 @@ const Contact = () => {
     }
   };
   return (
-    <section id="contact" className="relative py-20 px-6 lg:px-20 border-t border-neutral-800">
+    <motion.section 
+      id="contact" 
+      variants={FADE_IN_UP_CONTAINER}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-100px" }}
+      className="relative py-20 px-6 lg:px-20 border-t border-neutral-800"
+    >
       
       <div className="max-w-4xl mx-auto text-center">
         
-        <div className="mb-12">
+        <motion.div variants={FADE_IN_UP_ITEM} className="mb-12">
           <div className="text-xs font-mono text-neutral-500 mb-2">[ GET_IN_TOUCH ]</div>
           <h2 className="text-4xl lg:text-6xl font-black tracking-tighter uppercase mb-6">LET'S TALK</h2>
           <p className="text-neutral-400 text-lg max-w-2xl mx-auto">
             Currently available for freelance projects and full-time opportunities. 
             Let's build something exceptional together.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Contact Grid */}
-        <div className="grid md:grid-cols-3 gap-px bg-neutral-800 border border-neutral-800 mb-12">
+        <motion.div variants={FADE_IN_UP_ITEM} className="grid md:grid-cols-3 gap-px bg-neutral-800 border border-neutral-800 mb-12">
           {contactData.map((contact, idx) => (
             <a 
               key={idx} 
@@ -47,10 +55,10 @@ const Contact = () => {
               <div className="font-mono text-white group-hover:text-red-500 transition-colors">{contact.value}</div>
             </a>
           ))}
-        </div>
+        </motion.div>
 
         {/* CTA */}
-        <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
+        <motion.div variants={FADE_IN_UP_ITEM} className="flex flex-col md:flex-row gap-4 justify-center items-center">
           <a 
             href="mailto:daffaaditya.me@gmail.com"
             onClick={() => handleCopyEmail('EMAIL', 'daffaaditya.me@gmail.com')}
@@ -67,11 +75,11 @@ const Contact = () => {
           >
             RESUME <ArrowRight className="group-hover:-rotate-45 transition-transform duration-300" size={24} />
           </a>
-        </div>
+        </motion.div>
 
       </div>
 
-    </section>
+    </motion.section>
   );
 };
 

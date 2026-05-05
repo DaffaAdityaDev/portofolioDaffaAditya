@@ -1,15 +1,23 @@
 import React from 'react';
 import { Briefcase } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { experienceData } from '@/data/ExperienceV4';
+import { FADE_IN_UP_CONTAINER, FADE_IN_UP_ITEM } from '@/constant/animations';
 
 const Experience = () => {
   return (
-    <section className="relative py-20 px-6 lg:px-20 border-t border-neutral-800">
+    <motion.section 
+      variants={FADE_IN_UP_CONTAINER}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-100px" }}
+      className="relative py-20 px-6 lg:px-20 border-t border-neutral-800"
+    >
       
       <div className="grid lg:grid-cols-2 gap-16">
         
         {/* Left: Section Header */}
-        <div className="flex flex-col justify-between">
+        <motion.div variants={FADE_IN_UP_ITEM} className="flex flex-col justify-between">
           <div>
             <div className="text-xs font-mono text-neutral-500 mb-2">[ CAREER ]</div>
             <h2 className="text-4xl lg:text-6xl font-black tracking-tighter uppercase mb-6">EXPERIENCE</h2>
@@ -27,16 +35,16 @@ const Experience = () => {
               AVAILABLE FOR HIRE: TRUE
             </p>
           </div>
-        </div>
+        </motion.div>
 
         {/* Right: Timeline */}
-        <div>
+        <motion.div variants={FADE_IN_UP_ITEM}>
           <div className="text-xs font-mono text-neutral-500 mb-2">[ EXPERIENCE ]</div>
           <h3 className="text-2xl font-bold font-mono mb-8 uppercase">TIMELINE</h3>
           
           <div className="space-y-[1px] bg-neutral-800 border border-neutral-800">
             {experienceData.map((exp, idx) => (
-              <div key={idx} className="bg-[#0a0a0a] p-6 hover:bg-neutral-900 transition-colors group">
+              <div key={idx} className="bg-[#0a0a0a] p-6 lg:p-8 hover:bg-neutral-900 transition-colors group">
                 <div className="flex items-start gap-4 mb-3">
                   <Briefcase size={20} className="text-neutral-600 group-hover:text-white transition-colors mt-1" />
                   <div className="flex-1">
@@ -49,11 +57,11 @@ const Experience = () => {
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
 
       </div>
 
-    </section>
+    </motion.section>
   );
 };
 

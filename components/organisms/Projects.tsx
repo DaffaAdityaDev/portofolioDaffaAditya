@@ -5,6 +5,7 @@ import ProjectRow from '@/components/molecules/ProjectRow';
 
 
 import { AnimatePresence, motion } from 'framer-motion';
+import { FADE_IN_UP_CONTAINER, FADE_IN_UP_ITEM } from '@/constant/animations';
 
 const Projects = () => {
   const [hoveredProject, setHoveredProject] = useState<typeof projectsData[0] | null>(null);
@@ -23,14 +24,21 @@ const Projects = () => {
     <>
       <CursorPreview hoveredProject={hoveredProject} />
 
-      <section id="works" className="relative py-20 px-6 lg:px-20 border-t border-neutral-800">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 border-b border-zinc-800 pb-4 gap-4">
+      <motion.section 
+        id="works" 
+        variants={FADE_IN_UP_CONTAINER}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        className="relative py-20 px-6 lg:px-20 border-t border-neutral-800"
+      >
+        <motion.div variants={FADE_IN_UP_ITEM} className="flex flex-col md:flex-row md:items-end justify-between mb-8 border-b border-zinc-800 pb-4 gap-4">
           <div>
             <h2 className="text-sm font-mono text-zinc-500 mb-2">/// SECTION_02</h2>
             <h1 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight">Past Projects</h1>
           </div>
 
-          <div className="grid grid-cols-3 gap-1 bg-zinc-900/50 p-1 rounded-lg border border-zinc-800/50 backdrop-blur-sm relative min-w-[360px]">
+          <div className="grid grid-cols-3 gap-1 bg-zinc-900/50 p-1 rounded-lg border border-zinc-800/50 backdrop-blur-sm relative w-full md:min-w-[360px]">
             <button
               onClick={() => setActiveTab('work')}
               className={`relative z-10 px-4 py-2 text-xs font-mono uppercase transition-colors duration-300 cursor-pointer ${
@@ -65,9 +73,9 @@ const Projects = () => {
               }`}
             ></div>
           </div>
-        </div>
+        </motion.div>
         
-        <div className="flex flex-col border-t border-zinc-900 overflow-hidden min-h-[300px]">
+        <motion.div variants={FADE_IN_UP_ITEM} className="flex flex-col border-t border-zinc-900 overflow-hidden min-h-[300px]">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
@@ -93,8 +101,8 @@ const Projects = () => {
               )}
             </motion.div>
           </AnimatePresence>
-        </div>
-      </section>
+        </motion.div>
+      </motion.section>
     </>
   );
 };

@@ -6,8 +6,13 @@ export default function Document() {
   return (
     <Html className="scroll-smooth" lang="en">
       <Head>
-        
-        {/* Security headers */}
+        {/* Performance: Preconnect to external domains */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://www.google-analytics.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+
+        {/* Security and Rendering headers */}
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="theme-color" content="#000000" />
         
@@ -16,12 +21,12 @@ export default function Document() {
           <>
             <Script
               id="ga-script"
-              strategy="lazyOnload"
+              strategy="afterInteractive"
               src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
             />
             <Script
               id="gtag-init"
-              strategy="lazyOnload"
+              strategy="afterInteractive"
               dangerouslySetInnerHTML={{
                 __html: `
                   window.dataLayer = window.dataLayer || [];
@@ -38,7 +43,7 @@ export default function Document() {
           </>
         )}
       </Head>
-      <body className="bg-[#0a0a0a] text-white overflow-x-hidden">
+      <body className="bg-[#0a0a0a] text-white overflow-x-hidden antialiased">
         <Main />
         <NextScript />
       </body>

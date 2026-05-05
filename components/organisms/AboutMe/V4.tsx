@@ -1,18 +1,27 @@
 import React from 'react';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { FADE_IN_UP_CONTAINER, FADE_IN_UP_ITEM } from '@/constant/animations';
 
 const AboutMeV4 = () => {
   return (
-    <section id="about" className="relative py-20 px-6 lg:px-20 border-t border-neutral-800 bg-transparent">
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-zinc-800 pb-4 gap-4">
+    <motion.section 
+      id="about" 
+      variants={FADE_IN_UP_CONTAINER}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-100px" }}
+      className="relative py-20 px-6 lg:px-20 border-t border-neutral-800 bg-transparent"
+    >
+      <motion.div variants={FADE_IN_UP_ITEM} className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-zinc-800 pb-4 gap-4">
         <div>
           <h2 className="text-sm font-mono text-zinc-500 mb-2">/// SECTION_01</h2>
           <h1 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight">About Me</h1>
         </div>
-      </div>
+      </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8">
-        <div className="lg:col-span-4 flex flex-col items-center lg:items-start relative">
+        <motion.div variants={FADE_IN_UP_ITEM} className="lg:col-span-4 flex flex-col items-center lg:items-start relative">
             <div className="w-full max-w-sm aspect-3/4 relative border border-neutral-800 p-2 bg-neutral-900/20">
               <div className="absolute inset-0 bg-neutral-800/10 z-10 opacity-50 mix-blend-overlay"></div>
               <div className="relative w-full h-full grayscale hover:grayscale-0 transition-all duration-500 overflow-hidden">
@@ -35,9 +44,9 @@ const AboutMeV4 = () => {
                <span>STATUS: ACTIVE</span>
                <span>LOC: JAKARTA_ID</span>
             </div>
-        </div>
+        </motion.div>
 
-        <div className="lg:col-span-8 flex flex-col justify-center space-y-8">
+        <motion.div variants={FADE_IN_UP_ITEM} className="lg:col-span-8 flex flex-col justify-center space-y-8">
           <div>
              <h3 className="text-2xl font-black text-white uppercase mb-2">The Journey</h3>
              <div className="h-px w-12 bg-white/50 mb-6"></div>
@@ -54,26 +63,26 @@ const AboutMeV4 = () => {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6 border-t border-neutral-800/50">
-             <div className="p-4 bg-neutral-900/30 border border-neutral-800 flex flex-col items-center justify-center text-center">
+             <div className="p-6 bg-neutral-900/30 border border-neutral-800 flex flex-col items-center justify-center text-center">
                <span className="block text-3xl font-black text-white mb-1">2+</span>
                <span className="text-xs font-mono text-neutral-500 uppercase">Years Exp</span>
              </div>
-             <div className="p-4 bg-neutral-900/30 border border-neutral-800 flex flex-col items-center justify-center text-center">
+             <div className="p-6 bg-neutral-900/30 border border-neutral-800 flex flex-col items-center justify-center text-center">
                <span className="block text-3xl font-black text-white mb-1">6+</span>
                <span className="text-xs font-mono text-neutral-500 uppercase">Projects</span>
              </div>
-             <div className="p-4 bg-neutral-900/30 border border-neutral-800 flex flex-col items-center justify-center text-center">
+             <div className="p-6 bg-neutral-900/30 border border-neutral-800 flex flex-col items-center justify-center text-center">
                <span className="block text-3xl font-black text-white mb-1">5+</span>
                <span className="text-xs font-mono text-neutral-500 uppercase">Tech Stacks</span>
              </div>
-             <div className="p-4 bg-neutral-900/30 border border-neutral-800 flex flex-col items-center justify-center text-center">
+             <div className="p-6 bg-neutral-900/30 border border-neutral-800 flex flex-col items-center justify-center text-center">
                <span className="block text-3xl font-black text-white mb-1">100+</span>
                <span className="text-xs font-mono text-neutral-500 uppercase">Cup of Coffee</span>
              </div>
           </div>
-        </div>
+        </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
