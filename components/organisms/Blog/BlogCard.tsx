@@ -37,7 +37,11 @@ const BlogCard = (props: IBlogProps) => {
           <img 
             src={image} 
             alt={title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100 relative z-10"
+            width={1280}
+            height={720}
+            loading="lazy"
+            decoding="async"
+            className="w-full h-full object-fill group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100 relative z-10"
             style={{ viewTransitionName: `blog-image-${id}` }}
           />
           <div 

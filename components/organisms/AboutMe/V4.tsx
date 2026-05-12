@@ -64,7 +64,7 @@ const AboutMeV4 = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6 border-t border-neutral-800/50">
              <div className="p-6 bg-neutral-900/30 border border-neutral-800 flex flex-col items-center justify-center text-center">
-               <span className="block text-3xl font-black text-white mb-1">2+</span>
+               <span className="block text-3xl font-black text-white mb-1">3+</span>
                <span className="text-xs font-mono text-neutral-500 uppercase">Years Exp</span>
              </div>
              <div className="p-6 bg-neutral-900/30 border border-neutral-800 flex flex-col items-center justify-center text-center">
