@@ -65,8 +65,8 @@ const Navbar = () => {
         <div
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => { setIsHovered(false); setHoveredIndex(null); }}
-          className={`pointer-events-auto relative flex items-center justify-center overflow-hidden rounded-full group ${transitionClass} ${isExpanded ? 'h-14 px-6 gap-6' : 'h-11 px-4 gap-3'
-            }`}
+          className={`pointer-events-auto relative flex items-center justify-center rounded-full group ${transitionClass} ${isExpanded ? 'h-14 px-6 gap-6' : 'h-11 px-4 gap-3'
+            } ${isSocialOpen ? 'overflow-visible' : 'overflow-hidden'}`}
           style={{
             borderRadius: 9999,
           }}
@@ -125,8 +125,8 @@ const Navbar = () => {
 
             {/* Middle Section (Nav Menu) */}
             <nav
-              className={`flex items-center gap-1.5 relative px-1 py-0.5 overflow-hidden whitespace-nowrap ${transitionClass} ${isExpanded ? 'max-w-[400px] opacity-100 pointer-events-auto' : 'max-w-0 opacity-0 pointer-events-none'
-                }`}
+              className={`flex items-center gap-1.5 relative px-1 py-0.5 whitespace-nowrap ${transitionClass} ${isExpanded ? 'max-w-[400px] opacity-100 pointer-events-auto' : 'max-w-0 opacity-0 pointer-events-none'
+                } ${isSocialOpen ? 'overflow-visible' : 'overflow-hidden'}`}
               onMouseLeave={() => setHoveredIndex(null)}
               aria-label="Desktop navigation"
             >
@@ -164,7 +164,7 @@ const Navbar = () => {
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: 10, scale: 0.95 }}
                             transition={{ duration: 0.15, ease: "easeOut" }}
-                            className="absolute top-[38px] left-1/2 -translate-x-1/2 bg-[#0a0a0c]/90 backdrop-blur-2xl border border-white/[0.08] rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.6)] p-3 flex flex-col gap-1.5 min-w-[140px] z-50 pointer-events-auto"
+                            className="absolute top-[38px] left-1/2 -translate-x-1/2 bg-[#0a0a0c]/90 backdrop-blur-2xl border border-white/[0.08] rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.6)] p-3 flex flex-col gap-1.5 min-w-[140px] z-50 pointer-events-auto before:content-[''] before:absolute before:-top-5 before:left-0 before:w-full before:h-5 before:bg-transparent"
                           >
                             <a
                               href={siteConfig.links.github}
