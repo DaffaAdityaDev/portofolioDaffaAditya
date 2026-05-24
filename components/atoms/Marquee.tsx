@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useReducedMotion } from 'framer-motion';
 
 interface MarqueeProps {
    text: string;
@@ -9,26 +10,44 @@ interface MarqueeProps {
 }
 
 const Marquee: React.FC<MarqueeProps> = ({ text, direction = 'left', type = 'dark', border = true, opacity = 1 }) => {
-  const [isPaused, setIsPaused] = useState(false);
+  const [isIntersecting, setIsIntersecting] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
-    const handleScroll = () => {
-      // Pause animation if scrolled more than 20px
-      if (window.scrollY > 20) {
-        setIsPaused(true);
-      } else {
-        setIsPaused(false);
-      }
-    };
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsIntersecting(entry.isIntersecting);
+      },
+      { threshold: 0 }
+    );
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
+  // Pause animation if it's off-screen or if the user prefers reduced motion
+  const isPaused = !isIntersecting || !!shouldReduceMotion;
+
   return (
-    <div style={{ opacity }} className={`overflow-hidden whitespace-nowrap ${type === 'dark' ? 'bg-black text-white' : 'bg-white text-black'} py-2 ${border ? `border-y border-${type === 'dark' ? 'white' : 'black'}` : ''}`}>
+    <div 
+      ref={containerRef}
+      style={{ opacity }} 
+      className={`overflow-hidden whitespace-nowrap ${
+        type === 'dark' ? 'bg-black text-white' : 'bg-white text-black'
+      } py-2 ${
+        border ? `border-y ${type === 'dark' ? 'border-white/10' : 'border-black/10'}` : ''
+      }`}
+    >
       <div 
-        className={`inline-block animate-${direction === 'left' ? 'marquee' : 'marquee-reverse'}`}
+        className={`inline-block ${
+          direction === 'left' ? 'animate-marquee' : 'animate-marquee-reverse'
+        }`}
         style={{ animationPlayState: isPaused ? 'paused' : 'running' }}
       >
         <span className="text-xl font-bold font-mono tracking-tighter mx-4">{text}</span>
@@ -41,4 +60,5 @@ const Marquee: React.FC<MarqueeProps> = ({ text, direction = 'left', type = 'dar
 };
 
 export default Marquee;
+
 

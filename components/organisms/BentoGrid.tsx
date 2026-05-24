@@ -15,14 +15,15 @@ const INITIAL_EXPERIENCE = { y: '00', m: '00', d: '00', hh: '00', mm: '00', ss: 
  */
 const SubtleDigit = ({ char }: { char: string }) => {
   return (
-    <span className="inline-block w-[0.52em] text-center tabular-nums">
+    <span className="relative inline-block w-[0.55em] text-center tabular-nums">
       <AnimatePresence mode="popLayout">
         <motion.span
           key={char}
-          initial={{ opacity: 0, y: 3 }}
+          className="inline-block w-full"
+          initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -3 }}
-          transition={{ duration: 0.2, ease: "easeOut" }}
+          exit={{ opacity: 0, y: -6 }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
         >
           {char}
         </motion.span>
