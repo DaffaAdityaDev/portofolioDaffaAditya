@@ -1,19 +1,19 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import dynamic from 'next/dynamic';
-import Hero from '@/components/organisms/Hero';
+import Hero from '@/features/Hero';
 
 // Above the fold components stay as static imports for LCP
-import Marquee from '@/components/atoms/Marquee';
+import Marquee from '@/components/ui/Marquee';
 import { MARQUEE_TEXT } from '@/constant/constant';
 
 // Below the fold components are lazy-loaded
-const AboutMe = dynamic(() => import('@/components/organisms/AboutMe'), { ssr: true });
-const Experience = dynamic(() => import('@/components/organisms/Experience'), { ssr: true });
-const Projects = dynamic(() => import('@/components/organisms/Projects'), { ssr: true });
-const TechStack = dynamic(() => import('@/components/molecules/TechStack'), { ssr: true });
-const Contact = dynamic(() => import('@/components/organisms/Contact'), { ssr: true });
-const Footer = dynamic(() => import('@/components/organisms/Footer'), { ssr: true });
+const AboutMe = dynamic(() => import('@/features/AboutMe'), { ssr: true });
+const Experience = dynamic(() => import('@/features/Experience'), { ssr: true });
+const Projects = dynamic(() => import('@/features/Projects'), { ssr: true });
+const TechStack = dynamic(() => import('@/features/TechStack'), { ssr: true });
+const Contact = dynamic(() => import('@/features/Contact'), { ssr: true });
+const Footer = dynamic(() => import('@/components/Layout/Footer'), { ssr: true });
 
 const Home: NextPage = () => {
   return (

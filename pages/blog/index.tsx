@@ -1,11 +1,10 @@
-import React, { useState, useCallback } from 'react';
-import { IBlogProps } from '@/components/atoms/types';
+import dynamic from 'next/dynamic';
+import { IBlogProps } from '@/components/ui/types';
 import { getSortedPostsData, getPostsCount } from '../../lib/posts';
 import Head from 'next/head';
-import BlogLayout from '@/components/organisms/Blog/BlogLayout';
-import BlogList from '@/components/organisms/Blog/BlogList';
-import Footer from '@/components/organisms/Footer';
-import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
+import { BlogList, useBlog } from '@/features/Blog';
+
+const Footer = dynamic(() => import('@/components/Layout/Footer'), { ssr: true });
 
 const POSTS_PER_PAGE = 6; 
 
@@ -29,31 +28,7 @@ const Blog = ({
   initialPosts: IBlogProps[],
   totalPosts: number 
 }) => {
-  const [posts, setPosts] = useState(initialPosts);
-  const [loading, setLoading] = useState(false);
-  const hasMore = posts.length < totalPosts;
-
-  const loadMorePosts = useCallback(async () => {
-    if (loading || !hasMore) return;
-    
-    setLoading(true);
-    
-    try {
-      const response = await fetch(`/api/posts?skip=${posts.length}&limit=${POSTS_PER_PAGE}`);
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      
-      const newPosts = await response.json();
-      if (!Array.isArray(newPosts) || newPosts.length === 0) return;
-
-      setPosts(prev => [...prev, ...newPosts]);
-    } catch (error) {
-      console.error('Error loading more posts:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, [posts.length, loading, hasMore]);
-
-  useInfiniteScroll(loadMorePosts, hasMore, loading);
+  const { posts, loading } = useBlog(initialPosts, totalPosts);
 
   return (
     <>
@@ -63,7 +38,6 @@ const Blog = ({
       </Head>
 
       <div className="min-h-screen bg-[#0a0a0a] text-white font-sans selection:bg-red-600 selection:text-white flex flex-col">
-        
         
         <main className="flex-1 pt-16">
            <BlogList posts={posts} />
@@ -82,3 +56,4 @@ const Blog = ({
 };
 
 export default Blog;
+

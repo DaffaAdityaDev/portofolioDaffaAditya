@@ -3,10 +3,10 @@ import type { AppProps } from 'next/app';
 import { Outfit, Inter } from 'next/font/google';
 import { siteConfig } from '../config/metadata.config';
 import { AnimatePresence } from 'framer-motion';
-import Navbar from '@/components/organisms/Navbar';
+import Navbar from '@/components/Layout/Navbar';
 import { HeroUIProvider } from "@heroui/react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import PageTransition from '@/components/molecules/PageTransition';
+import PageTransition from '@/components/Layout/PageTransition';
 
 const outfit = Outfit({
   subsets: ['latin'],

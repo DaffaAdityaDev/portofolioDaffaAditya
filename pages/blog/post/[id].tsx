@@ -1,7 +1,8 @@
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { MDXRemote } from 'next-mdx-remote';
-import PostLayoutV4, { components } from '@/components/organisms/Blog/PostLayout';
+import { PostLayout as PostLayoutV4, components } from '@/features/Blog';
 import { getAllPostIds, getPostData } from '@/lib/posts';
+
 
 export default function Post({ mdxSource, meta }: any) {
   return (
