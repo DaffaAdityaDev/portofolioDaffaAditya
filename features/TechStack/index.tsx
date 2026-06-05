@@ -11,21 +11,23 @@ const TechStack = () => {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-100px" }}
-      className="mx-auto px-6 mb-32 border-t border-neutral-800 pt-20"
+      className="mx-auto px-6 mb-32 border-t border-neutral-800 pt-20 relative"
     >
-      <motion.div variants={FADE_IN_UP_ITEM} className="flex justify-between items-end mb-16">
-        <h2 className="text-3xl font-black text-white uppercase tracking-tighter flex items-center gap-4">
-          <span className="w-8 h-[2px] bg-white"></span>
-          Specs & Stack
-        </h2>
-        <span className="hidden md:block text-zinc-600 font-mono text-xs">SYSTEM_CAPABILITIES v2.4</span>
-      </motion.div>
+      <div className="relative z-20">
+        <motion.div variants={FADE_IN_UP_ITEM} className="flex justify-between items-end mb-16">
+          <h2 className="text-3xl font-black text-white uppercase tracking-tighter flex items-center gap-4">
+            <span className="w-8 h-[2px] bg-white"></span>
+            Specs & Stack
+          </h2>
+          <span className="hidden md:block text-zinc-600 font-mono text-xs">SYSTEM_CAPABILITIES v2.4</span>
+        </motion.div>
 
-      <motion.div variants={FADE_IN_UP_ITEM} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {diagnosticStack.map((module) => (
-          <DiagnosticCard key={module.id} module={module} />
-        ))}
-      </motion.div>
+        <motion.div variants={FADE_IN_UP_ITEM} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {diagnosticStack.map((module) => (
+            <DiagnosticCard key={module.id} module={module} />
+          ))}
+        </motion.div>
+      </div>
     </motion.section>
   );
 };

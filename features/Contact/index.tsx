@@ -23,8 +23,11 @@ const Contact = () => {
       viewport={{ once: true, margin: "-100px" }}
       className="relative py-20 px-6 lg:px-20 border-t border-neutral-800"
     >
+      {/* Markers for the parent SVG */}
+      <div id="contact-timeline-start" className="absolute left-[15px] md:left-[31px] top-0 w-1 h-1 pointer-events-none" />
+      <div id="contact-timeline-end" className="absolute left-[15px] md:left-[31px] bottom-0 w-1 h-1 pointer-events-none" />
       
-      <div className="max-w-4xl mx-auto text-center">
+      <div className="max-w-4xl mx-auto text-center relative z-20">
         
         <motion.div variants={FADE_IN_UP_ITEM} className="mb-12">
           <div className="text-xs font-mono text-neutral-500 mb-2">[ GET_IN_TOUCH ]</div>

@@ -28,9 +28,14 @@ const Projects = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
-        className="relative py-20 px-6 lg:px-20 border-t border-neutral-800"
+        className="relative py-20 px-6 lg:px-20 border-t border-neutral-800 pr-12 md:pr-24"
       >
-        <motion.div variants={FADE_IN_UP_ITEM} className="flex flex-col md:flex-row md:items-end justify-between mb-8 border-b border-zinc-800 pb-4 gap-4">
+        {/* Markers for the parent SVG */}
+        <div id="projects-timeline-start" className="absolute right-[15px] md:right-[31px] top-0 w-1 h-1 pointer-events-none" />
+        <div id="projects-timeline-end" className="absolute right-[15px] md:right-[31px] bottom-0 w-1 h-1 pointer-events-none" />
+
+        <div className="relative z-20">
+          <motion.div variants={FADE_IN_UP_ITEM} className="flex flex-col md:flex-row md:items-end justify-between mb-8 border-b border-zinc-800 pb-4 gap-4">
           <div>
             <h2 className="text-sm font-mono text-zinc-500 mb-2">/// SECTION_02</h2>
             <h1 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight">Past Projects</h1>
@@ -100,6 +105,7 @@ const Projects = () => {
             </motion.div>
           </AnimatePresence>
         </motion.div>
+        </div>
       </motion.section>
     </>
   );
