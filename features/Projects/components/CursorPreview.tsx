@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { Project } from '../constants';
+import Image from 'next/image';
 
 interface CursorPreviewProps {
   hoveredProject: Project | null;
@@ -63,10 +64,12 @@ const CursorPreview: React.FC<CursorPreviewProps> = ({ hoveredProject }) => {
       <div className="relative w-full h-full">
         {activeProject ? (
           <>
-            <img 
+            <Image 
               src={activeProject.image} 
               alt={activeProject.title}
-              className="w-full h-full object-cover"
+              fill
+              sizes="300px"
+              style={{ objectFit: 'cover' }}
             />
             
             <div className="absolute inset-0 bg-black/30"></div>

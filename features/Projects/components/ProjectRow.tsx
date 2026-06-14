@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { Project } from '../constants';
+import Link from 'next/link';
 
 interface ProjectRowProps {
   project: Project;
@@ -8,15 +9,10 @@ interface ProjectRowProps {
   onHover: (project: Project | null) => void;
 }
 
-const ProjectRow: React.FC<ProjectRowProps> = ({ project, onHover }) => (
-  <a 
-    href={project.link}
-    target="_blank"
-    rel="noopener noreferrer"
-    onMouseEnter={() => onHover(project)}
-    onMouseLeave={() => onHover(null)}
-    className="block group border-b border-zinc-800 hover:bg-zinc-900/30 transition-colors"
-  >
+const ProjectRow: React.FC<ProjectRowProps> = ({ project, onHover }) => {
+  const isInternal = project.link.startsWith('/');
+  
+  const content = (
     <div className="grid grid-cols-1 md:grid-cols-12 p-6 items-start gap-6">
       
       {/* Col 1: Project Title (Fixed Width or Scaled) */}
@@ -66,7 +62,33 @@ const ProjectRow: React.FC<ProjectRowProps> = ({ project, onHover }) => (
       </div>
 
     </div>
-  </a>
-);
+  );
 
-export default ProjectRow;
+  if (isInternal) {
+    return (
+      <Link 
+        href={project.link}
+        onMouseEnter={() => onHover(project)}
+        onMouseLeave={() => onHover(null)}
+        className="block group border-b border-zinc-800 hover:bg-zinc-900/30 transition-colors"
+      >
+        {content}
+      </Link>
+    );
+  }
+
+  return (
+    <a 
+      href={project.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      onMouseEnter={() => onHover(project)}
+      onMouseLeave={() => onHover(null)}
+      className="block group border-b border-zinc-800 hover:bg-zinc-900/30 transition-colors"
+    >
+      {content}
+    </a>
+  );
+};
+
+export default React.memo(ProjectRow);

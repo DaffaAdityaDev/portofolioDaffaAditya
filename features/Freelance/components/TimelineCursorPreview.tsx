@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, useSpring, useMotionValue } from 'framer-motion';
 import { TimelineNode } from '../constants';
+import Image from 'next/image';
 
 interface TimelineCursorPreviewProps {
   hoveredNode: TimelineNode | null;
@@ -66,10 +67,12 @@ export const TimelineCursorPreview: React.FC<TimelineCursorPreviewProps> = ({ ho
       <div className="relative w-full h-full">
         {activeNode && (
           <>
-            <img 
+            <Image 
               src={activeNode.image} 
               alt={activeNode.title}
-              className="w-full h-full object-cover"
+              fill
+              sizes="320px"
+              style={{ objectFit: 'cover' }}
             />
             
             {/* Dark & Red Gradient Overlay */}

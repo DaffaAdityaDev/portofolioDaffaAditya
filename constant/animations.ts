@@ -21,22 +21,6 @@ export const FADE_IN_UP_ITEM = {
   },
 };
 
-export const FADE_IN = {
-  hidden: { opacity: 0 },
-  visible: { 
-    opacity: 1,
-    transition: { duration: 0.6, ease: "easeOut" }
-  }
-};
-
-export const SCALE_REVEAL = {
-  hidden: { opacity: 0, scale: 0.95 },
-  visible: { 
-    opacity: 1, 
-    scale: 1,
-    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }
-  }
-};
 export const FADE_IN_SCALE = {
   hidden: { opacity: 0, scale: 0.95 },
   visible: {

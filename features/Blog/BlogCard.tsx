@@ -3,6 +3,7 @@ import { ArrowRight, Calendar, Clock } from 'lucide-react';
 import { IBlogProps } from '@/components/ui/types';
 import DateComponent from '@/components/ui/Date';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 const BlogCard = (props: IBlogProps) => {
   const { id, title, description, date, timeToRead, image } = props;
@@ -29,11 +30,11 @@ const BlogCard = (props: IBlogProps) => {
         {/* Image Container */}
         <div className="aspect-video w-full overflow-hidden border-b border-neutral-800 relative">
           <div className="absolute inset-0 bg-neutral-900 animate-pulse" />
-          <img 
+          <Image 
             src={image} 
             alt={title}
-            width={1280}
-            height={720}
+            width={480}
+            height={270}
             loading="lazy"
             decoding="async"
             className="w-full h-full object-fill group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100 relative z-10"

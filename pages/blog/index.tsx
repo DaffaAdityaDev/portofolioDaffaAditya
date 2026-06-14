@@ -2,8 +2,9 @@ import dynamic from 'next/dynamic';
 import { IBlogProps } from '@/components/ui/types';
 import { getSortedPostsData, getPostsCount } from '../../lib/posts';
 import Head from 'next/head';
-import { BlogList, useBlog } from '@/features/Blog';
+import { useBlog } from '@/features/Blog';
 
+const BlogList = dynamic(() => import('@/features/Blog/BlogList'), { ssr: true });
 const Footer = dynamic(() => import('@/components/Layout/Footer'), { ssr: true });
 
 const POSTS_PER_PAGE = 6; 

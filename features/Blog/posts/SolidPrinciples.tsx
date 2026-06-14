@@ -1,38 +1,35 @@
----
-title: "SOLID 5 Pirinciples that can improve you codebase"
-date: "2025-02-18"
-timeToRead: 10
-description: "SOLID intended to make mostly for OOP to make codebase more understandable, flexible, and maintainable."
-image: "/image/blogs/default-thumbnail.webp"
-production: false
----
+import React from 'react';
+import CodeBlock from '../components/CodeBlock';
 
-# SOLID for Developers
+export default function SolidPrinciples() {
+  return (
+    <div className="blog-content-static">
+      <h1>SOLID for Developers</h1>
 
-In book Clean Code, Uncle Bob (Robert C. Martin) mentioned about SOLID principles. 
+      <p>In book Clean Code, Uncle Bob (Robert C. Martin) mentioned about SOLID principles.</p>
 
-> Clean code always look like it was written by someone who cares.
+      <blockquote>
+        <p>Clean code always look like it was written by someone who cares.</p>
+      </blockquote>
 
-Mean if you just coding without any care to world, your code will be messy and hard to maintain. altought you follow all principles in world. it will be probably messy. just look you old code or you hobby project. if you good developer, you hobby project will be clean code. but most of us, is not will be.
+      <p>Mean if you just coding without any care to world, your code will be messy and hard to maintain. altought you follow all principles in world. it will be probably messy. just look you old code or you hobby project. if you good developer, you hobby project will be clean code. but most of us, is not will be.</p>
 
-most of my project is messy, and it's good. because i learn a lot from it. i make like many projects that never finished. Hahaha like many developer often project is one way trow away we never use or touch again. that what i think. untill i came in where i need to use my old project. to my current interest.
+      <p>most of my project is messy, and it's good. because i learn a lot from it. i make like many projects that never finished. Hahaha like many developer often project is one way trow away we never use or touch again. that what i think. untill i came in where i need to use my old project. to my current interest.</p>
 
-when i open my old project, i feel like i'm looking at the ancient world that i cannot decode or understand my self. altought i know i'm the one who made it.
-so i start remember how people always say clean code clean code. but i never understand why. until that moment. so i start to learn about clean code. and i found that clean code is not about following a set of rules. but it's about how you write code. it habits we build over time as developer.
+      <p>when i open my old project, i feel like i'm looking at the ancient world that i cannot decode or understand my self. altought i know i'm the one who made it. so i start remember how people always say clean code clean code. but i never understand why. until that moment. so i start to learn about clean code. and i found that clean code is not about following a set of rules. but it's about how you write code. it habits we build over time as developer.</p>
 
-## SOLID Principles
+      <h2>SOLID Principles</h2>
 
-SOLID intended to make mostly for OOP to make codebase more understandable, flexible, and maintainable. but it can be applied to any language. i way mostly working as frontend developer, so i will not cover OOP part. but i will cover how to apply SOLID principles in frontend. the concept is powerfull and can be applied to any language and stack. 
+      <p>SOLID intended to make mostly for OOP to make codebase more understandable, flexible, and maintainable. but it can be applied to any language. i way mostly working as frontend developer, so i will not cover OOP part. but i will cover how to apply SOLID principles in frontend. the concept is powerfull and can be applied to any language and stack.</p>
 
+      <h2>Single Responsibility Principle</h2>
 
-## Single Responsibility Principle
+      <p>Single Responsibility Principle like the name, a class or function should have only one responsibility. in react we can apply this principle by making a component that has only one responsibility.</p>
 
-Single Responsibility Principle like the name, a class or function should have only one responsibility. in react we can apply this principle by making a component that has only one responsibility.
+      <h2>this is example of bad code</h2>
 
-## this is example of bad code
-
-```javascript
-{/* filePath: pages/UserProfile.jsx */}
+      <CodeBlock className="language-javascript">
+{`// pages/UserProfile.jsx
 import React, { useState } from 'react';
 
 function UserProfile() {
@@ -71,17 +68,19 @@ function UserProfile() {
     )
 }
 
-export default UserProfile;
-```
+export default UserProfile;`}
+      </CodeBlock>
 
-### Issue with the Bad Example:
- - Multiple responsibilities: This component is managing both user input and file upload logic, which are distinct responsibilities.
- - Not reusable: The file upload logic is tightly coupled with the form, making it hard to reuse or test seperately.
+      <h3>Issue with the Bad Example:</h3>
+      <ul>
+        <li>Multiple responsibilities: This component is managing both user input and file upload logic, which are distinct responsibilities.</li>
+        <li>Not reusable: The file upload logic is tightly coupled with the form, making it hard to reuse or test seperately.</li>
+      </ul>
 
-## this is example of good code
+      <h2>this is example of good code</h2>
 
-```javascript 
-{/* filePath: pages/UserProfile.jsx */}
+      <CodeBlock className="language-javascript">
+{`// pages/UserProfile.jsx
 import React, { useState } from 'react';
 import ProfilePictureUpload from './ProfilePictureUpload';
 import Fetching from './Fetching';
@@ -109,11 +108,11 @@ function UserProfile() {
     )
 }
 
-export default UserProfile;
-```
+export default UserProfile;`}
+      </CodeBlock>
 
-```javascript 
-{/* filePath: components/ProfilePictureUpload.jsx */}
+      <CodeBlock className="language-javascript">
+{`// components/ProfilePictureUpload.jsx
 import React from 'react';
 
 const ProfilePictureUpload = ({ onUpload }) => {
@@ -131,11 +130,11 @@ const ProfilePictureUpload = ({ onUpload }) => {
     )
 };
 
-export default ProfilePictureUpload;
-```
+export default ProfilePictureUpload;`}
+      </CodeBlock>
 
-```javascript 
-{/* filePath: utils/Fetching.jsx */}
+      <CodeBlock className="language-javascript">
+{`// utils/Fetching.jsx
 import endpoint from '@/utils/endpoint';
 
 export const Fetching = {
@@ -154,5 +153,8 @@ export const Fetching = {
             return null;
         });
     }
+}`}
+      </CodeBlock>
+    </div>
+  );
 }
-```

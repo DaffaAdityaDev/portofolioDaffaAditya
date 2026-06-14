@@ -1,39 +1,9 @@
-import fs from 'fs';
-import path from 'path';
-
-import matter from 'gray-matter';
-import { serialize } from 'next-mdx-remote/serialize';
-import rehypePrism from 'rehype-prism-plus';
+import { POSTS_DATA } from '@/features/Blog/constants';
 import type { PostData } from 'types/blog';
 
-const postsDirectory = path.join(process.cwd(), 'posts');
-
 export function getSortedPostsData(limit?: number): PostData[] {
-  // Get file names under /posts
-  const fileNames = fs.readdirSync(postsDirectory).filter(file => file.endsWith('.md'));
-  const allPostsData = fileNames.map((fileName): PostData => {
-    // Remove ".md" from file name to get id
-    const id = fileName.replace(/\.md$/, '');
-
-    // Read markdown file as string
-    const fullPath = path.join(postsDirectory, fileName);
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
-
-    // Use gray-matter to parse the post metadata section
-    const matterResult = matter(fileContents);
-
-    // Combine the data with the id
-    const postData: PostData = {
-      id,
-      date: matterResult.data.date || '',  // Provide default empty string if date is missing
-      production: matterResult.data.production ?? true, // Default to true if not specified
-      ...matterResult.data,
-    };
-    return postData;
-  });
-
-  // Filter out posts where production is false logic
-  const productionPosts = allPostsData.filter(post => {
+  // Filter out posts where production is false in production environment
+  const productionPosts = POSTS_DATA.filter(post => {
     if (process.env.NODE_ENV === 'production') {
       return post.production !== false;
     }
@@ -49,71 +19,34 @@ export function getSortedPostsData(limit?: number): PostData[] {
     }
   });
 
-  // Return limited posts if limit is specified
   return limit ? sortedPosts.slice(0, limit) : sortedPosts;
 }
 
 export function getAllPostIds() {
-  const fileNames = fs.readdirSync(postsDirectory).filter(file => file.endsWith('.md'));
-
-  // Returns an array that looks like this:
-  // [
-  //   {
-  //     params: {
-  //       id: 'ssg-ssr'
-  //     }
-  //   },
-  //   {
-  //     params: {
-  //       id: 'pre-rendering'
-  //     }
-  //   }
-  // ]
-  const filteredFileNames = fileNames.filter((fileName) => {
+  const productionPosts = POSTS_DATA.filter(post => {
     if (process.env.NODE_ENV === 'production') {
-      const fullPath = path.join(postsDirectory, fileName);
-      const fileContents = fs.readFileSync(fullPath, 'utf8');
-      const matterResult = matter(fileContents);
-      return matterResult.data.production !== false;
+      return post.production !== false;
     }
     return true;
   });
 
-  return filteredFileNames.map((fileName) => {
+  return productionPosts.map((post) => {
     return {
       params: {
-        id: fileName.replace(/\.md$/, ''),
+        id: post.id,
       },
     };
   });
 }
 
 export async function getPostData(id: string) {
-  const fullPath = path.join(postsDirectory, `${id}.md`);
-  const fileContents = fs.readFileSync(fullPath, 'utf8');
-
-  // Use gray-matter to parse the post metadata section
-  // const matterResult = matter(fileContents);
-  // Use gray-matter to parse the post metadata section
-  const matterResult = matter(fileContents);
-
-  // Serialize the markdown content for client-side rendering
-  const mdxSource = await serialize(matterResult.content, {
-    mdxOptions: {
-      rehypePlugins: [rehypePrism as any],
-      development: false,
-    },
-  });
-
-  // Combine the data with the id and contentHtml
-  return {
-    id,
-    mdxSource,
-    ...matterResult.data,
-  };
+  const post = POSTS_DATA.find((p) => p.id === id);
+  if (!post) {
+    throw new Error(`Post not found: ${id}`);
+  }
+  return post;
 }
 
-// Add a new function to get total posts count
 export function getPostsCount() {
   const allPosts = getSortedPostsData();
   return allPosts.length;

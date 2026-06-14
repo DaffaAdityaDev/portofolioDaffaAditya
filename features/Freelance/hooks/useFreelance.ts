@@ -22,7 +22,7 @@ export const useFreelance = () => {
     projectDesc: ''
   });
 
-  const [activeFaq, setActiveFaq] = useState<number | null>(null);
+
 
   const estimatedQuote = useMemo(() => {
     let basePrice = 0;
@@ -171,8 +171,7 @@ Generated from Freelance Configurator Portal`;
     setFormSubmitted,
     formData,
     setFormData,
-    activeFaq,
-    setActiveFaq,
+
     estimatedQuote,
     handlePackageChange,
     handleAddonToggle,

@@ -39,9 +39,21 @@ module.exports = function (plop) {
     actions: [
       {
         type: 'add',
-        path: 'posts/{{kebabCase title}}.md',
-        templateFile: 'templates/blog-post.md.hbs',
+        path: 'features/Blog/posts/{{pascalCase title}}.tsx',
+        templateFile: 'templates/blog-post.tsx.hbs',
       },
+      {
+        type: 'modify',
+        path: 'features/Blog/constants.ts',
+        pattern: /(export const POSTS_DATA: PostData\[] = \[)/g,
+        template: `$1\n  {\n    id: "{{pascalCase title}}",\n    title: "{{title}}",\n    date: "{{currentDate}}",\n    timeToRead: {{timeToRead}},\n    description: "{{description}}",\n    image: "{{image}}",\n    production: {{production}}\n  },`
+      },
+      {
+        type: 'modify',
+        path: 'pages/blog/post/[id].tsx',
+        pattern: /(const MAPPED_POSTS: Record<string, React.ComponentType> = \{)/g,
+        template: `$1\n  '{{pascalCase title}}': dynamic(() => import('@/features/Blog/posts/{{pascalCase title}}')),`
+      }
     ],
   });
 }; 

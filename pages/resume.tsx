@@ -3,9 +3,10 @@ import Head from 'next/head';
 import { motion } from 'framer-motion';
 import { FADE_IN_UP_CONTAINER } from '@/constant/animations';
 import dynamic from 'next/dynamic';
-import { ResumeHeader, ResumeSidebar, useResume } from '@/features/Resume';
+import { ResumeHeader, useResume } from '@/features/Resume';
 
 const ResumeViewer = dynamic(() => import('@/features/Resume/components/ResumeViewer'), { ssr: false });
+const ResumeSidebar = dynamic(() => import('@/features/Resume/components/ResumeSidebar'), { ssr: true });
 
 
 const ResumePage = () => {

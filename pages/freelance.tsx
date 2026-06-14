@@ -1,18 +1,17 @@
 import React from 'react';
 import Head from 'next/head';
-import { ShieldCheck, CheckCircle2, UserCheck } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import {
   FreelanceHero,
   useFreelance,
-  FAQS,
-  TESTIMONIALS,
 } from '@/features/Freelance';
 
 const TimelineCursorPreview = dynamic(() => import('@/features/Freelance/components/TimelineCursorPreview'), { ssr: false });
 const ProjectsTimeline = dynamic(() => import('@/features/Freelance/components/ProjectsTimeline'), { ssr: true });
 const SkillsGrid = dynamic(() => import('@/features/Freelance/components/SkillsGrid'), { ssr: true });
 const CostCalculator = dynamic(() => import('@/features/Freelance/components/CostCalculator'), { ssr: true });
+const TrustSection = dynamic(() => import('@/features/Freelance/components/TrustSection'), { ssr: true });
+const FaqSection = dynamic(() => import('@/features/Freelance/components/FaqSection'), { ssr: true });
 
 
 export default function FreelancePage() {
@@ -26,8 +25,6 @@ export default function FreelancePage() {
     formSubmitted,
     formData,
     setFormData,
-    activeFaq,
-    setActiveFaq,
     estimatedQuote,
     handlePackageChange,
     handleAddonToggle,
@@ -132,96 +129,10 @@ export default function FreelancePage() {
           <SkillsGrid />
 
           {/* SECTION 5: DE-RISKING & TRUST BUILDERS */}
-          <section aria-label="Trust & Testimonials" className="w-full grid grid-cols-1 lg:grid-cols-2 gap-[1px] bg-zinc-800 border-b border-zinc-800">
-            
-            {/* The "Clean Handoff" Guarantee Cell */}
-            <div className="bg-[#0f0f13] p-8 md:p-12 xl:p-16 space-y-6 border-b lg:border-b-0 border-zinc-800 lg:border-r border-zinc-800 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center gap-2.5 border-b border-zinc-800 pb-4 mb-6">
-                  <ShieldCheck size={18} className="text-red-500" />
-                  <span className="text-xs font-mono text-zinc-400 uppercase tracking-widest font-bold">The Clean Handoff Guarantee</span>
-                </div>
-                
-                <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight leading-snug mb-4">
-                  Write code once. Maintain it forever.
-                </h3>
-                
-                <p className="text-sm font-mono text-zinc-400 leading-relaxed mb-6">
-                  Freelance clients are terrified of hiring engineers who deliver unmaintainable black boxes. 
-                  I design all custom logic with robust JSDoc declarations, standard TypeScript configurations, 
-                  and modular directory boundaries.
-                </p>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 font-mono text-sm text-zinc-300">
-                  <div className="p-3 border border-zinc-800 rounded bg-zinc-900/30 flex items-start gap-2">
-                    <CheckCircle2 size={12} className="text-red-500 shrink-0 mt-0.5" />
-                    <span>Comprehensive README, env setups & deploy docs</span>
-                  </div>
-                  <div className="p-3 border border-zinc-800 rounded bg-zinc-900/30 flex items-start gap-2">
-                    <CheckCircle2 size={12} className="text-red-500 shrink-0 mt-0.5" />
-                    <span>Modular state management with zero tight-coupling</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="border-t border-zinc-800 pt-6 mt-6 font-mono text-xs text-zinc-400 uppercase flex justify-between">
-                <span>Maintainability Index: 100/100</span>
-                <span>Type Coverage: Strict-True</span>
-              </div>
-            </div>
-
-            {/* Testimonials / Technical Commendations Cell */}
-            <div className="bg-[#0f0f13] p-8 md:p-12 xl:p-16 space-y-6 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center gap-2.5 border-b border-zinc-800 pb-4 mb-6">
-                  <UserCheck size={18} className="text-red-500" />
-                  <span className="text-xs font-mono text-zinc-400 uppercase tracking-widest font-bold">Technical Commendations</span>
-                </div>
-                
-                <div className="space-y-6">
-                  {TESTIMONIALS.map((t, idx) => (
-                    <div key={idx} className="border-l-2 border-red-500 pl-4 space-y-2">
-                      <p className="text-sm md:text-base font-mono text-zinc-300 italic leading-relaxed">
-                        &ldquo;{t.quote}&rdquo;
-                      </p>
-                      <span className="text-xs font-mono text-zinc-400 uppercase block font-bold">
-                        // {t.author}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-          </section>
+          <TrustSection />
 
           {/* SECTION 6: FAQ ACCORDION */}
-          <section className="w-full bg-[#0b0b0e] px-6 sm:px-12 md:px-16 lg:px-24 py-16 md:py-24 border-b border-zinc-800">
-            <div className="max-w-4xl mx-auto">
-              <div className="mb-12 border-b border-zinc-800 pb-6 text-center sm:text-left">
-                <span className="text-xs font-mono text-red-500 uppercase tracking-widest font-bold">// SYSTEM_RISK_ASSESSMENT</span>
-                <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight mt-2">Frequently Asked Questions</h2>
-              </div>
-              <div className="space-y-4">
-                {FAQS.map((faq, idx) => (
-                  <div key={idx} className="border border-zinc-800 bg-zinc-900/20 rounded-xl overflow-hidden transition-all duration-300 hover:border-zinc-700">
-                    <button
-                      onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}
-                      className="w-full flex justify-between items-center text-left p-6 font-mono font-bold uppercase text-white hover:text-red-500 transition-colors gap-4"
-                    >
-                      <span className="text-sm md:text-base">{faq.q}</span>
-                      <span className="text-red-500 font-bold shrink-0">{activeFaq === idx ? '[-]' : '[+]'}</span>
-                    </button>
-                    {activeFaq === idx && (
-                      <div className="px-6 pb-6 text-sm font-mono text-zinc-300 leading-relaxed border-t border-zinc-800/80 pt-4 bg-zinc-900/10">
-                        {faq.a}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
+          <FaqSection />
 
           {/* SECTION 7: INTERACTIVE SCOPE CONFIGURATOR */}
           <CostCalculator 

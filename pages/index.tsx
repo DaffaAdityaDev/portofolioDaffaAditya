@@ -6,10 +6,10 @@ import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
 
 // Above the fold components stay as static imports for LCP
-import Marquee from '@/components/ui/Marquee';
 import { MARQUEE_TEXT } from '@/constant/constant';
 
 // Below the fold components are lazy-loaded
+const Marquee = dynamic(() => import('@/components/ui/Marquee'), { ssr: true });
 const AboutMe = dynamic(() => import('@/features/AboutMe'), { ssr: true });
 const Experience = dynamic(() => import('@/features/Experience'), { ssr: true });
 const Projects = dynamic(() => import('@/features/Projects'), { ssr: true });

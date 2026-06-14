@@ -1,0 +1,23 @@
+import React from 'react';
+import CodeBlock from '../components/CodeBlock';
+import CustomImage from '../components/CustomImage';
+
+export default function {{pascalCase title}}() {
+  return (
+    <div className="blog-content-static">
+      <p>Write your blog post content here in React JSX formatting.</p>
+
+      <h2>Headings</h2>
+      <p>Standard text paragraph goes here.</p>
+
+      <CodeBlock className="language-javascript">
+{`console.log('Hello, world!');`}
+      </CodeBlock>
+
+      <CustomImage 
+        src="{{image}}" 
+        alt="Alt text" 
+      />
+    </div>
+  );
+}
