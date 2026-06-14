@@ -2,13 +2,8 @@ import { POSTS_DATA } from '@/features/Blog/constants';
 import type { PostData } from 'types/blog';
 
 export function getSortedPostsData(limit?: number): PostData[] {
-  // Filter out posts where production is false in production environment
-  const productionPosts = POSTS_DATA.filter(post => {
-    if (process.env.NODE_ENV === 'production') {
-      return post.production !== false;
-    }
-    return true;
-  });
+  // Filter out posts where production is false
+  const productionPosts = POSTS_DATA.filter(post => post.production !== false);
 
   // Sort posts by date
   const sortedPosts = productionPosts.sort((a, b) => {
@@ -23,12 +18,7 @@ export function getSortedPostsData(limit?: number): PostData[] {
 }
 
 export function getAllPostIds() {
-  const productionPosts = POSTS_DATA.filter(post => {
-    if (process.env.NODE_ENV === 'production') {
-      return post.production !== false;
-    }
-    return true;
-  });
+  const productionPosts = POSTS_DATA.filter(post => post.production !== false);
 
   return productionPosts.map((post) => {
     return {

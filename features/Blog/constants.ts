@@ -17,7 +17,7 @@ export const POSTS_DATA: PostData[] = [
     timeToRead: 10,
     description: "SOLID intended to make mostly for OOP to make codebase more understandable, flexible, and maintainable.",
     image: "/image/fallback.webp",
-    production: true
+    production: false
   },
   {
     id: "SSGInDetail",
