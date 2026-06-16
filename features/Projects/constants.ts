@@ -118,54 +118,6 @@ export const projectsData = [
     tech: ["Nextjs", "Nodejs", "PostgreSQL", "Tailwind CSS"],
     nature: "freelance"
   },
-  {
-    id: 8,
-    title: "Rivian_Mobile_Companion",
-    slug: "rivian-mobile-companion",
-    client: "Rivian Automotive",
-    description: "Re-engineering Bluetooth Low Energy socket structures and telemetry visualizer systems for zero packet loss under off-grid wilderness conditions.",
-    year: "2025",
-    type: "MOBILE",
-    category: "MOBILE",
-    featured: true,
-    link: "/case-studies/rivian-mobile-companion",
-    image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=600&q=80",
-    color: "from-orange-600 to-amber-900",
-    tech: ["BLE Core", "WASM Canvas", "React Native"],
-    nature: "work"
-  },
-  {
-    id: 9,
-    title: "Help_Scout_Beacon",
-    slug: "help-scout-beacon",
-    client: "Help Scout",
-    description: "Encapsulating global widget styling and multi-layer chat/search layers to survive client website CSS injection collisions.",
-    year: "2025",
-    type: "WEB_APP",
-    category: "WEB_APP",
-    featured: true,
-    link: "/case-studies/help-scout-beacon",
-    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
-    color: "from-purple-600 to-indigo-900",
-    tech: ["Shadow DOM", "Vanilla JS", "Rollup.js"],
-    nature: "work"
-  },
-  {
-    id: 10,
-    title: "Prevue_Vector_Sharing",
-    slug: "prevue-vector-sharing",
-    client: "Prevue Network",
-    description: "Designing a hardware-accelerated drawing smoothing parser capable of broadcasting cursor coordinates under 15ms.",
-    year: "2024",
-    type: "WEB_APP",
-    category: "WEB_APP",
-    featured: true,
-    link: "/case-studies/prevue-vector-sharing",
-    image: "https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&w=600&q=80",
-    color: "from-cyan-600 to-blue-900",
-    tech: ["WebGL 2", "WebSockets", "ArrayBuffers"],
-    nature: "side"
-  }
 ];
 
 export type Project = typeof projectsData[0];

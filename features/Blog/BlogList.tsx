@@ -1,6 +1,6 @@
 import React from 'react';
 import BlogCard from './BlogCard';
-import { IBlogProps } from '@/components/ui/types';
+import { IBlogProps } from '@/types/blog';
 import GridLine from '@/components/ui/GridLine';
 
 interface BlogListProps {

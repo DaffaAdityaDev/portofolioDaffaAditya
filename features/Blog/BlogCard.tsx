@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowRight, Calendar, Clock } from 'lucide-react';
-import { IBlogProps } from '@/components/ui/types';
+import { IBlogProps } from '@/types/blog';
 import DateComponent from '@/components/ui/Date';
 import { useRouter } from 'next/router';
 import Image from 'next/image';

@@ -1,15 +1,18 @@
-import { parseISO, format } from 'date-fns';
-
-export default function Date({ dateString }: any) {
+export default function DateComponent({ dateString }: any) {
   if (!dateString) return null;
   try {
-    const date = parseISO(dateString);
+    const date = new Date(dateString);
     if (isNaN(date.getTime())) {
       return <time dateTime={dateString}>{dateString}</time>;
     }
-    return <time dateTime={dateString}>{format(date, 'LLLL d, yyyy')}</time>;
+    const formatted = date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+    return <time dateTime={dateString}>{formatted}</time>;
   } catch (error) {
     return <time dateTime={dateString}>{dateString}</time>;
   }
 }
-export { Date as DateComponent };
+export { DateComponent as Date };
