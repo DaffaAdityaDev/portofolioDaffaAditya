@@ -8,7 +8,7 @@ export const POSTS_DATA: PostData[] = [
     timeToRead: 5,
     description: "The Art of Learning: Mastering the meta-skill that allows you to conquer any subject, from high-level math to complex software architecture.",
     image: "/image/blogs/LearnHowToLearn/hero.webp",
-    production: true
+    production: false
   },
   {
     id: "solid-5-pirinciples-that-can-improve-you-codebase",
