@@ -7,7 +7,19 @@ interface DiagnosticCardProps {
 
 const DiagnosticCard: React.FC<DiagnosticCardProps> = ({ module }) => {
   return (
-    <div className="bg-[#0a0a0a] border border-zinc-800 p-6 flex flex-col hover:border-zinc-600 transition-colors group">
+    <div className="bg-[#0a0a0a] border border-zinc-800 p-6 flex flex-col transition-colors group relative">
+      
+      {/* Clockwise Border Animation Overlay */}
+      <svg className="border-trace-svg" aria-hidden="true">
+        <rect
+          x="0"
+          y="0"
+          width="100%"
+          height="100%"
+          pathLength="100"
+          className="border-trace-rect"
+        />
+      </svg>
       
       {/* Card Header */}
       <div className="flex justify-between items-start mb-6">
@@ -27,9 +39,21 @@ const DiagnosticCard: React.FC<DiagnosticCardProps> = ({ module }) => {
       {/* Processes List */}
       <div className="space-y-2">
         {module.processes.map((proc, idx) => (
-          <div key={idx} className="flex justify-between items-center font-mono text-sm py-1 border-b border-zinc-900/50 group-hover:border-zinc-800 transition-colors">
-            <span className="text-zinc-400 group-hover:text-zinc-300">{proc.name}</span>
-            <span className="text-zinc-600">[{proc.version}]</span>
+          <div
+            key={idx}
+            className="flex justify-between items-center font-mono text-sm py-1 border-b border-zinc-900/50 transition-colors relative"
+          >
+            <span className="text-zinc-400 group-hover:text-zinc-300 z-10 transition-colors">
+              {proc.name}
+            </span>
+            <span className="text-zinc-600 z-10">[{proc.version}]</span>
+            
+            {/* Row Underline Trace Animation */}
+            <span
+              className="border-trace-line"
+              style={{ transitionDelay: `${idx * 30}ms` }}
+              aria-hidden="true"
+            />
           </div>
         ))}
       </div>

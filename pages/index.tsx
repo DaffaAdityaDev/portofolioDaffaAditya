@@ -3,7 +3,7 @@ import Head from 'next/head';
 import dynamic from 'next/dynamic';
 import Hero from '@/features/Hero';
 import React, { useRef, useState, useEffect } from 'react';
-import { motion, useScroll, useSpring } from 'framer-motion';
+import { motion, useScroll } from 'framer-motion';
 
 // Above the fold components stay as static imports for LCP
 import { MARQUEE_TEXT } from '@/constant/constant';
@@ -38,45 +38,34 @@ const Home: NextPage = () => {
       if (!containerRef.current) return;
       const containerRect = containerRef.current.getBoundingClientRect();
 
-      const getX = (id: string) => {
+      const getCoords = (id: string) => {
         const el = document.getElementById(id);
-        if (!el) return 0;
+        if (!el) return { x: 0, y: 0, top: 0, bottom: 0 };
         const rect = el.getBoundingClientRect();
-        return rect.left - containerRect.left + rect.width / 2;
+        return {
+          x: rect.left - containerRect.left + rect.width / 2,
+          y: rect.top - containerRect.top + rect.height / 2,
+          top: rect.top - containerRect.top,
+          bottom: rect.bottom - containerRect.top
+        };
       };
 
-      const getSectionY = (id: string, edge: 'top' | 'bottom') => {
-        const el = document.getElementById(id);
-        if (!el) return 0;
-        const rect = el.getBoundingClientRect();
-        return edge === 'top' 
-          ? rect.top - containerRect.top 
-          : rect.bottom - containerRect.top;
-      };
+      const exp = getCoords('experience-timeline-start');
+      const proj = getCoords('projects-timeline-start');
+      const contact = getCoords('contact-timeline-start');
+      const expSection = getCoords('experience-section');
+      const worksSection = getCoords('works');
+      const contactSection = getCoords('contact');
+      const contactEnd = getCoords('contact-timeline-end');
 
-      const expX = getX('experience-timeline-start');
-      const projX = getX('projects-timeline-start');
-      const contactX = getX('contact-timeline-start');
-
-      const expStartEl = document.getElementById('experience-timeline-start');
-      const expStartYVal = expStartEl ? expStartEl.getBoundingClientRect().top - containerRect.top + expStartEl.getBoundingClientRect().height / 2 : 0;
-
-      const expEndY = getSectionY('experience-section', 'bottom');
-      const projStartY = getSectionY('works', 'top');
-      const projEndY = getSectionY('works', 'bottom');
-      const contactStartY = getSectionY('contact', 'top');
-      
-      const contactEndEl = document.getElementById('contact-timeline-end');
-      const contactEndYVal = contactEndEl ? contactEndEl.getBoundingClientRect().top - containerRect.top + contactEndEl.getBoundingClientRect().height / 2 : 0;
-
-      if (expX && projX && contactX) {
+      if (exp.x && proj.x && contact.x) {
         setPoints({
-          expStart: { x: expX, y: expStartYVal },
-          expEnd: { x: expX, y: expEndY },
-          projStart: { x: projX, y: projStartY },
-          projEnd: { x: projX, y: projEndY },
-          contactStart: { x: contactX, y: contactStartY },
-          contactEnd: { x: contactX, y: contactEndYVal }
+          expStart: { x: exp.x, y: exp.y },
+          expEnd: { x: exp.x, y: expSection.bottom },
+          projStart: { x: proj.x, y: worksSection.top },
+          projEnd: { x: proj.x, y: worksSection.bottom },
+          contactStart: { x: contact.x, y: contactSection.top },
+          contactEnd: { x: contact.x, y: contactEnd.y }
         });
       }
     };
@@ -87,9 +76,7 @@ const Home: NextPage = () => {
     window.addEventListener('resize', updatePoints);
     
     // ResizeObserver for dynamic height updates
-    const observer = new ResizeObserver(() => {
-      updatePoints();
-    });
+    const observer = new ResizeObserver(updatePoints);
     if (containerRef.current) {
       observer.observe(containerRef.current);
     }
@@ -101,21 +88,9 @@ const Home: NextPage = () => {
     };
   }, []);
 
-  let pathD = "";
-  if (points) {
-    const { expStart, expEnd, projStart, projEnd, contactStart, contactEnd } = points;
-
-    pathD = `
-      M ${expStart.x} ${expStart.y}
-      L ${expEnd.x} ${expEnd.y}
-      H ${projStart.x}
-      L ${projStart.x} ${projStart.y}
-      L ${projEnd.x} ${projEnd.y}
-      H ${contactStart.x}
-      L ${contactStart.x} ${contactStart.y}
-      L ${contactEnd.x} ${contactEnd.y}
-    `.replace(/\s+/g, ' ').trim();
-  }
+  const pathD = points
+    ? `M ${points.expStart.x} ${points.expStart.y} L ${points.expEnd.x} ${points.expEnd.y} H ${points.projStart.x} L ${points.projStart.x} ${points.projStart.y} L ${points.projEnd.x} ${points.projEnd.y} H ${points.contactStart.x} L ${points.contactStart.x} ${points.contactStart.y} L ${points.contactEnd.x} ${points.contactEnd.y}`
+    : '';
 
   return (
     <>
@@ -180,3 +155,4 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+

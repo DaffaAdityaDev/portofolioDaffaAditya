@@ -11,6 +11,18 @@ interface NavItem {
   path?: string;
 }
 
+const navItems: NavItem[] = [
+  { label: 'HOME', id: 'hero' },
+  { label: 'BLOG', path: '/blog' },
+  { label: 'SOCIALS' }
+];
+
+const socialLinks = [
+  { label: 'GITHUB', href: siteConfig.links.github, Icon: Github, external: true, aria: 'GitHub Profile' },
+  { label: 'LINKEDIN', href: siteConfig.links.linkedin, Icon: Linkedin, external: true, aria: 'LinkedIn Profile' },
+  { label: 'EMAIL', href: `mailto:${siteConfig.links.email}`, Icon: Mail, aria: 'Send Email' }
+];
+
 const Navbar = () => {
   const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -27,12 +39,6 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems: NavItem[] = [
-    { label: 'HOME', id: 'hero' },
-    { label: 'BLOG', path: '/blog' },
-    { label: 'SOCIALS' }
-  ];
-
   const checkActive = (item: NavItem) => {
     return (item.id === 'hero' && router.pathname === '/' && !router.asPath.includes('#')) ||
       (item.id && router.asPath.includes(`#${item.id}`)) ||
@@ -40,13 +46,11 @@ const Navbar = () => {
   };
 
   const handleNavigation = (e: React.MouseEvent<HTMLAnchorElement>, item: NavItem) => {
-    if (item.id) {
-      if (router.pathname === '/') {
-        e.preventDefault();
-        const element = document.getElementById(item.id);
-        if (element) element.scrollIntoView({ behavior: 'smooth' });
-        router.push(`/#${item.id}`, undefined, { scroll: false });
-      }
+    if (item.id && router.pathname === '/') {
+      e.preventDefault();
+      const element = document.getElementById(item.id);
+      if (element) element.scrollIntoView({ behavior: 'smooth' });
+      router.push(`/#${item.id}`, undefined, { scroll: false });
     }
   };
 
@@ -65,9 +69,6 @@ const Navbar = () => {
           onMouseLeave={() => { setIsHovered(false); setHoveredIndex(null); }}
           className={`pointer-events-auto relative flex items-center justify-center rounded-full group ${transitionClass} ${isExpanded ? 'h-14 px-6 gap-6' : 'h-11 px-4 gap-3'
             } ${isSocialOpen ? 'overflow-visible' : 'overflow-hidden'}`}
-          style={{
-            borderRadius: 9999,
-          }}
         >
           {/* Background Layer with heavy filters */}
           <div className="absolute inset-0 bg-[#0a0a0c]/85 backdrop-blur-2xl border border-white/[0.08] shadow-[0_24px_50px_rgba(0,0,0,0.8),_inset_0_1px_1px_rgba(255,255,255,0.08)] group-hover:shadow-[0_24px_50px_rgba(0,0,0,0.9),_0_0_20px_rgba(255,255,255,0.02),_inset_0_1px_1px_rgba(255,255,255,0.12)] rounded-full -z-10 pointer-events-none transition-shadow duration-300" />
@@ -164,31 +165,17 @@ const Navbar = () => {
                             transition={{ duration: 0.15, ease: "easeOut" }}
                             className="absolute top-[38px] left-1/2 -translate-x-1/2 bg-[#0a0a0c]/90 backdrop-blur-2xl border border-white/[0.08] rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.6)] p-3 flex flex-col gap-1.5 min-w-[140px] z-50 pointer-events-auto before:content-[''] before:absolute before:-top-5 before:left-0 before:w-full before:h-5 before:bg-transparent"
                           >
-                            <a
-                              href={siteConfig.links.github}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-neutral-400 hover:text-white hover:bg-white/[0.06] transition-all duration-200 text-[10px] font-mono font-bold tracking-wider"
-                            >
-                              <Github size={14} className="shrink-0" />
-                              GITHUB
-                            </a>
-                            <a
-                              href={siteConfig.links.linkedin}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-neutral-400 hover:text-white hover:bg-white/[0.06] transition-all duration-200 text-[10px] font-mono font-bold tracking-wider"
-                            >
-                              <Linkedin size={14} className="shrink-0" />
-                              LINKEDIN
-                            </a>
-                            <a
-                              href={`mailto:${siteConfig.links.email}`}
-                              className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-neutral-400 hover:text-white hover:bg-white/[0.06] transition-all duration-200 text-[10px] font-mono font-bold tracking-wider"
-                            >
-                              <Mail size={14} className="shrink-0" />
-                              EMAIL
-                            </a>
+                            {socialLinks.map(({ label, href, Icon, external }) => (
+                              <a
+                                key={label}
+                                href={href}
+                                {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                                className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-neutral-400 hover:text-white hover:bg-white/[0.06] transition-all duration-200 text-[10px] font-mono font-bold tracking-wider"
+                              >
+                                <Icon size={14} className="shrink-0" />
+                                {label}
+                              </a>
+                            ))}
                           </motion.div>
                         )}
                       </AnimatePresence>
@@ -258,8 +245,8 @@ const Navbar = () => {
       <div className="fixed top-6 left-0 w-full md:hidden flex justify-center items-start z-[100] pointer-events-none h-0 px-4">
         <div
           className={`pointer-events-auto overflow-hidden relative flex flex-col justify-start items-center group ${transitionClass} ${isMobileMenuOpen
-              ? 'w-[calc(100vw-2rem)] max-w-[384px] h-[310px] rounded-3xl'
-              : 'w-[240px] h-[44px] rounded-full'
+            ? 'w-[calc(100vw-2rem)] max-w-[384px] h-[310px] rounded-3xl'
+            : 'w-[240px] h-[44px] rounded-full'
             }`}
         >
           {/* Background Layer with heavy filters */}
@@ -300,31 +287,17 @@ const Navbar = () => {
 
                 {/* Social Links */}
                 <div className="flex items-center justify-center gap-6 py-2.5 border-t border-white/[0.08] shrink-0">
-                  <a
-                    href={siteConfig.links.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-neutral-400 hover:text-white transition-colors duration-200 p-1 rounded focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:outline-none"
-                    aria-label="GitHub Profile"
-                  >
-                    <Github size={16} />
-                  </a>
-                  <a
-                    href={siteConfig.links.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-neutral-400 hover:text-white transition-colors duration-200 p-1 rounded focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:outline-none"
-                    aria-label="LinkedIn Profile"
-                  >
-                    <Linkedin size={16} />
-                  </a>
-                  <a
-                    href={`mailto:${siteConfig.links.email}`}
-                    className="text-neutral-400 hover:text-white transition-colors duration-200 p-1 rounded focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:outline-none"
-                    aria-label="Send Email"
-                  >
-                    <Mail size={16} />
-                  </a>
+                  {socialLinks.map(({ label, href, Icon, external, aria }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                      className="text-neutral-400 hover:text-white transition-colors duration-200 p-1 rounded focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:outline-none"
+                      aria-label={aria}
+                    >
+                      <Icon size={16} />
+                    </a>
+                  ))}
                 </div>
 
                 <div className="pt-2.5 border-t border-white/[0.08] shrink-0">
