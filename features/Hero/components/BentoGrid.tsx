@@ -9,7 +9,7 @@ const VIRTUAL_START_DATE = new Date('2023-03-01T00:00:00');
 // Initial State Constant
 const INITIAL_EXPERIENCE = { y: '00', m: '00', d: '00', hh: '00', mm: '00', ss: '00' };
 
-const SubtleDigit = ({ char }: { char: string }) => {
+const SubtleDigit = React.memo(({ char }: { char: string }) => {
   return (
     <span className="relative inline-block w-[0.55em] text-center tabular-nums">
       <AnimatePresence mode="popLayout">
@@ -26,7 +26,8 @@ const SubtleDigit = ({ char }: { char: string }) => {
       </AnimatePresence>
     </span>
   );
-};
+});
+SubtleDigit.displayName = 'SubtleDigit';
 
 const BentoGrid = () => {
   const [experience, setExperience] = useState(INITIAL_EXPERIENCE);

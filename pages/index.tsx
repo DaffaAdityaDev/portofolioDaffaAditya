@@ -34,6 +34,7 @@ const Home: NextPage = () => {
   });
 
   useEffect(() => {
+    let frameId: number | null = null;
     const updatePoints = () => {
       if (!containerRef.current) return;
       const containerRect = containerRef.current.getBoundingClientRect();
@@ -70,21 +71,32 @@ const Home: NextPage = () => {
       }
     };
 
-    // Delay slightly to allow components to render and mount
-    const timer = setTimeout(updatePoints, 100);
+    const handleUpdate = () => {
+      if (frameId !== null) return;
+      frameId = requestAnimationFrame(() => {
+        updatePoints();
+        frameId = null;
+      });
+    };
 
-    window.addEventListener('resize', updatePoints);
+    // Delay slightly to allow components to render and mount
+    const timer = setTimeout(handleUpdate, 100);
+
+    window.addEventListener('resize', handleUpdate);
     
     // ResizeObserver for dynamic height updates
-    const observer = new ResizeObserver(updatePoints);
+    const observer = new ResizeObserver(handleUpdate);
     if (containerRef.current) {
       observer.observe(containerRef.current);
     }
 
     return () => {
       clearTimeout(timer);
-      window.removeEventListener('resize', updatePoints);
+      window.removeEventListener('resize', handleUpdate);
       observer.disconnect();
+      if (frameId !== null) {
+        cancelAnimationFrame(frameId);
+      }
     };
   }, []);
 
@@ -125,6 +137,16 @@ const Home: NextPage = () => {
                   fill="none"
                   strokeLinecap="round"
                 />
+                {/* Glow Progress path background layer for neon glow effect */}
+                <motion.path
+                  d={pathD}
+                  stroke="#ef4444"
+                  strokeWidth="6"
+                  opacity="0.3"
+                  fill="none"
+                  strokeLinecap="round"
+                  style={{ pathLength: scrollYProgress }}
+                />
                 {/* Glow Progress path */}
                 <motion.path
                   d={pathD}
@@ -133,7 +155,6 @@ const Home: NextPage = () => {
                   fill="none"
                   strokeLinecap="round"
                   style={{ pathLength: scrollYProgress }}
-                  className="drop-shadow-[0_0_8px_rgba(239,68,68,0.8)]"
                 />
               </svg>
             )}

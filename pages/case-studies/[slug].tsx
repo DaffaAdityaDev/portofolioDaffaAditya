@@ -76,7 +76,7 @@ interface CaseStudyLayoutProps {
 
 const CaseStudyLayout: React.FC<CaseStudyLayoutProps> = ({ project, children }) => {
   return (
-    <div className="bg-[#0a0a0c] text-zinc-100 min-h-screen relative font-sans select-none pb-24">
+    <div className="bg-[#0a0a0c] text-zinc-100 min-h-screen relative font-sans pb-24">
       {/* Immersive Panoramic Header using the Project's visual accent or cover image */}
       <div className="relative w-full h-[60vh] overflow-hidden flex items-end">
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-transparent to-black/40 z-10" />

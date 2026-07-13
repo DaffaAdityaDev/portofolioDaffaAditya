@@ -61,7 +61,7 @@ export default function CaseStudiesIndex() {
 
       <style dangerouslySetInnerHTML={{ __html: ARROW_STYLES }} />
 
-      <div className="bg-[#060608] text-zinc-100 min-h-screen relative overflow-hidden font-sans select-none pb-32 pt-20 selection:bg-red-500/30 selection:text-red-400">
+      <div className="bg-[#060608] text-zinc-100 min-h-screen relative overflow-hidden font-sans pb-32 pt-20 selection:bg-red-500/30 selection:text-red-400">
 
         {/* Dynamic Spectrum Ambient Spotlight */}
         <div

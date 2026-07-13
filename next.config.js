@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   reactCompiler: true,
+  transpilePackages: ['next-themes'],
   compiler: {
     // Remove console logs in production for better performance and cleaner logs
     removeConsole: process.env.NODE_ENV === 'production',

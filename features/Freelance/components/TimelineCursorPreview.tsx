@@ -30,6 +30,8 @@ export const TimelineCursorPreview: React.FC<TimelineCursorPreviewProps> = ({ ho
   }, [hoveredNode]);
 
   useEffect(() => {
+    if (!hoveredNode) return;
+
     const moveCursor = (e: MouseEvent) => {
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
@@ -37,7 +39,7 @@ export const TimelineCursorPreview: React.FC<TimelineCursorPreviewProps> = ({ ho
     
     window.addEventListener('mousemove', moveCursor);
     return () => window.removeEventListener('mousemove', moveCursor);
-  }, [cursorX, cursorY]);
+  }, [hoveredNode, cursorX, cursorY]);
 
   if (!isMounted) return null;
 

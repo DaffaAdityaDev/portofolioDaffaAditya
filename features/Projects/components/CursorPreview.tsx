@@ -31,6 +31,8 @@ const CursorPreview: React.FC<CursorPreviewProps> = ({ hoveredProject }) => {
   }, [hoveredProject]);
 
   useEffect(() => {
+    if (!hoveredProject) return;
+
     const moveCursor = (e: MouseEvent) => {
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
@@ -38,7 +40,7 @@ const CursorPreview: React.FC<CursorPreviewProps> = ({ hoveredProject }) => {
     
     window.addEventListener('mousemove', moveCursor);
     return () => window.removeEventListener('mousemove', moveCursor);
-  }, [cursorX, cursorY]);
+  }, [hoveredProject, cursorX, cursorY]);
 
   const content = (
     <motion.div 
