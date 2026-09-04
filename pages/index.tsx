@@ -121,54 +121,58 @@ const Home: NextPage = () => {
 
       <div className="min-h-screen bg-[#0a0a0a] text-white font-sans selection:bg-red-600 selection:text-white overflow-x-hidden relative flex flex-col">
         
-        <main className="flex-1 relative">
-          <Hero />
-          <AboutMe />
-          
-          {/* Continuous Timeline container */}
-          <div ref={containerRef} className="relative">
-            {pathD && (
-              <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
-                {/* Background path */}
-                <path
-                  d={pathD}
-                  stroke="#27272a"
-                  strokeWidth="2"
-                  fill="none"
-                  strokeLinecap="round"
-                />
-                {/* Glow Progress path background layer for neon glow effect */}
-                <motion.path
-                  d={pathD}
-                  stroke="#ef4444"
-                  strokeWidth="6"
-                  opacity="0.3"
-                  fill="none"
-                  strokeLinecap="round"
-                  style={{ pathLength: scrollYProgress }}
-                />
-                {/* Glow Progress path */}
-                <motion.path
-                  d={pathD}
-                  stroke="#ef4444"
-                  strokeWidth="2"
-                  fill="none"
-                  strokeLinecap="round"
-                  style={{ pathLength: scrollYProgress }}
-                />
-              </svg>
-            )}
+        {/* Main Content Surface (Elevated above sticky under-page footer) */}
+        <div className="relative z-10 bg-[#0a0a0a] shadow-[0_30px_60px_rgba(0,0,0,0.9)]">
+          <main className="flex-1 relative">
+            <Hero />
+            <AboutMe />
             
-            <Experience />
-            <Projects />
-            <TechStack />
-            <Contact />
-          </div>
-        </main>
+            {/* Continuous Timeline container */}
+            <div ref={containerRef} className="relative">
+              {pathD && (
+                <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
+                  {/* Background path */}
+                  <path
+                    d={pathD}
+                    stroke="#27272a"
+                    strokeWidth="2"
+                    fill="none"
+                    strokeLinecap="round"
+                  />
+                  {/* Glow Progress path background layer for neon glow effect */}
+                  <motion.path
+                    d={pathD}
+                    stroke="#ef4444"
+                    strokeWidth="6"
+                    opacity="0.3"
+                    fill="none"
+                    strokeLinecap="round"
+                    style={{ pathLength: scrollYProgress }}
+                  />
+                  {/* Glow Progress path */}
+                  <motion.path
+                    d={pathD}
+                    stroke="#ef4444"
+                    strokeWidth="2"
+                    fill="none"
+                    strokeLinecap="round"
+                    style={{ pathLength: scrollYProgress }}
+                  />
+                </svg>
+              )}
+              
+              <Experience />
+              <Projects />
+              <TechStack />
+              <Contact />
+            </div>
+          </main>
 
-        {/* Footer Marquee */}
-        <Marquee text={MARQUEE_TEXT} border={true} type="light" />
+          {/* Footer Marquee */}
+          <Marquee text={MARQUEE_TEXT} border={true} type="light" />
+        </div>
 
+        {/* Sticky Under-Page Reveal Footer */}
         <Footer />
       </div>
     </>

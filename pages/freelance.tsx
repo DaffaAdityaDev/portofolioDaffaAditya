@@ -129,7 +129,7 @@ export default function FreelancePage() {
           <SkillsGrid />
 
           {/* SECTION 5: DE-RISKING & TRUST BUILDERS */}
-          <TrustSection />
+          {/* <TrustSection /> */}
 
           {/* SECTION 6: FAQ ACCORDION */}
           <FaqSection />

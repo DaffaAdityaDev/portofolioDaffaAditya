@@ -1,5 +1,6 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
+import dynamic from 'next/dynamic';
 import { Outfit, Inter } from 'next/font/google';
 import { siteConfig } from '../config/metadata.config';
 import { AnimatePresence } from 'framer-motion';
@@ -7,6 +8,10 @@ import Navbar from '@/components/Layout/Navbar';
 import { HeroUIProvider } from "@heroui/react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import PageTransition from '@/components/Layout/PageTransition';
+
+const CustomCursor = dynamic(() => import('@/components/ui/CustomCursor'), {
+  ssr: false,
+});
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -25,6 +30,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
     <NextThemesProvider attribute="class" defaultTheme="dark">
       <HeroUIProvider>
         <div className={`${inter.variable} ${outfit.variable} font-sans`}>
+          <CustomCursor />
           <Navbar />
           <AnimatePresence mode="wait" initial={false}>
             <PageTransition key={router.asPath}>

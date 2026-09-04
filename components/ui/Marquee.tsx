@@ -1,15 +1,25 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useReducedMotion } from 'framer-motion';
 
 interface MarqueeProps {
-   text: string;
-   direction?: 'left' | 'right';
-   type?: 'dark' | 'light';
-   border?: boolean;
-   opacity?: number;
+  text: string;
+  direction?: 'left' | 'right';
+  type?: 'dark' | 'light';
+  border?: boolean;
+  opacity?: number;
+  className?: string;
+  speed?: number; // duration in seconds
 }
 
-const Marquee: React.FC<MarqueeProps> = ({ text, direction = 'left', type = 'dark', border = true, opacity = 1 }) => {
+const Marquee: React.FC<MarqueeProps> = ({
+  text,
+  direction = 'left',
+  type = 'dark',
+  border = true,
+  opacity = 1,
+  className = '',
+  speed = 35,
+}) => {
   const [isIntersecting, setIsIntersecting] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
@@ -31,29 +41,113 @@ const Marquee: React.FC<MarqueeProps> = ({ text, direction = 'left', type = 'dar
     };
   }, []);
 
-  // Pause animation if it's off-screen or if the user prefers reduced motion
   const isPaused = !isIntersecting || !!shouldReduceMotion;
 
+  // Split items if separated by '///', or treat as single item
+  const items = useMemo(() => {
+    if (text.includes('///')) {
+      return text.split('///').map((s) => s.trim()).filter(Boolean);
+    }
+    return [text.trim()];
+  }, [text]);
+
+  const isDark = type === 'dark';
+
+  const renderItemSequence = (repeatKey: string) => (
+    <div className="flex shrink-0 items-center">
+      {/* Repeat sequence 3 times per track to ensure 100% coverage on 4K/Ultrawide */}
+      {[0, 1, 2].map((loopIdx) => (
+        <React.Fragment key={`${repeatKey}-${loopIdx}`}>
+          {items.map((item, idx) => (
+            <div
+              key={`${repeatKey}-${loopIdx}-${idx}`}
+              className="inline-flex items-center gap-3.5 mx-3.5 md:mx-5 group/item select-none cursor-default"
+            >
+              <span
+                className={`text-[11px] md:text-xs font-mono font-extrabold tracking-[0.22em] uppercase transition-all duration-200 ${
+                  isDark
+                    ? 'text-neutral-400 group-hover/item:text-white group-hover/item:scale-105'
+                    : 'text-neutral-700 group-hover/item:text-black group-hover/item:scale-105'
+                }`}
+              >
+                {item}
+              </span>
+
+              {/* High-tech accent divider */}
+              <span className="inline-flex items-center gap-2 opacity-50 group-hover/item:opacity-100 transition-opacity">
+                <span
+                  className={`w-1.5 h-1.5 rounded-full transition-transform group-hover/item:scale-125 ${
+                    isDark
+                      ? 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.9)]'
+                      : 'bg-red-600 shadow-[0_0_4px_rgba(220,38,38,0.4)]'
+                  }`}
+                />
+                <span
+                  className={`text-[10px] font-mono font-black tracking-widest ${
+                    isDark ? 'text-neutral-600' : 'text-neutral-400'
+                  }`}
+                >
+                  ///
+                </span>
+              </span>
+            </div>
+          ))}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+
   return (
-    <div 
+    <div
       ref={containerRef}
-      style={{ opacity }} 
-      className={`overflow-hidden whitespace-nowrap ${
-        type === 'dark' ? 'bg-black text-white' : 'bg-white text-black'
-      } py-2 ${
-        border ? `border-y ${type === 'dark' ? 'border-white/10' : 'border-black/10'}` : ''
-      }`}
+      style={{ opacity }}
+      className={`group relative w-full overflow-hidden whitespace-nowrap py-3 md:py-3.5 select-none transition-colors ${
+        isDark
+          ? 'bg-[#060608] text-white'
+          : 'bg-white text-black shadow-[inset_0_1px_0_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.03)]'
+      } ${
+        border
+          ? `border-y ${isDark ? 'border-white/[0.08]' : 'border-neutral-200/90'}`
+          : ''
+      } ${className}`}
     >
-      <div 
-        className={`inline-block ${
-          direction === 'left' ? 'animate-marquee' : 'animate-marquee-reverse'
+      {/* Edge Gradient Vignettes for smooth cinematic fade-in/out */}
+      <div
+        className={`pointer-events-none absolute inset-y-0 left-0 w-16 md:w-28 z-10 ${
+          isDark
+            ? 'bg-gradient-to-r from-[#060608] to-transparent'
+            : 'bg-gradient-to-r from-white to-transparent'
         }`}
-        style={{ animationPlayState: isPaused ? 'paused' : 'running' }}
-      >
-        <span className="text-xl font-bold font-mono tracking-tighter mx-4">{text}</span>
-        <span className="text-xl font-bold font-mono tracking-tighter mx-4">{text}</span>
-        <span className="text-xl font-bold font-mono tracking-tighter mx-4">{text}</span>
-        <span className="text-xl font-bold font-mono tracking-tighter mx-4">{text}</span>
+      />
+      <div
+        className={`pointer-events-none absolute inset-y-0 right-0 w-16 md:w-28 z-10 ${
+          isDark
+            ? 'bg-gradient-to-l from-[#060608] to-transparent'
+            : 'bg-gradient-to-l from-white to-transparent'
+        }`}
+      />
+
+      {/* Dual-Track Perfect Infinite Loop (Zero Stutter / Seamless Hand-off) */}
+      <div className="flex w-max">
+        <div
+          className={direction === 'left' ? 'animate-marquee' : 'animate-marquee-reverse'}
+          style={{
+            animationDuration: `${speed}s`,
+            animationPlayState: isPaused ? 'paused' : undefined,
+          }}
+        >
+          {renderItemSequence('track-a')}
+        </div>
+        <div
+          className={direction === 'left' ? 'animate-marquee' : 'animate-marquee-reverse'}
+          style={{
+            animationDuration: `${speed}s`,
+            animationPlayState: isPaused ? 'paused' : undefined,
+          }}
+          aria-hidden="true"
+        >
+          {renderItemSequence('track-b')}
+        </div>
       </div>
     </div>
   );

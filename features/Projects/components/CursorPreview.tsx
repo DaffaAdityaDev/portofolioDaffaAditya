@@ -63,7 +63,7 @@ const CursorPreview: React.FC<CursorPreviewProps> = ({ hoveredProject }) => {
         scale: { duration: 0.2 },
       }}
     >
-      <div className="relative w-full h-full">
+      <div className="relative w-full h-full pointer-events-none select-none">
         {activeProject ? (
           <>
             <Image 
@@ -72,12 +72,13 @@ const CursorPreview: React.FC<CursorPreviewProps> = ({ hoveredProject }) => {
               fill
               sizes="300px"
               style={{ objectFit: 'cover' }}
+              className="pointer-events-none select-none"
             />
             
-            <div className="absolute inset-0 bg-black/30"></div>
+            <div className="absolute inset-0 bg-black/30 pointer-events-none" />
 
-            <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/90 to-transparent">
-              <span className="text-white text-[10px] font-mono tracking-widest uppercase">
+            <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/90 to-transparent pointer-events-none">
+              <span className="text-white text-[10px] font-mono tracking-widest uppercase pointer-events-none">
                 {activeProject.title}
               </span>
             </div>

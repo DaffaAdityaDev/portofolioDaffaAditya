@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { motion, useReducedMotion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Github, Linkedin, Mail } from 'lucide-react';
 import { siteConfig } from '@/config/metadata.config';
+import { SPRING_MOBILE_OS } from '@/constant/animations';
 
 interface NavItem {
   label: string;
@@ -188,6 +189,7 @@ const Navbar = () => {
                     href={item.path || `/#${item.id}`}
                     onClick={(e) => handleNavigation(e, item)}
                     onMouseEnter={() => setHoveredIndex(index)}
+                    data-cursor="merge"
                     className={`relative px-4 py-1.5 text-[10px] font-bold font-mono tracking-[0.15em] transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:outline-none rounded-full ${isActive ? 'text-white' : 'text-neutral-400 hover:text-white'}`}
                   >
                     {hoveredIndex === index && (
@@ -232,7 +234,8 @@ const Navbar = () => {
               <span className="h-4 w-px bg-white/[0.08] shrink-0" aria-hidden="true" />
               <Link
                 href="/resume"
-                className="relative px-5 py-2 overflow-hidden bg-white text-black font-extrabold font-mono text-[9px] rounded-full uppercase tracking-[0.2em] shadow-[0_8px_16px_-4px_rgba(255,255,255,0.25)] hover:bg-neutral-100 hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:outline-none transition-[transform,background-color,box-shadow] duration-200 whitespace-nowrap shrink-0"
+                data-cursor="merge"
+                className="relative px-5 py-2 overflow-hidden bg-white text-black font-extrabold font-mono text-[9px] rounded-full uppercase tracking-[0.2em] shadow-[0_8px_16px_-4px_rgba(255,255,255,0.25)] hover:bg-neutral-100 hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:outline-none transition-[transform,background-color,box-shadow] duration-200 whitespace-nowrap shrink-0 block"
               >
                 Resume
               </Link>
@@ -243,8 +246,10 @@ const Navbar = () => {
 
       {/* ================= MOBILE NAVBAR ================= */}
       <div className="fixed top-6 left-0 w-full md:hidden flex justify-center items-start z-[100] pointer-events-none h-0 px-4">
-        <div
-          className={`pointer-events-auto overflow-hidden relative flex flex-col justify-start items-center group ${transitionClass} ${isMobileMenuOpen
+        <motion.div
+          layout
+          transition={shouldReduceMotion ? { duration: 0.2 } : SPRING_MOBILE_OS}
+          className={`pointer-events-auto overflow-hidden relative flex flex-col justify-start items-center group ${isMobileMenuOpen
             ? 'w-[calc(100vw-2rem)] max-w-[384px] h-[310px] rounded-3xl'
             : 'w-[240px] h-[44px] rounded-full'
             }`}
@@ -341,7 +346,7 @@ const Navbar = () => {
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
+        </motion.div>
       </div>
     </>
   );

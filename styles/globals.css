@@ -194,30 +194,37 @@
 /* Marquee Animations */
 @keyframes marquee {
   0% {
-    transform: translateX(0);
+    transform: translateX(0%);
   }
 
   100% {
-    transform: translateX(-50%);
+    transform: translateX(-100%);
   }
 }
 
 @keyframes marquee-reverse {
   0% {
-    transform: translateX(-50%);
+    transform: translateX(-100%);
   }
 
   100% {
-    transform: translateX(0);
+    transform: translateX(0%);
   }
 }
 
 .animate-marquee {
-  animation: marquee 40s linear infinite;
+  animation: marquee 35s linear infinite;
+  will-change: transform;
 }
 
 .animate-marquee-reverse {
-  animation: marquee-reverse 40s linear infinite;
+  animation: marquee-reverse 35s linear infinite;
+  will-change: transform;
+}
+
+.group:hover .animate-marquee,
+.group:hover .animate-marquee-reverse {
+  animation-play-state: paused;
 }
 
 /* Card Border Trace Animation */
@@ -231,13 +238,17 @@
   height: calc(100% + 2px);
   pointer-events: none;
   overflow: visible;
+  border-radius: 0.75rem;
+  z-index: 20;
 }
 
 .border-trace-rect {
   fill: none;
-  stroke: var(--foreground);
-  stroke-opacity: 0.45;
+  stroke: #ffffff;
+  stroke-opacity: 0.85;
   stroke-width: 1.5px;
+  rx: 12px;
+  ry: 12px;
   stroke-dasharray: 100;
   stroke-dashoffset: 100;
   transition: stroke-dashoffset 0.7s cubic-bezier(0.4, 0, 0.2, 1);
@@ -253,8 +264,8 @@
   left: 0;
   right: 0;
   height: 1px;
-  background-color: var(--destructive);
-  opacity: 0.80;
+  background-color: #ffffff;
+  opacity: 0.65;
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);

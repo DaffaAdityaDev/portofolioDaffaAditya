@@ -3,6 +3,10 @@ import { ShieldCheck, CheckCircle2, UserCheck } from 'lucide-react';
 import { TESTIMONIALS } from '../constants';
 
 export const TrustSection: React.FC = () => {
+  // Temporarily hidden - testimonials not ready yet
+  const isEnabled = false;
+  if (!isEnabled) return null;
+
   return (
     <section aria-label="Trust & Testimonials" className="w-full grid grid-cols-1 lg:grid-cols-2 gap-[1px] bg-zinc-800 border-b border-zinc-800">
       

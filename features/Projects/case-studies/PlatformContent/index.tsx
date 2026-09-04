@@ -10,9 +10,16 @@ import { Chapter2 } from './Chapter2';
 import { Chapter3 } from './Chapter3';
 import { Chapter4 } from './Chapter4';
 
+interface ScreenItem {
+  id: string;
+  type: string;
+  label: string;
+  config: Record<string, any>;
+}
+
 const PlatformContent: React.FC = () => {
   // --- State untuk Screen Builder ---
-  const [screenComponents, setScreenComponents] = useState(INITIAL_COMPONENTS);
+  const [screenComponents, setScreenComponents] = useState<ScreenItem[]>(INITIAL_COMPONENTS);
 
   // --- State untuk Database ---
   const [dbSchemas, setDbSchemas] = useState(INITIAL_DB_SCHEMAS);
