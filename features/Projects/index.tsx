@@ -35,14 +35,14 @@ const Projects = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
-        className="relative py-20 px-6 lg:px-20 border-t border-neutral-800 pr-12 md:pr-24"
+        className="relative py-10 md:py-20 px-4 sm:px-6 lg:px-20 border-t border-neutral-800 scroll-mt-20"
       >
         {/* Markers for the parent SVG */}
         <div id="projects-timeline-start" className="absolute right-[15px] md:right-[31px] top-0 w-1 h-1 pointer-events-none" />
         <div id="projects-timeline-end" className="absolute right-[15px] md:right-[31px] bottom-0 w-1 h-1 pointer-events-none" />
 
-        <div className="relative z-20">
-          <motion.div variants={FADE_IN_UP_ITEM} className="flex flex-col md:flex-row md:items-end justify-between mb-8 border-b border-zinc-800 pb-4 gap-4">
+        <div className="relative z-20 max-w-7xl mx-auto w-full">
+          <motion.div variants={FADE_IN_UP_ITEM} className="flex flex-col md:flex-row md:items-end justify-between mb-5 md:mb-8 border-b border-zinc-800 pb-3 md:pb-4 gap-4">
             <div>
               <h1 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight">Featured Projects</h1>
             </div>

@@ -18,10 +18,10 @@ const TechStack = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
-        className="mx-auto px-6 mb-32 border-t border-neutral-800 pt-20 relative"
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-20 mb-12 md:mb-32 border-t border-neutral-800 py-10 md:pt-20 relative scroll-mt-20"
       >
-        <div className="relative z-20">
-          <motion.div variants={FADE_IN_UP_ITEM} className="flex justify-between items-end mb-16 border-b border-zinc-800 pb-4">
+        <div className="relative z-20 w-full">
+          <motion.div variants={FADE_IN_UP_ITEM} className="flex justify-between items-end mb-6 md:mb-16 border-b border-zinc-800 pb-3 md:pb-4">
             <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight flex items-center gap-4">
               Tech Stack & Specs
             </h2>

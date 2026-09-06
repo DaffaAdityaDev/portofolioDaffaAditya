@@ -16,13 +16,13 @@ const Experience = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
-        className="relative py-20 px-6 lg:px-20 border-t border-zinc-800"
+        className="relative py-10 md:py-20 px-4 sm:px-6 lg:px-20 border-t border-zinc-800 scroll-mt-20"
       >
         <div className="relative z-20 max-w-7xl mx-auto">
           {/* Section Header matching Projects and TechStack */}
           <motion.div 
             variants={FADE_IN_UP_ITEM} 
-            className="flex flex-col md:flex-row md:items-end justify-between mb-12 pb-4 border-b border-zinc-800 gap-4"
+            className="flex flex-col md:flex-row md:items-end justify-between mb-6 md:mb-12 pb-3 md:pb-4 border-b border-zinc-800 gap-4"
           >
             <div>
               <div className="text-xs font-mono text-zinc-500 mb-1 tracking-widest uppercase">

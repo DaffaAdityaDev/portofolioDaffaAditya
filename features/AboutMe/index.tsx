@@ -163,11 +163,11 @@ const AboutMe = memo(() => {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-100px" }}
-      className="relative py-20 px-6 lg:px-20 border-t border-neutral-800 bg-transparent overflow-hidden"
+      className="relative py-10 md:py-20 px-4 sm:px-6 lg:px-20 border-t border-neutral-800 bg-transparent overflow-hidden scroll-mt-20"
     >
       <motion.div
         variants={headingVariants}
-        className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-zinc-800 pb-4 gap-4"
+        className="flex flex-col md:flex-row md:items-end justify-between mb-6 md:mb-12 border-b border-zinc-800 pb-3 md:pb-4 gap-4"
       >
         <div>
           <h2 className="text-sm font-mono text-zinc-500 mb-2">/// SECTION_01</h2>
@@ -175,7 +175,7 @@ const AboutMe = memo(() => {
         </div>
       </motion.div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-12 lg:gap-8">
         {/* Profile Image Column */}
         <motion.div
           variants={imageContainerVariants}

@@ -37,7 +37,7 @@ const Contact = () => {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-100px" }}
-      className="relative py-20 px-6 lg:px-20 border-t border-neutral-800"
+      className="relative py-10 md:py-20 px-4 sm:px-6 lg:px-20 border-t border-neutral-800 scroll-mt-20"
     >
       {/* Markers for the parent SVG */}
       <div id="contact-timeline-start" className="absolute left-[15px] md:left-[31px] top-0 w-1 h-1 pointer-events-none" />
@@ -45,7 +45,7 @@ const Contact = () => {
       
       <div className="max-w-4xl mx-auto text-center relative z-20">
         
-        <motion.div variants={FADE_IN_UP_ITEM} className="mb-12">
+        <motion.div variants={FADE_IN_UP_ITEM} className="mb-6 md:mb-12">
           <h2 className="text-4xl lg:text-6xl font-black tracking-tighter uppercase mb-6 text-white">LET'S WORK TOGETHER</h2>
           <p className="text-neutral-300 text-lg max-w-2xl mx-auto font-sans leading-relaxed">
             Currently available for full-time software engineering roles and select freelance opportunities.

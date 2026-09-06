@@ -112,7 +112,7 @@ const Footer = () => {
           </div>
 
           {/* Middle Navigation Grid */}
-          <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-6 py-4">
+          <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 py-4">
             {/* Col 1: Status & Scope */}
             <div className="space-y-2">
               <span className="text-[11px] font-mono text-neutral-200 uppercase tracking-widest block font-bold">
@@ -196,18 +196,18 @@ const Footer = () => {
               <span className="text-[11px] font-mono text-neutral-200 uppercase tracking-widest block font-bold">
                 SYSTEM SPEC
               </span>
-              <div className="space-y-1 text-xs font-mono text-neutral-300">
-                <div className="flex justify-between border-b border-neutral-800/80 pb-1">
-                  <span className="text-neutral-300 font-semibold">FRAMEWORK</span>
-                  <span className="text-white font-medium">Next.js 16</span>
+              <div className="space-y-1.5 text-xs font-mono text-neutral-300">
+                <div className="flex items-center justify-between gap-2 border-b border-neutral-800/80 pb-1">
+                  <span className="text-neutral-400 font-medium text-[10px] sm:text-[11px]">FRAMEWORK</span>
+                  <span className="text-white font-medium text-right text-[11px] sm:text-xs whitespace-nowrap">Next.js 16</span>
                 </div>
-                <div className="flex justify-between border-b border-neutral-800/80 pb-1">
-                  <span className="text-neutral-300 font-semibold">BUNDLER</span>
-                  <span className="text-white font-medium">Turbopack</span>
+                <div className="flex items-center justify-between gap-2 border-b border-neutral-800/80 pb-1">
+                  <span className="text-neutral-400 font-medium text-[10px] sm:text-[11px]">BUNDLER</span>
+                  <span className="text-white font-medium text-right text-[11px] sm:text-xs whitespace-nowrap">Turbopack</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-neutral-300 font-semibold">ANIMATIONS</span>
-                  <span className="text-white font-medium">Motion for React</span>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-neutral-400 font-medium text-[10px] sm:text-[11px]">ANIMATION</span>
+                  <span className="text-white font-medium text-right text-[11px] sm:text-xs whitespace-nowrap">Framer Motion</span>
                 </div>
               </div>
             </div>
