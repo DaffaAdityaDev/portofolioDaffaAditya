@@ -343,26 +343,31 @@ const Navbar = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="flex items-center justify-between w-full h-full px-4 pointer-events-auto absolute inset-0"
+                onClick={() => setIsMobileMenuOpen(true)}
+                role="button"
+                tabIndex={0}
+                aria-label="Open navigation menu"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setIsMobileMenuOpen(true);
+                  }
+                }}
+                className="flex items-center justify-between w-full h-full px-4 pointer-events-auto absolute inset-0 cursor-pointer select-none active:scale-[0.98] transition-transform"
               >
-                <Link
-                  href="/"
-                  className="font-sans font-black text-xs tracking-[0.2em] text-white uppercase rounded px-1.5 py-0.5 focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:outline-none"
-                >
-                  DA
-                </Link>
+                <div className="flex items-center gap-2">
+                  <span className="font-sans font-black text-xs tracking-[0.2em] text-white uppercase rounded px-1.5 py-0.5">
+                    DA
+                  </span>
+                </div>
                 <div className="flex items-center gap-3">
                   <div className="relative flex items-center justify-center w-2 h-2">
                     <span className="absolute w-2.5 h-2.5 rounded-full bg-emerald-500/30 animate-ping" />
                     <span className="relative w-1.5 h-1.5 rounded-full bg-emerald-500" />
                   </div>
-                  <button
-                    onClick={() => setIsMobileMenuOpen(true)}
-                    className="text-neutral-400 hover:text-white rounded p-1 cursor-pointer focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:outline-none transition-colors duration-200"
-                    aria-label="Open navigation menu"
-                  >
+                  <div className="text-neutral-400 group-hover:text-white rounded p-1 transition-colors duration-200">
                     <Menu size={16} />
-                  </button>
+                  </div>
                 </div>
               </motion.div>
             )}

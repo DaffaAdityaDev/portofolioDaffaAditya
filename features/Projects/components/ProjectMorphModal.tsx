@@ -160,15 +160,18 @@ export const ProjectMorphModal: React.FC<ProjectMorphModalProps> = ({ project, o
                 href={project.liveLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-black font-extrabold font-mono text-xs uppercase tracking-wider hover:bg-neutral-200 transition-transform active:scale-95 shadow-lg shadow-white/10"
+                data-cursor="merge"
+                className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-black font-extrabold font-mono text-xs uppercase tracking-wider hover:bg-neutral-200 transition-all active:scale-95 shadow-lg shadow-white/10"
               >
-                <span>Launch Live System</span>
-                <ExternalLink size={14} />
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Visit Site</span>
+                <ExternalLink size={13} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </a>
             )}
 
             <button
               onClick={onClose}
+              data-cursor="merge"
               className="ml-auto px-4 py-2.5 text-xs font-mono text-neutral-400 hover:text-white uppercase transition-colors cursor-pointer"
             >
               Close
