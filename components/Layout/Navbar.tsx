@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { motion, useReducedMotion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Github, Linkedin, Mail } from 'lucide-react';
+import { Menu, X, Github, Linkedin, Mail, ArrowUpRight } from 'lucide-react';
 import { siteConfig } from '@/config/metadata.config';
 import { SPRING_MOBILE_OS } from '@/constant/animations';
 
@@ -61,6 +61,9 @@ const Navbar = () => {
     ? ''
     : 'transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]';
 
+  const activeIndex = navItems.findIndex(checkActive);
+  const currentPillIndex = hoveredIndex !== null ? hoveredIndex : activeIndex;
+
   return (
     <>
       {/* ================= DESKTOP NAVBAR ================= */}
@@ -68,17 +71,17 @@ const Navbar = () => {
         <div
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => { setIsHovered(false); setHoveredIndex(null); }}
-          className={`pointer-events-auto relative flex items-center justify-center rounded-full group ${transitionClass} ${isExpanded ? 'h-14 px-6 gap-6' : 'h-11 px-4 gap-3'
+          className={`pointer-events-auto relative flex items-center justify-center rounded-full group ${transitionClass} ${isExpanded ? 'h-[52px] px-6 gap-5' : 'h-11 px-4 gap-3'
             } ${isSocialOpen ? 'overflow-visible' : 'overflow-hidden'}`}
         >
-          {/* Background Layer with heavy filters */}
-          <div className="absolute inset-0 bg-[#0a0a0c]/85 backdrop-blur-2xl border border-white/[0.08] shadow-[0_24px_50px_rgba(0,0,0,0.8),_inset_0_1px_1px_rgba(255,255,255,0.08)] group-hover:shadow-[0_24px_50px_rgba(0,0,0,0.9),_0_0_20px_rgba(255,255,255,0.02),_inset_0_1px_1px_rgba(255,255,255,0.12)] rounded-full -z-10 pointer-events-none transition-shadow duration-300" />
+          {/* Multi-layered Obsidian Glassmorphic Shell */}
+          <div className="absolute inset-0 bg-[#08080a]/90 backdrop-blur-2xl border border-white/[0.08] shadow-[0_20px_45px_rgba(0,0,0,0.85),_inset_0_1px_0_rgba(255,255,255,0.15),_inset_0_-1px_0_rgba(0,0,0,0.5)] group-hover:shadow-[0_24px_55px_rgba(0,0,0,0.95),_0_0_20px_rgba(255,255,255,0.03),_inset_0_1px_0_rgba(255,255,255,0.22)] rounded-full -z-10 pointer-events-none transition-all duration-300" />
 
           <div
-            className={`flex items-center justify-center whitespace-nowrap pointer-events-auto ${transitionClass} ${isExpanded ? 'gap-6' : 'gap-3'
+            className={`flex items-center justify-center whitespace-nowrap pointer-events-auto ${transitionClass} ${isExpanded ? 'gap-5' : 'gap-3'
               }`}
           >
-            {/* Logo */}
+            {/* Logo & Brand Identity */}
             <Link
               href="/"
               onClick={(e) => {
@@ -93,7 +96,7 @@ const Navbar = () => {
               }}
               className="group/logo font-sans font-black text-xs tracking-[0.2em] text-white transition-colors duration-200 uppercase focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:outline-none rounded px-1.5 py-0.5 flex items-center gap-1.5"
             >
-              <span className="relative flex items-center h-5">
+              <span className="relative flex items-center h-6">
                 <span>D</span>
                 <span
                   className={`${transitionClass} overflow-hidden flex items-center whitespace-nowrap ${isExpanded ? 'max-w-[200px] opacity-100 ml-0.5' : 'max-w-0 opacity-0 ml-0'
@@ -108,30 +111,43 @@ const Navbar = () => {
                   A
                 </span>
                 <span
-                  className={`text-[8px] font-mono font-medium text-neutral-500 tracking-[0.1em] transition-colors duration-200 group-hover/logo:text-neutral-400 whitespace-nowrap overflow-hidden ${transitionClass} ${isExpanded ? 'max-w-[120px] opacity-100 ml-1.5' : 'max-w-0 opacity-0 ml-0'
+                  className={`text-[8.5px] font-mono font-medium text-neutral-400 tracking-[0.1em] transition-colors duration-200 group-hover/logo:text-neutral-300 whitespace-nowrap overflow-hidden flex items-center ${transitionClass} ${isExpanded ? 'max-w-[260px] opacity-100 ml-1.5' : 'max-w-0 opacity-0 ml-0'
                     }`}
                 >
                   // PORTFOLIO
+                  <span className="inline-flex items-center gap-1.5 pl-2 ml-1.5 border-l border-white/[0.1]">
+                    <span className="relative flex items-center justify-center w-2.5 h-2.5 shrink-0">
+                      <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-emerald-400/50" />
+                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.85)]" />
+                    </span>
+                    <span className="text-[8px] font-mono text-emerald-400 font-bold tracking-wider">
+                      AVAILABLE
+                    </span>
+                  </span>
                 </span>
               </span>
             </Link>
 
             {/* Divider 1 */}
             <span
-              className={`h-4 bg-white/[0.08] shrink-0 ${transitionClass} ${isExpanded ? 'w-px opacity-100' : 'w-0 opacity-0 pointer-events-none'
+              className={`h-4 bg-white/[0.1] shrink-0 ${transitionClass} ${isExpanded ? 'w-px opacity-100' : 'w-0 opacity-0 pointer-events-none overflow-hidden'
                 }`}
               aria-hidden="true"
             />
 
-            {/* Middle Section (Nav Menu) */}
+            {/* Middle Section (Nav Menu with Unified Sliding Glass Pill) - Hidden on scroll */}
             <nav
-              className={`flex items-center gap-1.5 relative px-1 py-0.5 whitespace-nowrap ${transitionClass} ${isExpanded ? 'max-w-[400px] opacity-100 pointer-events-auto' : 'max-w-0 opacity-0 pointer-events-none'
+              className={`flex items-center gap-1 relative px-1 py-0.5 whitespace-nowrap ${transitionClass} ${isExpanded
+                  ? 'max-w-[380px] opacity-100 pointer-events-auto'
+                  : 'max-w-0 opacity-0 pointer-events-none overflow-hidden'
                 } ${isSocialOpen ? 'overflow-visible' : 'overflow-hidden'}`}
               onMouseLeave={() => setHoveredIndex(null)}
               aria-label="Desktop navigation"
             >
               {navItems.map((item, index) => {
                 const isActive = checkActive(item);
+                const isPillActive = currentPillIndex === index;
+
                 if (item.label === 'SOCIALS') {
                   return (
                     <div
@@ -146,13 +162,14 @@ const Navbar = () => {
                       }}
                     >
                       <button
-                        className={`relative px-4 py-1.5 text-[10px] font-bold font-mono tracking-[0.15em] transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:outline-none rounded-full ${isSocialOpen ? 'text-white' : 'text-neutral-400 hover:text-white'} cursor-pointer`}
+                        className={`relative px-3.5 py-1.5 text-[10px] font-bold font-mono tracking-[0.15em] transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:outline-none rounded-full ${isSocialOpen || isActive ? 'text-white' : 'text-neutral-400 hover:text-white'
+                          } cursor-pointer`}
                       >
-                        {hoveredIndex === index && (
+                        {isPillActive && (
                           <motion.span
-                            layoutId="nav-hover-pill"
-                            className="absolute inset-0 bg-white/[0.05] border border-white/[0.08] rounded-full -z-10 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]"
-                            transition={{ type: "spring", stiffness: 450, damping: 32 }}
+                            layoutId="nav-glass-pill"
+                            className="absolute inset-0 bg-white/[0.08] border border-white/[0.12] rounded-full -z-10 shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_2px_8px_rgba(0,0,0,0.3)]"
+                            transition={{ type: "spring", stiffness: 420, damping: 30 }}
                           />
                         )}
                         <span className="relative z-10">{item.label}</span>
@@ -160,21 +177,21 @@ const Navbar = () => {
                       <AnimatePresence>
                         {isSocialOpen && (
                           <motion.div
-                            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                            initial={{ opacity: 0, y: 8, scale: 0.96 }}
                             animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                            transition={{ duration: 0.15, ease: "easeOut" }}
-                            className="absolute top-[38px] left-1/2 -translate-x-1/2 bg-[#0a0a0c]/90 backdrop-blur-2xl border border-white/[0.08] rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.6)] p-3 flex flex-col gap-1.5 min-w-[140px] z-50 pointer-events-auto before:content-[''] before:absolute before:-top-5 before:left-0 before:w-full before:h-5 before:bg-transparent"
+                            exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                            transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
+                            className="absolute top-[40px] left-1/2 -translate-x-1/2 bg-[#08080a]/95 backdrop-blur-2xl border border-white/[0.1] rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.8),_inset_0_1px_0_rgba(255,255,255,0.15)] p-2.5 flex flex-col gap-1 min-w-[145px] z-50 pointer-events-auto before:content-[''] before:absolute before:-top-5 before:left-0 before:w-full before:h-5 before:bg-transparent"
                           >
                             {socialLinks.map(({ label, href, Icon, external }) => (
                               <a
                                 key={label}
                                 href={href}
                                 {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                                className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-neutral-400 hover:text-white hover:bg-white/[0.06] transition-all duration-200 text-[10px] font-mono font-bold tracking-wider"
+                                className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-neutral-400 hover:text-white hover:bg-white/[0.08] transition-all duration-150 text-[10px] font-mono font-bold tracking-wider"
                               >
-                                <Icon size={14} className="shrink-0" />
-                                {label}
+                                <Icon size={13} className="shrink-0 text-neutral-300" />
+                                <span>{label}</span>
                               </a>
                             ))}
                           </motion.div>
@@ -190,19 +207,20 @@ const Navbar = () => {
                     onClick={(e) => handleNavigation(e, item)}
                     onMouseEnter={() => setHoveredIndex(index)}
                     data-cursor="merge"
-                    className={`relative px-4 py-1.5 text-[10px] font-bold font-mono tracking-[0.15em] transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:outline-none rounded-full ${isActive ? 'text-white' : 'text-neutral-400 hover:text-white'}`}
+                    className={`relative px-3.5 py-1.5 text-[10px] font-bold font-mono tracking-[0.15em] transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:outline-none rounded-full ${isActive ? 'text-white' : 'text-neutral-400 hover:text-white'
+                      }`}
                   >
-                    {hoveredIndex === index && (
+                    {isPillActive && (
                       <motion.span
-                        layoutId="nav-hover-pill"
-                        className="absolute inset-0 bg-white/[0.05] border border-white/[0.08] rounded-full -z-10 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]"
-                        transition={{ type: "spring", stiffness: 450, damping: 32 }}
+                        layoutId="nav-glass-pill"
+                        className="absolute inset-0 bg-white/[0.08] border border-white/[0.12] rounded-full -z-10 shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_2px_8px_rgba(0,0,0,0.3)]"
+                        transition={{ type: "spring", stiffness: 420, damping: 30 }}
                       />
                     )}
                     {isActive && (
                       <motion.span
-                        layoutId="active-nav-dot"
-                        className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]"
+                        layoutId="active-dot-glow"
+                        className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.9)]"
                         transition={{ type: "spring", stiffness: 350, damping: 28 }}
                       />
                     )}
@@ -212,32 +230,35 @@ const Navbar = () => {
               })}
             </nav>
 
-            {/* Status Pill */}
+            {/* Status Pill (Visible ONLY when collapsed on scroll) */}
             <div
-              className={`flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-950/20 border border-emerald-500/20 shadow-[0_0_10px_rgba(16,185,129,0.05)] overflow-hidden whitespace-nowrap shrink-0 ${transitionClass} ${!isExpanded ? 'max-w-[150px] opacity-100 pointer-events-auto' : 'max-w-0 opacity-0 pointer-events-none'
+              className={`flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/30 border border-emerald-500/25 shadow-[0_0_12px_rgba(16,185,129,0.1)] overflow-hidden whitespace-nowrap shrink-0 ${transitionClass} ${!isExpanded ? 'max-w-[160px] opacity-100 pointer-events-auto' : 'max-w-0 opacity-0 pointer-events-none'
                 }`}
             >
-              <div className="relative flex items-center justify-center w-2 h-2 shrink-0">
-                <span className="absolute w-2.5 h-2.5 rounded-full bg-emerald-500/30 animate-ping" />
-                <span className="relative w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              <div className="relative flex items-center justify-center w-2.5 h-2.5 shrink-0">
+                <span className="absolute w-2 h-2 rounded-full bg-emerald-500/40 animate-ping" />
+                <span className="relative w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.85)]" />
               </div>
-              <span className="text-[8px] font-bold font-mono text-emerald-400 tracking-[0.25em] uppercase">
+              <span className="text-[8px] font-bold font-mono text-emerald-400 tracking-[0.2em] uppercase">
                 AVAILABLE
               </span>
             </div>
 
-            {/* Right Section (Resume Button) */}
+            {/* Right Section (Resume Button - Visible when expanded) */}
             <div
-              className={`flex items-center overflow-hidden whitespace-nowrap ${transitionClass} ${isExpanded ? 'max-w-[150px] opacity-100 pointer-events-auto gap-6' : 'max-w-0 opacity-0 pointer-events-none gap-0'
+              className={`flex items-center overflow-hidden whitespace-nowrap ${transitionClass} ${isExpanded ? 'max-w-[160px] opacity-100 pointer-events-auto gap-4' : 'max-w-0 opacity-0 pointer-events-none gap-0'
                 }`}
             >
-              <span className="h-4 w-px bg-white/[0.08] shrink-0" aria-hidden="true" />
+              <span className="h-4 w-px bg-white/[0.1] shrink-0" aria-hidden="true" />
               <Link
                 href="/resume"
                 data-cursor="merge"
-                className="relative px-5 py-2 overflow-hidden bg-white text-black font-extrabold font-mono text-[9px] rounded-full uppercase tracking-[0.2em] shadow-[0_8px_16px_-4px_rgba(255,255,255,0.25)] hover:bg-neutral-100 hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:outline-none transition-[transform,background-color,box-shadow] duration-200 whitespace-nowrap shrink-0 block"
+                className="group/resume relative px-4 py-1.5 overflow-hidden bg-white text-black font-extrabold font-mono text-[9px] rounded-full uppercase tracking-[0.18em] shadow-[0_8px_20px_-4px_rgba(255,255,255,0.3)] hover:shadow-[0_10px_25px_-2px_rgba(255,255,255,0.5)] hover:scale-[1.03] active:scale-95 transition-all duration-200 whitespace-nowrap shrink-0 flex items-center gap-1"
               >
-                Resume
+                {/* Micro Light Sweep Shimmer on Hover */}
+                <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover/resume:translate-x-full transition-transform duration-700 ease-out pointer-events-none" />
+                <span className="relative z-10">Resume</span>
+                <ArrowUpRight size={11} className="relative z-10 transition-transform duration-200 group-hover/resume:translate-x-0.5 group-hover/resume:-translate-y-0.5" />
               </Link>
             </div>
           </div>

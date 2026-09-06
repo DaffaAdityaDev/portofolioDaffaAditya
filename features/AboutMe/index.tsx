@@ -1,15 +1,30 @@
 import React, { memo } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { projectsData } from '@/features/Projects/constants';
+import { diagnosticStack } from '@/features/TechStack/constants';
 
 // Premium Custom Bezier Ease (Expo Out style)
 const EASING = [0.16, 1, 0.3, 1] as const;
 
-// Static configuration for stats grid to prevent allocation on every render
+// Virtual Career Start Date: Accumulated professional engineering experience (synced with BentoGrid)
+const CAREER_START_DATE = new Date('2023-03-01T00:00:00');
+const calculatedYears = Math.floor(
+  (new Date().getTime() - CAREER_START_DATE.getTime()) / (1000 * 60 * 60 * 24 * 365.25)
+);
+
+// Dynamic calculations computed at SSG build time to keep the page completely static & SEO-optimized
+const rawTechStacks = diagnosticStack.reduce(
+  (acc, module) => acc + (module.processes?.length || 0),
+  0
+);
+// Clean rounded milestone benchmark (e.g., 41/42 -> 40+)
+const roundedTechStacks = Math.floor(rawTechStacks / 5) * 5;
+
 const STATS = [
-  { val: "3+", label: "Years Exp" },
-  { val: "6+", label: "Projects" },
-  { val: "5+", label: "Tech Stacks" },
+  { val: `${Math.max(1, calculatedYears)}+`, label: "Years Exp" },
+  { val: `${projectsData.length}+`, label: "Projects" },
+  { val: `${roundedTechStacks}+`, label: "Tech Stacks" },
   { val: "100+", label: "Cup of Coffee" }
 ] as const;
 

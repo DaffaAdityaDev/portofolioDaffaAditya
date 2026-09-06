@@ -1,65 +1,131 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import React, { useEffect, useRef } from 'react';
 
+/**
+ * CustomCursor - High-performance custom cursor with zero React state re-rendering.
+ * Direct DOM updates via hardware-accelerated transform: translate3d eliminate
+ * input lag and micro-stuttering on high-refresh-rate (60Hz–240Hz+) monitors.
+ */
 export const CustomCursor: React.FC = () => {
-  const [isAbsorbed, setIsAbsorbed] = useState(false);
-  const [isClicking, setIsClicking] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-  const [hasMoved, setHasMoved] = useState(false);
-  const prevAbsorbedRef = useRef(false);
+  const dotRef = useRef<HTMLDivElement | null>(null);
+  const ringRef = useRef<HTMLDivElement | null>(null);
+  const ringVisualRef = useRef<HTMLDivElement | null>(null);
+  const dotVisualRef = useRef<HTMLDivElement | null>(null);
 
-  // Raw mouse coordinates
-  const mouseX = useMotionValue(-100);
-  const mouseY = useMotionValue(-100);
-
-  // Spring physics: responsive tracking with elastic detachment
-  const springConfig = { stiffness: 480, damping: 26, mass: 0.35 };
-  const smoothX = useSpring(mouseX, springConfig);
-  const smoothY = useSpring(mouseY, springConfig);
   useEffect(() => {
+    // Only mount on desktop / fine pointer devices (mouse / trackpad)
+    if (typeof window === 'undefined') return;
+    const mediaQuery = window.matchMedia('(pointer: fine)');
+    if (!mediaQuery.matches) return;
+
     let rafId: number | null = null;
+    let targetX = -100;
+    let targetY = -100;
+    let ringX = -100;
+    let ringY = -100;
+    let isVisible = false;
+    let isAbsorbed = false;
+    let isClicking = false;
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const clientX = e.clientX;
-      const clientY = e.clientY;
-      const target = e.target as HTMLElement | null;
+    // Direct DOM styling helper — 0 React re-renders during mouse interaction
+    const updateVisualStates = () => {
+      if (!ringVisualRef.current || !dotVisualRef.current) return;
 
-      if (rafId) cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(() => {
-        mouseX.set(clientX);
-        mouseY.set(clientY);
-        if (!hasMoved) setHasMoved(true);
-        if (!isVisible) setIsVisible(true);
+      if (!isVisible) {
+        ringVisualRef.current.style.opacity = '0';
+        dotVisualRef.current.style.opacity = '0';
+        return;
+      }
 
-        if (!target) {
-          setIsAbsorbed(false);
-          return;
-        }
+      // Dot styles (5px crisp center core, inverts via mix-blend-difference)
+      dotVisualRef.current.style.opacity = '1';
+      dotVisualRef.current.style.transform = isClicking
+        ? 'translate(-50%, -50%) scale(1.4)'
+        : 'translate(-50%, -50%) scale(1)';
 
-        // Universal Absorption Target Detection across all pages and components
-        const interactiveElement = target.closest<HTMLElement>(
-          'button, [role="button"], a, input, textarea, select, [data-cursor], .cursor-pointer, [tabindex="0"], summary'
-        );
-
-        const shouldAbsorb = Boolean(interactiveElement);
-        if (shouldAbsorb !== prevAbsorbedRef.current) {
-          prevAbsorbedRef.current = shouldAbsorb;
-          setIsAbsorbed(shouldAbsorb);
-        }
-      });
+      // Outer Ring styles
+      if (isAbsorbed) {
+        // Snappy absorption into interactive elements
+        ringVisualRef.current.style.opacity = '0';
+        ringVisualRef.current.style.transform = 'translate(-50%, -50%) scale(0)';
+      } else if (isClicking) {
+        // Tactile compression feedback on click
+        ringVisualRef.current.style.opacity = '1';
+        ringVisualRef.current.style.transform = 'translate(-50%, -50%) scale(0.7)';
+        ringVisualRef.current.style.backgroundColor = 'rgba(255, 255, 255, 0.25)';
+        ringVisualRef.current.style.borderColor = '#ffffff';
+      } else {
+        // Default floating halo
+        ringVisualRef.current.style.opacity = '1';
+        ringVisualRef.current.style.transform = 'translate(-50%, -50%) scale(1)';
+        ringVisualRef.current.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+        ringVisualRef.current.style.borderColor = '#ffffff';
+      }
     };
 
-    const handleMouseDown = () => setIsClicking(true);
-    const handleMouseUp = () => setIsClicking(false);
+    // Smooth RAF physics interpolation for trailing ring
+    const renderLoop = () => {
+      // Lerp speed factor: 0.20 provides high tracking speed with smooth fluid detachment
+      ringX += (targetX - ringX) * 0.2;
+      ringY += (targetY - ringY) * 0.2;
+
+      if (ringRef.current) {
+        ringRef.current.style.transform = `translate3d(${ringX}px, ${ringY}px, 0)`;
+      }
+
+      rafId = requestAnimationFrame(renderLoop);
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      targetX = e.clientX;
+      targetY = e.clientY;
+
+      if (!isVisible) {
+        isVisible = true;
+        ringX = targetX;
+        ringY = targetY;
+        updateVisualStates();
+      }
+
+      // Hardware 1:1 instantaneous tracking for focal dot (0ms latency)
+      if (dotRef.current) {
+        dotRef.current.style.transform = `translate3d(${targetX}px, ${targetY}px, 0)`;
+      }
+
+      // Universal Absorption Target Detection across all pages and components
+      const target = e.target as HTMLElement | null;
+      const interactive = target
+        ? Boolean(
+            target.closest(
+              'button, [role="button"], a, input, textarea, select, [data-cursor], .cursor-pointer, [tabindex="0"], summary'
+            )
+          )
+        : false;
+
+      if (interactive !== isAbsorbed) {
+        isAbsorbed = interactive;
+        updateVisualStates();
+      }
+    };
+
+    const handleMouseDown = () => {
+      isClicking = true;
+      updateVisualStates();
+    };
+
+    const handleMouseUp = () => {
+      isClicking = false;
+      updateVisualStates();
+    };
 
     const handleMouseLeave = () => {
-      setIsVisible(false);
-      setIsAbsorbed(false);
-      prevAbsorbedRef.current = false;
+      isVisible = false;
+      isAbsorbed = false;
+      updateVisualStates();
     };
 
     const handleMouseEnter = () => {
-      setIsVisible(true);
+      isVisible = true;
+      updateVisualStates();
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
@@ -67,6 +133,8 @@ export const CustomCursor: React.FC = () => {
     window.addEventListener('mouseup', handleMouseUp);
     document.addEventListener('mouseleave', handleMouseLeave);
     document.addEventListener('mouseenter', handleMouseEnter);
+
+    rafId = requestAnimationFrame(renderLoop);
 
     return () => {
       if (rafId) cancelAnimationFrame(rafId);
@@ -76,62 +144,47 @@ export const CustomCursor: React.FC = () => {
       document.removeEventListener('mouseleave', handleMouseLeave);
       document.removeEventListener('mouseenter', handleMouseEnter);
     };
-  }, [mouseX, mouseY, isVisible, hasMoved]);
-
-  if (!hasMoved) return null;
+  }, []);
 
   return (
-    <>
-      {/* Substantial Outer Ring (Bold 2px border, clean contrast) */}
-      <motion.div
-        className="fixed top-0 left-0 pointer-events-none select-none z-[99999] rounded-full -translate-x-1/2 -translate-y-1/2"
-        style={{
-          x: smoothX,
-          y: smoothY,
-        }}
-        animate={{
-          width: 32,
-          height: 32,
-          scale: !isVisible ? 0 : isAbsorbed ? 0 : isClicking ? 0.7 : 1,
-          opacity: !isVisible ? 0 : isAbsorbed ? 0 : isClicking ? 1 : 0.85,
-          backgroundColor: isClicking ? 'rgba(255, 255, 255, 0.25)' : 'rgba(255, 255, 255, 0.08)',
-          borderColor: 'rgba(255, 255, 255, 0.9)',
-          borderWidth: '2px',
-          boxShadow: isClicking
-            ? '0 0 16px rgba(255, 255, 255, 0.45)'
-            : '0 0 10px rgba(255, 255, 255, 0.2), inset 0 0 6px rgba(255, 255, 255, 0.1)',
-        }}
-        transition={{
-          type: 'spring',
-          stiffness: isAbsorbed ? 550 : 380, // Snappy entry absorption
-          damping: isAbsorbed ? 30 : 20,      // Elastic overshoot bounce on exit ("when leave it leave")
-          mass: 0.35,
-        }}
-      />
+    <div className="pointer-events-none select-none">
+      {/* Substantial Outer Ring (Smooth trailing physics, background-aware inversion) */}
+      <div
+        ref={ringRef}
+        className="fixed top-0 left-0 pointer-events-none select-none z-[99999] will-change-transform mix-blend-difference"
+        style={{ transform: 'translate3d(-100px, -100px, 0)' }}
+      >
+        <div
+          ref={ringVisualRef}
+          className="w-8 h-8 rounded-full border-2 border-white bg-white/5"
+          style={{
+            transform: 'translate(-50%, -50%) scale(0)',
+            opacity: 0,
+            transition:
+              'transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.15s ease, background-color 0.15s ease, border-color 0.15s ease',
+          }}
+        />
+      </div>
 
-      {/* Solid Center Focal Dot (Crisp 5px core) */}
-      <motion.div
-        className="fixed top-0 left-0 pointer-events-none select-none z-[100000] rounded-full -translate-x-1/2 -translate-y-1/2"
-        style={{
-          x: mouseX,
-          y: mouseY,
-        }}
-        animate={{
-          width: 5,
-          height: 5,
-          scale: !isVisible ? 0 : isClicking ? 1.4 : 1,
-          opacity: !isVisible ? 0 : 1,
-          backgroundColor: '#ffffff',
-          boxShadow: '0 0 8px rgba(255, 255, 255, 0.8)',
-        }}
-        transition={{
-          type: 'spring',
-          stiffness: 600,
-          damping: 30,
-        }}
-      />
-    </>
+      {/* Solid Center Focal Dot (Instant 0ms hardware position, background-aware inversion) */}
+      <div
+        ref={dotRef}
+        className="fixed top-0 left-0 pointer-events-none select-none z-[100000] will-change-transform mix-blend-difference"
+        style={{ transform: 'translate3d(-100px, -100px, 0)' }}
+      >
+        <div
+          ref={dotVisualRef}
+          className="w-[5px] h-[5px] rounded-full bg-white"
+          style={{
+            transform: 'translate(-50%, -50%) scale(0)',
+            opacity: 0,
+            transition: 'transform 0.15s ease-out, opacity 0.15s ease',
+          }}
+        />
+      </div>
+    </div>
   );
 };
 
 export default CustomCursor;
+

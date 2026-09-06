@@ -16,93 +16,15 @@ const Projects = dynamic(() => import('@/features/Projects'), { ssr: true });
 const TechStack = dynamic(() => import('@/features/TechStack'), { ssr: true });
 const Contact = dynamic(() => import('@/features/Contact'), { ssr: true });
 const Footer = dynamic(() => import('@/components/Layout/Footer'), { ssr: true });
+const ArchitecturalSpine = dynamic(() => import('@/components/ui/ArchitecturalSpine'), { ssr: false });
 
 const Home: NextPage = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [points, setPoints] = useState<{
-    expStart: { x: number; y: number };
-    expEnd: { x: number; y: number };
-    projStart: { x: number; y: number };
-    projEnd: { x: number; y: number };
-    contactStart: { x: number; y: number };
-    contactEnd: { x: number; y: number };
-  } | null>(null);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start center", "end end"]
   });
-
-  useEffect(() => {
-    let frameId: number | null = null;
-    const updatePoints = () => {
-      if (!containerRef.current) return;
-      const containerRect = containerRef.current.getBoundingClientRect();
-
-      const getCoords = (id: string) => {
-        const el = document.getElementById(id);
-        if (!el) return { x: 0, y: 0, top: 0, bottom: 0 };
-        const rect = el.getBoundingClientRect();
-        return {
-          x: rect.left - containerRect.left + rect.width / 2,
-          y: rect.top - containerRect.top + rect.height / 2,
-          top: rect.top - containerRect.top,
-          bottom: rect.bottom - containerRect.top
-        };
-      };
-
-      const exp = getCoords('experience-timeline-start');
-      const proj = getCoords('projects-timeline-start');
-      const contact = getCoords('contact-timeline-start');
-      const expSection = getCoords('experience-section');
-      const worksSection = getCoords('works');
-      const contactSection = getCoords('contact');
-      const contactEnd = getCoords('contact-timeline-end');
-
-      if (exp.x && proj.x && contact.x) {
-        setPoints({
-          expStart: { x: exp.x, y: exp.y },
-          expEnd: { x: exp.x, y: expSection.bottom },
-          projStart: { x: proj.x, y: worksSection.top },
-          projEnd: { x: proj.x, y: worksSection.bottom },
-          contactStart: { x: contact.x, y: contactSection.top },
-          contactEnd: { x: contact.x, y: contactEnd.y }
-        });
-      }
-    };
-
-    const handleUpdate = () => {
-      if (frameId !== null) return;
-      frameId = requestAnimationFrame(() => {
-        updatePoints();
-        frameId = null;
-      });
-    };
-
-    // Delay slightly to allow components to render and mount
-    const timer = setTimeout(handleUpdate, 100);
-
-    window.addEventListener('resize', handleUpdate);
-    
-    // ResizeObserver for dynamic height updates
-    const observer = new ResizeObserver(handleUpdate);
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener('resize', handleUpdate);
-      observer.disconnect();
-      if (frameId !== null) {
-        cancelAnimationFrame(frameId);
-      }
-    };
-  }, []);
-
-  const pathD = points
-    ? `M ${points.expStart.x} ${points.expStart.y} L ${points.expEnd.x} ${points.expEnd.y} H ${points.projStart.x} L ${points.projStart.x} ${points.projStart.y} L ${points.projEnd.x} ${points.projEnd.y} H ${points.contactStart.x} L ${points.contactStart.x} ${points.contactStart.y} L ${points.contactEnd.x} ${points.contactEnd.y}`
-    : '';
 
   return (
     <>
@@ -120,47 +42,23 @@ const Home: NextPage = () => {
       </Head>
 
       <div className="min-h-screen bg-[#0a0a0a] text-white font-sans selection:bg-red-600 selection:text-white overflow-x-hidden relative flex flex-col">
-        
+        {/* Minimalist Top Reading Progress Bar (System Red Accent) */}
+        <motion.div
+          style={{ scaleX: scrollYProgress }}
+          className="fixed top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-red-600 via-red-500 to-red-600 origin-left z-50 pointer-events-none shadow-[0_0_8px_rgba(239,68,68,0.7)]"
+        />
+
+        {/* Architectural Navigation Spine - Right Margin Index */}
+        <ArchitecturalSpine />
+
         {/* Main Content Surface (Elevated above sticky under-page footer) */}
         <div className="relative z-10 bg-[#0a0a0a] shadow-[0_30px_60px_rgba(0,0,0,0.9)]">
           <main className="flex-1 relative">
             <Hero />
             <AboutMe />
             
-            {/* Continuous Timeline container */}
+            {/* Continuous Sections Container */}
             <div ref={containerRef} className="relative">
-              {pathD && (
-                <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
-                  {/* Background path */}
-                  <path
-                    d={pathD}
-                    stroke="#27272a"
-                    strokeWidth="2"
-                    fill="none"
-                    strokeLinecap="round"
-                  />
-                  {/* Glow Progress path background layer for neon glow effect */}
-                  <motion.path
-                    d={pathD}
-                    stroke="#ef4444"
-                    strokeWidth="6"
-                    opacity="0.3"
-                    fill="none"
-                    strokeLinecap="round"
-                    style={{ pathLength: scrollYProgress }}
-                  />
-                  {/* Glow Progress path */}
-                  <motion.path
-                    d={pathD}
-                    stroke="#ef4444"
-                    strokeWidth="2"
-                    fill="none"
-                    strokeLinecap="round"
-                    style={{ pathLength: scrollYProgress }}
-                  />
-                </svg>
-              )}
-              
               <Experience />
               <Projects />
               <TechStack />
