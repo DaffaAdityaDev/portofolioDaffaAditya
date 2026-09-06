@@ -272,7 +272,7 @@ const Navbar = () => {
           transition={shouldReduceMotion ? { duration: 0.2 } : SPRING_MOBILE_OS}
           className={`pointer-events-auto overflow-hidden relative flex flex-col justify-start items-center group ${isMobileMenuOpen
             ? 'w-[calc(100vw-2rem)] max-w-[384px] h-[310px] rounded-3xl'
-            : 'w-[240px] h-[44px] rounded-full'
+            : 'w-[calc(100vw-2rem)] max-w-[320px] h-[44px] rounded-full'
             }`}
         >
           {/* Background Layer with heavy filters */}
@@ -289,14 +289,28 @@ const Navbar = () => {
                 className="flex flex-col w-full h-full pt-4 px-4 pb-6 pointer-events-auto absolute inset-0 justify-between"
               >
                 <div className="flex items-center justify-between w-full pb-3 border-b border-white/[0.08] shrink-0">
-                  <span className="font-sans font-black text-xs tracking-[0.2em] text-white uppercase">DAFFA ADITYA</span>
-                  <button
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-neutral-400 hover:text-white rounded p-1 cursor-pointer focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:outline-none transition-colors duration-200"
-                    aria-label="Close navigation menu"
-                  >
-                    <X size={16} />
-                  </button>
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-sans font-black text-xs tracking-[0.2em] text-white uppercase">DAFFA ADITYA</span>
+                    <span className="text-[8px] font-mono text-neutral-400 font-medium tracking-wider">// PORTFOLIO</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-950/40 border border-emerald-500/25">
+                      <span className="relative flex items-center justify-center w-2 h-2 shrink-0">
+                        <span className="absolute w-2 h-2 rounded-full bg-emerald-500/40 animate-ping" />
+                        <span className="relative w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                      </span>
+                      <span className="text-[7.5px] font-bold font-mono text-emerald-400 tracking-wider uppercase">
+                        AVAILABLE
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="text-neutral-400 hover:text-white rounded p-1 cursor-pointer focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:outline-none transition-colors duration-200"
+                      aria-label="Close navigation menu"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
                 </div>
                 <nav className="flex flex-col gap-1 py-2 grow justify-center" aria-label="Mobile navigation">
                   {navItems.filter(item => item.label !== 'SOCIALS').map((item) => (
@@ -353,20 +367,28 @@ const Navbar = () => {
                     setIsMobileMenuOpen(true);
                   }
                 }}
-                className="flex items-center justify-between w-full h-full px-4 pointer-events-auto absolute inset-0 cursor-pointer select-none active:scale-[0.98] transition-transform"
+                className="flex items-center justify-between w-full h-full px-3.5 pointer-events-auto absolute inset-0 cursor-pointer select-none active:scale-[0.98] transition-transform"
               >
-                <div className="flex items-center gap-2">
-                  <span className="font-sans font-black text-xs tracking-[0.2em] text-white uppercase rounded px-1.5 py-0.5">
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <span className="font-sans font-black text-xs tracking-[0.2em] text-white uppercase rounded px-1 py-0.5">
                     DA
                   </span>
+                  <span className="text-[8px] font-mono text-neutral-400 font-medium tracking-wider">
+                    // PORTFOLIO
+                  </span>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="relative flex items-center justify-center w-2 h-2">
-                    <span className="absolute w-2.5 h-2.5 rounded-full bg-emerald-500/30 animate-ping" />
-                    <span className="relative w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <div className="flex items-center gap-2 shrink-0">
+                  <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-950/40 border border-emerald-500/25">
+                    <div className="relative flex items-center justify-center w-2 h-2 shrink-0">
+                      <span className="absolute w-2 h-2 rounded-full bg-emerald-500/40 animate-ping" />
+                      <span className="relative w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    </div>
+                    <span className="text-[7.5px] font-bold font-mono text-emerald-400 tracking-wider uppercase">
+                      AVAILABLE
+                    </span>
                   </div>
-                  <div className="text-neutral-400 group-hover:text-white rounded p-1 transition-colors duration-200">
-                    <Menu size={16} />
+                  <div className="text-neutral-400 group-hover:text-white rounded p-0.5 transition-colors duration-200">
+                    <Menu size={15} />
                   </div>
                 </div>
               </motion.div>
