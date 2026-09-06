@@ -102,8 +102,8 @@ export const ProjectMorphModal: React.FC<ProjectMorphModalProps> = ({ project, o
 
               {/* Audited Metric Pill */}
               {meta?.metric && (
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-mono font-bold tracking-wider uppercase">
-                  <Activity size={14} className="animate-pulse" />
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-xs font-mono font-bold tracking-wider uppercase shadow-[0_0_12px_rgba(16,185,129,0.15)]">
+                  <Activity size={14} className="animate-pulse text-emerald-400" />
                   <span>{meta.metric}</span>
                 </div>
               )}

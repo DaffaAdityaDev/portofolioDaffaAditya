@@ -191,11 +191,11 @@ export interface CaseStudyMeta {
 export const DEFAULT_META: CaseStudyMeta = {
   metric: 'Audited Metric',
   color: {
-    accent: 'red',
-    glow: 'from-red-500/0 via-red-500/5 to-red-500/0',
-    pillsBorder: 'border-red-500/15',
-    pillsText: 'text-red-400',
-    pillsBg: 'bg-red-500/5'
+    accent: 'emerald',
+    glow: 'from-emerald-500/0 via-emerald-500/5 to-emerald-500/0',
+    pillsBorder: 'border-emerald-500/15',
+    pillsText: 'text-emerald-400',
+    pillsBg: 'bg-emerald-500/5'
   }
 };
 
@@ -203,11 +203,11 @@ export const CASE_STUDIES_META: Record<string, CaseStudyMeta> = {
   'platform': {
     metric: '99.98% Core Uptime',
     color: {
-      accent: 'red',
-      glow: 'from-red-500/0 via-red-500/5 to-red-500/0',
-      pillsBorder: 'border-red-500/15',
-      pillsText: 'text-red-400',
-      pillsBg: 'bg-red-500/5'
+      accent: 'emerald',
+      glow: 'from-emerald-500/0 via-emerald-500/5 to-emerald-500/0',
+      pillsBorder: 'border-emerald-500/15',
+      pillsText: 'text-emerald-400',
+      pillsBg: 'bg-emerald-500/5'
     }
   },
   'accounting-plus': {
@@ -253,21 +253,21 @@ export const CASE_STUDIES_META: Record<string, CaseStudyMeta> = {
   'artifyo': {
     metric: '0.4s CLS Score',
     color: {
-      accent: 'red',
-      glow: 'from-red-500/0 via-red-500/5 to-red-500/0',
-      pillsBorder: 'border-red-500/15',
-      pillsText: 'text-red-400',
-      pillsBg: 'bg-red-500/5'
+      accent: 'emerald',
+      glow: 'from-emerald-500/0 via-emerald-500/5 to-emerald-500/0',
+      pillsBorder: 'border-emerald-500/15',
+      pillsText: 'text-emerald-400',
+      pillsBg: 'bg-emerald-500/5'
     }
   },
   'aliman-bulus': {
     metric: '9ms SQL Latency',
     color: {
-      accent: 'red',
-      glow: 'from-red-500/0 via-red-500/5 to-red-500/0',
-      pillsBorder: 'border-red-500/15',
-      pillsText: 'text-red-400',
-      pillsBg: 'bg-red-500/5'
+      accent: 'emerald',
+      glow: 'from-emerald-500/0 via-emerald-500/5 to-emerald-500/0',
+      pillsBorder: 'border-emerald-500/15',
+      pillsText: 'text-emerald-400',
+      pillsBg: 'bg-emerald-500/5'
     }
   },
   'rivian-mobile-companion': {
