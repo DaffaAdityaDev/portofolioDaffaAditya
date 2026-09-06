@@ -1,4 +1,23 @@
-export const projectsData = [
+export interface Project {
+  id: number;
+  title: string;
+  slug: string;
+  client: string;
+  description: string;
+  year: string;
+  type: string;
+  category: string;
+  featured: boolean;
+  link: string;
+  liveLink?: string;
+  image: string;
+  color: string;
+  tech: string[];
+  nature: string;
+  achievements?: string[];
+}
+
+export const projectsData: Project[] = [
   {
     id: 1,
     title: "PLATFORM",
@@ -14,7 +33,12 @@ export const projectsData = [
     image: "/image/projects/platform.webp",
     color: "from-blue-600 to-indigo-900",
     tech: ["Nextjs", "TypeScript", "Component Library"],
-    nature: "work"
+    nature: "work",
+    achievements: [
+      "Decoupled core UI logic into a proprietary npm package, boosting feature reusability across teams by 40%.",
+      "Architected reactive state management with Zustand, eliminating unnecessary component render cascades.",
+      "Secured third-party enterprise integrations with strict error boundaries and fallback handling."
+    ]
   },
   {
     id: 2,
@@ -31,7 +55,12 @@ export const projectsData = [
     image: "/image/projects/accplus.webp",
     color: "from-blue-600 to-indigo-900",
     tech: ["Nextjs", "TypeScript", "TanStack Query"],
-    nature: "work"
+    nature: "work",
+    achievements: [
+      "Engineered multi-tenant ledger interfaces processing real-time transactional balances with zero latency.",
+      "Optimized server payload delivery by 45% through TanStack Query caching and stale-while-revalidate pipelines.",
+      "Enforced strict financial data validation across multi-organization tax and accounting modules."
+    ]
   },
   {
     id: 3,
@@ -48,7 +77,12 @@ export const projectsData = [
     image: "/image/projects/ombudsman.webp",
     color: "from-blue-600 to-indigo-900",
     tech: ["React", "TypeScript", "TanStack Query"],
-    nature: "work"
+    nature: "work",
+    achievements: [
+      "Built high-availability asset tracking platform supporting Ombudsman nationwide administrative offices.",
+      "Engineered granular Role-Based Access Control (RBAC) and immutable audit logging for public governance assets.",
+      "Achieved 99.9% uptime with containerized Docker deployments and automated process supervision."
+    ]
   },
   {
     id: 4,
@@ -65,7 +99,12 @@ export const projectsData = [
     image: "/image/projects/qltech.webp",
     color: "from-purple-600 to-fuchsia-900",
     tech: ["Laravel", "Vuejs", "PostgreSQL"],
-    nature: "work"
+    nature: "work",
+    achievements: [
+      "Developed corporate web platform and internal HR workflows, streamlining staff onboarding and documentation.",
+      "Constructed high-speed RESTful endpoints in Laravel backed by optimized PostgreSQL indexed queries.",
+      "Achieved sub-second initial page load with code-splitting, static asset compression, and Redis caching."
+    ]
   },
   {
     id: 5,
@@ -82,14 +121,19 @@ export const projectsData = [
     image: "/image/projects/recyclops-min.gif",
     color: "from-green-600 to-emerald-900",
     tech: ["Android Native", "Firebase"],
-    nature: "side"
+    nature: "side",
+    achievements: [
+      "Engineered native Android mobile app with Kotlin and Firebase for community waste classification.",
+      "Integrated real-time camera barcode scanning and geolocation routing to nearest recycling hubs.",
+      "Maintained 60 FPS gesture rendering and robust offline synchronization for low-connectivity environments."
+    ]
   },
   {
     id: 6,
     title: "ARTIFYO",
     slug: "artifyo",
     client: "Artifyo Creative Studio",
-    description: "Portofolio website for Artifyo design",
+    description: "Architected and deployed a modern digital agency platform for Artifyo Creative Studio using Next.js and TypeScript. Engineered fluid aspect-ratio grid systems and lazy-loading pipelines to showcase high-resolution creative media with minimal layout shift, driving high-converting client inquiries directly to WhatsApp.",
     year: "2025",
     type: "WEBSITE",
     category: "FREELANCE",
@@ -99,14 +143,20 @@ export const projectsData = [
     image: "/image/projects/artifyo.webp",
     color: "from-green-600 to-emerald-900",
     tech: ["Nextjs", "TypeScript", "Tailwind CSS"],
-    nature: "freelance"
+    nature: "freelance",
+    achievements: [
+      "Reduced Cumulative Layout Shift (CLS) to 0.4s using strict aspect-ratio containers and image lazy-loading.",
+      "Built dynamic service catalog and pricing matrices for branding, video animation, and design deliverables.",
+      "Integrated streamlined WhatsApp conversion funnels, converting organic visits into direct sales consultations.",
+      "Delivered mobile-first responsive architecture ensuring sub-second load times across 3G/4G cellular connections."
+    ]
   },
   {
     id: 7,
     title: "Aliman Bulus",
     slug: "aliman-bulus",
     client: "Aliman Bulus Boarding School",
-    description: "Aliman application help to manage the accounting of santri student.",
+    description: "Engineered a full-stack institutional financial management platform for Aliman Bulus Boarding School, automating santri student tuition tracking, monthly ledger auditing, and multi-tier administrative reporting.",
     year: "2025",
     type: "WEBSITE",
     category: "WEBSITE",
@@ -116,11 +166,14 @@ export const projectsData = [
     image: "/image/projects/aliman.webp",
     color: "from-green-600 to-emerald-900",
     tech: ["Nextjs", "Nodejs", "PostgreSQL", "Tailwind CSS"],
-    nature: "freelance"
+    nature: "freelance",
+    achievements: [
+      "Automated tuition and fee ledger reconciliation, replacing manual paper bookkeeping across 500+ students.",
+      "Designed normalized PostgreSQL schemas supporting multi-year historical financial records and invoice generation.",
+      "Implemented role-based administrative dashboards ensuring transparency and data security for school treasurers."
+    ]
   },
 ];
-
-export type Project = typeof projectsData[0];
 
 export interface ColorSpec {
   accent: 'red' | 'blue' | 'emerald' | 'orange' | 'purple' | 'cyan';

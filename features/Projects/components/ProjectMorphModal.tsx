@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { X, ExternalLink, Activity } from 'lucide-react';
+import { X, ExternalLink, Activity, CheckCircle2, Award } from 'lucide-react';
 import { Project, CASE_STUDIES_META, DEFAULT_META } from '../constants';
 import { SPRING_MOBILE_OS, BACKDROP_VARIANTS } from '@/constant/animations';
 import { useModalDismiss } from '@/hooks/useModalDismiss';
@@ -113,6 +113,28 @@ export const ProjectMorphModal: React.FC<ProjectMorphModalProps> = ({ project, o
               {project.description}
             </p>
           </div>
+
+          {/* Key Achievements & Measurable Impact */}
+          {project.achievements && project.achievements.length > 0 && (
+            <div className="space-y-3 pt-2 border-t border-white/5">
+              <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest flex items-center gap-1.5 font-bold">
+                <Award size={13} className="text-emerald-400" />
+                KEY ACHIEVEMENTS & MEASURABLE IMPACT:
+              </span>
+
+              <div className="space-y-2">
+                {project.achievements.map((milestone, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-start gap-3 p-3 rounded-xl bg-zinc-900/30 border border-zinc-800/70 font-mono text-xs text-neutral-300 leading-relaxed"
+                  >
+                    <CheckCircle2 size={15} className="text-emerald-400 shrink-0 mt-0.5" />
+                    <span>{milestone}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Tech Stack Specs */}
           <div className="space-y-2 pt-2 border-t border-white/5">

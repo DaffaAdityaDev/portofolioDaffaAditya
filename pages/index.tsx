@@ -30,7 +30,7 @@ const Home: NextPage = () => {
     <>
       <Head>
         <title>Daffa Aditya Rahman | Software Engineer</title>
-        <meta name="description" content="Portfolio of Daffa Aditya Rahman, a Software Engineer specialized in high-performance web solutions and industrial-grade UI/UX." />
+        <meta name="description" content="Portfolio of Daffa Aditya Rahman, a Software Engineer specialized in industrial-grade systems and high-performance web architectures." />
         <meta property="og:title" content="Daffa Aditya Rahman" />
         <meta
           property="og:description"

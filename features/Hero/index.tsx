@@ -128,7 +128,7 @@ const Hero = () => {
                   transition={{ duration: 0.6, delay: isIntro ? 0 : 0.45, ease: [0.16, 1, 0.3, 1] }}
                   className="max-w-xl text-neutral-300 text-base md:text-lg leading-relaxed font-sans"
                 >
-                  Crafting high-performance web applications and industrial-grade user experiences with modern frontend architectures and backend engineering.
+                  Engineering industrial-grade systems and high-performance web architectures built for speed, resilience, and scale.
                 </motion.p>
               </div>
 

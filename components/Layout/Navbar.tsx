@@ -111,13 +111,13 @@ const Navbar = () => {
                   A
                 </span>
                 <span
-                  className={`text-[8.5px] font-mono font-medium text-neutral-400 tracking-[0.1em] transition-colors duration-200 group-hover/logo:text-neutral-300 whitespace-nowrap overflow-hidden flex items-center ${transitionClass} ${isExpanded ? 'max-w-[260px] opacity-100 ml-1.5' : 'max-w-0 opacity-0 ml-0'
+                  className={`text-[8.5px] font-mono font-medium text-neutral-400 tracking-[0.1em] transition-colors duration-200 group-hover/logo:text-neutral-300 whitespace-nowrap flex items-center h-6 ${transitionClass} ${isExpanded ? 'max-w-[280px] opacity-100 ml-1.5 overflow-visible' : 'max-w-0 opacity-0 ml-0 overflow-hidden'
                     }`}
                 >
-                  // PORTFOLIO
-                  <span className="inline-flex items-center gap-1.5 pl-2 ml-1.5 border-l border-white/[0.1]">
-                    <span className="relative flex items-center justify-center w-2.5 h-2.5 shrink-0">
-                      <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-emerald-400/50" />
+                  <span>// PORTFOLIO</span>
+                  <span className="inline-flex items-center gap-1.5 ml-2.5 overflow-visible">
+                    <span className="relative flex items-center justify-center w-3 h-3 shrink-0 overflow-visible">
+                      <span className="animate-ping absolute inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400/50 pointer-events-none" />
                       <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.85)]" />
                     </span>
                     <span className="text-[8px] font-mono text-emerald-400 font-bold tracking-wider">
@@ -232,11 +232,11 @@ const Navbar = () => {
 
             {/* Status Pill (Visible ONLY when collapsed on scroll) */}
             <div
-              className={`flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/30 border border-emerald-500/25 shadow-[0_0_12px_rgba(16,185,129,0.1)] overflow-hidden whitespace-nowrap shrink-0 ${transitionClass} ${!isExpanded ? 'max-w-[160px] opacity-100 pointer-events-auto' : 'max-w-0 opacity-0 pointer-events-none'
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-950/30 border border-emerald-500/25 shadow-[0_0_12px_rgba(16,185,129,0.1)] whitespace-nowrap shrink-0 ${transitionClass} ${!isExpanded ? 'max-w-[160px] opacity-100 pointer-events-auto overflow-visible' : 'max-w-0 opacity-0 pointer-events-none overflow-hidden'
                 }`}
             >
-              <div className="relative flex items-center justify-center w-2.5 h-2.5 shrink-0">
-                <span className="absolute w-2 h-2 rounded-full bg-emerald-500/40 animate-ping" />
+              <div className="relative flex items-center justify-center w-3 h-3 shrink-0 overflow-visible">
+                <span className="absolute w-2.5 h-2.5 rounded-full bg-emerald-500/40 animate-ping pointer-events-none" />
                 <span className="relative w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.85)]" />
               </div>
               <span className="text-[8px] font-bold font-mono text-emerald-400 tracking-[0.2em] uppercase">
