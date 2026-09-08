@@ -44,7 +44,10 @@ const Projects = () => {
         <div className="relative z-20 max-w-7xl mx-auto w-full">
           <motion.div variants={FADE_IN_UP_ITEM} className="flex flex-col md:flex-row md:items-end justify-between mb-5 md:mb-8 border-b border-zinc-800 pb-3 md:pb-4 gap-4">
             <div>
-              <h1 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight">Featured Projects</h1>
+              <div className="text-xs font-mono text-zinc-500 mb-1 tracking-widest uppercase">
+                [ 03 // PROJECTS ]
+              </div>
+              <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight">Featured Projects</h2>
             </div>
 
             {/* Fluid Segmented Tab Control */}

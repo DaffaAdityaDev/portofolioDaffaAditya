@@ -9,10 +9,10 @@ interface SectionNode {
 }
 
 const SECTIONS: SectionNode[] = [
-  { id: 'experience-section', number: '01', label: 'EXPERIENCE' },
-  { id: 'works', number: '02', label: 'PROJECTS' },
-  { id: 'tech-stack', number: '03', label: 'TECH STACK' },
-  { id: 'contact', number: '04', label: 'CONTACT' },
+  { id: 'about', number: '01', label: 'ABOUT' },
+  { id: 'experience-section', number: '02', label: 'EXPERIENCE' },
+  { id: 'works', number: '03', label: 'PROJECTS' },
+  { id: 'tech-stack', number: '04', label: 'TECH STACK' },
 ];
 
 // GPU-accelerated animation variants (Zero layout shift, pure transform & opacity interpolation)
@@ -36,7 +36,7 @@ const labelVariants: Variants = {
 };
 
 export const ArchitecturalSpine: React.FC = () => {
-  const [activeSection, setActiveSection] = useState<string>('experience-section');
+  const [activeSection, setActiveSection] = useState<string>('about');
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isHovered, setIsHovered] = useState<boolean>(false);
 
@@ -127,7 +127,7 @@ export const ArchitecturalSpine: React.FC = () => {
   const startY = lineCoords.positions[0] ?? 14;
   const currentTargetY = lineCoords.positions[activeIndex] ?? startY;
   const targetHeight = Math.max(0, currentTargetY - startY);
-  const totalRailHeight = (lineCoords.positions[3] ?? 206) - startY;
+  const totalRailHeight = (lineCoords.positions[SECTIONS.length - 1] ?? 230) - startY;
 
   return (
     <motion.nav

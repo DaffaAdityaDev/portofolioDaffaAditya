@@ -55,10 +55,10 @@ const Home: NextPage = () => {
         <div className="relative z-10 bg-[#0a0a0a] shadow-[0_30px_60px_rgba(0,0,0,0.9)]">
           <main className="flex-1 relative">
             <Hero />
-            <AboutMe />
             
             {/* Continuous Sections Container */}
             <div ref={containerRef} className="relative">
+              <AboutMe />
               <Experience />
               <Projects />
               <TechStack />

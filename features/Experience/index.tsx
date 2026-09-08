@@ -26,7 +26,7 @@ const Experience = () => {
           >
             <div>
               <div className="text-xs font-mono text-zinc-500 mb-1 tracking-widest uppercase">
-                [ 01 // CAREER ]
+                [ 02 // CAREER ]
               </div>
               <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight">
                 Experience
