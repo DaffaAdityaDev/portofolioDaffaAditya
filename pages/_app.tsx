@@ -9,10 +9,6 @@ import { HeroUIProvider } from "@heroui/react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import PageTransition from '@/components/Layout/PageTransition';
 
-const CustomCursor = dynamic(() => import('@/components/ui/CustomCursor'), {
-  ssr: false,
-});
-
 const outfit = Outfit({
   subsets: ['latin'],
   variable: '--font-outfit',
@@ -30,7 +26,6 @@ function MyApp({ Component, pageProps, router }: AppProps) {
     <NextThemesProvider attribute="class" defaultTheme="dark">
       <HeroUIProvider>
         <div className={`${inter.variable} ${outfit.variable} font-sans`}>
-          <CustomCursor />
           <Navbar />
           <AnimatePresence mode="wait" initial={false}>
             <PageTransition key={router.asPath}>
