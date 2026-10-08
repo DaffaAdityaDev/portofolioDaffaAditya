@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import Footer from '@/components/Layout/Footer';
 import Marquee from '@/components/ui/Marquee';
 import { MARQUEE_TEXT } from '@/constant/constant';
@@ -16,22 +16,22 @@ export const Custom404Content = () => {
 
       <div className="min-h-screen bg-[#0a0a0a] text-white font-sans selection:bg-red-600 selection:text-white overflow-x-hidden relative flex flex-col">
         <main className="flex-1 relative flex flex-col items-center justify-center min-h-[80vh] px-4">
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className="text-center"
           >
-            <motion.h1 
+            <m.h1 
               className="text-7xl md:text-9xl font-bold tracking-tighter"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
             >
               404
-            </motion.h1>
+            </m.h1>
             
-            <motion.div
+            <m.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.4 }}
@@ -43,9 +43,9 @@ export const Custom404Content = () => {
               <p className="max-w-md mx-auto text-neutral-500 text-sm md:text-base">
                 The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
               </p>
-            </motion.div>
+            </m.div>
 
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.6 }}
@@ -68,8 +68,8 @@ export const Custom404Content = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
               </Link>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         </main>
 
         {/* Footer Marquee */}

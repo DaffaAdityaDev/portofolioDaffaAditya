@@ -7,10 +7,10 @@ export const SkillsGrid = () => {
     <section aria-labelledby="skills-heading" className="w-full border-b border-zinc-800 bg-[#0a0a0c]">
       <div className="w-full bg-[#0f0f13] px-6 sm:px-12 md:px-16 lg:px-24 py-6 border-b border-zinc-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
         <div>
-          <span className="text-xs font-mono text-red-500 uppercase tracking-widest font-bold">// TECH_CAPABILITIES</span>
-          <h2 id="skills-heading" className="text-xl md:text-2xl font-black text-white uppercase tracking-tight mt-1">Engineering & Design Skills</h2>
+          <span className="text-xs font-mono text-red-500 uppercase tracking-widest font-bold">// SKILLS</span>
+          <h2 id="skills-heading" className="text-xl md:text-2xl font-black text-white uppercase tracking-tight mt-1">What I Work With</h2>
         </div>
-        <span className="text-xs font-mono text-zinc-500 tracking-wider">// FULL-STACK CAPABILITIES</span>
+        <span className="text-xs font-mono text-zinc-500 tracking-wider">// FULL-STACK</span>
       </div>
       
       <div className="max-w-6xl mx-auto px-6 sm:px-12 md:px-16 lg:px-24 py-16">
@@ -26,10 +26,10 @@ export const SkillsGrid = () => {
                   </div>
                   <h3 className="text-lg font-bold text-white uppercase tracking-tight">Frontend Engineering</h3>
                 </div>
-                <span className="text-[10px] font-mono text-zinc-500">// INTERACTIVE</span>
+                <span className="text-[10px] font-mono text-zinc-400">// INTERACTIVE</span>
               </div>
               <p className="text-sm font-sans text-zinc-300 leading-relaxed font-medium antialiased">
-                High-performance React and Next.js interfaces featuring fluid animations and optimal Lighthouse scores.
+                React and Next.js interfaces that load fast and stay smooth on mid-range phones.
               </p>
             </div>
             <div className="border-t border-zinc-900 pt-4 mt-6 flex flex-wrap gap-1.5">
@@ -49,10 +49,10 @@ export const SkillsGrid = () => {
                   </div>
                   <h3 className="text-lg font-bold text-white uppercase tracking-tight">UI/UX Design</h3>
                 </div>
-                <span className="text-[10px] font-mono text-zinc-500">// DESIGN SYSTEM</span>
+                <span className="text-[10px] font-mono text-zinc-400">// DESIGN SYSTEM</span>
               </div>
               <p className="text-sm font-sans text-zinc-300 leading-relaxed font-medium antialiased">
-                Intuitive user journeys and developer-friendly design systems mapped from high-fidelity Figma prototypes.
+                I write UI specs and turn Figma designs into reusable components with consistent spacing and type.
               </p>
             </div>
             <div className="border-t border-zinc-900 pt-4 mt-6 flex flex-wrap gap-1.5">
@@ -72,10 +72,10 @@ export const SkillsGrid = () => {
                   </div>
                   <h3 className="text-lg font-bold text-white uppercase tracking-tight">Backend Infrastructure</h3>
                 </div>
-                <span className="text-[10px] font-mono text-zinc-500">// ROBUST & SECURE</span>
+                <span className="text-[10px] font-mono text-zinc-400">// APIS & DATA</span>
               </div>
               <p className="text-sm font-sans text-zinc-300 leading-relaxed font-medium antialiased">
-                Secure API services, transactional general ledgers, and optimized SQL databases engineered with Go and Node.js.
+                API services and SQL databases in Node.js and Go, including double-entry ledgers for finance data.
               </p>
             </div>
             <div className="border-t border-zinc-900 pt-4 mt-6 flex flex-wrap gap-1.5">
@@ -93,16 +93,16 @@ export const SkillsGrid = () => {
                   <div className="p-2 border border-zinc-800 bg-zinc-900/30 rounded-lg text-zinc-400 group-hover:border-red-500/40 group-hover:bg-red-500/5 group-hover:text-red-500 transition-all duration-300 shrink-0">
                     <Cpu size={20} className="transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3" />
                   </div>
-                  <h3 className="text-lg font-bold text-white uppercase tracking-tight">AI Agent Workflows</h3>
+                  <h3 className="text-lg font-bold text-white uppercase tracking-tight">AI & LLM Features</h3>
                 </div>
-                <span className="text-[10px] font-mono text-zinc-500">// INTELLIGENT</span>
+                <span className="text-[10px] font-mono text-zinc-400">// LLM</span>
               </div>
               <p className="text-sm font-sans text-zinc-300 leading-relaxed font-medium antialiased">
-                State-persisted cognitive loops, vector search systems, and cooperative multi-agent architectures integrated into web platforms.
+                LLM features inside web apps: search over your own documents, chat interfaces and tool-calling agents built with LangChain and LangGraph.
               </p>
             </div>
             <div className="border-t border-zinc-900 pt-4 mt-6 flex flex-wrap gap-1.5">
-              {["LangGraph", "Vector DBs", "Claude / GPT APIs", "Semantic Search", "Python"].map(tech => (
+              {["LangChain", "LangGraph", "Vector DBs", "Claude / GPT APIs", "Python"].map(tech => (
                 <span key={tech} className="bg-zinc-950/80 border border-zinc-800/80 px-2 py-0.5 rounded text-[10px] text-zinc-400 font-mono transition-colors duration-300 group-hover:border-red-500/20 group-hover:text-zinc-200">{tech}</span>
               ))}
             </div>
@@ -116,16 +116,16 @@ export const SkillsGrid = () => {
                   <div className="p-2 border border-zinc-800 bg-zinc-900/30 rounded-lg text-zinc-400 group-hover:border-red-500/40 group-hover:bg-red-500/5 group-hover:text-red-500 transition-all duration-300 shrink-0">
                     <Workflow size={20} className="transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3" />
                   </div>
-                  <h3 className="text-lg font-bold text-white uppercase tracking-tight">Mobile Engineering</h3>
+                  <h3 className="text-lg font-bold text-white uppercase tracking-tight">Android Apps</h3>
                 </div>
-                <span className="text-[10px] font-mono text-zinc-500">// CROSS-PLATFORM</span>
+                <span className="text-[10px] font-mono text-zinc-400">// NATIVE ANDROID</span>
               </div>
               <p className="text-sm font-sans text-zinc-300 leading-relaxed font-medium antialiased">
-                Sleek native mobile apps featuring responsive design, secure authentication, and offline data syncing.
+                Native Android apps in Kotlin with Firebase, including offline data sync.
               </p>
             </div>
             <div className="border-t border-zinc-900 pt-4 mt-6 flex flex-wrap gap-1.5">
-              {["React Native", "Expo", "Native Bridges", "Offline Syncing", "iOS & Android"].map(tech => (
+              {["Kotlin", "Android", "Firebase", "Offline Sync"].map(tech => (
                 <span key={tech} className="bg-zinc-950/80 border border-zinc-800/80 px-2 py-0.5 rounded text-[10px] text-zinc-400 font-mono transition-colors duration-300 group-hover:border-red-500/20 group-hover:text-zinc-200">{tech}</span>
               ))}
             </div>
@@ -141,14 +141,14 @@ export const SkillsGrid = () => {
                   </div>
                   <h3 className="text-lg font-bold text-white uppercase tracking-tight">DevOps & Deployments</h3>
                 </div>
-                <span className="text-[10px] font-mono text-zinc-500">// AUTOMATED CI/CD</span>
+                <span className="text-[10px] font-mono text-zinc-400">// SHIPPING</span>
               </div>
               <p className="text-sm font-sans text-zinc-300 leading-relaxed font-medium antialiased">
-                Automated CI/CD delivery pipelines, secure Docker container hosting, and Cloudflare edge caches.
+                Docker images, CI/CD pipelines and deployment to Vercel or a cloud server, with the domain and DNS set up.
               </p>
             </div>
             <div className="border-t border-zinc-900 pt-4 mt-6 flex flex-wrap gap-1.5">
-              {["Docker", "CI/CD Pipelines", "AWS / Vercel", "DNS Security", "Cloudflare CDN"].map(tech => (
+              {["Docker", "CI/CD Pipelines", "AWS / GCP", "Vercel", "Cloudflare"].map(tech => (
                 <span key={tech} className="bg-zinc-950/80 border border-zinc-800/80 px-2 py-0.5 rounded text-[10px] text-zinc-400 font-mono transition-colors duration-300 group-hover:border-red-500/20 group-hover:text-zinc-200">{tech}</span>
               ))}
             </div>

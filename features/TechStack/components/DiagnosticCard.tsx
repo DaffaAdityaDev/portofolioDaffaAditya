@@ -1,6 +1,6 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { Module } from '../constants';
+import { m } from 'framer-motion';
+import { Module, TECH_USAGE_LABELS } from '../constants';
 import { SPRING_MOBILE_OS } from '@/constant/animations';
 
 interface DiagnosticCardProps {
@@ -9,8 +9,17 @@ interface DiagnosticCardProps {
 }
 
 const DiagnosticCard: React.FC<DiagnosticCardProps> = ({ module, onSelect }) => {
+  const indexed = module.processes.map((proc, idx) => ({ proc, idx }));
+  const used = indexed.filter(({ proc }) => proc.usage === 'project');
+  const familiar = indexed.filter(({ proc }) => proc.usage === 'familiar');
+  // The "also worked with" label only helps when the card mixes both groups.
+  const groups = [
+    { usage: 'project' as const, items: used, showLabel: false },
+    { usage: 'familiar' as const, items: familiar, showLabel: used.length > 0 },
+  ].filter((g) => g.items.length > 0);
+
   return (
-    <motion.div
+    <m.div
       layoutId={`diagnostic-module-${module.id}`}
       transition={SPRING_MOBILE_OS}
       onClick={() => onSelect?.(module)}
@@ -47,7 +56,7 @@ const DiagnosticCard: React.FC<DiagnosticCardProps> = ({ module, onSelect }) => 
               {module.name}
             </span>
           </div>
-          <div className="font-mono text-xs text-zinc-600 uppercase">Module ID: {module.id}</div>
+          <div className="font-mono text-xs text-zinc-500">{module.headline}</div>
         </div>
         <div className="flex items-center gap-1.5 px-2 py-1 bg-emerald-900/10 border border-emerald-900/20 rounded-sm">
           <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -55,36 +64,47 @@ const DiagnosticCard: React.FC<DiagnosticCardProps> = ({ module, onSelect }) => 
         </div>
       </div>
 
-      {/* Processes List */}
+      {/* Processes, grouped: tools used in my projects first, then the rest */}
       <div className="relative z-10 space-y-2 flex-1">
-        {module.processes.map((proc, idx) => (
-          <div
-            key={idx}
-            className="flex justify-between items-baseline gap-3 font-mono text-sm py-1 border-b border-zinc-900/50 last:border-b-0 transition-colors relative"
-          >
-            <span className="text-zinc-400 group-hover:text-zinc-300 z-10 transition-colors leading-snug">
-              {proc.name}
-            </span>
-            <span className="text-zinc-500 font-mono text-xs z-10 shrink-0 whitespace-nowrap text-right">
-              [{proc.roleLabel}]
-            </span>
-            
-            {/* Row Underline Trace Animation */}
-            <span
-              className="border-trace-line"
-              style={{ transitionDelay: `${idx * 30}ms` }}
-              aria-hidden="true"
-            />
-          </div>
+        {groups.map((group) => (
+          <React.Fragment key={group.usage}>
+            {group.showLabel && (
+              <div className="pt-2 font-mono text-[10px] uppercase tracking-widest text-zinc-400">
+                {TECH_USAGE_LABELS[group.usage]}
+              </div>
+            )}
+            {group.items.map(({ proc, idx }) => (
+              <div
+                key={idx}
+                className="flex justify-between items-baseline gap-3 font-mono text-sm py-1 border-b border-zinc-900/50 last:border-b-0 transition-colors relative"
+              >
+                <span
+                  className={`${proc.usage === 'project' ? 'text-zinc-400 group-hover:text-zinc-300' : 'text-zinc-500 group-hover:text-zinc-400'} z-10 transition-colors leading-snug`}
+                >
+                  {proc.name}
+                </span>
+                <span className="text-zinc-500 font-mono text-xs z-10 shrink-0 whitespace-nowrap text-right">
+                  [{proc.roleLabel}]
+                </span>
+
+                {/* Row Underline Trace Animation */}
+                <span
+                  className="border-trace-line"
+                  style={{ transitionDelay: `${idx * 30}ms` }}
+                  aria-hidden="true"
+                />
+              </div>
+            ))}
+          </React.Fragment>
         ))}
       </div>
 
       {/* Footer hint */}
-      <div className="relative z-10 mt-4 pt-3 border-t border-zinc-900 flex justify-between items-center text-[10px] font-mono text-zinc-600 group-hover:text-zinc-400 transition-colors">
-        <span>VIEW BLUEPRINT</span>
-        <span className="text-zinc-700 group-hover:text-red-400 font-bold transition-colors">TAP // &rarr;</span>
+      <div className="relative z-10 mt-4 pt-3 border-t border-zinc-900 flex justify-between items-center text-[10px] font-mono text-zinc-400 group-hover:text-zinc-400 transition-colors">
+        <span>VIEW DETAILS</span>
+        <span className="text-zinc-700 group-hover:text-red-400 font-bold transition-colors">&rarr;</span>
       </div>
-    </motion.div>
+    </m.div>
   );
 };
 

@@ -1,0 +1,100 @@
+/*
+ * Hero intro, CSS only so it plays from the first paint without waiting for hydration.
+ *
+ * Every element is in its final place in the HTML. The headline does not animate: it is the
+ * LCP element and sits above the backdrop from the first paint. The backdrop only covers the first viewport, so a reload further down the page
+ * is never blacked out. Under reduced motion none of this runs.
+ * Every delay + duration ends by 0.5s, so the whole first screen is visible within half a second.
+ */
+
+.indicator {
+  opacity: 0.6;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .backdrop {
+    animation: backdrop-out 0.35s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+  }
+
+  .indicator {
+    animation: indicator-out 0.3s ease-out 0.1s both;
+  }
+
+  .badge {
+    --rise: 15px;
+    animation: rise 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
+  }
+
+  /* Slides but stays opaque: on phones the bio is the largest text block, so the LCP candidate. */
+  .bio {
+    animation: slide 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
+  }
+
+  .actions {
+    animation: rise 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+  }
+
+  .bento {
+    animation: scale-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop,
+  .indicator {
+    display: none;
+  }
+}
+
+@keyframes backdrop-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes indicator-out {
+  from {
+    opacity: 0.6;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(12px);
+    visibility: hidden;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(var(--rise, 20px));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes slide {
+  from {
+    transform: translateY(20px);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
-import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
+import { m, AnimatePresence, LayoutGroup } from 'framer-motion';
 import { experienceData, ExperienceItem } from './constants';
-import { ExperienceMorphModal } from './components/ExperienceMorphModal';
+import dynamic from 'next/dynamic';
 import { FADE_IN_UP_CONTAINER, FADE_IN_UP_ITEM } from '@/constant/animations';
+
+// Only needed once a row is opened, so its code loads on demand.
+const loadExperienceMorphModal = () => import('./components/ExperienceMorphModal');
+const ExperienceMorphModal = dynamic(loadExperienceMorphModal, { ssr: false });
 
 const Experience = () => {
   const [selectedItem, setSelectedItem] = useState<{ item: ExperienceItem; index: number } | null>(null);
 
   return (
     <LayoutGroup id="experience-group">
-      <motion.section 
+      <m.section 
         id="experience-section"
         variants={FADE_IN_UP_CONTAINER}
         initial="hidden"
@@ -20,7 +25,7 @@ const Experience = () => {
       >
         <div className="relative z-20 max-w-7xl mx-auto">
           {/* Section Header matching Projects and TechStack */}
-          <motion.div 
+          <m.div 
             variants={FADE_IN_UP_ITEM} 
             className="flex flex-col md:flex-row md:items-end justify-between mb-6 md:mb-12 pb-3 md:pb-4 border-b border-zinc-800 gap-4"
           >
@@ -33,9 +38,9 @@ const Experience = () => {
               </h2>
             </div>
             <p className="max-w-md text-zinc-400 font-mono text-xs md:text-sm leading-relaxed">
-              Chronological track record of engineering roles, production systems architecture, and technical contributions.
+              Where I have worked, newest first. Open a row for details, or read the case study.
             </p>
-          </motion.div>
+          </m.div>
 
           {/* Experience Table Rows */}
           <div className="divide-y divide-zinc-800/80 border-b border-zinc-800/80">
@@ -43,10 +48,13 @@ const Experience = () => {
               const isCurrent = exp.year.toLowerCase().includes('now');
 
               return (
-                <motion.div
+                <m.div
                   key={idx}
                   variants={FADE_IN_UP_ITEM}
                   layoutId={`exp-card-${idx}`}
+                  // Warm the modal chunk before the click so the first open still morphs straight away.
+                  onPointerEnter={() => void loadExperienceMorphModal()}
+                  onFocus={() => void loadExperienceMorphModal()}
                   onClick={() => setSelectedItem({ item: exp, index: idx })}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
@@ -87,6 +95,18 @@ const Experience = () => {
                     <p className="text-xs md:text-sm text-zinc-400 font-sans leading-relaxed mt-2 line-clamp-2 group-hover:text-zinc-300 transition-colors">
                       {exp.description}
                     </p>
+
+                    {exp.caseStudy && (
+                      <Link
+                        href={exp.caseStudy}
+                        // The row opens the detail modal; the link goes to the page instead.
+                        onClick={(e) => e.stopPropagation()}
+                        onKeyDown={(e) => e.stopPropagation()}
+                        className="inline-flex items-center gap-1 mt-2 text-xs font-mono text-zinc-400 hover:text-red-400 underline-offset-4 hover:underline transition-colors"
+                      >
+                        Case study <ArrowUpRight size={12} aria-hidden="true" />
+                      </Link>
+                    )}
                   </div>
 
                   {/* Right Column: Action Cue */}
@@ -101,7 +121,7 @@ const Experience = () => {
                       />
                     </div>
                   </div>
-                </motion.div>
+                </m.div>
               );
             })}
           </div>
@@ -117,7 +137,7 @@ const Experience = () => {
             />
           )}
         </AnimatePresence>
-      </motion.section>
+      </m.section>
     </LayoutGroup>
   );
 };

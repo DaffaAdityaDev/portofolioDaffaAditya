@@ -1,32 +1,47 @@
-import { Html, Head, Main, NextScript } from 'next/document';
+import { Html, Head, Main, NextScript, type DocumentProps } from 'next/document';
 import Script from 'next/script';
+import { BARE_PAGE_ROUTES } from '@/constant/constant';
 import { GA_MEASUREMENT_ID } from '../lib/gtag';
 
-export default function Document() {
-  return (
-    <Html className="scroll-smooth" lang="en">
-      <Head>
-        {/* Performance: Preconnect to external domains */}
-        <link rel="preconnect" href="https://www.googletagmanager.com" />
-        <link rel="preconnect" href="https://www.google-analytics.com" />
-        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+export default function Document({ __NEXT_DATA__ }: DocumentProps) {
+  // Bare pages (the playground preview iframe) get no analytics and no site styling on <body>.
+  if (__NEXT_DATA__?.page && BARE_PAGE_ROUTES.includes(__NEXT_DATA__.page)) {
+    return (
+      <Html lang="en">
+        <Head />
+        <body>
+          <Main />
+          <NextScript />
+        </body>
+      </Html>
+    );
+  }
 
+  return (
+    // The site is dark-only: `dark` drives the `dark:` variant (no theme provider needed).
+    <Html className="scroll-smooth dark" lang="en" style={{ colorScheme: 'dark' }}>
+      <Head>
         {/* Security and Rendering headers */}
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="theme-color" content="#000000" />
+        <link rel="icon" href="/svg/selflogo.svg" type="image/svg+xml" />
         
         {/* Analytics with performance optimization */}
         {GA_MEASUREMENT_ID && (
           <>
+            {/* Performance: Preconnect to external domains */}
+            <link rel="preconnect" href="https://www.googletagmanager.com" />
+            {/* Sends the first page view. Client-side navigations are counted by GA4 Enhanced
+                Measurement ("page changes based on browser history events", on by default), so
+                _app does not send its own, which would count every navigation twice. */}
             <Script
               id="ga-script"
-              strategy="afterInteractive"
+              strategy="lazyOnload"
               src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
             />
             <Script
               id="gtag-init"
-              strategy="afterInteractive"
+              strategy="lazyOnload"
               dangerouslySetInnerHTML={{
                 __html: `
                   window.dataLayer = window.dataLayer || [];
@@ -34,8 +49,7 @@ export default function Document() {
                   gtag('js', new Date());
                   gtag('config', '${GA_MEASUREMENT_ID}', {
                     page_path: window.location.pathname,
-                    transport_type: 'beacon',
-                    send_page_view: false
+                    transport_type: 'beacon'
                   });
                 `,
               }}

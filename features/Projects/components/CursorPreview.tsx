@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { m, useMotionValue, useSpring } from 'framer-motion';
 import { Project } from '../constants';
 import Image from 'next/image';
 
@@ -43,7 +43,7 @@ const CursorPreview: React.FC<CursorPreviewProps> = ({ hoveredProject }) => {
   }, [hoveredProject, cursorX, cursorY]);
 
   const content = (
-    <motion.div 
+    <m.div 
       className="fixed pointer-events-none z-[100] w-[300px] h-[200px] rounded-lg overflow-hidden hidden lg:block border border-zinc-800 shadow-2xl bg-zinc-900"
       style={{ 
         x, 
@@ -85,7 +85,7 @@ const CursorPreview: React.FC<CursorPreviewProps> = ({ hoveredProject }) => {
           </>
         ) : null}
       </div>
-    </motion.div>
+    </m.div>
   );
 
   if (!isMounted) return null;

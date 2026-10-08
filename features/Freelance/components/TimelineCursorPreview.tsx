@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { motion, useSpring, useMotionValue } from 'framer-motion';
+import { m, useSpring, useMotionValue } from 'framer-motion';
 import { TimelineNode } from '../constants';
+import { useFreelanceStore } from '@/store/useFreelanceStore';
 import Image from 'next/image';
 
-interface TimelineCursorPreviewProps {
-  hoveredNode: TimelineNode | null;
+export interface TimelineCursorPreviewProps {
+  hoveredNode?: TimelineNode | null;
 }
 
-export const TimelineCursorPreview: React.FC<TimelineCursorPreviewProps> = ({ hoveredNode }) => {
+export const TimelineCursorPreview: React.FC<TimelineCursorPreviewProps> = (props) => {
+  const storeHoveredNode = useFreelanceStore((state) => state.hoveredNode);
+  const hoveredNode = props.hoveredNode !== undefined ? props.hoveredNode : storeHoveredNode;
   const cursorX = useMotionValue(0);
   const cursorY = useMotionValue(0);
   
@@ -44,7 +47,7 @@ export const TimelineCursorPreview: React.FC<TimelineCursorPreviewProps> = ({ ho
   if (!isMounted) return null;
 
   return createPortal(
-    <motion.div 
+    <m.div 
       className="fixed pointer-events-none z-[100] w-[320px] h-[200px] rounded-xl overflow-hidden hidden lg:block border border-red-500/20 shadow-[0_0_30px_rgba(239,68,68,0.15)] bg-zinc-950"
       style={{ 
         x, 
@@ -89,10 +92,13 @@ export const TimelineCursorPreview: React.FC<TimelineCursorPreviewProps> = ({ ho
                 {activeNode.title}
               </span>
             </div>
+
+            {/* Fluid top specular edge, above the image and scrims so it is not painted over */}
+            <div className="absolute inset-0 pointer-events-none"></div>
           </>
         )}
       </div>
-    </motion.div>,
+    </m.div>,
     document.body
   );
 };

@@ -25,3 +25,44 @@ export const calculateDuration = (startDate: Date) => {
     ss: (seconds % 60).toString().padStart(2, '0')
   };
 };
+
+/**
+ * Safely formats an ISO date string or Date object into a readable format.
+ * Pure function with fallback handling for malformed dates.
+ * Formatted in UTC, where "2025-05-12" is parsed, so the server and every
+ * visitor's browser print the same day and hydration does not mismatch.
+ */
+export const formatDate = (
+  dateInput: string | Date | undefined | null,
+  locale: string = 'en-US'
+): string => {
+  if (!dateInput) return '';
+  try {
+    const date = typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
+    if (isNaN(date.getTime())) {
+      return typeof dateInput === 'string' ? dateInput : '';
+    }
+    return date.toLocaleDateString(locale, {
+      timeZone: 'UTC',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  } catch {
+    return typeof dateInput === 'string' ? dateInput : '';
+  }
+};
+
+/**
+ * Returns the current time formatted for the Asia/Jakarta timezone (24-hour clock).
+ * Pure function with default parameter for effortless testing and rendering.
+ */
+export const formatJakartaTime = (date: Date = new Date()): string => {
+  return date.toLocaleTimeString('en-US', {
+    timeZone: 'Asia/Jakarta',
+    hour12: false,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  });
+};

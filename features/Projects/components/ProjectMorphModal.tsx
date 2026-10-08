@@ -1,11 +1,13 @@
 import React from 'react';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { X, ExternalLink, Activity, CheckCircle2, Award } from 'lucide-react';
-import { Project, CASE_STUDIES_META, DEFAULT_META } from '../constants';
+import Link from 'next/link';
+import { m } from 'framer-motion';
+import { X, ExternalLink, Activity, CheckCircle2, Award, ArrowUpRight } from 'lucide-react';
+import { Project, CASE_STUDIES_META, PROJECT_VIDEOS } from '../constants';
 import { SPRING_MOBILE_OS, BACKDROP_VARIANTS } from '@/constant/animations';
 import { useModalDismiss } from '@/hooks/useModalDismiss';
 import Portal from '@/components/ui/Portal';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 interface ProjectMorphModalProps {
   project: Project | null;
@@ -14,16 +16,18 @@ interface ProjectMorphModalProps {
 
 export const ProjectMorphModal: React.FC<ProjectMorphModalProps> = ({ project, onClose }) => {
   useModalDismiss(!!project, onClose);
+  const reducedMotion = usePrefersReducedMotion();
 
   if (!project) return null;
 
-  const meta = CASE_STUDIES_META[project.slug] || DEFAULT_META;
+  const meta = CASE_STUDIES_META[project.slug];
+  const video = PROJECT_VIDEOS[project.slug];
 
   return (
     <Portal>
       <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 md:p-10 pointer-events-auto">
         {/* Backdrop with modern OS blur */}
-        <motion.div
+        <m.div
           variants={BACKDROP_VARIANTS}
           initial="hidden"
           animate="visible"
@@ -34,7 +38,7 @@ export const ProjectMorphModal: React.FC<ProjectMorphModalProps> = ({ project, o
         />
 
         {/* Fluid Morphing Container (Shared layoutId with triggering row) */}
-        <motion.div
+        <m.div
           layoutId={`project-card-${project.id}`}
           transition={SPRING_MOBILE_OS}
           className="relative w-full max-w-3xl max-h-[90vh] bg-[#0c0c0e]/90 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-[0_32px_80px_rgba(0,0,0,0.95)] overflow-hidden flex flex-col text-neutral-100 focus:outline-none"
@@ -44,7 +48,7 @@ export const ProjectMorphModal: React.FC<ProjectMorphModalProps> = ({ project, o
           tabIndex={-1}
         >
           {/* Smooth Inner Content Transition (prevents content distortion during outer container morph) */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -78,15 +82,32 @@ export const ProjectMorphModal: React.FC<ProjectMorphModalProps> = ({ project, o
           {/* Visual Showcase / Image Preview */}
           {project.image && (
             <div className="relative w-full aspect-16/9 rounded-2xl overflow-hidden border border-white/10 bg-neutral-900/60 shadow-inner">
-              <Image
-                src={project.image}
-                alt={project.title}
-                fill
-                className="object-cover object-top"
-                sizes="(max-width: 768px) 100vw, 768px"
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c0e] via-transparent to-transparent opacity-80" />
+              {video ? (
+                // Muted and inline so browsers allow autoplay; reduced motion gets controls instead.
+                <video
+                  className="absolute inset-0 w-full h-full object-cover object-top"
+                  poster={project.image}
+                  autoPlay={!reducedMotion}
+                  controls={reducedMotion}
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  aria-label={project.title}
+                >
+                  <source src={video.webm} type="video/webm" />
+                  <source src={video.mp4} type="video/mp4" />
+                </video>
+              ) : (
+                <Image
+                  src={project.image}
+                  alt={project.title}
+                  fill
+                  className="object-cover object-top"
+                  sizes="(max-width: 768px) 100vw, 768px"
+                />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c0e] via-transparent to-transparent opacity-80 pointer-events-none" />
             </div>
           )}
 
@@ -100,7 +121,7 @@ export const ProjectMorphModal: React.FC<ProjectMorphModalProps> = ({ project, o
                 {project.title.replace(/_/g, ' ')}
               </h2>
 
-              {/* Audited Metric Pill */}
+              {/* Metric pill (none when the project has no meta) */}
               {meta?.metric && (
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-xs font-mono font-bold tracking-wider uppercase shadow-[0_0_12px_rgba(16,185,129,0.15)]">
                   <Activity size={14} className="animate-pulse text-emerald-400" />
@@ -114,12 +135,12 @@ export const ProjectMorphModal: React.FC<ProjectMorphModalProps> = ({ project, o
             </p>
           </div>
 
-          {/* Key Achievements & Measurable Impact */}
+          {/* What I did */}
           {project.achievements && project.achievements.length > 0 && (
             <div className="space-y-3 pt-2 border-t border-white/5">
               <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest flex items-center gap-1.5 font-bold">
                 <Award size={13} className="text-emerald-400" />
-                KEY ACHIEVEMENTS & MEASURABLE IMPACT:
+                WHAT I DID:
               </span>
 
               <div className="space-y-2">
@@ -138,8 +159,8 @@ export const ProjectMorphModal: React.FC<ProjectMorphModalProps> = ({ project, o
 
           {/* Tech Stack Specs */}
           <div className="space-y-2 pt-2 border-t border-white/5">
-            <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest block">
-              SYSTEM ARCHITECTURE & TECH SPEC:
+            <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest block">
+              TECH STACK:
             </span>
             <div className="flex flex-wrap gap-2">
               {project.tech.map((tech, idx) => (
@@ -169,6 +190,16 @@ export const ProjectMorphModal: React.FC<ProjectMorphModalProps> = ({ project, o
               </a>
             )}
 
+            {project.link && (
+              <Link
+                href={project.link}
+                data-cursor="merge"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/15 text-white font-mono text-xs uppercase tracking-wider hover:bg-white/10 transition-colors"
+              >
+                Case study <ArrowUpRight size={13} />
+              </Link>
+            )}
+
             <button
               onClick={onClose}
               data-cursor="merge"
@@ -178,8 +209,8 @@ export const ProjectMorphModal: React.FC<ProjectMorphModalProps> = ({ project, o
             </button>
           </div>
         </div>
-      </motion.div>
-    </motion.div>
+      </m.div>
+    </m.div>
   </div>
   </Portal>
   );

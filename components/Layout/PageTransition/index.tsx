@@ -1,106 +1,90 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+import { usePresence, useReducedMotion } from 'framer-motion';
+import styles from './PageTransition.module.css';
 
 const NUM_COLS = 10;
 const NUM_ROWS = 7;
 
-const COLS_ARRAY = Array.from({ length: NUM_COLS });
-const ROWS_ARRAY = Array.from({ length: NUM_ROWS });
+// Speed chosen by the owner: about 300 ms per phase (cover, then uncover), ~600 ms per navigation.
+// Raise WAVE_STEP_MS and CELL_MS together to slow it down; PHASE_MS follows.
+const CELL_MS = 160;
+const WAVE_STEP_MS = 8;
 
-// Deterministic diagonal wave with digital scatter
+// Deterministic diagonal wave with digital scatter, in ms
 const getPixelDelay = (col: number, row: number): number => {
-  const diagonal = (col + row) * 0.024;
-  const scatter = ((col * 3 + row * 7) % 5) * 0.012;
+  const diagonal = (col + row) * WAVE_STEP_MS;
+  const scatter = ((col * 3 + row * 7) % 5) * (WAVE_STEP_MS / 2);
   return diagonal + scatter;
 };
 
-// High-Contrast Pixel Transition Variants (Scale + Opacity Bloom)
-const pixelVariants = {
-  initial: {
-    scale: 1,
-    opacity: 1,
-  },
-  enter: ({ col, row }: { col: number; row: number }) => ({
-    scale: 0,
-    opacity: 0,
-    transition: {
-      duration: 0.35,
-      delay: getPixelDelay(col, row),
-      ease: [0.76, 0, 0.24, 1] as const,
-    },
-  }),
-  exit: ({ col, row }: { col: number; row: number }) => ({
-    scale: 1,
-    opacity: 1,
-    transition: {
-      duration: 0.35,
-      delay: getPixelDelay(col, row),
-      ease: [0.76, 0, 0.24, 1] as const,
-    },
-  }),
-};
+// A phase ends when the last cell finishes: its delay plus one cell animation.
+const PHASE_MS = CELL_MS + getPixelDelay(NUM_COLS - 1, NUM_ROWS - 1) + 4 * (WAVE_STEP_MS / 2);
 
-// Subtle content fade
-const contentVariants = {
-  initial: {
-    opacity: 0,
-  },
-  enter: {
-    opacity: 1,
-    transition: {
-      duration: 0.3,
-      delay: 0.15,
-      ease: [0.22, 1, 0.36, 1] as const,
-    },
-  },
-  exit: {
-    opacity: 0.85,
-    transition: {
-      duration: 0.2,
-    },
-  },
-};
+const CELL_DELAYS = Array.from({ length: NUM_ROWS * NUM_COLS }, (_, index) =>
+  getPixelDelay(index % NUM_COLS, Math.floor(index / NUM_COLS))
+);
+
+const GRID_STYLE = {
+  '--cols': NUM_COLS,
+  '--rows': NUM_ROWS,
+  '--cell-ms': `${CELL_MS}ms`,
+} as React.CSSProperties;
+
+// Set when a page finishes covering the screen, so the next page knows to uncover it.
+// Stays false on the first load, which therefore never plays the overlay.
+let uncoverPending = false;
+
+const PixelOverlay = ({ phase }: { phase: 'cover' | 'uncover' }) => (
+  <div aria-hidden="true" className={`${styles.overlay} ${styles[phase]}`} style={GRID_STYLE}>
+    {CELL_DELAYS.map((delay, index) => (
+      <div key={index} className={styles.cell} style={{ '--i': delay } as React.CSSProperties} />
+    ))}
+  </div>
+);
 
 interface PageTransitionProps {
   children: React.ReactNode;
 }
 
+/**
+ * Route transition for AnimatePresence (mode="wait"). The pixel grid is only in the DOM
+ * while it plays: the leaving page covers the screen, then the entering page uncovers it.
+ * Reduced motion skips both phases and swaps pages instantly.
+ */
 const PageTransition = React.forwardRef<HTMLDivElement, PageTransitionProps>(
   ({ children }, ref) => {
+    const [isPresent, safeToRemove] = usePresence();
+    const prefersReducedMotion = useReducedMotion();
+    const [isUncovering, setIsUncovering] = useState(() => uncoverPending);
+
+    // Leaving: cover the old page, then let AnimatePresence mount the next one.
+    useEffect(() => {
+      if (isPresent) return;
+      if (prefersReducedMotion) {
+        safeToRemove();
+        return;
+      }
+      const timeout = setTimeout(() => {
+        uncoverPending = true;
+        safeToRemove();
+      }, PHASE_MS);
+      return () => clearTimeout(timeout);
+    }, [isPresent, safeToRemove, prefersReducedMotion]);
+
+    // Entering: uncover, then drop the overlay from the DOM.
+    useEffect(() => {
+      uncoverPending = false;
+      if (!isUncovering) return;
+      const timeout = setTimeout(() => setIsUncovering(false), PHASE_MS);
+      return () => clearTimeout(timeout);
+    }, [isUncovering]);
+
+    const phase = !isPresent ? 'cover' : isUncovering ? 'uncover' : null;
+
     return (
       <div ref={ref} className="relative w-full min-h-full">
-        {/* High-Contrast Pixel Grid Page Transition Overlay */}
-        <div
-          aria-hidden="true"
-          className="fixed inset-0 z-[80] pointer-events-none flex w-screen h-screen overflow-hidden"
-        >
-          {COLS_ARRAY.map((_, col) => (
-            <div key={col} className="flex-1 h-full flex flex-col">
-              {ROWS_ARRAY.map((_, row) => (
-                <motion.div
-                  key={row}
-                  custom={{ col, row }}
-                  variants={pixelVariants}
-                  initial="initial"
-                  animate="enter"
-                  exit="exit"
-                  className="w-full flex-1 bg-[#18181c] border border-white/20 shadow-[inset_0_0_12px_rgba(255,255,255,0.03)] origin-center"
-                />
-              ))}
-            </div>
-          ))}
-        </div>
-
-        {/* Page Content */}
-        <motion.div
-          variants={contentVariants}
-          initial="initial"
-          animate="enter"
-          exit="exit"
-          className="h-full w-full"
-        >
-          {children}
-        </motion.div>
+        {phase && !prefersReducedMotion && <PixelOverlay phase={phase} />}
+        {children}
       </div>
     );
   }

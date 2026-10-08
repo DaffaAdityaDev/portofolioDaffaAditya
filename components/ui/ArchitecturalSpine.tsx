@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import type { Variants } from 'framer-motion';
+import type { SectionNode } from '@/types/navigation';
 
-interface SectionNode {
-  id: string;
-  number: string;
-  label: string;
-}
+export type { SectionNode };
 
 const SECTIONS: SectionNode[] = [
   { id: 'about', number: '01', label: 'ABOUT' },
@@ -14,6 +11,13 @@ const SECTIONS: SectionNode[] = [
   { id: 'works', number: '03', label: 'PROJECTS' },
   { id: 'tech-stack', number: '04', label: 'TECH STACK' },
 ];
+
+const DEFAULT_LINE_COORDS = {
+  x: 8.5,
+  positions: [14, 78, 142, 206],
+} as const;
+
+const SCROLL_OFFSET_PX = -40;
 
 // GPU-accelerated animation variants (Zero layout shift, pure transform & opacity interpolation)
 const labelVariants: Variants = {
@@ -43,8 +47,8 @@ export const ArchitecturalSpine: React.FC = () => {
   const spineRef = useRef<HTMLDivElement>(null);
   const nodeRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [lineCoords, setLineCoords] = useState<{ x: number; positions: number[] }>({
-    x: 8.5,
-    positions: [14, 78, 142, 206],
+    x: DEFAULT_LINE_COORDS.x,
+    positions: [...DEFAULT_LINE_COORDS.positions],
   });
 
   const updateNodePositions = () => {
@@ -73,19 +77,47 @@ export const ArchitecturalSpine: React.FC = () => {
     updateNodePositions();
     const timer = setTimeout(updateNodePositions, 100);
 
-    const handleScroll = () => {
+    // Page and viewport heights are cached and refreshed only when they change (resize, or the
+    // document growing as lazy sections load), so scrolling reads nothing that forces layout.
+    let documentHeight = document.documentElement.scrollHeight;
+    let windowHeight = window.innerHeight;
+
+    const updateVisibility = () => {
       const scrollY = window.scrollY;
       const heroThreshold = 350;
-      const documentHeight = document.documentElement.scrollHeight;
-      const windowHeight = window.innerHeight;
       const footerThreshold = documentHeight - windowHeight - 400;
 
       setIsVisible(scrollY > heroThreshold && scrollY < footerThreshold);
     };
 
+    // One update per frame at most, however many scroll/resize events arrive.
+    let scrollFrame = 0;
+    const handleScroll = () => {
+      if (scrollFrame) return;
+      scrollFrame = requestAnimationFrame(() => {
+        scrollFrame = 0;
+        updateVisibility();
+      });
+    };
+
+    let measureFrame = 0;
+    const remeasure = () => {
+      if (measureFrame) return;
+      measureFrame = requestAnimationFrame(() => {
+        measureFrame = 0;
+        documentHeight = document.documentElement.scrollHeight;
+        windowHeight = window.innerHeight;
+        updateNodePositions();
+        updateVisibility();
+      });
+    };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', updateNodePositions);
-    handleScroll();
+    window.addEventListener('resize', remeasure);
+    const resizeObserver =
+      typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(remeasure);
+    resizeObserver?.observe(document.body);
+    updateVisibility();
 
     // Active section tracking via IntersectionObserver
     const observer = new IntersectionObserver(
@@ -109,8 +141,11 @@ export const ArchitecturalSpine: React.FC = () => {
 
     return () => {
       clearTimeout(timer);
+      cancelAnimationFrame(scrollFrame);
+      cancelAnimationFrame(measureFrame);
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', updateNodePositions);
+      window.removeEventListener('resize', remeasure);
+      resizeObserver?.disconnect();
       observer.disconnect();
     };
   }, []);
@@ -118,8 +153,7 @@ export const ArchitecturalSpine: React.FC = () => {
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
     if (!el) return;
-    const yOffset = -40;
-    const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+    const y = el.getBoundingClientRect().top + window.pageYOffset + SCROLL_OFFSET_PX;
     window.scrollTo({ top: y, behavior: 'smooth' });
   };
 
@@ -130,7 +164,7 @@ export const ArchitecturalSpine: React.FC = () => {
   const totalRailHeight = (lineCoords.positions[SECTIONS.length - 1] ?? 230) - startY;
 
   return (
-    <motion.nav
+    <m.nav
       aria-label="Section Navigation Spine"
       initial="collapsed"
       animate={isHovered ? 'expanded' : 'collapsed'}
@@ -163,7 +197,7 @@ export const ArchitecturalSpine: React.FC = () => {
         />
 
         {/* System Accent Traveling Beam - Stops PRECISELY at the active circle */}
-        <motion.div
+        <m.div
           className="absolute w-[2px] bg-gradient-to-b from-red-500 to-red-600 shadow-[0_0_10px_rgba(239,68,68,0.85)] rounded-full -translate-x-1/2 pointer-events-none z-0"
           style={{
             left: lineCoords.x,
@@ -190,7 +224,7 @@ export const ArchitecturalSpine: React.FC = () => {
               aria-current={isActive ? 'true' : undefined}
             >
               {/* Sliding Text Label */}
-              <motion.span
+              <m.span
                 variants={labelVariants}
                 className={`text-[10px] font-mono tracking-wider whitespace-nowrap pr-1 transition-colors duration-200 ${
                   isActive
@@ -199,14 +233,14 @@ export const ArchitecturalSpine: React.FC = () => {
                 }`}
               >
                 {section.label}
-              </motion.span>
+              </m.span>
 
               {/* Number */}
               <span
                 className={`text-xs font-mono transition-colors duration-200 pr-1 ${
                   isActive
                     ? 'text-red-500 font-bold'
-                    : 'text-zinc-600 group-hover/item:text-zinc-300'
+                    : 'text-zinc-500 group-hover/item:text-zinc-300'
                 }`}
               >
                 {section.number}
@@ -220,7 +254,7 @@ export const ArchitecturalSpine: React.FC = () => {
                 className={`relative w-[9px] h-[9px] rounded-full border transition-all duration-300 flex items-center justify-center shrink-0 z-10 ${
                   isActive
                     ? 'bg-[#0a0a0a] border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)] scale-125'
-                    : 'bg-[#0a0a0a] border-zinc-700 group-hover/item:border-red-500/60'
+                    : 'bg-[#0a0a0a] border-zinc-700 group-hover/item:border-red-500/60 '
                 }`}
               >
                 <div
@@ -233,7 +267,7 @@ export const ArchitecturalSpine: React.FC = () => {
           );
         })}
       </div>
-    </motion.nav>
+    </m.nav>
   );
 };
 

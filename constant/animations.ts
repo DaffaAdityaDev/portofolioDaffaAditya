@@ -60,3 +60,24 @@ export const BACKDROP_VARIANTS = {
   exit: { opacity: 0, transition: { duration: 0.2, ease: "easeIn" as const } },
 };
 
+export const SPRING_COUNTER = {
+  stiffness: 120,
+  damping: 24,
+  mass: 0.6,
+};
+
+/** Scroll-reveal item: short and small, so content never feels like it is loading in late. */
+export const REVEAL_ITEM = {
+  hidden: { y: 12, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] as const },
+  },
+};
+
+/** Scroll-reveal trigger: fire once, before the block enters the viewport. */
+export const REVEAL_VIEWPORT = {
+  once: true,
+  margin: '0px 0px 120px 0px',
+} as const;

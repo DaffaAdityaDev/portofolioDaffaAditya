@@ -36,7 +36,7 @@ export const AmbientGlowCard: React.FC<AmbientGlowCardProps> = ({ children, clas
         }}
       />
       
-      {/* Design accents */}
+      {/* Design accents (Fluid insets them past the larger corner radius so overflow-hidden keeps them) */}
       <div className="absolute top-0 left-0 w-[20px] h-[1px] bg-gradient-to-r from-red-500/20 to-transparent group-hover:from-red-500/70 transition-all duration-500" />
       <div className="absolute top-0 left-0 w-[1px] h-[20px] bg-gradient-to-b from-red-500/20 to-transparent group-hover:from-red-500/70 transition-all duration-500" />
       <div className="absolute bottom-0 right-0 w-[20px] h-[1px] bg-gradient-to-l from-red-500/10 to-transparent group-hover:from-red-500/40 transition-all duration-500" />

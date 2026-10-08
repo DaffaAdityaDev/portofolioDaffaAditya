@@ -1,0 +1,132 @@
+import React from 'react';
+import Image from 'next/image';
+
+/** Intrinsic sizes of the project screenshots, so every screenshot reserves its box before it loads. */
+const SHOT_SIZES: Record<string, { width: number; height: number }> = {
+  '/image/projects/platform.webp': { width: 1862, height: 984 },
+  '/image/projects/accplus.webp': { width: 1885, height: 1004 },
+  '/image/projects/ombudsman.webp': { width: 1077, height: 552 },
+  '/image/projects/qltech.webp': { width: 1880, height: 990 },
+  '/image/projects/artifyo.webp': { width: 1899, height: 999 },
+  '/image/projects/aliman.webp': { width: 1905, height: 999 },
+  '/image/projects/recyclops.webp': { width: 414, height: 882 },
+};
+const FALLBACK_SIZE = { width: 1600, height: 900 };
+
+export const shotSize = (src: string) => SHOT_SIZES[src] ?? FALLBACK_SIZE;
+
+/** Portrait screenshots get a phone frame, landscape ones a browser window. */
+export const isPortraitShot = (src: string) => {
+  const { width, height } = shotSize(src);
+  return height > width;
+};
+
+export interface ShotItem {
+  src: string;
+  alt: string;
+}
+
+interface FrameProps extends ShotItem {
+  eager?: boolean;
+  /** next/image `sizes`: the frame's rendered width. */
+  sizes: string;
+  className?: string;
+  style?: React.CSSProperties;
+}
+
+/** A screenshot in a minimal browser window: three dots, a slim bar, a soft drop shadow. */
+export const BrowserFrame: React.FC<FrameProps> = ({ src, alt, eager, sizes, className = '', style }) => {
+  const { width, height } = shotSize(src);
+  return (
+    <figure
+      className={`overflow-hidden rounded-md border border-white/[0.12] bg-[#111114] shadow-[0_24px_48px_-12px_rgba(0,0,0,0.85),0_0_0_1px_rgba(0,0,0,0.6)] ${className}`}
+      style={style}
+    >
+      <div aria-hidden="true" className="flex h-5 items-center gap-1 border-b border-white/[0.08] bg-[#18181b] px-2">
+        <span className="h-1.5 w-1.5 rounded-full bg-[#3f3f46]" />
+        <span className="h-1.5 w-1.5 rounded-full bg-[#3f3f46]" />
+        <span className="h-1.5 w-1.5 rounded-full bg-[#3f3f46]" />
+        <span className="ml-2 h-2 flex-1 rounded-sm bg-white/[0.05]" />
+      </div>
+      <Image
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        sizes={sizes}
+        loading={eager ? 'eager' : 'lazy'}
+        className="block h-auto w-full"
+        style={{ aspectRatio: `${width} / ${height}` }}
+      />
+    </figure>
+  );
+};
+
+/** A portrait screenshot in a slim phone body. */
+export const PhoneFrame: React.FC<FrameProps> = ({ src, alt, eager, sizes, className = '', style }) => {
+  const { width, height } = shotSize(src);
+  return (
+    <figure
+      className={`overflow-hidden rounded-[14px] border-[3px] border-[#27272a] bg-[#111114] shadow-[0_24px_48px_-12px_rgba(0,0,0,0.85)] ${className}`}
+      style={style}
+    >
+      <Image
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        sizes={sizes}
+        loading={eager ? 'eager' : 'lazy'}
+        className="block h-auto w-full"
+        style={{ aspectRatio: `${width} / ${height}` }}
+      />
+    </figure>
+  );
+};
+
+const LIFT =
+  'transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-safe:group-hover:-translate-y-1 motion-safe:group-focus-within:-translate-y-1';
+
+/**
+ * The project screenshot(s) layered over a card poster, sitting high so most of each frame shows.
+ * One project: a single centred window. Two or more: the first sits back and left, the second
+ * in front and right, so both read at a glance. The poster must be `relative overflow-hidden`.
+ */
+export const PosterShots: React.FC<{ shots: ShotItem[]; eager?: boolean; wide?: boolean }> = ({
+  shots,
+  eager,
+  wide,
+}) => {
+  if (shots.length === 0) return null;
+  // The poster is about half the viewport in a two-column card, a bit more in a wide one.
+  const sizes = wide ? '(min-width: 768px) 60vw, 100vw' : '(min-width: 768px) 50vw, 100vw';
+
+  if (shots.length === 1) {
+    const [shot] = shots;
+    if (isPortraitShot(shot.src)) {
+      return (
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 top-[12%] z-[6] flex justify-center">
+          <PhoneFrame {...shot} eager={eager} sizes="180px" className={`w-[30%] max-w-[180px] self-start ${LIFT}`} />
+        </div>
+      );
+    }
+    return (
+      <div className="pointer-events-none absolute inset-x-0 top-[12%] z-[6] flex justify-center">
+        <BrowserFrame {...shot} eager={eager} sizes={sizes} className={`w-[86%] ${LIFT}`} />
+      </div>
+    );
+  }
+
+  const [back, front] = shots;
+  return (
+    <div className="pointer-events-none absolute inset-0 z-[6]">
+      <BrowserFrame
+        {...back}
+        eager={eager}
+        sizes={sizes}
+        className={`absolute left-[6%] top-[12%] w-[62%] opacity-90 ${LIFT}`}
+      />
+      <BrowserFrame {...front} eager={eager} sizes={sizes} className={`absolute right-[6%] top-[26%] w-[62%] ${LIFT}`} />
+    </div>
+  );
+};

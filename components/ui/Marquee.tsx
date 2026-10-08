@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useReducedMotion } from 'framer-motion';
+import { DEFAULT_MARQUEE_SPEED } from '@/constant/constant';
 
-interface MarqueeProps {
+export interface MarqueeProps {
   text: string;
   direction?: 'left' | 'right';
   type?: 'dark' | 'light';
@@ -18,7 +19,7 @@ const Marquee: React.FC<MarqueeProps> = ({
   border = true,
   opacity = 1,
   className = '',
-  speed = 35,
+  speed = DEFAULT_MARQUEE_SPEED,
 }) => {
   const [isIntersecting, setIsIntersecting] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);

@@ -1,8 +1,10 @@
 export const siteConfig = {
-    title: 'Daffa Aditya Rahman',
-    description: 'Daffa Aditya Personal Website',
+    name: 'Daffa Aditya',
+    title: 'Daffa Aditya',
+    description:
+      'Software engineer in Jakarta building Accounting+ and an enterprise low-code platform. Case studies and writing.',
     url: 'https://daffaaditya.id',
-    ogImage: '/image/Profile.jpg',
+    ogImage: '/image/og-default.jpg',
     links: {
       github: 'https://github.com/DaffaAdityaDev',
       linkedin: 'https://www.linkedin.com/in/daffaadityarahman-14b588192/',

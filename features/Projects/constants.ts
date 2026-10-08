@@ -1,21 +1,6 @@
-export interface Project {
-  id: number;
-  title: string;
-  slug: string;
-  client: string;
-  description: string;
-  year: string;
-  type: string;
-  category: string;
-  featured: boolean;
-  link: string;
-  liveLink?: string;
-  image: string;
-  color: string;
-  tech: string[];
-  nature: string;
-  achievements?: string[];
-}
+import type { Project, ColorSpec, CaseStudyMeta } from '@/types/project';
+
+export type { Project, ColorSpec, CaseStudyMeta };
 
 export const projectsData: Project[] = [
   {
@@ -23,21 +8,21 @@ export const projectsData: Project[] = [
     title: "PLATFORM",
     slug: "platform",
     client: "Run System",
-    description: "Maintain and develop an enterprise low-code platform using Next.js and Zustand, optimizing application performance by decoupling core UI logic into a proprietary npm library for cross-project reusability; manage end-to-end feature releases and secure 3rd-party integrations to ensure stable, high-scale production performance.",
+    description: "Run System's enterprise low-code platform, where customers build business tools in a visual editor. I maintain the core system and its third-party integrations, including payments, and helped build the visual editor.",
     year: "2024",
     type: "WEB_APP",
     category: "WEB_APP",
     featured: true,
-    link: "/case-studies/platform",
+    link: "/case-studies/run-system",
     liveLink: "https://runsystem.io/",
     image: "/image/projects/platform.webp",
     color: "from-blue-600 to-indigo-900",
-    tech: ["Nextjs", "TypeScript", "Component Library"],
+    tech: ["Nextjs", "TypeScript", "Zustand"],
     nature: "work",
     achievements: [
-      "Decoupled core UI logic into a proprietary npm package, boosting feature reusability across teams by 40%.",
-      "Architected reactive state management with Zustand, eliminating unnecessary component render cascades.",
-      "Secured third-party enterprise integrations with strict error boundaries and fallback handling."
+      "Maintain the core system of the low-code platform.",
+      "Maintain its third-party integrations, including the payment flow.",
+      "Helped build the visual editor where customers lay out screens without code."
     ]
   },
   {
@@ -45,21 +30,21 @@ export const projectsData: Project[] = [
     title: "ACCOUNTING+",
     slug: "accounting-plus",
     client: "Run System",
-    description: "Architected and maintained a multi-service SaaS ecosystem, implemented secure third-party integrations, and delivered performance optimizations to ensure a fast, scalable experience across distributed frontend architectures.",
+    description: "A multi-service accounting SaaS with companion apps for e-signature by email and POS cashiering. I build and maintain the frontend and deliver third-party integrations for BUMN and government-program clients.",
     year: "2024",
     type: "WEB_APP",
     category: "WEB_APP",
     featured: true,
-    link: "/case-studies/accounting-plus",
+    link: "/case-studies/run-system",
     liveLink: "https://accountingplus.id/",
     image: "/image/projects/accplus.webp",
     color: "from-blue-600 to-indigo-900",
     tech: ["Nextjs", "TypeScript", "TanStack Query"],
     nature: "work",
     achievements: [
-      "Engineered multi-tenant ledger interfaces processing real-time transactional balances with zero latency.",
-      "Optimized server payload delivery by 45% through TanStack Query caching and stale-while-revalidate pipelines.",
-      "Enforced strict financial data validation across multi-organization tax and accounting modules."
+      "Built ledger screens that show balances in real time, with validation across the tax and accounting modules.",
+      "Made server payload delivery about 45% better with TanStack Query caching (stale-while-revalidate).",
+      "Delivered third-party integrations that let BUMN and government-program clients go live."
     ]
   },
   {
@@ -67,21 +52,21 @@ export const projectsData: Project[] = [
     title: "OMBUDSMAN_ITEM_MANAGEMENT",
     slug: "ombudsman-item-management",
     client: "Ombudsman RI",
-    description: "Developed a high-performance inventory management system for the Ombudsman, featuring tracking system, role-based access control, and secure data handling to support government operations.",
-    year: "2024",
+    description: "An inventory management system for Ombudsman RI with item tracking, role-based access control and audit logging. Built during a 3-month internship at the institution, where I led the intern team.",
+    year: "2023",
     type: "WEB_APP",
     category: "WEB_APP",
     featured: true,
-    link: "/case-studies/ombudsman-item-management",
+    link: "/case-studies/ombudsman-ri",
     liveLink: "https://ombudsman.go.id/",
     image: "/image/projects/ombudsman.webp",
     color: "from-blue-600 to-indigo-900",
-    tech: ["React", "TypeScript", "TanStack Query"],
+    tech: ["React", "TypeScript", "TanStack Query", "Laravel"],
     nature: "work",
     achievements: [
-      "Built high-availability asset tracking platform supporting Ombudsman nationwide administrative offices.",
-      "Engineered granular Role-Based Access Control (RBAC) and immutable audit logging for public governance assets.",
-      "Achieved 99.9% uptime with containerized Docker deployments and automated process supervision."
+      "Led the intern team and shipped the full system to production within three months.",
+      "Built role-based access control scoped to every action, and an audit log that normal delete actions cannot touch.",
+      "Deployed it in Docker containers with automated process supervision."
     ]
   },
   {
@@ -89,21 +74,21 @@ export const projectsData: Project[] = [
     title: "QQTECH_WEBSITE",
     slug: "qqtech-website",
     client: "QQTech",
-    description: "Developed a corporate website, blog system and backend hr system for QQTech, featuring a modern design and smooth animations to showcase the company's products and services.",
+    description: "The corporate website, blog with CMS and internal HR portal for QQTech, built during my 2023 internship with Laravel, Vue.js and PostgreSQL.",
     year: "2023",
     type: "WEBSITE",
     category: "WEBSITE",
     featured: true,
-    link: "/case-studies/qqtech-website",
+    link: "/case-studies/qqtech",
     liveLink: "https://qqltech.com/",
     image: "/image/projects/qltech.webp",
     color: "from-purple-600 to-fuchsia-900",
     tech: ["Laravel", "Vuejs", "PostgreSQL"],
     nature: "work",
     achievements: [
-      "Developed corporate web platform and internal HR workflows, streamlining staff onboarding and documentation.",
-      "Constructed high-speed RESTful endpoints in Laravel backed by optimized PostgreSQL indexed queries.",
-      "Achieved sub-second initial page load with code-splitting, static asset compression, and Redis caching."
+      "Built the corporate website and a blog with a CMS from the designers' Figma prototypes.",
+      "Built the HR portal for staff onboarding and documents, with Laravel REST endpoints on PostgreSQL.",
+      "Kept the first page load under a second with code splitting, asset compression and Redis caching."
     ]
   },
   {
@@ -111,21 +96,21 @@ export const projectsData: Project[] = [
     title: "Recyclops",
     slug: "recyclops",
     client: "Side Project",
-    description: "Gamified mobile-first web app to encourage recycling habits in local communities.",
+    description: "A native Android app that shows people how to sort their waste, routes them to the nearest recycling point and rewards them with points. It works offline.",
     year: "2022",
     type: "MOBILE",
     category: "MOBILE",
     featured: true,
     link: "/case-studies/recyclops",
     liveLink: "https://github.com/DaffaAdityaDev/recyclops",
-    image: "/image/projects/recyclops-min.gif",
+    image: "/image/projects/recyclops.webp",
     color: "from-green-600 to-emerald-900",
-    tech: ["Android Native", "Firebase"],
+    tech: ["Kotlin", "Android", "Firebase"],
     nature: "side",
     achievements: [
-      "Engineered native Android mobile app with Kotlin and Firebase for community waste classification.",
-      "Integrated real-time camera barcode scanning and geolocation routing to nearest recycling hubs.",
-      "Maintained 60 FPS gesture rendering and robust offline synchronization for low-connectivity environments."
+      "Built the app in Kotlin with Firebase as the backend.",
+      "Added camera barcode scanning and routing to the nearest recycling point with Google Maps.",
+      "Made it work offline: actions are saved on the device and sync to Firebase when the connection returns."
     ]
   },
   {
@@ -133,7 +118,7 @@ export const projectsData: Project[] = [
     title: "ARTIFYO",
     slug: "artifyo",
     client: "Artifyo Creative Studio",
-    description: "Architected and deployed a modern digital agency platform for Artifyo Creative Studio using Next.js and TypeScript. Engineered fluid aspect-ratio grid systems and lazy-loading pipelines to showcase high-resolution creative media with minimal layout shift, driving high-converting client inquiries directly to WhatsApp.",
+    description: "The website of Artifyo Creative Studio, built with Next.js and TypeScript: a grid of the studio's work, a service catalog with pricing, and inquiries straight to WhatsApp.",
     year: "2025",
     type: "WEBSITE",
     category: "FREELANCE",
@@ -145,10 +130,10 @@ export const projectsData: Project[] = [
     tech: ["Nextjs", "TypeScript", "Tailwind CSS"],
     nature: "freelance",
     achievements: [
-      "Reduced Cumulative Layout Shift (CLS) to 0.4s using strict aspect-ratio containers and image lazy-loading.",
-      "Built dynamic service catalog and pricing matrices for branding, video animation, and design deliverables.",
-      "Integrated streamlined WhatsApp conversion funnels, converting organic visits into direct sales consultations.",
-      "Delivered mobile-first responsive architecture ensuring sub-second load times across 3G/4G cellular connections."
+      "Used fixed aspect-ratio containers and lazy-loaded images, so the high-resolution work loads with minimal layout shift.",
+      "Built the service catalog with pricing for branding, video animation and design packages.",
+      "Added a direct WhatsApp link so visitors can start a consultation in one tap.",
+      "Built the layout mobile-first; it loads in under a second on 3G and 4G."
     ]
   },
   {
@@ -156,10 +141,10 @@ export const projectsData: Project[] = [
     title: "Aliman Bulus",
     slug: "aliman-bulus",
     client: "Aliman Bulus Boarding School",
-    description: "Engineered a full-stack institutional financial management platform for Aliman Bulus Boarding School, automating santri student tuition tracking, monthly ledger auditing, and multi-tier administrative reporting.",
+    description: "A finance system for Aliman Bulus Boarding School: tuition and fee tracking on a double-entry ledger, monthly ledger audits and reports for each admin level. I wrote the UI specs and built the Next.js frontend and the PostgreSQL backend.",
     year: "2025",
-    type: "WEBSITE",
-    category: "WEBSITE",
+    type: "WEB_APP",
+    category: "FREELANCE",
     featured: true,
     link: "/case-studies/aliman-bulus",
     liveLink: "https://alimanbulus.net/",
@@ -168,40 +153,28 @@ export const projectsData: Project[] = [
     tech: ["Nextjs", "Nodejs", "PostgreSQL", "Tailwind CSS"],
     nature: "freelance",
     achievements: [
-      "Automated tuition and fee ledger reconciliation, replacing manual paper bookkeeping across 500+ students.",
-      "Designed normalized PostgreSQL schemas supporting multi-year historical financial records and invoice generation.",
-      "Implemented role-based administrative dashboards ensuring transparency and data security for school treasurers."
+      "Moved tuition records for 500+ students from paper books to one ledger.",
+      "Designed a normalized PostgreSQL schema for multi-year financial history and invoice generation.",
+      "Built role-based dashboards for school treasurers."
     ]
   },
 ];
 
-export interface ColorSpec {
-  accent: 'red' | 'blue' | 'emerald' | 'orange' | 'purple' | 'cyan';
-  glow: string;
-  pillsBorder: string;
-  pillsText: string;
-  pillsBg: string;
-}
-
-export interface CaseStudyMeta {
-  metric: string;
-  color: ColorSpec;
-}
-
-export const DEFAULT_META: CaseStudyMeta = {
-  metric: 'Audited Metric',
-  color: {
-    accent: 'emerald',
-    glow: 'from-emerald-500/0 via-emerald-500/5 to-emerald-500/0',
-    pillsBorder: 'border-emerald-500/15',
-    pillsText: 'text-emerald-400',
-    pillsBg: 'bg-emerald-500/5'
+/**
+ * Screen recordings played in the project modal, keyed by slug. `project.image`
+ * stays a still WebP (the poster), so hover previews and cards never fetch video.
+ */
+export const PROJECT_VIDEOS: Record<string, { webm: string; mp4: string }> = {
+  'recyclops': {
+    webm: '/image/projects/recyclops.webm',
+    mp4: '/image/projects/recyclops.mp4'
   }
 };
 
+/** Short pill per project. Every figure here must also appear in engagements.ts. */
 export const CASE_STUDIES_META: Record<string, CaseStudyMeta> = {
   'platform': {
-    metric: '99.98% Core Uptime',
+    metric: 'Payment integrations',
     color: {
       accent: 'emerald',
       glow: 'from-emerald-500/0 via-emerald-500/5 to-emerald-500/0',
@@ -211,7 +184,7 @@ export const CASE_STUDIES_META: Record<string, CaseStudyMeta> = {
     }
   },
   'accounting-plus': {
-    metric: '180ms Payload Fetch',
+    metric: '45% better payload delivery',
     color: {
       accent: 'blue',
       glow: 'from-blue-500/0 via-blue-500/5 to-blue-500/0',
@@ -221,7 +194,7 @@ export const CASE_STUDIES_META: Record<string, CaseStudyMeta> = {
     }
   },
   'ombudsman-item-management': {
-    metric: 'Role-Based Access Lock',
+    metric: 'Shipped in 3 months',
     color: {
       accent: 'emerald',
       glow: 'from-emerald-500/0 via-emerald-500/5 to-emerald-500/0',
@@ -231,7 +204,7 @@ export const CASE_STUDIES_META: Record<string, CaseStudyMeta> = {
     }
   },
   'qqtech-website': {
-    metric: '60 FPS Transitions',
+    metric: 'Sub-second first load',
     color: {
       accent: 'blue',
       glow: 'from-blue-500/0 via-blue-500/5 to-blue-500/0',
@@ -241,7 +214,7 @@ export const CASE_STUDIES_META: Record<string, CaseStudyMeta> = {
     }
   },
   'recyclops': {
-    metric: '92% CPU Efficiency',
+    metric: 'Works offline',
     color: {
       accent: 'emerald',
       glow: 'from-emerald-500/0 via-emerald-500/5 to-emerald-500/0',
@@ -251,7 +224,7 @@ export const CASE_STUDIES_META: Record<string, CaseStudyMeta> = {
     }
   },
   'artifyo': {
-    metric: '0.4s CLS Score',
+    metric: '< 1s on 3G/4G',
     color: {
       accent: 'emerald',
       glow: 'from-emerald-500/0 via-emerald-500/5 to-emerald-500/0',
@@ -261,7 +234,7 @@ export const CASE_STUDIES_META: Record<string, CaseStudyMeta> = {
     }
   },
   'aliman-bulus': {
-    metric: '9ms SQL Latency',
+    metric: '500+ students',
     color: {
       accent: 'emerald',
       glow: 'from-emerald-500/0 via-emerald-500/5 to-emerald-500/0',
@@ -269,44 +242,5 @@ export const CASE_STUDIES_META: Record<string, CaseStudyMeta> = {
       pillsText: 'text-emerald-400',
       pillsBg: 'bg-emerald-500/5'
     }
-  },
-  'rivian-mobile-companion': {
-    metric: '99.94% BLE Success',
-    color: {
-      accent: 'orange',
-      glow: 'from-orange-500/0 via-orange-500/5 to-orange-500/0',
-      pillsBorder: 'border-orange-500/15',
-      pillsText: 'text-orange-400',
-      pillsBg: 'bg-orange-500/5'
-    }
-  },
-  'help-scout-beacon': {
-    metric: '120KB Core Weight',
-    color: {
-      accent: 'purple',
-      glow: 'from-purple-500/0 via-purple-500/5 to-purple-500/0',
-      pillsBorder: 'border-purple-500/15',
-      pillsText: 'text-purple-400',
-      pillsBg: 'bg-purple-500/5'
-    }
-  },
-  'prevue-vector-sharing': {
-    metric: '15ms Vector Sync',
-    color: {
-      accent: 'cyan',
-      glow: 'from-cyan-500/0 via-cyan-500/5 to-cyan-500/0',
-      pillsBorder: 'border-cyan-500/15',
-      pillsText: 'text-cyan-400',
-      pillsBg: 'bg-cyan-500/5'
-    }
   }
 };
-
-export const ACCENT_SPOTLIGHT_COLORS = {
-  red: 'rgba(239, 68, 68, 0.04)',
-  blue: 'rgba(59, 130, 246, 0.04)',
-  emerald: 'rgba(16, 185, 129, 0.04)',
-  orange: 'rgba(249, 115, 22, 0.04)',
-  purple: 'rgba(168, 85, 247, 0.04)',
-  cyan: 'rgba(6, 182, 212, 0.04)'
-} as const;

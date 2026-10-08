@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { motion, useMotionValue, useMotionTemplate } from 'framer-motion';
+import { m, useMotionValue, useMotionTemplate } from 'framer-motion';
 import { contactData, resumeLink } from './constants';
 import { FADE_IN_UP_CONTAINER, FADE_IN_UP_ITEM } from '@/constant/animations';
 import SpotlightButton from '@/components/ui/SpotlightButton';
@@ -31,7 +32,7 @@ const Contact = () => {
     }
   };
   return (
-    <motion.section 
+    <m.section 
       id="contact" 
       variants={FADE_IN_UP_CONTAINER}
       initial="hidden"
@@ -45,14 +46,14 @@ const Contact = () => {
       
       <div className="max-w-4xl mx-auto text-center relative z-20">
         
-        <motion.div variants={FADE_IN_UP_ITEM} className="mb-6 md:mb-12">
+        <m.div variants={FADE_IN_UP_ITEM} className="mb-6 md:mb-12">
           <h2 className="text-4xl lg:text-6xl font-black tracking-tighter uppercase mb-6 text-white">LET'S WORK TOGETHER</h2>
           <p className="text-neutral-300 text-lg max-w-2xl mx-auto font-sans leading-relaxed">
             Currently available for full-time software engineering roles and select freelance opportunities.
           </p>
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           variants={FADE_IN_UP_ITEM}
           onMouseMove={handleMouseMove}
           onMouseEnter={() => setIsHoveringGrid(true)}
@@ -62,7 +63,7 @@ const Contact = () => {
           className="grid md:grid-cols-3 gap-px bg-neutral-800 border border-neutral-800/80 rounded-2xl overflow-hidden mb-12 shadow-2xl relative group/grid"
         >
           {/* Round Cursor-Tracking Spotlight Gradient */}
-          <motion.div
+          <m.div
             className="pointer-events-none absolute inset-0 z-5 transition-opacity duration-300"
             style={{
               background: spotlightBg,
@@ -84,7 +85,7 @@ const Contact = () => {
               >
                 {/* Single Shared Sliding Highlight Pill */}
                 {isHovered && (
-                  <motion.div
+                  <m.div
                     layoutId="contact-card-highlight"
                     transition={{
                       type: "spring",
@@ -96,7 +97,7 @@ const Contact = () => {
                   >
                     <div className="absolute inset-0 bg-gradient-to-b from-white/[0.03] to-transparent pointer-events-none" />
                     <div className="absolute bottom-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-red-500/50 to-transparent" />
-                  </motion.div>
+                  </m.div>
                 )}
 
                 <div className="relative z-10">
@@ -114,10 +115,10 @@ const Contact = () => {
               </a>
             );
           })}
-        </motion.div>
+        </m.div>
 
         {/* CTA */}
-        <motion.div variants={FADE_IN_UP_ITEM} className="flex flex-col md:flex-row gap-4 justify-center items-center">
+        <m.div variants={FADE_IN_UP_ITEM} className="flex flex-col md:flex-row gap-4 justify-center items-center">
           <SpotlightButton 
             as="a"
             variant="primary"
@@ -138,11 +139,20 @@ const Contact = () => {
           >
             VIEW RESUME <ArrowRight className="group-hover:translate-x-1 transition-transform duration-300" size={18} />
           </SpotlightButton>
-        </motion.div>
+        </m.div>
+
+        <m.div variants={FADE_IN_UP_ITEM} className="mt-8">
+          <Link
+            href="/freelance"
+            className="group inline-flex items-center gap-2 font-mono text-sm text-neutral-300 hover:text-white underline underline-offset-4 decoration-neutral-700 hover:decoration-red-500 transition-colors"
+          >
+            Freelance work <ArrowRight className="group-hover:translate-x-1 transition-transform" size={16} />
+          </Link>
+        </m.div>
 
       </div>
 
-    </motion.section>
+    </m.section>
   );
 };
 

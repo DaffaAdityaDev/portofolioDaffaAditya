@@ -1,13 +1,31 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowUp, Github, Linkedin, Mail, Clock } from 'lucide-react';
+import dynamic from 'next/dynamic';
+import { m, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { ArrowUp, ArrowUpRight, Github, Linkedin, Mail, Clock } from 'lucide-react';
 import { siteConfig } from '@/config/metadata.config';
-import FractalGlass from '@/components/ui/FractalGlass';
+import { formatJakartaTime } from '@/utils/date';
+
+// three.js is ~136 KB gzip, so the shader is client-only and loaded only when the footer nears the viewport.
+const FractalGlass = dynamic(() => import('@/components/ui/FractalGlass'), { ssr: false });
+
+// Static stand-in for the shader (same palette): shown before it loads, under reduced motion and without WebGL.
+const AMBIENT_GRADIENT: React.CSSProperties = {
+  background: [
+    'radial-gradient(55% 75% at 18% 30%, rgba(10, 64, 217, 0.45), transparent 70%)',
+    'radial-gradient(50% 70% at 72% 35%, rgba(199, 20, 158, 0.38), transparent 70%)',
+    'radial-gradient(50% 70% at 50% 95%, rgba(235, 38, 64, 0.32), transparent 70%)',
+    'radial-gradient(40% 60% at 92% 85%, rgba(13, 224, 235, 0.22), transparent 70%)',
+  ].join(', '),
+};
 
 const Footer = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [jakartaTime, setJakartaTime] = useState<string>('');
+  // `isNear`: footer is within about one viewport. `shaderRequested` latches so the shader is never torn down again.
+  const [isNear, setIsNear] = useState(false);
+  const [shaderRequested, setShaderRequested] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -20,22 +38,32 @@ const Footer = () => {
   const scale = useTransform(scrollYProgress, [0, 1], [0.96, 1]);
 
   useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsNear(entry.isIntersecting);
+        if (entry.isIntersecting) setShaderRequested(true);
+      },
+      { rootMargin: '100% 0px' }
+    );
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
+
+  // Only tick the clock while the footer can actually be seen.
+  useEffect(() => {
+    if (!isNear) return;
+
     const updateTime = () => {
-      const now = new Date();
-      const formatted = now.toLocaleTimeString('en-US', {
-        timeZone: 'Asia/Jakarta',
-        hour12: false,
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-      });
-      setJakartaTime(formatted);
+      setJakartaTime(formatJakartaTime());
     };
 
     updateTime();
     const interval = setInterval(updateTime, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [isNear]);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -44,15 +72,18 @@ const Footer = () => {
   return (
     <div
       ref={containerRef}
-      className="relative h-[680px] sm:h-[520px] md:h-[460px] w-full"
+      className="relative h-[680px] sm:h-[520px] md:h-[460px] w-full pointer-events-none"
       style={{ clipPath: 'polygon(0% 0, 100% 0%, 100% 100%, 0 100%)' }}
     >
       {/* Sticky Under-Page Surface */}
-      <div className="fixed bottom-0 left-0 right-0 h-[680px] sm:h-[520px] md:h-[460px] w-full -z-10 bg-[#060608] border-t border-white/20 overflow-hidden">
-        {/* Ambient Fractal Glass Refraction Layer (Three.js WebGL) */}
-        <motion.div style={{ opacity, scale }} className="absolute inset-0 w-full h-full pointer-events-none">
-          <FractalGlass intensity="vibrant" interactive={true} targetRef={containerRef} />
-        </motion.div>
+      <div className="fixed bottom-0 left-0 right-0 h-[680px] sm:h-[520px] md:h-[460px] w-full z-0 pointer-events-auto bg-[#060608] border-t border-white/20 overflow-hidden">
+        {/* Ambient Fractal Glass Refraction Layer (Three.js WebGL over a static gradient) */}
+        <m.div style={{ opacity, scale }} className="absolute inset-0 w-full h-full pointer-events-none">
+          <div aria-hidden="true" className="absolute inset-0" style={AMBIENT_GRADIENT} />
+          {shaderRequested && !prefersReducedMotion && (
+            <FractalGlass intensity="vibrant" interactive={true} targetRef={containerRef} />
+          )}
+        </m.div>
 
         {/* Ambient Contrast Protection Mask for WCAG AAA Readability */}
         <div
@@ -60,22 +91,22 @@ const Footer = () => {
           className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#060608]/80 via-[#060608]/50 to-[#060608]/90"
         />
 
-        <motion.footer
+        {/* Background Ambient Watermark - Centered on Full Viewport */}
+        <div
+          aria-hidden="true"
+          className="absolute -bottom-4 md:-bottom-8 left-1/2 -translate-x-1/2 text-[14vw] sm:text-[13vw] font-black uppercase tracking-tighter whitespace-nowrap pointer-events-none select-none z-0"
+          style={{
+            color: 'rgba(255, 255, 255, 0.05)',
+            textShadow: '0 0 32px rgba(255, 255, 255, 0.02)',
+          }}
+        >
+          Daffa Aditya
+        </div>
+
+        <m.footer
           style={{ opacity, y, scale }}
           className="h-full w-full max-w-7xl mx-auto px-6 lg:px-20 py-8 sm:py-10 flex flex-col justify-between relative overflow-hidden"
         >
-          {/* Background Ambient Watermark - Filled at 20% opacity */}
-          <div
-            aria-hidden="true"
-            className="absolute -bottom-4 md:-bottom-8 left-1/2 -translate-x-1/2 text-[14vw] sm:text-[13vw] font-black uppercase tracking-tighter whitespace-nowrap pointer-events-none select-none z-0"
-            style={{
-              color: 'rgba(255, 255, 255, 0.05)',
-              textShadow: '0 0 32px rgba(255, 255, 255, 0.02)',
-            }}
-          >
-            Daffa Aditya
-          </div>
-
           {/* Top Bar: Brand, Live Clock, Back to Top */}
           <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-white/20">
             <div className="flex flex-col">
@@ -99,20 +130,19 @@ const Footer = () => {
               {/* Back to Top */}
               <button
                 onClick={scrollToTop}
-                data-cursor="merge"
-                className="group flex items-center gap-1.5 text-xs font-mono text-neutral-300 hover:text-white transition-colors cursor-pointer"
+                className="group flex items-center gap-2 text-xs font-mono text-neutral-400 hover:text-white transition-all cursor-pointer"
                 aria-label="Scroll to top"
               >
-                <span>TOP</span>
-                <div className="w-6 h-6 rounded-full bg-neutral-900/80 border border-white/20 group-hover:border-white/50 flex items-center justify-center transition-colors">
-                  <ArrowUp size={12} className="group-hover:-translate-y-0.5 transition-transform text-white" />
+                <span className="font-semibold tracking-wider">TOP</span>
+                <div className="w-6 h-6 rounded-full bg-neutral-900/90 border border-white/20 group-hover:border-red-500/50 group-hover:bg-neutral-800 flex items-center justify-center transition-all shadow-sm">
+                  <ArrowUp size={12} className="group-hover:-translate-y-0.5 transition-transform text-neutral-300 group-hover:text-red-400" />
                 </div>
               </button>
             </div>
           </div>
 
-          {/* Middle Navigation Grid */}
-          <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 py-4">
+          {/* Middle Navigation Grid - Vertically Centered via my-auto */}
+          <div className="relative z-10 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 my-auto py-6 items-start">
             {/* Col 1: Status & Scope */}
             <div className="space-y-2">
               <span className="text-[11px] font-mono text-neutral-200 uppercase tracking-widest block font-bold">
@@ -122,50 +152,72 @@ const Footer = () => {
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 <span className="text-xs font-mono text-emerald-400 font-bold">OPEN FOR ROLES</span>
               </div>
-              <p className="text-xs text-neutral-200 font-sans leading-relaxed">
-                Available for full-time frontend engineering & high-impact contracts.
+              <p className="text-xs text-neutral-200 font-sans leading-relaxed max-w-xs">
+                Available for full-time software engineering roles and freelance projects.
               </p>
             </div>
 
-            {/* Col 2: Navigation */}
-            <div className="space-y-2">
+            {/* Col 2: Navigation (Centered in Column) */}
+            <div className="space-y-2 md:justify-self-center">
               <span className="text-[11px] font-mono text-neutral-200 uppercase tracking-widest block font-bold">
                 NAVIGATION
               </span>
-              <ul className="space-y-1.5 text-xs font-mono">
+              <ul className="space-y-2 text-xs font-mono">
                 <li>
-                  <Link href="/" className="text-neutral-200 hover:text-white transition-colors">
-                    /home
+                  <Link
+                    href="/"
+                    className="group inline-flex items-center gap-1.5 text-neutral-400 hover:text-white hover:translate-x-1.5 transition-all duration-200 cursor-pointer"
+                  >
+                    <span className="text-neutral-500 group-hover:text-red-500 transition-colors font-mono font-bold">/</span>
+                    <span className="group-hover:text-white font-medium transition-colors">home</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/blog" className="text-neutral-200 hover:text-white transition-colors">
-                    /blog
+                  <Link
+                    href="/blog"
+                    className="group inline-flex items-center gap-1.5 text-neutral-400 hover:text-white hover:translate-x-1.5 transition-all duration-200 cursor-pointer"
+                  >
+                    <span className="text-neutral-500 group-hover:text-red-500 transition-colors font-mono font-bold">/</span>
+                    <span className="group-hover:text-white font-medium transition-colors">blog</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/resume" className="text-neutral-200 hover:text-white transition-colors">
-                    /resume
+                  <Link
+                    href="/resume"
+                    className="group inline-flex items-center gap-1.5 text-neutral-400 hover:text-white hover:translate-x-1.5 transition-all duration-200 cursor-pointer"
+                  >
+                    <span className="text-neutral-500 group-hover:text-red-500 transition-colors font-mono font-bold">/</span>
+                    <span className="group-hover:text-white font-medium transition-colors">resume</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/freelance"
+                    className="group inline-flex items-center gap-1.5 text-neutral-400 hover:text-white hover:translate-x-1.5 transition-all duration-200 cursor-pointer"
+                  >
+                    <span className="text-neutral-500 group-hover:text-red-500 transition-colors font-mono font-bold">/</span>
+                    <span className="group-hover:text-white font-medium transition-colors">freelance</span>
                   </Link>
                 </li>
               </ul>
             </div>
 
-            {/* Col 3: Direct Connect */}
-            <div className="space-y-2">
+            {/* Col 3: Direct Connect (Centered in Column) */}
+            <div className="space-y-2 md:justify-self-center">
               <span className="text-[11px] font-mono text-neutral-200 uppercase tracking-widest block font-bold">
                 CONNECT
               </span>
-              <ul className="space-y-1.5 text-xs font-mono">
+              <ul className="space-y-2 text-xs font-mono">
                 <li>
                   <a
                     href={siteConfig.links.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-neutral-200 hover:text-white transition-colors flex items-center gap-1.5"
+                    className="group inline-flex items-center gap-2 text-neutral-400 hover:text-white hover:translate-x-1.5 transition-all duration-200 cursor-pointer"
                   >
-                    <Github size={12} />
-                    <span>GitHub</span>
+                    <Github size={13} className="text-neutral-500 group-hover:text-white transition-colors" />
+                    <span className="font-medium">GitHub</span>
+                    <ArrowUpRight size={11} className="text-neutral-600 group-hover:text-red-500 opacity-40 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                   </a>
                 </li>
                 <li>
@@ -173,26 +225,28 @@ const Footer = () => {
                     href={siteConfig.links.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-neutral-200 hover:text-white transition-colors flex items-center gap-1.5"
+                    className="group inline-flex items-center gap-2 text-neutral-400 hover:text-white hover:translate-x-1.5 transition-all duration-200 cursor-pointer"
                   >
-                    <Linkedin size={12} />
-                    <span>LinkedIn</span>
+                    <Linkedin size={13} className="text-neutral-500 group-hover:text-white transition-colors" />
+                    <span className="font-medium">LinkedIn</span>
+                    <ArrowUpRight size={11} className="text-neutral-600 group-hover:text-red-500 opacity-40 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                   </a>
                 </li>
                 <li>
                   <a
                     href={`mailto:${siteConfig.links.email}`}
-                    className="text-neutral-200 hover:text-white transition-colors flex items-center gap-1.5"
+                    className="group inline-flex items-center gap-2 text-neutral-400 hover:text-white hover:translate-x-1.5 transition-all duration-200 cursor-pointer"
                   >
-                    <Mail size={12} />
-                    <span>Email</span>
+                    <Mail size={13} className="text-neutral-500 group-hover:text-white transition-colors" />
+                    <span className="font-medium">Email</span>
+                    <ArrowUpRight size={11} className="text-neutral-600 group-hover:text-red-500 opacity-40 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                   </a>
                 </li>
               </ul>
             </div>
 
-            {/* Col 4: Tech & Build Specs */}
-            <div className="space-y-2">
+            {/* Col 4: Tech & Build Specs (Right-aligned in Column) */}
+            <div className="space-y-2 md:justify-self-end w-full max-w-[260px]">
               <span className="text-[11px] font-mono text-neutral-200 uppercase tracking-widest block font-bold">
                 SYSTEM SPEC
               </span>
@@ -217,10 +271,10 @@ const Footer = () => {
           <div className="relative z-10 pt-4 border-t border-neutral-800/80 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs font-mono text-neutral-400">
             <div>© {new Date().getFullYear()} DAFFA ADITYA. ALL RIGHTS RESERVED.</div>
             <div className="flex items-center gap-1 text-neutral-300 font-medium">
-              <span>Software Engineer Base on Jakarta</span>
+              <span>Software Engineer, based in Jakarta, Indonesia</span>
             </div>
           </div>
-        </motion.footer>
+        </m.footer>
       </div>
     </div>
   );

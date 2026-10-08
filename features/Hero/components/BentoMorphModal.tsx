@@ -1,9 +1,11 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { X, Globe, Zap, Cpu, Clock, CheckCircle2, ArrowRight, ShieldCheck, Mail, Sparkles } from 'lucide-react';
 import { SPRING_MOBILE_OS, BACKDROP_VARIANTS } from '@/constant/animations';
 import { useModalDismiss } from '@/hooks/useModalDismiss';
 import Portal from '@/components/ui/Portal';
+import { siteConfig } from '@/config/metadata.config';
+import { EXPERIENCE_LABEL } from './ExperienceTicker';
 
 export type BentoModalType = 'location' | 'status' | 'tech' | null;
 
@@ -22,7 +24,7 @@ export const BentoMorphModal: React.FC<BentoMorphModalProps> = ({ type, onClose,
     <Portal>
       <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 md:p-10 pointer-events-auto">
         {/* Backdrop */}
-        <motion.div
+        <m.div
           variants={BACKDROP_VARIANTS}
           initial="hidden"
           animate="visible"
@@ -33,7 +35,7 @@ export const BentoMorphModal: React.FC<BentoMorphModalProps> = ({ type, onClose,
         />
 
         {/* Shared FLIP Morph Container */}
-        <motion.div
+        <m.div
           layoutId={`bento-cell-${type}`}
           transition={SPRING_MOBILE_OS}
           className="relative w-full max-w-xl max-h-[90vh] bg-[#0d0d10] border border-white/10 rounded-3xl shadow-[0_32px_80px_rgba(0,0,0,0.95)] overflow-hidden flex flex-col text-neutral-100 focus:outline-none"
@@ -53,7 +55,7 @@ export const BentoMorphModal: React.FC<BentoMorphModalProps> = ({ type, onClose,
             {type === 'location' && (
               <>
                 <Globe size={15} className="text-red-400" />
-                <span>LOCATION & CHRONOMETRY SPEC</span>
+                <span>LOCATION & EXPERIENCE</span>
               </>
             )}
             {type === 'status' && (
@@ -65,7 +67,7 @@ export const BentoMorphModal: React.FC<BentoMorphModalProps> = ({ type, onClose,
             {type === 'tech' && (
               <>
                 <Cpu size={15} className="text-blue-400" />
-                <span>CORE ENGINEERING CLUSTER</span>
+                <span>TECH STACK</span>
               </>
             )}
           </div>
@@ -91,14 +93,14 @@ export const BentoMorphModal: React.FC<BentoMorphModalProps> = ({ type, onClose,
                 </h3>
                 <p className="text-neutral-400 text-sm font-mono flex items-center gap-2">
                   <Clock size={14} className="text-red-400" />
-                  TIMEZONE: GMT+7 (WIB) &bull; REMOTE READY WORLDWIDE
+                  TIMEZONE: GMT+7 (WIB) &bull; OPEN TO REMOTE WORK
                 </p>
               </div>
 
               {experienceString && (
                 <div className="p-4 rounded-2xl bg-zinc-900/40 border border-zinc-800 space-y-1">
-                  <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest block">
-                    TOTAL ACCUMULATED EXPERIENCE
+                  <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest block">
+                    {EXPERIENCE_LABEL}
                   </span>
                   <div className="text-lg sm:text-xl font-mono font-bold text-white tracking-tight">
                     {experienceString}
@@ -107,21 +109,21 @@ export const BentoMorphModal: React.FC<BentoMorphModalProps> = ({ type, onClose,
               )}
 
               <div className="space-y-3">
-                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest block">
-                  COLLABORATION CAPABILITIES:
+                <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest block">
+                  WORKING STYLE:
                 </span>
                 <div className="space-y-2 font-mono text-xs text-zinc-300">
                   <div className="p-3 rounded-xl bg-zinc-900/20 border border-zinc-800/80 flex items-center gap-3">
                     <CheckCircle2 size={15} className="text-emerald-400 shrink-0" />
-                    <span>Seamless overlap with APAC, EMEA, and US East/West working hours.</span>
+                    <span>Based in Jakarta (GMT+7); comfortable working with remote teams across time zones.</span>
                   </div>
                   <div className="p-3 rounded-xl bg-zinc-900/20 border border-zinc-800/80 flex items-center gap-3">
                     <CheckCircle2 size={15} className="text-emerald-400 shrink-0" />
-                    <span>Fluent in English and Indonesian; asynchronous communication champion.</span>
+                    <span>Works in English and Indonesian, in writing and on calls.</span>
                   </div>
                   <div className="p-3 rounded-xl bg-zinc-900/20 border border-zinc-800/80 flex items-center gap-3">
                     <CheckCircle2 size={15} className="text-emerald-400 shrink-0" />
-                    <span>Equipped with enterprise fiber redundancy & dedicated workstation.</span>
+                    <span>Reviews code and mentors interns day to day at Run System.</span>
                   </div>
                 </div>
               </div>
@@ -134,7 +136,7 @@ export const BentoMorphModal: React.FC<BentoMorphModalProps> = ({ type, onClose,
               <div className="space-y-2">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono font-bold uppercase">
                   <div className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                  <span>ACCEPTING NEW CONTRACTS & ROLES</span>
+                  <span>OPEN TO NEW ROLES & FREELANCE</span>
                 </div>
                 <h3 id="bento-modal-title" className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight">
                   Open to Work & Freelance
@@ -143,42 +145,42 @@ export const BentoMorphModal: React.FC<BentoMorphModalProps> = ({ type, onClose,
 
               <div className="grid grid-cols-2 gap-3 font-mono text-xs">
                 <div className="p-4 rounded-2xl bg-zinc-900/40 border border-zinc-800 space-y-1">
-                  <span className="text-zinc-500 text-[10px] uppercase">ENGAGEMENT</span>
-                  <div className="text-white font-bold text-sm">Full-Time / B2B</div>
+                  <span className="text-zinc-400 text-[10px] uppercase">ENGAGEMENT</span>
+                  <div className="text-white font-bold text-sm">Full-time / Freelance</div>
                 </div>
                 <div className="p-4 rounded-2xl bg-zinc-900/40 border border-zinc-800 space-y-1">
-                  <span className="text-zinc-500 text-[10px] uppercase">RESPONSE TIME</span>
-                  <div className="text-emerald-400 font-bold text-sm">&lt; 2 Hours</div>
+                  <span className="text-zinc-400 text-[10px] uppercase">LOCATION</span>
+                  <div className="text-white font-bold text-sm">Jakarta / Remote</div>
                 </div>
               </div>
 
               <div className="space-y-3">
-                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest block">
+                <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest block">
                   SERVICES & DOMAINS:
                 </span>
                 <div className="space-y-2 font-mono text-xs text-zinc-300">
                   <div className="p-3 rounded-xl bg-zinc-900/20 border border-zinc-800/80 flex items-center gap-3">
                     <ShieldCheck size={15} className="text-emerald-400 shrink-0" />
-                    <span>Modern frontend architecture (React 19, Next.js, TypeScript).</span>
+                    <span>Web apps with React, Next.js and TypeScript.</span>
                   </div>
                   <div className="p-3 rounded-xl bg-zinc-900/20 border border-zinc-800/80 flex items-center gap-3">
                     <ShieldCheck size={15} className="text-emerald-400 shrink-0" />
-                    <span>Enterprise design systems & modular component packages.</span>
+                    <span>Third-party integrations, such as payments, for business systems.</span>
                   </div>
                   <div className="p-3 rounded-xl bg-zinc-900/20 border border-zinc-800/80 flex items-center gap-3">
                     <ShieldCheck size={15} className="text-emerald-400 shrink-0" />
-                    <span>AI agent integration, workflow automation, and backend APIs.</span>
+                    <span>Backend APIs and AI agent workflows.</span>
                   </div>
                 </div>
               </div>
 
               <div className="pt-2">
                 <a
-                  href="mailto:daffaaditya.me@gmail.com"
+                  href={`mailto:${siteConfig.links.email}`}
                   className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-full bg-white text-black font-extrabold font-mono text-xs uppercase tracking-wider hover:bg-neutral-200 transition-colors cursor-pointer shadow-lg shadow-white/10"
                 >
                   <Mail size={15} />
-                  <span>Direct Project Inquiry</span>
+                  <span>Email me</span>
                 </a>
               </div>
             </>
@@ -189,30 +191,30 @@ export const BentoMorphModal: React.FC<BentoMorphModalProps> = ({ type, onClose,
             <>
               <div className="space-y-2">
                 <h3 id="bento-modal-title" className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight">
-                  Curated Engineering Stack
+                  Tech Stack
                 </h3>
                 <p className="text-sm text-neutral-300 font-sans leading-relaxed">
-                  Carefully chosen tools, architectural patterns, and production-tested libraries utilized daily across production environments.
+                  Tools I have used in real work. The full list, by area, is in the Tech Stack section.
                 </p>
               </div>
 
               <div className="grid grid-cols-2 gap-2 font-mono text-xs">
                 {[
-                  { name: 'Next.js', role: 'Fullstack / SSR / Turbopack' },
-                  { name: 'TypeScript', role: 'Type Safety / Zero Any' },
-                  { name: 'Golang', role: 'High Throughput Backend' },
-                  { name: 'AI Agent / LangGraph', role: 'Autonomous Workflows' },
-                  { name: 'Node.js', role: 'Microservices & APIs' },
-                  { name: 'GraphQL', role: 'Federated Data Graph' },
+                  { name: 'Next.js', role: 'Full-stack React / SSR' },
+                  { name: 'TypeScript', role: 'Typed frontend & backend' },
+                  { name: 'Golang', role: 'Backend services' },
+                  { name: 'AI Agent / LangGraph', role: 'LLM agent workflows' },
+                  { name: 'Node.js', role: 'APIs & services' },
+                  { name: 'GraphQL', role: 'API layer' },
                   { name: 'PostgreSQL', role: 'Relational Database' },
-                  { name: 'Docker', role: 'Container Orchestration' },
+                  { name: 'Docker', role: 'Containers' },
                 ].map((item, idx) => (
                   <div key={idx} className="p-3 rounded-xl bg-zinc-900/30 border border-zinc-800 flex flex-col gap-1">
                     <span className="font-bold text-white uppercase text-xs flex items-center gap-1.5">
                       <Sparkles size={11} className="text-red-400" />
                       {item.name}
                     </span>
-                    <span className="text-[10px] text-zinc-500">{item.role}</span>
+                    <span className="text-[10px] text-zinc-400">{item.role}</span>
                   </div>
                 ))}
               </div>
@@ -228,7 +230,7 @@ export const BentoMorphModal: React.FC<BentoMorphModalProps> = ({ type, onClose,
                   }}
                   className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-full bg-zinc-900 border border-white/15 text-white font-mono text-xs uppercase tracking-wider hover:bg-neutral-800 transition-colors cursor-pointer"
                 >
-                  <span>Explore Full Specs & Diagnostics</span>
+                  <span>See the full tech stack</span>
                   <ArrowRight size={14} />
                 </button>
               </div>
@@ -241,11 +243,11 @@ export const BentoMorphModal: React.FC<BentoMorphModalProps> = ({ type, onClose,
               onClick={onClose}
               className="px-4 py-2 text-xs font-mono text-neutral-400 hover:text-white uppercase transition-colors cursor-pointer"
             >
-              Close Spec
+              Close
             </button>
           </div>
         </div>
-      </motion.div>
+      </m.div>
     </div>
     </Portal>
   );

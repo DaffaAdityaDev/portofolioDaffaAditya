@@ -1,19 +1,21 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-import dynamic from 'next/dynamic';
 import { Outfit, Inter } from 'next/font/google';
-import { siteConfig } from '../config/metadata.config';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, LazyMotion } from 'framer-motion';
 import Navbar from '@/components/Layout/Navbar';
-import { HeroUIProvider } from "@heroui/react";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
 import PageTransition from '@/components/Layout/PageTransition';
+import { BARE_PAGE_ROUTES } from '@/constant/constant';
 
+// Only the case-study pages use Outfit, so don't preload it on every route.
 const outfit = Outfit({
   subsets: ['latin'],
   variable: '--font-outfit',
   display: 'swap',
+  preload: false,
 });
+
+// Motion features load in their own chunk; components use `m.*` so they stay small.
+const loadMotionFeatures = () => import('@/lib/motionFeatures').then((mod) => mod.default);
 
 const inter = Inter({
   subsets: ['latin'],
@@ -22,19 +24,25 @@ const inter = Inter({
 });
 
 function MyApp({ Component, pageProps, router }: AppProps) {
+  // No navbar, providers or transitions, e.g. for the playground preview iframe.
+  if (BARE_PAGE_ROUTES.includes(router.pathname)) {
+    return <Component {...pageProps} />;
+  }
+
+  // Key on the path without the hash so in-page section links don't remount the page.
+  const transitionKey = router.asPath.split('#')[0];
+
   return (
-    <NextThemesProvider attribute="class" defaultTheme="dark">
-      <HeroUIProvider>
-        <div className={`${inter.variable} ${outfit.variable} font-sans`}>
-          <Navbar />
-          <AnimatePresence mode="wait" initial={false}>
-            <PageTransition key={router.asPath}>
-              <Component {...pageProps} />
-            </PageTransition>
-          </AnimatePresence>
-        </div>
-      </HeroUIProvider>
-    </NextThemesProvider>
+    <LazyMotion features={loadMotionFeatures} strict>
+      <div className={`${inter.variable} ${outfit.variable} font-sans`}>
+        <Navbar />
+        <AnimatePresence mode="wait" initial={false}>
+          <PageTransition key={transitionKey}>
+            <Component {...pageProps} />
+          </PageTransition>
+        </AnimatePresence>
+      </div>
+    </LazyMotion>
   );
 }
 

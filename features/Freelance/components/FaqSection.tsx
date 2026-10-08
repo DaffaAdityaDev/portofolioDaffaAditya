@@ -8,7 +8,7 @@ export const FaqSection: React.FC = () => {
     <section className="w-full bg-[#0b0b0e] px-6 sm:px-12 md:px-16 lg:px-24 py-16 md:py-24 border-b border-zinc-800">
       <div className="max-w-4xl mx-auto">
         <div className="mb-12 border-b border-zinc-800 pb-6 text-center sm:text-left">
-          <span className="text-xs font-mono text-red-500 uppercase tracking-widest font-bold">// SYSTEM_RISK_ASSESSMENT</span>
+          <span className="text-xs font-mono text-red-500 uppercase tracking-widest font-bold">// FAQ</span>
           <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight mt-2">Frequently Asked Questions</h2>
         </div>
         <div className="space-y-4">

@@ -1,6 +1,8 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { X, Calendar, Building2, CheckCircle2, Award } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { m } from 'framer-motion';
+import { X, Calendar, Building2, CheckCircle2, Award, ArrowUpRight } from 'lucide-react';
 import { ExperienceItem } from '../constants';
 import { SPRING_MOBILE_OS, BACKDROP_VARIANTS } from '@/constant/animations';
 import { useModalDismiss } from '@/hooks/useModalDismiss';
@@ -21,7 +23,7 @@ export const ExperienceMorphModal: React.FC<ExperienceMorphModalProps> = ({ item
     <Portal>
       <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 md:p-10 pointer-events-auto">
         {/* Backdrop */}
-        <motion.div
+        <m.div
           variants={BACKDROP_VARIANTS}
           initial="hidden"
           animate="visible"
@@ -32,7 +34,7 @@ export const ExperienceMorphModal: React.FC<ExperienceMorphModalProps> = ({ item
         />
 
         {/* Fluid Morphing Container */}
-        <motion.div
+        <m.div
           layoutId={`exp-card-${index}`}
           transition={SPRING_MOBILE_OS}
           className="relative w-full max-w-2xl max-h-[90vh] bg-[#0d0d10] border border-white/10 rounded-3xl shadow-[0_32px_80px_rgba(0,0,0,0.95)] overflow-hidden flex flex-col text-neutral-100 focus:outline-none"
@@ -68,11 +70,12 @@ export const ExperienceMorphModal: React.FC<ExperienceMorphModalProps> = ({ item
             {/* Featured Workplace Photo Banner */}
             {item.image && (
               <div className="relative w-full h-44 sm:h-56 md:h-64 rounded-2xl overflow-hidden border border-white/10 bg-zinc-950 shrink-0 shadow-lg">
-                <img
+                <Image
                   src={item.image}
                   alt={`${item.company} workplace`}
-                  className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105"
-                  loading="lazy"
+                  fill
+                  sizes="(min-width: 768px) 608px, calc(100vw - 82px)"
+                  className="object-cover object-center transition-transform duration-500 hover:scale-105"
                 />
                 {/* Subtle dark vignette overlay at bottom */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d10] via-transparent to-black/20 pointer-events-none" />
@@ -101,8 +104,8 @@ export const ExperienceMorphModal: React.FC<ExperienceMorphModalProps> = ({ item
 
             {/* Role Summary & Scope */}
             <div className="p-4 sm:p-5 rounded-2xl bg-zinc-900/30 border border-zinc-800/80 space-y-2">
-              <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest block font-bold">
-                ROLE SUMMARY & IMPACT:
+              <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest block font-bold">
+                ROLE SUMMARY:
               </span>
               <p className="text-xs sm:text-sm text-zinc-200 font-sans leading-relaxed">
                 {item.description}
@@ -111,9 +114,9 @@ export const ExperienceMorphModal: React.FC<ExperienceMorphModalProps> = ({ item
 
             {/* Tailored Key Milestones */}
             <div className="space-y-3">
-              <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest flex items-center gap-1.5 font-bold">
+              <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest flex items-center gap-1.5 font-bold">
                 <Award size={13} className="text-emerald-400" />
-                KEY MILESTONES & CORE RESPONSIBILITIES:
+                WHAT I DID:
               </span>
 
               <div className="space-y-2">
@@ -131,9 +134,17 @@ export const ExperienceMorphModal: React.FC<ExperienceMorphModalProps> = ({ item
 
             {/* Modal Footer */}
             <div className="pt-4 flex items-center justify-between border-t border-white/5">
-              <span className="text-[10px] font-mono text-zinc-500 uppercase">
-                STATUS: VERIFIED PRODUCTION RECORD
-              </span>
+              {item.caseStudy ? (
+                <Link
+                  href={item.caseStudy}
+                  onClick={onClose}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-black text-xs font-mono font-bold uppercase tracking-wider hover:bg-neutral-200 transition-colors"
+                >
+                  Read the case study <ArrowUpRight size={14} aria-hidden="true" />
+                </Link>
+              ) : (
+                <span />
+              )}
               <button
                 onClick={onClose}
                 className="px-4 py-2 text-xs font-mono text-neutral-400 hover:text-white uppercase transition-colors cursor-pointer"
@@ -142,7 +153,7 @@ export const ExperienceMorphModal: React.FC<ExperienceMorphModalProps> = ({ item
               </button>
             </div>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </Portal>
   );

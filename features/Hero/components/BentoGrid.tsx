@@ -1,65 +1,25 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Globe, ArrowUpRight, Zap, Cpu } from 'lucide-react';
-import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
-import { calculateDuration } from '@/utils/date';
+import { m, AnimatePresence, LayoutGroup } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import type { BentoModalType } from './BentoMorphModal';
+import ExperienceTicker, { EXPERIENCE_LABEL, formatExperience, useExperience } from './ExperienceTicker';
 import { SPRING_MOBILE_OS } from '@/constant/animations';
 
 const BentoMorphModal = dynamic(() => import('./BentoMorphModal'), { ssr: false });
 
-// Virtual Start Date: Accumulated duration of real experience (Internships + Current Role)
-const VIRTUAL_START_DATE = new Date('2023-03-01T00:00:00');
-
-// Initial State Constant
-const INITIAL_EXPERIENCE = { y: '00', m: '00', d: '00', hh: '00', mm: '00', ss: '00' };
-
-const SubtleDigit = React.memo(({ char }: { char: string }) => {
-  return (
-    <span className="relative inline-block w-[0.55em] text-center tabular-nums">
-      <AnimatePresence mode="popLayout">
-        <motion.span
-          key={char}
-          className="inline-block w-full"
-          initial={{ opacity: 0, y: 6 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -6 }}
-          transition={{ duration: 0.25, ease: "easeOut" }}
-        >
-          {char}
-        </motion.span>
-      </AnimatePresence>
-    </span>
-  );
-});
-SubtleDigit.displayName = 'SubtleDigit';
+/** The modal with the experience string, read when it opens. */
+const LiveBentoMorphModal = ({ type, onClose }: { type: Exclude<BentoModalType, null>; onClose: () => void }) => {
+  const experience = useExperience();
+  return <BentoMorphModal type={type} onClose={onClose} experienceString={formatExperience(experience)} />;
+};
 
 export interface BentoGridProps {
   glassBg?: boolean;
 }
 
 const BentoGrid: React.FC<BentoGridProps> = ({ glassBg = false }) => {
-  const [experience, setExperience] = useState(INITIAL_EXPERIENCE);
-  const [mounted, setMounted] = useState(false);
   const [activeModal, setActiveModal] = useState<BentoModalType>(null);
-
-  useEffect(() => {
-    setMounted(true);
-    
-    const updateExperience = () => {
-      setExperience(calculateDuration(VIRTUAL_START_DATE));
-    };
-
-    updateExperience();
-    const timer = setInterval(updateExperience, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const experienceString = useMemo(() => {
-    return `${experience.y} Years, ${experience.m} Months, ${experience.d} Days (${experience.hh}:${experience.mm}:${experience.ss})`;
-  }, [experience]);
-
-  if (!mounted) return null;
 
   return (
     <LayoutGroup id="bento-layout-group">
@@ -70,7 +30,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ glassBg = false }) => {
       }`}>
         
         {/* Cell 1: Location & Experience Counter */}
-        <motion.div
+        <m.div
           layoutId="bento-cell-location"
           transition={SPRING_MOBILE_OS}
           onClick={() => setActiveModal('location')}
@@ -94,7 +54,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ glassBg = false }) => {
                 <Globe size={18} className="text-neutral-300 group-hover:text-red-400 transition-colors" />
                 <span className="text-xs font-mono text-neutral-300 uppercase tracking-widest font-semibold">Based in</span>
               </div>
-              <h3 className="text-lg lg:text-xl font-bold text-white tracking-tight whitespace-nowrap drop-shadow-sm">Jakarta, Indonesia</h3>
+              <h2 className="text-lg lg:text-xl font-bold text-white tracking-tight whitespace-nowrap drop-shadow-sm">Jakarta, Indonesia</h2>
             </div>
             <div className={`p-1.5 rounded-xl transition-colors ${
               glassBg ? "bg-neutral-800/40 group-hover:bg-neutral-700/60 border border-neutral-700/50" : "bg-white/0 group-hover:bg-white/5"
@@ -105,47 +65,14 @@ const BentoGrid: React.FC<BentoGridProps> = ({ glassBg = false }) => {
 
           <div>
             <div className="text-[9px] font-mono text-neutral-300 uppercase tracking-[0.2em] mb-2 flex items-center gap-2 font-semibold">
-               Experience
+               {EXPERIENCE_LABEL}
             </div>
-            <div className={`flex items-baseline font-mono text-white tracking-tighter whitespace-nowrap overflow-hidden px-3.5 py-1.5 rounded-xl w-fit ${
-              glassBg ? "bg-[#0a0a0a]/80 border border-neutral-800 shadow-inner" : ""
-            }`}>
-              <span className="text-neutral-400 mr-1 text-sm md:text-base font-light">[</span>
-              
-              <div className="flex items-baseline text-sm md:text-base font-medium">
-                <span className="text-white font-semibold">
-                  <SubtleDigit char={experience.y[0]} /><SubtleDigit char={experience.y[1]} />
-                </span>
-                <span className="text-[8px] text-neutral-300 ml-0.5 mr-0.5 font-bold">Y</span>
-                
-                <span className="text-white font-semibold">
-                  <SubtleDigit char={experience.m[0]} /><SubtleDigit char={experience.m[1]} />
-                </span>
-                <span className="text-[8px] text-neutral-300 ml-0.5 mr-0.5 font-bold">M</span>
-                
-                <span className="text-white font-semibold">
-                  <SubtleDigit char={experience.d[0]} /><SubtleDigit char={experience.d[1]} />
-                </span>
-                <span className="text-[8px] text-neutral-300 ml-0.5 font-bold">D</span>
-              </div>
-              
-              <span className="text-neutral-500 mx-1 font-light text-sm md:text-base">|</span>
-
-              <div className="text-sm md:text-base font-bold text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.6)]">
-                <SubtleDigit char={experience.hh[0]} /><SubtleDigit char={experience.hh[1]} />
-                <span className="mx-0.5 opacity-30">:</span>
-                <SubtleDigit char={experience.mm[0]} /><SubtleDigit char={experience.mm[1]} />
-                <span className="mx-0.5 opacity-30">:</span>
-                <SubtleDigit char={experience.ss[0]} /><SubtleDigit char={experience.ss[1]} />
-              </div>
-
-              <span className="text-neutral-400 ml-1 text-sm md:text-base font-light">]</span>
-            </div>
+            <ExperienceTicker glassBg={glassBg} />
           </div>
-        </motion.div>
+        </m.div>
 
         {/* Cell 2: Status */}
-        <motion.div
+        <m.div
           layoutId="bento-cell-status"
           transition={SPRING_MOBILE_OS}
           onClick={() => setActiveModal('status')}
@@ -180,10 +107,10 @@ const BentoGrid: React.FC<BentoGridProps> = ({ glassBg = false }) => {
             </div>
             <p className="text-neutral-300 text-xs mt-2 font-mono tracking-wider font-medium">Available for new opportunities &bull; Tap to view</p>
           </div>
-        </motion.div>
+        </m.div>
 
         {/* Cell 3: Tech Stack */}
-        <motion.div
+        <m.div
           layoutId="bento-cell-tech"
           transition={SPRING_MOBILE_OS}
           onClick={() => setActiveModal('tech')}
@@ -209,7 +136,7 @@ const BentoGrid: React.FC<BentoGridProps> = ({ glassBg = false }) => {
               <span className={`text-[10px] font-mono px-3 py-1 rounded-full transition-colors uppercase ${
                 glassBg 
                   ? "text-neutral-300 border border-neutral-800 bg-neutral-900/60 group-hover:border-neutral-700" 
-                  : "text-neutral-600 border border-neutral-800 group-hover:border-neutral-500"
+                  : "text-neutral-400 border border-neutral-800 group-hover:border-neutral-500"
               }`}>Curated // Inspect</span>
            </div>
 
@@ -225,18 +152,14 @@ const BentoGrid: React.FC<BentoGridProps> = ({ glassBg = false }) => {
                  </div>
               ))}
            </div>
-        </motion.div>
+        </m.div>
 
       </div>
 
       {/* Shared Element Morph Modal */}
       <AnimatePresence>
         {activeModal && (
-          <BentoMorphModal
-            type={activeModal}
-            onClose={() => setActiveModal(null)}
-            experienceString={experienceString}
-          />
+          <LiveBentoMorphModal type={activeModal} onClose={() => setActiveModal(null)} />
         )}
       </AnimatePresence>
     </LayoutGroup>

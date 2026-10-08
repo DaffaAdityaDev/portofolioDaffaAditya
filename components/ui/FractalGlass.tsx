@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import * as THREE from 'three';
+import { lerp } from '@/utils/math';
+
+const MOUSE_LERP_FACTOR = 0.05;
 
 interface FractalGlassProps {
   className?: string;
@@ -224,11 +226,14 @@ void main() {
 `;
 
 /**
- * Creates a procedural seamless film grain DataTexture.
+ * Creates the procedural seamless film grain pixels (256x256 RGBA).
  * Guarantees zero external network requests and consistent analog texture.
  */
-function createFilmGrainTexture(): THREE.DataTexture {
-  const size = 256;
+const GRAIN_SIZE = 256;
+const NOISE_FBO_SIZE = 256;
+
+function createFilmGrainData(): Uint8Array {
+  const size = GRAIN_SIZE;
   const data = new Uint8Array(size * size * 4);
 
   let seed = 42;
@@ -249,20 +254,84 @@ function createFilmGrainTexture(): THREE.DataTexture {
     data[idx + 2] = val; // B
     data[idx + 3] = 255; // A
   }
+  return data;
+}
 
-  const texture = new THREE.DataTexture(
-    data,
-    size,
-    size,
-    THREE.RGBAFormat,
-    THREE.UnsignedByteType
+type GL = WebGLRenderingContext | WebGL2RenderingContext;
+
+/**
+ * Shader prefixes mirroring what three's ShaderMaterial injected (three 0.185):
+ * on WebGL2 the GLSL ES 1.00-style sources are compiled as GLSL ES 3.00 via
+ * defines (atanh needs 3.00). The full-screen triangle feeds `position` (xy, z = 0)
+ * and `uv` is derived from it, matching PlaneGeometry(2, 2) UVs exactly.
+ * No output color-space conversion or tone mapping: three only applies those in a
+ * ShaderMaterial when the shader includes the colorspace/tonemapping chunks, which
+ * these shaders never did.
+ */
+function vertexPrefix(isGL2: boolean): string {
+  return (
+    (isGL2 ? '#version 300 es\n#define attribute in\n#define varying out\n' : '') +
+    'precision highp float;\nprecision highp int;\n' +
+    'attribute vec3 position;\n#define uv (position.xy * 0.5 + 0.5)\n'
   );
-  texture.wrapS = THREE.RepeatWrapping;
-  texture.wrapT = THREE.RepeatWrapping;
-  texture.minFilter = THREE.LinearFilter;
-  texture.magFilter = THREE.LinearFilter;
-  texture.needsUpdate = true;
-  return texture;
+}
+
+function fragmentPrefix(isGL2: boolean): string {
+  return isGL2
+    ? '#version 300 es\n#define varying in\nlayout(location = 0) out highp vec4 pc_fragColor;\n#define gl_FragColor pc_fragColor\n#define texture2D texture\nprecision highp float;\nprecision highp int;\n'
+    : 'precision highp float;\nprecision highp int;\nfloat atanh(float x) { return 0.5 * log((1.0 + x) / (1.0 - x)); }\n';
+}
+
+function createProgram(gl: GL, isGL2: boolean, vs: string, fs: string): WebGLProgram | null {
+  const compile = (type: number, src: string) => {
+    const shader = gl.createShader(type);
+    if (!shader) return null;
+    gl.shaderSource(shader, src);
+    gl.compileShader(shader);
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+      if (process.env.NODE_ENV !== 'production') console.error(gl.getShaderInfoLog(shader));
+      gl.deleteShader(shader);
+      return null;
+    }
+    return shader;
+  };
+  const v = compile(gl.VERTEX_SHADER, vertexPrefix(isGL2) + vs);
+  const f = compile(gl.FRAGMENT_SHADER, fragmentPrefix(isGL2) + fs);
+  const program = v && f ? gl.createProgram() : null;
+  if (program && v && f) {
+    gl.attachShader(program, v);
+    gl.attachShader(program, f);
+    gl.bindAttribLocation(program, 0, 'position');
+    gl.linkProgram(program);
+  }
+  if (v) gl.deleteShader(v);
+  if (f) gl.deleteShader(f);
+  if (program && !gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    if (process.env.NODE_ENV !== 'production') console.error(gl.getProgramInfoLog(program));
+    gl.deleteProgram(program);
+    return null;
+  }
+  return program;
+}
+
+function createTexture(
+  gl: GL,
+  size: number,
+  data: Uint8Array | null,
+  wrap: number
+): WebGLTexture | null {
+  const tex = gl.createTexture();
+  if (!tex) return null;
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+  gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+  gl.pixelStorei(gl.UNPACK_ALIGNMENT, 4);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, size, size, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, wrap);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, wrap);
+  return tex;
 }
 
 export const FractalGlass: React.FC<FractalGlassProps> = ({
@@ -274,102 +343,137 @@ export const FractalGlass: React.FC<FractalGlassProps> = ({
   const mountRef = useRef<HTMLDivElement>(null);
   const mouseTargetRef = useRef<{ x: number; y: number }>({ x: 0.5, y: 0.5 });
   const mouseCurrentRef = useRef<{ x: number; y: number }>({ x: 0.5, y: 0.5 });
-  const isVisibleRef = useRef<boolean>(true);
 
   useEffect(() => {
     const mount = mountRef.current;
     if (!mount) return;
 
-    // 1. Scene & Camera Setup (NDC Full-Screen Quad)
-    const scene = new THREE.Scene();
-    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-
-    const pixelRatio = Math.min(window.devicePixelRatio || 1, 2.0);
-    const renderer = new THREE.WebGLRenderer({
-      powerPreference: 'high-performance',
+    // 1. Raw WebGL context (WebGL2, WebGL1 fallback).
+    // Ambient background: 1x is enough for a soft blurred shader and keeps fill cost
+    // low on high-DPI screens. Low-power lets laptops stay on the integrated GPU.
+    const pixelRatio = 1;
+    const canvas = document.createElement('canvas');
+    canvas.style.display = 'block';
+    const contextAttributes: WebGLContextAttributes = {
+      powerPreference: 'low-power',
       alpha: true,
       antialias: false,
-    });
-    renderer.setPixelRatio(pixelRatio);
-    renderer.setSize(mount.clientWidth, mount.clientHeight);
-    mount.appendChild(renderer.domElement);
+      depth: false,
+      stencil: false,
+      premultipliedAlpha: true,
+      preserveDrawingBuffer: false,
+    };
+    let gl: GL | null = null;
+    let isGL2 = false;
+    try {
+      gl = canvas.getContext('webgl2', contextAttributes);
+      isGL2 = !!gl;
+      if (!gl) gl = canvas.getContext('webgl', contextAttributes);
+    } catch {
+      gl = null;
+    }
+    // No WebGL: leave the mount empty so the caller's static fallback shows through.
+    if (!gl) return;
+    const ctx: GL = gl;
 
-    // 2. Offscreen FBO for Simplex Noise Domain Warping
-    const noiseRenderTarget = new THREE.WebGLRenderTarget(256, 256, {
-      format: THREE.RGBAFormat,
-      magFilter: THREE.LinearFilter,
-      minFilter: THREE.LinearFilter,
-    });
-    noiseRenderTarget.texture.wrapS = THREE.MirroredRepeatWrapping;
-    noiseRenderTarget.texture.wrapT = THREE.MirroredRepeatWrapping;
+    const noiseProgram = createProgram(ctx, isGL2, noiseVertexShader, noiseFragmentShader);
+    const mainProgram = createProgram(ctx, isGL2, mainVertexShader, mainFragmentShader);
 
-    const noiseScene = new THREE.Scene();
-    const noiseCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-    const noiseUniforms = {
-      uTime: { value: 0 },
-      uNoiseScaleX: { value: 0.35 },
-      uNoiseScaleY: { value: 0.55 },
-      uWarpSpeed: { value: 0.12 },
+    // 2. Full-screen triangle (covers clip space; uv derived from position)
+    const vertexBuffer = ctx.createBuffer();
+    ctx.bindBuffer(ctx.ARRAY_BUFFER, vertexBuffer);
+    ctx.bufferData(ctx.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), ctx.STATIC_DRAW);
+
+    // 3. Offscreen FBO for Simplex Noise Domain Warping (256x256 RGBA8, mirrored repeat)
+    const noiseTexture = createTexture(ctx, NOISE_FBO_SIZE, null, ctx.MIRRORED_REPEAT);
+    const noiseFramebuffer = ctx.createFramebuffer();
+    ctx.bindFramebuffer(ctx.FRAMEBUFFER, noiseFramebuffer);
+    ctx.framebufferTexture2D(ctx.FRAMEBUFFER, ctx.COLOR_ATTACHMENT0, ctx.TEXTURE_2D, noiseTexture, 0);
+    ctx.bindFramebuffer(ctx.FRAMEBUFFER, null);
+
+    // 4. Film Grain Procedural Texture
+    const grainTexture = createTexture(ctx, GRAIN_SIZE, createFilmGrainData(), ctx.REPEAT);
+
+    const loseContext = ctx.getExtension('WEBGL_lose_context');
+    const releaseGL = () => {
+      ctx.deleteProgram(noiseProgram);
+      ctx.deleteProgram(mainProgram);
+      ctx.deleteBuffer(vertexBuffer);
+      ctx.deleteFramebuffer(noiseFramebuffer);
+      ctx.deleteTexture(noiseTexture);
+      ctx.deleteTexture(grainTexture);
+      loseContext?.loseContext();
     };
 
-    const noiseQuad = new THREE.Mesh(
-      new THREE.PlaneGeometry(2, 2),
-      new THREE.ShaderMaterial({
-        vertexShader: noiseVertexShader,
-        fragmentShader: noiseFragmentShader,
-        uniforms: noiseUniforms,
-      })
-    );
-    noiseScene.add(noiseQuad);
+    if (!noiseProgram || !mainProgram || !vertexBuffer || !noiseFramebuffer || !noiseTexture || !grainTexture) {
+      releaseGL();
+      return;
+    }
 
-    // 3. Film Grain Procedural Texture
-    const grainTexture = createFilmGrainTexture();
+    // Fixed GL state: no blending / depth (three disabled blending for opaque ShaderMaterials)
+    ctx.disable(ctx.BLEND);
+    ctx.disable(ctx.DEPTH_TEST);
+    ctx.disable(ctx.CULL_FACE);
+    ctx.clearColor(0, 0, 0, 0);
+    ctx.enableVertexAttribArray(0);
+    ctx.vertexAttribPointer(0, 2, ctx.FLOAT, false, 0, 0);
 
-    // 4. Main Shader Quad
+    const loc = (program: WebGLProgram, name: string) => ctx.getUniformLocation(program, name);
+
+    // Noise pass uniforms
+    const noiseTimeLoc = loc(noiseProgram, 'uTime');
+    ctx.useProgram(noiseProgram);
+    ctx.uniform1f(loc(noiseProgram, 'uNoiseScaleX'), 0.35);
+    ctx.uniform1f(loc(noiseProgram, 'uNoiseScaleY'), 0.55);
+    ctx.uniform1f(loc(noiseProgram, 'uWarpSpeed'), 0.12);
+
+    // 5. Main Shader
     // Neon Flux & Cyan Palette tuned to Daffa's dark sleek theme:
     // [0] Deep Royal Azure, [1] Magenta / Purple, [2] Crimson, [3] Amber / Tangerine, [4] Vivid Cyan / Teal
-    const palette = [
-      new THREE.Vector3(0.04, 0.25, 0.85), // Azure
-      new THREE.Vector3(0.78, 0.08, 0.62), // Magenta
-      new THREE.Vector3(0.92, 0.15, 0.25), // Crimson
-      new THREE.Vector3(0.96, 0.50, 0.10), // Amber
-      new THREE.Vector3(0.05, 0.88, 0.92), // Electric Teal
+    const palette: [number, number, number][] = [
+      [0.04, 0.25, 0.85], // Azure
+      [0.78, 0.08, 0.62], // Magenta
+      [0.92, 0.15, 0.25], // Crimson
+      [0.96, 0.50, 0.10], // Amber
+      [0.05, 0.88, 0.92], // Electric Teal
     ];
 
     const exposureValue = intensity === 'vibrant' ? 0.95 : 0.72;
 
-    const mainUniforms = {
-      uResolution: { value: new THREE.Vector2(mount.clientWidth, mount.clientHeight) },
-      uPixelRatio: { value: pixelRatio },
-      uTime: { value: 0 },
-      uMouse: { value: new THREE.Vector2(0.5, 0.5) },
-      uWarpStrength: { value: 0.38 },
-      uNoiseMap: { value: noiseRenderTarget.texture },
-      uGrainTexture: { value: grainTexture },
-      uGrainTextureSize: { value: new THREE.Vector2(256, 256) },
-      uGrainStrength: { value: 0.12 },
-      uFluteWidth: { value: 65.0 },     // Width of each fluted column
-      uFluteStrength: { value: 110.0 }, // Intensity of glass refraction
-      uToneMapExposure: { value: exposureValue },
-      uC1: { value: palette[0] },
-      uC2: { value: palette[1] },
-      uC3: { value: palette[2] },
-      uC4: { value: palette[3] },
-      uC5: { value: palette[4] },
+    const resolutionLoc = loc(mainProgram, 'uResolution');
+    const mainTimeLoc = loc(mainProgram, 'uTime');
+    const mouseLoc = loc(mainProgram, 'uMouse');
+    ctx.useProgram(mainProgram);
+    ctx.uniform1f(loc(mainProgram, 'uPixelRatio'), pixelRatio);
+    ctx.uniform2f(mouseLoc, 0.5, 0.5);
+    ctx.uniform1f(loc(mainProgram, 'uWarpStrength'), 0.38);
+    ctx.uniform1i(loc(mainProgram, 'uNoiseMap'), 0);
+    ctx.uniform1i(loc(mainProgram, 'uGrainTexture'), 1);
+    ctx.uniform2f(loc(mainProgram, 'uGrainTextureSize'), GRAIN_SIZE, GRAIN_SIZE);
+    ctx.uniform1f(loc(mainProgram, 'uGrainStrength'), 0.12);
+    ctx.uniform1f(loc(mainProgram, 'uFluteWidth'), 65.0);     // Width of each fluted column
+    ctx.uniform1f(loc(mainProgram, 'uFluteStrength'), 110.0); // Intensity of glass refraction
+    ctx.uniform1f(loc(mainProgram, 'uToneMapExposure'), exposureValue);
+    palette.forEach((c, i) => ctx.uniform3f(loc(mainProgram, `uC${i + 1}`), c[0], c[1], c[2]));
+
+    // Texture units are fixed for the component's lifetime.
+    ctx.activeTexture(ctx.TEXTURE1);
+    ctx.bindTexture(ctx.TEXTURE_2D, grainTexture);
+    ctx.activeTexture(ctx.TEXTURE0);
+    ctx.bindTexture(ctx.TEXTURE_2D, noiseTexture);
+
+    const setSize = (w: number, h: number) => {
+      canvas.width = Math.floor(w * pixelRatio);
+      canvas.height = Math.floor(h * pixelRatio);
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
+      ctx.useProgram(mainProgram);
+      ctx.uniform2f(resolutionLoc, w, h);
     };
+    setSize(mount.clientWidth, mount.clientHeight);
+    mount.appendChild(canvas);
 
-    const mainMaterial = new THREE.ShaderMaterial({
-      vertexShader: mainVertexShader,
-      fragmentShader: mainFragmentShader,
-      uniforms: mainUniforms,
-      depthTest: false,
-      depthWrite: false,
-    });
-
-    const mainQuad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), mainMaterial);
-    scene.add(mainQuad);
-
-    // 5. Mouse Interaction Listeners
+    // 6. Mouse Interaction Listeners
     const eventTarget = targetRef?.current || mount;
     const handleMouseMove = (e: MouseEvent) => {
       if (!interactive) return;
@@ -390,64 +494,82 @@ export const FractalGlass: React.FC<FractalGlassProps> = ({
       eventTarget.addEventListener('mouseleave', handleMouseLeave);
     }
 
-    // 6. Resize Observer
+    // 7. Resize Observer
     const handleResize = () => {
       if (!mount) return;
-      const width = mount.clientWidth;
-      const height = mount.clientHeight;
-      renderer.setSize(width, height);
-      mainUniforms.uResolution.value.set(width, height);
+      setSize(mount.clientWidth, mount.clientHeight);
     };
 
     const resizeObserver = new ResizeObserver(handleResize);
     resizeObserver.observe(mount);
 
-    // 7. Intersection Observer for Power Efficiency (Pause WebGL when off-screen)
-    const intersectionObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          isVisibleRef.current = entry.isIntersecting;
-        });
-      },
-      { threshold: 0.05 }
-    );
-    intersectionObserver.observe(mount);
-
-    // 8. Animation Render Loop
-    let animationFrameId: number;
+    // 8. Animation Render Loop (only scheduled while on screen, see step 9)
+    let animationFrameId: number | null = null;
     let lastTime = performance.now();
+    let time = 0;
 
     const animate = (now: number) => {
       animationFrameId = requestAnimationFrame(animate);
-
-      if (!isVisibleRef.current) return;
+      if (ctx.isContextLost()) return;
 
       const delta = Math.min((now - lastTime) / 1000, 0.1);
       lastTime = now;
 
-      // Smooth mouse lerp
-      mouseCurrentRef.current.x += (mouseTargetRef.current.x - mouseCurrentRef.current.x) * 0.05;
-      mouseCurrentRef.current.y += (mouseTargetRef.current.y - mouseCurrentRef.current.y) * 0.05;
-      mainUniforms.uMouse.value.set(mouseCurrentRef.current.x, mouseCurrentRef.current.y);
+      // Smooth mouse lerp via pure math utility
+      mouseCurrentRef.current.x = lerp(mouseCurrentRef.current.x, mouseTargetRef.current.x, MOUSE_LERP_FACTOR);
+      mouseCurrentRef.current.y = lerp(mouseCurrentRef.current.y, mouseTargetRef.current.y, MOUSE_LERP_FACTOR);
 
       // Advance time
-      noiseUniforms.uTime.value += delta;
-      mainUniforms.uTime.value += delta;
+      time += delta;
 
       // Pass 1: Render Simplex Noise into FBO
-      renderer.setRenderTarget(noiseRenderTarget);
-      renderer.render(noiseScene, noiseCamera);
+      ctx.bindFramebuffer(ctx.FRAMEBUFFER, noiseFramebuffer);
+      ctx.viewport(0, 0, NOISE_FBO_SIZE, NOISE_FBO_SIZE);
+      ctx.useProgram(noiseProgram);
+      ctx.uniform1f(noiseTimeLoc, time);
+      ctx.drawArrays(ctx.TRIANGLES, 0, 3);
 
-      // Pass 2: Render Main Fractal Glass Quad to Screen
-      renderer.setRenderTarget(null);
-      renderer.render(scene, camera);
+      // Pass 2: Render Main Fractal Glass to Screen
+      ctx.bindFramebuffer(ctx.FRAMEBUFFER, null);
+      ctx.viewport(0, 0, canvas.width, canvas.height);
+      ctx.clear(ctx.COLOR_BUFFER_BIT);
+      ctx.useProgram(mainProgram);
+      ctx.uniform1f(mainTimeLoc, time);
+      ctx.uniform2f(mouseLoc, mouseCurrentRef.current.x, mouseCurrentRef.current.y);
+      ctx.drawArrays(ctx.TRIANGLES, 0, 3);
     };
 
-    animationFrameId = requestAnimationFrame(animate);
+    const start = () => {
+      if (animationFrameId !== null) return;
+      // Reset the clock so the first frame after a pause does not jump.
+      lastTime = performance.now();
+      animationFrameId = requestAnimationFrame(animate);
+    };
 
-    // 9. Cleanup & Resource Disposal
-    return () => {
+    const stop = () => {
+      if (animationFrameId === null) return;
       cancelAnimationFrame(animationFrameId);
+      animationFrameId = null;
+    };
+
+    // 9. Intersection Observer for Power Efficiency (no rAF at all while off-screen)
+    // Observe the in-flow target, not `mount`: the Footer renders this inside a
+    // `position: fixed` layer, which always intersects the viewport even while page
+    // content covers it, so observing `mount` never paused the shader.
+    const intersectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) start();
+          else stop();
+        });
+      },
+      { threshold: 0.05 }
+    );
+    intersectionObserver.observe(targetRef?.current ?? mount);
+
+    // 10. Cleanup & Resource Disposal
+    return () => {
+      stop();
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
 
@@ -456,17 +578,9 @@ export const FractalGlass: React.FC<FractalGlassProps> = ({
         eventTarget.removeEventListener('mouseleave', handleMouseLeave);
       }
 
-      noiseQuad.geometry.dispose();
-      (noiseQuad.material as THREE.Material).dispose();
-      noiseRenderTarget.dispose();
-
-      mainQuad.geometry.dispose();
-      mainMaterial.dispose();
-      grainTexture.dispose();
-
-      renderer.dispose();
-      if (mount.contains(renderer.domElement)) {
-        mount.removeChild(renderer.domElement);
+      releaseGL();
+      if (mount.contains(canvas)) {
+        mount.removeChild(canvas);
       }
     };
   }, [intensity, interactive, targetRef]);

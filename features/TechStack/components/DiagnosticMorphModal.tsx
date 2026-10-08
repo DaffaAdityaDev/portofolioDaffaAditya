@@ -1,10 +1,12 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { X, Sparkles, Code2 } from 'lucide-react';
-import { Module } from '../constants';
+import { Module, TECH_USAGE_LABELS, TechUsage } from '../constants';
 import { SPRING_MOBILE_OS, BACKDROP_VARIANTS } from '@/constant/animations';
 import { useModalDismiss } from '@/hooks/useModalDismiss';
 import Portal from '@/components/ui/Portal';
+
+const USAGE_ORDER: TechUsage[] = ['project', 'familiar'];
 
 interface DiagnosticMorphModalProps {
   module: Module | null;
@@ -20,7 +22,7 @@ export const DiagnosticMorphModal: React.FC<DiagnosticMorphModalProps> = ({ modu
     <Portal>
       <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 md:p-10 pointer-events-auto">
         {/* Backdrop */}
-        <motion.div
+        <m.div
           variants={BACKDROP_VARIANTS}
           initial="hidden"
           animate="visible"
@@ -31,7 +33,7 @@ export const DiagnosticMorphModal: React.FC<DiagnosticMorphModalProps> = ({ modu
         />
 
         {/* Fluid Morphing Container */}
-        <motion.div
+        <m.div
           layoutId={`diagnostic-module-${module.id}`}
           transition={SPRING_MOBILE_OS}
           className="relative w-full max-w-2xl max-h-[90vh] bg-[#0d0d10] border border-white/10 rounded-3xl shadow-[0_32px_80px_rgba(0,0,0,0.95)] overflow-hidden flex flex-col text-neutral-100 focus:outline-none"
@@ -58,8 +60,8 @@ export const DiagnosticMorphModal: React.FC<DiagnosticMorphModalProps> = ({ modu
                 >
                   {module.name}
                 </h3>
-                <div className="font-mono text-[10px] text-zinc-500 uppercase">
-                  ARCHITECTURAL BLUEPRINT // ID: {module.id}
+                <div className="font-mono text-[10px] text-zinc-400 uppercase">
+                  {module.headline}
                 </div>
               </div>
             </div>
@@ -75,7 +77,7 @@ export const DiagnosticMorphModal: React.FC<DiagnosticMorphModalProps> = ({ modu
               <button
                 onClick={onClose}
                 className="p-1.5 rounded-full bg-white/5 hover:bg-white/15 text-neutral-400 hover:text-white transition-all cursor-pointer flex items-center gap-1 text-xs font-mono"
-                aria-label="Close diagnostic inspector"
+                aria-label="Close tech stack details"
               >
                 <span className="hidden sm:inline text-[10px] text-neutral-400 px-1 font-mono">ESC</span>
                 <X size={16} />
@@ -89,21 +91,18 @@ export const DiagnosticMorphModal: React.FC<DiagnosticMorphModalProps> = ({ modu
             <div className="space-y-2">
               <span className="text-[10px] font-mono text-red-400 font-bold uppercase tracking-widest flex items-center gap-1.5">
                 <Code2 size={12} />
-                ENGINEERING PHILOSOPHY & SCOPE
+                SCOPE
               </span>
-              <h4 className="text-lg font-black text-white uppercase tracking-tight">
-                {module.headline}
-              </h4>
               <p className="text-sm text-neutral-300 font-sans leading-relaxed">
                 {module.description}
               </p>
             </div>
 
-            {/* Architectural Pillars (Real engineering standards) */}
+            {/* Summary pillars */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 bg-zinc-900/40 border border-zinc-800 rounded-2xl">
               {module.pillars.map((pillar, idx) => (
                 <div key={idx} className="flex flex-col gap-1 border-b sm:border-b-0 sm:border-r last:border-none border-zinc-800/80 pb-2 sm:pb-0 sm:pr-3">
-                  <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider">
+                  <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">
                     {pillar.label}
                   </span>
                   <span className="text-xs font-mono font-bold text-white leading-snug">
@@ -113,55 +112,57 @@ export const DiagnosticMorphModal: React.FC<DiagnosticMorphModalProps> = ({ modu
               ))}
             </div>
 
-            {/* Core Capabilities & Tool Matrix */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest flex items-center gap-1.5">
-                  <Sparkles size={12} className="text-red-400" />
-                  CORE CAPABILITIES & RUNTIMES
-                </span>
-                <span className="text-[10px] font-mono text-zinc-600">
-                  TOTAL: {module.processes.length}
-                </span>
-              </div>
-
-              <div className="space-y-2.5">
-                {module.processes.map((proc, idx) => (
-                  <div
-                    key={idx}
-                    className="p-3.5 rounded-xl bg-zinc-900/40 border border-zinc-800/80 hover:border-zinc-700/60 transition-colors space-y-2"
-                  >
-                    <div className="flex items-center justify-between flex-wrap gap-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-bold text-white font-mono tracking-tight">
-                          {proc.name}
-                        </span>
-                      </div>
-                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-neutral-800 text-neutral-300 border border-neutral-700">
-                        {proc.roleLabel}
-                      </span>
-                    </div>
-
-                    <p className="text-xs text-neutral-300 font-sans leading-relaxed">
-                      {proc.role}
-                    </p>
-
-                    {proc.patterns && proc.patterns.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5 pt-1">
-                        {proc.patterns.map((tag, pIdx) => (
-                          <span
-                            key={pIdx}
-                            className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-800/60 text-zinc-400 border border-zinc-700/40"
-                          >
-                            #{tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
+            {/* Tools, grouped: used in my projects, then also worked with */}
+            {USAGE_ORDER.map((usage) => {
+              const items = module.processes.filter((proc) => proc.usage === usage);
+              if (items.length === 0) return null;
+              return (
+                <div key={usage} className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest flex items-center gap-1.5">
+                      <Sparkles size={12} className="text-red-400" />
+                      {TECH_USAGE_LABELS[usage]}
+                    </span>
+                    <span className="text-[10px] font-mono text-zinc-400">{items.length}</span>
                   </div>
-                ))}
-              </div>
-            </div>
+
+                  <div className="space-y-2.5">
+                    {items.map((proc) => (
+                      <div
+                        key={proc.name}
+                        className="p-3.5 rounded-xl bg-zinc-900/40 border border-zinc-800/80 hover:border-zinc-700/60 transition-colors space-y-2"
+                      >
+                        <div className="flex items-center justify-between flex-wrap gap-2">
+                          <span className="text-sm font-bold text-white font-mono tracking-tight">
+                            {proc.name}
+                          </span>
+                          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-neutral-800 text-neutral-300 border border-neutral-700">
+                            {proc.roleLabel}
+                          </span>
+                        </div>
+
+                        <p className="text-xs text-neutral-300 font-sans leading-relaxed">
+                          {proc.role}
+                        </p>
+
+                        {proc.patterns.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5 pt-1">
+                            {proc.patterns.map((tag) => (
+                              <span
+                                key={tag}
+                                className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-800/60 text-zinc-400 border border-zinc-700/40"
+                              >
+                                #{tag}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
 
             {/* Footer Close */}
             <div className="pt-2 flex justify-end border-t border-white/5">
@@ -169,11 +170,11 @@ export const DiagnosticMorphModal: React.FC<DiagnosticMorphModalProps> = ({ modu
                 onClick={onClose}
                 className="px-4 py-2 text-xs font-mono text-neutral-400 hover:text-white uppercase transition-colors cursor-pointer"
               >
-                Close Blueprint
+                Close
               </button>
             </div>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </Portal>
   );

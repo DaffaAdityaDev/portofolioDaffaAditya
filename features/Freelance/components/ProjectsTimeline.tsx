@@ -1,18 +1,23 @@
 import React, { useRef } from 'react';
-import { motion, useScroll, useSpring } from 'framer-motion';
-import { TIMELINE_NODES, TimelineNode } from '../constants';
+import { m, useScroll, useSpring } from 'framer-motion';
+import Link from 'next/link';
+import { TIMELINE_NODES, TimelineNode, CASE_STUDY_LINKS } from '../constants';
+import { useFreelanceStore } from '@/store/useFreelanceStore';
 
-interface ProjectsTimelineProps {
-  showAllProjects: boolean;
-  setShowAllProjects: (val: boolean) => void;
-  setHoveredNode: (node: TimelineNode | null) => void;
+export interface ProjectsTimelineProps {
+  showAllProjects?: boolean;
+  setShowAllProjects?: (val: boolean) => void;
+  setHoveredNode?: (node: TimelineNode | null) => void;
 }
 
-export const ProjectsTimeline: React.FC<ProjectsTimelineProps> = ({
-  showAllProjects,
-  setShowAllProjects,
-  setHoveredNode,
-}) => {
+export const ProjectsTimeline: React.FC<ProjectsTimelineProps> = (props) => {
+  // Select only what the timeline uses: hoveredNode changes on every hover and must not re-render it.
+  const storeShowAllProjects = useFreelanceStore((state) => state.showAllProjects);
+  const storeSetShowAllProjects = useFreelanceStore((state) => state.setShowAllProjects);
+  const storeSetHoveredNode = useFreelanceStore((state) => state.setHoveredNode);
+  const showAllProjects = props.showAllProjects ?? storeShowAllProjects;
+  const setShowAllProjects = props.setShowAllProjects ?? storeSetShowAllProjects;
+  const setHoveredNode = props.setHoveredNode ?? storeSetHoveredNode;
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: scrollContainerRef,
@@ -30,18 +35,18 @@ export const ProjectsTimeline: React.FC<ProjectsTimelineProps> = ({
       <div className="max-w-6xl mx-auto">
         <div className="mb-12 border-b border-zinc-800 pb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
           <div>
-            <span className="text-xs font-mono text-red-500 uppercase tracking-widest font-bold">// SOLUTIONS_ROADMAP</span>
-            <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight mt-2">What I Offer & Tech Stack</h2>
+            <span className="text-xs font-mono text-red-500 uppercase tracking-widest font-bold">// FREELANCE_WORK</span>
+            <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight mt-2">Freelance Projects</h2>
           </div>
           <p className="text-xs font-mono text-zinc-500 tracking-wider md:max-w-xs text-left md:text-right">
-            // SCROLL TO TRACE ENGINE ALIGNMENT
+            Client work I took on as a freelancer.
           </p>
         </div>
 
         <div className="relative pl-8 md:pl-16 space-y-16">
           <div className="absolute left-[9px] md:left-[17px] top-4 bottom-4 w-[2px]">
             <div className="absolute inset-0 bg-zinc-800" />
-            <motion.div 
+            <m.div 
               style={{ scaleY: scaleY, originY: 0 }}
               className="absolute inset-0 bg-gradient-to-b from-red-600 via-red-500 to-red-600 shadow-[0_0_10px_rgba(239,68,68,0.7)]"
             />
@@ -63,7 +68,7 @@ export const ProjectsTimeline: React.FC<ProjectsTimelineProps> = ({
 
                 <div className="w-full md:w-1/3 shrink-0">
                   <span className="text-xs font-mono text-red-500 uppercase tracking-wider block font-bold mb-1">
-                    {node.id}: {node.category}
+                    {node.category}
                   </span>
                   <div className="text-2xl font-black text-white uppercase tracking-tight group-hover:text-red-500 transition-colors duration-300">
                     {node.title}
@@ -94,9 +99,13 @@ export const ProjectsTimeline: React.FC<ProjectsTimelineProps> = ({
                     ))}
                   </div>
 
-                  <div className="border-t border-zinc-800 pt-4 flex justify-between items-center text-xs font-mono text-zinc-400">
-                    <span>SYSTEM PARAMETER</span>
+                  <div className="border-t border-zinc-800 pt-4 flex flex-wrap justify-between items-center gap-2 text-xs font-mono text-zinc-400">
                     <span className="text-red-500 font-bold uppercase tracking-wider">{node.metric}</span>
+                    {CASE_STUDY_LINKS[node.id] && (
+                      <Link href={CASE_STUDY_LINKS[node.id]} className="text-zinc-300 hover:text-white underline underline-offset-4 decoration-zinc-700 hover:decoration-red-500 transition-colors">
+                        Read the case study →
+                      </Link>
+                    )}
                   </div>
                 </div>
               </div>
@@ -111,10 +120,16 @@ export const ProjectsTimeline: React.FC<ProjectsTimelineProps> = ({
               onClick={() => setShowAllProjects(!showAllProjects)}
               className="group px-6 py-3 border border-zinc-800 bg-[#0f0f13] text-zinc-300 font-mono text-xs uppercase tracking-widest hover:border-red-500 hover:text-white hover:shadow-[0_0_15px_rgba(239,68,68,0.15)] transition-all duration-300 rounded-lg flex items-center gap-2 cursor-pointer active:scale-95"
             >
-              <span>{showAllProjects ? 'Collapse Projects [-]' : 'Expand Full Roadmap [+]'}</span>
+              <span>{showAllProjects ? 'Collapse Projects [-]' : 'Show All Projects [+]'}</span>
             </button>
           </div>
         )}
+        <p className="mt-16 text-sm font-mono text-zinc-400 border-t border-zinc-800 pt-6">
+          Looking for my work as an employee (Run System, Ombudsman RI, QQTech)?{' '}
+          <Link href="/case-studies" className="text-white underline underline-offset-4 decoration-zinc-700 hover:decoration-red-500 transition-colors">
+            See the case studies →
+          </Link>
+        </p>
       </div>
     </section>
   );

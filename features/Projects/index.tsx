@@ -1,16 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useSyncExternalStore } from 'react';
 import { projectsData, Project } from './constants';
-import CursorPreview from './components/CursorPreview';
 import dynamic from 'next/dynamic';
 import ProjectRow from './components/ProjectRow';
-import { AnimatePresence, motion, LayoutGroup } from 'framer-motion';
-import { ProjectMorphModal } from './components/ProjectMorphModal';
+import { AnimatePresence, m, LayoutGroup } from 'framer-motion';
 import { FADE_IN_UP_CONTAINER, FADE_IN_UP_ITEM, SPRING_SNAPPY } from '@/constant/animations';
+
+// Both only matter after an interaction, so their code loads on demand instead of with the section.
+const loadProjectMorphModal = () => import('./components/ProjectMorphModal');
+const ProjectMorphModal = dynamic(loadProjectMorphModal, { ssr: false });
+const CursorPreview = dynamic(() => import('./components/CursorPreview'), { ssr: false });
+
+// The cursor preview follows a mouse; touch-only devices never mount it (or fetch its chunk).
+const HOVER_QUERY = '(hover: hover)';
+const subscribeHover = (onChange: () => void) => {
+  const query = window.matchMedia(HOVER_QUERY);
+  query.addEventListener('change', onChange);
+  return () => query.removeEventListener('change', onChange);
+};
+const getHoverSnapshot = () => window.matchMedia(HOVER_QUERY).matches;
+const getHoverServerSnapshot = () => false;
 
 const Projects = () => {
   const [hoveredProject, setHoveredProject] = useState<Project | null>(null);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [activeTab, setActiveTab] = useState<'work' | 'freelance' | 'side'>('work');
+  const canHover = useSyncExternalStore(subscribeHover, getHoverSnapshot, getHoverServerSnapshot);
 
   // Filter projects by nature
   const workProjects = projectsData.filter(p => !p.nature || p.nature === 'work');
@@ -27,9 +41,9 @@ const Projects = () => {
 
   return (
     <LayoutGroup id="projects-layout-group">
-      <CursorPreview hoveredProject={hoveredProject} />
+      {canHover && <CursorPreview hoveredProject={hoveredProject} />}
 
-      <motion.section 
+      <m.section 
         id="works" 
         variants={FADE_IN_UP_CONTAINER}
         initial="hidden"
@@ -42,7 +56,7 @@ const Projects = () => {
         <div id="projects-timeline-end" className="absolute right-[15px] md:right-[31px] bottom-0 w-1 h-1 pointer-events-none" />
 
         <div className="relative z-20 max-w-7xl mx-auto w-full">
-          <motion.div variants={FADE_IN_UP_ITEM} className="flex flex-col md:flex-row md:items-end justify-between mb-5 md:mb-8 border-b border-zinc-800 pb-3 md:pb-4 gap-4">
+          <m.div variants={FADE_IN_UP_ITEM} className="flex flex-col md:flex-row md:items-end justify-between mb-5 md:mb-8 border-b border-zinc-800 pb-3 md:pb-4 gap-4">
             <div>
               <div className="text-xs font-mono text-zinc-500 mb-1 tracking-widest uppercase">
                 [ 03 // PROJECTS ]
@@ -63,7 +77,7 @@ const Projects = () => {
                     }`}
                   >
                     {isActive && (
-                      <motion.div
+                      <m.div
                         layoutId="project-tab-active-pill"
                         transition={SPRING_SNAPPY}
                         className="absolute inset-0 rounded-md bg-zinc-800 border border-zinc-700 shadow-sm -z-10"
@@ -74,11 +88,11 @@ const Projects = () => {
                 );
               })}
             </div>
-          </motion.div>
+          </m.div>
           
-          <motion.div variants={FADE_IN_UP_ITEM} className="flex flex-col border-t border-zinc-900 overflow-hidden min-h-[300px]">
+          <m.div variants={FADE_IN_UP_ITEM} className="flex flex-col border-t border-zinc-900 overflow-hidden min-h-[300px]">
             <AnimatePresence mode="wait">
-              <motion.div
+              <m.div
                 key={activeTab}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -91,21 +105,25 @@ const Projects = () => {
                     key={project.id} 
                     project={project} 
                     compact={false} 
-                    onHover={setHoveredProject} 
+                    onHover={(hovered) => {
+                      // Warm the modal chunk on hover so the first open still morphs straight away.
+                      if (hovered) void loadProjectMorphModal();
+                      setHoveredProject(hovered);
+                    }}
                     onSelect={setSelectedProject}
                   />
                 ))}
                 
                 {displayedProjects.length === 0 && (
-                  <div className="py-20 text-center text-zinc-600 font-mono text-sm uppercase">
+                  <div className="py-20 text-center text-zinc-500 font-mono text-sm uppercase">
                     No projects found in this category.
                   </div>
                 )}
-              </motion.div>
+              </m.div>
             </AnimatePresence>
-          </motion.div>
+          </m.div>
         </div>
-      </motion.section>
+      </m.section>
 
       {/* Shared Element Morph Modal */}
       <AnimatePresence>

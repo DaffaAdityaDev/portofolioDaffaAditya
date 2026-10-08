@@ -1,24 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { motion, useReducedMotion, AnimatePresence } from 'framer-motion';
+import { m, useReducedMotion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Github, Linkedin, Mail, ArrowUpRight } from 'lucide-react';
 import { siteConfig } from '@/config/metadata.config';
 import { SPRING_MOBILE_OS } from '@/constant/animations';
+import type { NavItem, SocialLink } from '@/types/navigation';
 
-interface NavItem {
-  label: string;
-  id?: string;
-  path?: string;
-}
+export type { NavItem, SocialLink };
 
 const navItems: NavItem[] = [
   { label: 'HOME', id: 'hero' },
+  { label: 'CASE STUDIES', path: '/case-studies' },
   { label: 'BLOG', path: '/blog' },
   { label: 'SOCIALS' }
 ];
 
-const socialLinks = [
+const socialLinks: SocialLink[] = [
   { label: 'GITHUB', href: siteConfig.links.github, Icon: Github, external: true, aria: 'GitHub Profile' },
   { label: 'LINKEDIN', href: siteConfig.links.linkedin, Icon: Linkedin, external: true, aria: 'LinkedIn Profile' },
   { label: 'EMAIL', href: `mailto:${siteConfig.links.email}`, Icon: Mail, aria: 'Send Email' }
@@ -31,6 +29,8 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [isSocialOpen, setIsSocialOpen] = useState(false);
+  // Hash set by in-page navigation, which bypasses the router (so asPath goes stale).
+  const [inPageHash, setInPageHash] = useState<string | null>(null);
   const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
@@ -40,18 +40,41 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    const resetHash = () => setInPageHash(null);
+    router.events.on('routeChangeComplete', resetHash);
+    router.events.on('hashChangeComplete', resetHash);
+    return () => {
+      router.events.off('routeChangeComplete', resetHash);
+      router.events.off('hashChangeComplete', resetHash);
+    };
+  }, [router.events]);
+
+  const currentPath = inPageHash !== null && router.pathname === '/' ? `/${inPageHash}` : router.asPath;
+
   const checkActive = (item: NavItem) => {
-    return (item.id === 'hero' && router.pathname === '/' && !router.asPath.includes('#')) ||
-      (item.id && router.asPath.includes(`#${item.id}`)) ||
+    return (item.id === 'hero' && router.pathname === '/' && !currentPath.includes('#')) ||
+      (item.id && currentPath.includes(`#${item.id}`)) ||
       (item.path && router.pathname.startsWith(item.path));
+  };
+
+  /**
+   * Same-page jumps only scroll and rewrite the URL. Going through router.push would
+   * change asPath and remount the whole home page behind the page transition.
+   * Next's history state is kept so back/forward still work.
+   */
+  const replaceInPageUrl = (hash: string) => {
+    const url = `/${hash}`;
+    window.history.replaceState({ ...window.history.state, as: url }, '', url);
+    setInPageHash(hash);
   };
 
   const handleNavigation = (e: React.MouseEvent<HTMLAnchorElement>, item: NavItem) => {
     if (item.id && router.pathname === '/') {
       e.preventDefault();
       const element = document.getElementById(item.id);
-      if (element) element.scrollIntoView({ behavior: 'smooth' });
-      router.push(`/#${item.id}`, undefined, { scroll: false });
+      if (element) element.scrollIntoView({ behavior: shouldReduceMotion ? 'auto' : 'smooth' });
+      replaceInPageUrl(`#${item.id}`);
     }
   };
 
@@ -75,7 +98,7 @@ const Navbar = () => {
             } ${isSocialOpen ? 'overflow-visible' : 'overflow-hidden'}`}
         >
           {/* Multi-layered Obsidian Glassmorphic Shell */}
-          <div className="absolute inset-0 bg-[#08080a]/90 backdrop-blur-2xl border border-white/[0.08] shadow-[0_20px_45px_rgba(0,0,0,0.85),_inset_0_1px_0_rgba(255,255,255,0.15),_inset_0_-1px_0_rgba(0,0,0,0.5)] group-hover:shadow-[0_24px_55px_rgba(0,0,0,0.95),_0_0_20px_rgba(255,255,255,0.03),_inset_0_1px_0_rgba(255,255,255,0.22)] rounded-full -z-10 pointer-events-none transition-all duration-300" />
+          <div className="absolute inset-0 bg-[#08080a]/90 backdrop-blur-md border border-white/[0.08] shadow-[0_20px_45px_rgba(0,0,0,0.85),_inset_0_1px_0_rgba(255,255,255,0.15),_inset_0_-1px_0_rgba(0,0,0,0.5)] group-hover:shadow-[0_24px_55px_rgba(0,0,0,0.95),_0_0_20px_rgba(255,255,255,0.03),_inset_0_1px_0_rgba(255,255,255,0.22)] rounded-full -z-10 pointer-events-none transition-all duration-300" />
 
           <div
             className={`flex items-center justify-center whitespace-nowrap pointer-events-auto ${transitionClass} ${isExpanded ? 'gap-5' : 'gap-3'
@@ -90,8 +113,8 @@ const Navbar = () => {
                   setIsHovered(true);
                 } else if (router.pathname === '/') {
                   e.preventDefault();
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                  router.push('/', undefined, { scroll: false });
+                  window.scrollTo({ top: 0, behavior: shouldReduceMotion ? 'auto' : 'smooth' });
+                  replaceInPageUrl('');
                 }
               }}
               className="group/logo font-sans font-black text-xs tracking-[0.2em] text-white transition-colors duration-200 uppercase focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:outline-none rounded px-1.5 py-0.5 flex items-center gap-1.5"
@@ -99,7 +122,7 @@ const Navbar = () => {
               <span className="relative flex items-center h-6">
                 <span>D</span>
                 <span
-                  className={`${transitionClass} overflow-hidden flex items-center whitespace-nowrap ${isExpanded ? 'max-w-[200px] opacity-100 ml-0.5' : 'max-w-0 opacity-0 ml-0'
+                  className={`${transitionClass} overflow-hidden flex items-center whitespace-nowrap ${isExpanded ? 'max-w-[200px] opacity-100 ml-0' : 'max-w-0 opacity-0 ml-0'
                     }`}
                 >
                   AFFA ADITYA
@@ -138,7 +161,7 @@ const Navbar = () => {
             {/* Middle Section (Nav Menu with Unified Sliding Glass Pill) - Hidden on scroll */}
             <nav
               className={`flex items-center gap-1 relative px-1 py-0.5 whitespace-nowrap ${transitionClass} ${isExpanded
-                  ? 'max-w-[380px] opacity-100 pointer-events-auto'
+                  ? 'max-w-[500px] opacity-100 pointer-events-auto'
                   : 'max-w-0 opacity-0 pointer-events-none overflow-hidden'
                 } ${isSocialOpen ? 'overflow-visible' : 'overflow-hidden'}`}
               onMouseLeave={() => setHoveredIndex(null)}
@@ -166,7 +189,7 @@ const Navbar = () => {
                           } cursor-pointer`}
                       >
                         {isPillActive && (
-                          <motion.span
+                          <m.span
                             layoutId="nav-glass-pill"
                             className="absolute inset-0 bg-white/[0.08] border border-white/[0.12] rounded-full -z-10 shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_2px_8px_rgba(0,0,0,0.3)]"
                             transition={{ type: "spring", stiffness: 420, damping: 30 }}
@@ -176,7 +199,7 @@ const Navbar = () => {
                       </button>
                       <AnimatePresence>
                         {isSocialOpen && (
-                          <motion.div
+                          <m.div
                             initial={{ opacity: 0, y: 8, scale: 0.96 }}
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: 8, scale: 0.96 }}
@@ -190,11 +213,11 @@ const Navbar = () => {
                                 {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                                 className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-neutral-400 hover:text-white hover:bg-white/[0.08] transition-all duration-150 text-[10px] font-mono font-bold tracking-wider"
                               >
-                                <Icon size={13} className="shrink-0 text-neutral-300" />
+                                {Icon && <Icon size={13} className="shrink-0 text-neutral-300" />}
                                 <span>{label}</span>
                               </a>
                             ))}
-                          </motion.div>
+                          </m.div>
                         )}
                       </AnimatePresence>
                     </div>
@@ -211,14 +234,14 @@ const Navbar = () => {
                       }`}
                   >
                     {isPillActive && (
-                      <motion.span
+                      <m.span
                         layoutId="nav-glass-pill"
                         className="absolute inset-0 bg-white/[0.08] border border-white/[0.12] rounded-full -z-10 shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_2px_8px_rgba(0,0,0,0.3)]"
                         transition={{ type: "spring", stiffness: 420, damping: 30 }}
                       />
                     )}
                     {isActive && (
-                      <motion.span
+                      <m.span
                         layoutId="active-dot-glow"
                         className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.9)]"
                         transition={{ type: "spring", stiffness: 350, damping: 28 }}
@@ -267,20 +290,20 @@ const Navbar = () => {
 
       {/* ================= MOBILE NAVBAR ================= */}
       <div className="fixed top-6 left-0 w-full md:hidden flex justify-center items-start z-[100] pointer-events-none h-0 px-4">
-        <motion.div
+        <m.div
           layout
           transition={shouldReduceMotion ? { duration: 0.2 } : SPRING_MOBILE_OS}
           className={`pointer-events-auto overflow-hidden relative flex flex-col justify-start items-center group ${isMobileMenuOpen
-            ? 'w-[calc(100vw-2rem)] max-w-[384px] h-[310px] rounded-3xl'
+            ? 'w-[calc(100vw-2rem)] max-w-[384px] h-[352px] rounded-3xl'
             : 'w-[calc(100vw-2rem)] max-w-[320px] h-[44px] rounded-full'
             }`}
         >
           {/* Background Layer with heavy filters */}
-          <div className="absolute inset-0 bg-[#0a0a0c]/90 backdrop-blur-2xl border border-white/[0.08] shadow-[0_24px_50px_rgba(0,0,0,0.8)] -z-10 rounded-[inherit] pointer-events-none" />
+          <div className="absolute inset-0 bg-[#0a0a0c]/90 backdrop-blur-md border border-white/[0.08] shadow-[0_24px_50px_rgba(0,0,0,0.8)] -z-10 rounded-[inherit] pointer-events-none" />
 
           <AnimatePresence initial={false}>
             {isMobileMenuOpen ? (
-              <motion.div
+              <m.div
                 key="mobile-expanded"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -335,7 +358,7 @@ const Navbar = () => {
                       className="text-neutral-400 hover:text-white transition-colors duration-200 p-1 rounded focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:outline-none"
                       aria-label={aria}
                     >
-                      <Icon size={16} />
+                      {Icon && <Icon size={16} />}
                     </a>
                   ))}
                 </div>
@@ -349,9 +372,9 @@ const Navbar = () => {
                     Resume
                   </Link>
                 </div>
-              </motion.div>
+              </m.div>
             ) : (
-              <motion.div
+              <m.div
                 key="mobile-collapsed"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -391,10 +414,10 @@ const Navbar = () => {
                     <Menu size={15} />
                   </div>
                 </div>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
-        </motion.div>
+        </m.div>
       </div>
     </>
   );

@@ -1,18 +1,21 @@
-export default function DateComponent({ dateString }: any) {
-  if (!dateString) return null;
-  try {
-    const date = new Date(dateString);
-    if (isNaN(date.getTime())) {
-      return <time dateTime={dateString}>{dateString}</time>;
-    }
-    const formatted = date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-    return <time dateTime={dateString}>{formatted}</time>;
-  } catch (error) {
-    return <time dateTime={dateString}>{dateString}</time>;
-  }
+import React from 'react';
+import { formatDate } from '@/utils/date';
+
+interface DateComponentProps {
+  dateString?: string;
+  className?: string;
 }
+
+export default function DateComponent({ dateString, className }: DateComponentProps) {
+  if (!dateString) return null;
+
+  const formatted = formatDate(dateString);
+
+  return (
+    <time dateTime={dateString} className={className}>
+      {formatted}
+    </time>
+  );
+}
+
 export { DateComponent as Date };

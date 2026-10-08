@@ -4,6 +4,10 @@ import Image from 'next/image';
 interface CustomImageProps {
   src: string;
   alt: string;
+  /**
+   * Intrinsic pixel size of the file. The box reserves this aspect ratio before the
+   * image loads, so pass the real size or it shifts (the default is 16:9).
+   */
   width?: number;
   height?: number;
 }
@@ -16,10 +20,11 @@ const CustomImage: React.FC<CustomImageProps> = ({ src, alt, width = 1200, heigh
         alt={alt || ''}
         width={width}
         height={height}
+        sizes="(min-width: 768px) 68ch, 100vw"
         className="w-full h-auto object-cover rounded"
         loading="lazy"
       />
-      {alt && <div className="mt-2 text-center text-xs font-mono text-neutral-600 uppercase">{alt}</div>}
+      {alt && <div className="mt-2 text-center text-xs font-mono text-neutral-500 uppercase">{alt}</div>}
     </div>
   );
 };

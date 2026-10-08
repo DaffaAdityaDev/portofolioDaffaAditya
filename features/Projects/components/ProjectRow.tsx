@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { Project, CASE_STUDIES_META, DEFAULT_META } from '../constants';
+import { m } from 'framer-motion';
+import { Project, CASE_STUDIES_META } from '../constants';
 import { SPRING_MOBILE_OS } from '@/constant/animations';
 
 interface ProjectRowProps {
@@ -12,10 +12,10 @@ interface ProjectRowProps {
 }
 
 const ProjectRow: React.FC<ProjectRowProps> = ({ project, onHover, onSelect }) => {
-  const meta = CASE_STUDIES_META[project.slug] || DEFAULT_META;
+  const meta = CASE_STUDIES_META[project.slug];
 
   return (
-    <motion.div
+    <m.div
       layoutId={`project-card-${project.id}`}
       transition={SPRING_MOBILE_OS}
       onClick={() => onSelect(project)}
@@ -30,7 +30,7 @@ const ProjectRow: React.FC<ProjectRowProps> = ({ project, onHover, onSelect }) =
           onSelect(project);
         }
       }}
-      className="group block rounded-xl md:rounded-none bg-[#0a0a0c]/85 md:bg-transparent border border-white/[0.08] md:border-none md:border-b md:border-zinc-800 my-2 md:my-0 p-4 md:p-6 hover:bg-zinc-900/40 transition-all duration-200 cursor-pointer focus:outline-none focus-visible:bg-zinc-900/60 focus-visible:ring-1 focus-visible:ring-emerald-500/50 shadow-[0_4px_20px_rgba(0,0,0,0.4)] md:shadow-none active:scale-[0.99] md:active:scale-100"
+      className="group block rounded-xl md:rounded-none bg-[#0a0a0c]/85 md:bg-transparent max-md: max-md: border border-white/[0.08] md:border-none md:border-b md:border-zinc-800 my-2 md:my-0 p-4 md:p-6 hover:bg-zinc-900/40 transition-all duration-200 cursor-pointer focus:outline-none focus-visible:bg-zinc-900/60 max-md: max-md: focus-visible:ring-1 focus-visible:ring-emerald-500/50 shadow-[0_4px_20px_rgba(0,0,0,0.4)] md:shadow-none active:scale-[0.99] md:active:scale-100"
     >
       <div className="grid grid-cols-1 md:grid-cols-12 items-start gap-3 md:gap-6">
         {/* Col 1: Project Title & Mobile Metric Badge */}
@@ -45,14 +45,14 @@ const ProjectRow: React.FC<ProjectRowProps> = ({ project, onHover, onSelect }) =
                   // TYPE: {project.type}
                 </span>
                 {project.year && (
-                  <span className="text-[10px] text-neutral-500 font-mono">
+                  <span className="text-[10px] text-neutral-400 font-mono">
                     · {project.year}
                   </span>
                 )}
               </div>
             </div>
 
-            {/* Mobile Audited Metric Badge */}
+            {/* Mobile metric badge (none when the project has no meta) */}
             {meta?.metric && (
               <div className="md:hidden inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-[9px] font-mono font-bold tracking-wider uppercase shrink-0 shadow-[0_0_10px_rgba(16,185,129,0.15)]">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -96,7 +96,7 @@ const ProjectRow: React.FC<ProjectRowProps> = ({ project, onHover, onSelect }) =
 
         {/* Col 3: Action Endpoint */}
         <div className="md:col-span-2 flex justify-between md:justify-end items-center h-full pt-2 md:pt-0 border-t border-white/[0.04] md:border-none">
-          <span className="text-[10px] font-mono text-neutral-500 uppercase md:hidden">
+          <span className="text-[10px] font-mono text-neutral-400 uppercase md:hidden">
             Client: {project.client}
           </span>
           <div
@@ -107,7 +107,7 @@ const ProjectRow: React.FC<ProjectRowProps> = ({ project, onHover, onSelect }) =
           </div>
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 };
 

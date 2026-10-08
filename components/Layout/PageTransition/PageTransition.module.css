@@ -1,0 +1,59 @@
+/* Pixel-grid route transition. Mounted only while a transition plays (see index.tsx). */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), 1fr);
+  grid-template-rows: repeat(var(--rows), 1fr);
+}
+
+.cell {
+  background: #18181c;
+  border: 1px solid rgb(255 255 255 / 0.2);
+  box-shadow: inset 0 0 12px rgb(255 255 255 / 0.03);
+  transform-origin: center;
+  animation-duration: var(--cell-ms);
+  animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+  animation-fill-mode: both;
+  /* --i: per-cell delay in ms (diagonal wave with digital scatter) */
+  animation-delay: calc(var(--i) * 1ms);
+}
+
+.cover .cell {
+  animation-name: pixel-cover;
+}
+
+.uncover .cell {
+  animation-name: pixel-uncover;
+}
+
+@keyframes pixel-cover {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes pixel-uncover {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay {
+    display: none;
+  }
+}

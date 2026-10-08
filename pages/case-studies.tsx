@@ -1,145 +1,100 @@
-import React, { useState, useCallback } from 'react';
-import Head from 'next/head';
-import {
-  projectsData,
-  CASE_STUDIES_META,
-  DEFAULT_META,
-  ACCENT_SPOTLIGHT_COLORS
-} from '@/features/Projects/constants';
-import GridLine from '@/components/ui/GridLine';
+import React from 'react';
+import type { GetStaticProps } from 'next';
 import dynamic from 'next/dynamic';
+import Seo from '@/components/Seo';
+import { ENGAGEMENTS, ENGAGEMENT_KIND_LABELS, getEngagementProjects, projectTitle } from '@/features/Projects/engagements';
+import CaseStudyCard, { type CaseStudyCardData } from '@/features/Projects/components/CaseStudyCard';
+import CaseStudyIndexHeader, { type KindCount } from '@/features/Projects/components/CaseStudyIndexHeader';
+import { filled, filledList } from '@/features/Projects/components/Engagement/utils';
+import type { ShotItem } from '@/features/Projects/components/CaseStudyArt/ProductShot';
+import type { Engagement, EngagementKind } from '@/types/project';
 
-const CaseStudyRow = dynamic(() => import('@/features/Projects/components/CaseStudyRow'), { ssr: true });
+// Below the fold: the site footer closes the page, as on the blog.
+const Footer = dynamic(() => import('@/components/Layout/Footer'), { ssr: true });
 
-// Injecting CSS Animations for SVG Drawing hoisted outside render context
-const ARROW_STYLES = `
-  .arrow-line {
-    stroke-dasharray: 12;
-    stroke-dashoffset: 12;
-    transition: stroke-dashoffset 0.3s ease-out, opacity 0.3s ease-in-out;
-    opacity: 0;
-  }
-  .group:hover .arrow-line {
-    stroke-dashoffset: 0;
-    opacity: 1;
-  }
-  .arrow-head {
-    transform: translateX(-4px);
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .group:hover .arrow-head {
-    transform: translateX(0px);
-  }
-`;
+interface CaseStudiesIndexProps {
+  cards: CaseStudyCardData[];
+  totalCount: number;
+  kindCounts: KindCount[];
+}
 
-export default function CaseStudiesIndex() {
-  const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
-  const [showAll, setShowAll] = useState(false);
+const KIND_ORDER: EngagementKind[] = ['work', 'freelance', 'side'];
 
-  // Dynamic color spectrum backdrop transitions
-  const getAmbientSpotlightColor = () => {
-    if (!hoveredSlug) return 'rgba(239, 68, 68, 0.02)'; // Soft red default
-    const meta = CASE_STUDIES_META[hoveredSlug];
-    if (!meta) return 'rgba(239, 68, 68, 0.02)';
-    return ACCENT_SPOTLIGHT_COLORS[meta.color.accent] || 'rgba(239, 68, 68, 0.02)';
+/** One screenshot per project in the engagement (at most two), falling back to the engagement image. */
+const shotsFor = (engagement: Engagement): ShotItem[] => {
+  const shots = getEngagementProjects(engagement)
+    .filter((p) => filled(p.image))
+    .map((p) => ({ src: p.image, alt: `${projectTitle(p.slug)} screenshot` }));
+  if (shots.length > 0) return shots.slice(0, 2);
+  return filled(engagement.image) ? [{ src: engagement.image, alt: `${engagement.title} screenshot` }] : [];
+};
+
+const toCard = (e: Engagement): CaseStudyCardData => ({
+  slug: e.slug,
+  title: e.title,
+  summary: e.summary,
+  image: e.image,
+  accent: e.color.accent,
+  kindLabel: ENGAGEMENT_KIND_LABELS[e.kind],
+  company: e.context.company,
+  role: e.context.role ?? null,
+  period: filled(e.context.period) ? e.context.period : null,
+  headlineMetric: filled(e.headlineMetric) ? e.headlineMetric : null,
+  projectTitles: e.projectSlugs.map(projectTitle),
+  stack: filledList(e.context.stack),
+  shots: shotsFor(e),
+});
+
+// The engagement data is read here at build time only, so it stays out of the page's client chunk.
+export const getStaticProps: GetStaticProps<CaseStudiesIndexProps> = async () => {
+  const kindCounts = KIND_ORDER.map((kind) => ({
+    kind,
+    label: ENGAGEMENT_KIND_LABELS[kind],
+    count: ENGAGEMENTS.filter((e) => e.kind === kind).length,
+  })).filter((k) => k.count > 0);
+
+  return {
+    props: {
+      cards: ENGAGEMENTS.map(toCard),
+      totalCount: ENGAGEMENTS.length,
+      kindCounts,
+    },
   };
+};
 
-  const handleMouseEnter = useCallback((slug: string) => {
-    setHoveredSlug(slug);
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    setHoveredSlug(null);
-  }, []);
-
+export default function CaseStudiesIndex({ cards, totalCount, kindCounts }: CaseStudiesIndexProps) {
   return (
     <>
-      <Head>
-        <title>Technical Case Studies | Daffa Aditya Rahman</title>
-        <meta name="description" content="Immersive systems engineering case studies exploring BLE thread offloading, style encapsulation, and low-latency vector synchronization." />
-      </Head>
+      <Seo
+        path="/case-studies"
+        title="Case Studies | Daffa Aditya"
+        description="Case studies grouped by company: the problem, my decisions, what I shipped and the impact."
+      />
 
-      <style dangerouslySetInnerHTML={{ __html: ARROW_STYLES }} />
+      <div className="overflow-x-clip bg-[#0a0a0a] font-sans text-zinc-100 selection:bg-red-500/30 selection:text-red-300">
+        <main className="mx-auto max-w-[1320px] px-4 pb-10 pt-24 sm:px-6 md:pt-28 lg:px-10">
+          <CaseStudyIndexHeader totalCount={totalCount} kindCounts={kindCounts} />
 
-      <div className="bg-[#060608] text-zinc-100 min-h-screen relative overflow-hidden font-sans pb-32 pt-20 selection:bg-red-500/30 selection:text-red-400">
+          <section aria-labelledby="cs-index-heading" className="mt-8 border-t border-[#1f1f23] pt-6 md:mt-10">
+            <h2 id="cs-index-heading" className="sr-only">
+              Index
+            </h2>
 
-        {/* Dynamic Spectrum Ambient Spotlight */}
-        <div
-          id="ambient-spotlight"
-          className="fixed top-1/3 left-1/2 -translate-x-1/2 w-[65vw] h-[65vw] rounded-full blur-[200px] pointer-events-none transition-all duration-1000 ease-in-out z-0 opacity-40"
-          style={{ backgroundColor: getAmbientSpotlightColor() }}
-        />
-
-        {/* Dotted Grid Pattern */}
-        <div
-          className="absolute inset-0 z-0 opacity-[0.07] pointer-events-none"
-          style={{ backgroundImage: 'radial-gradient(#555 1px, transparent 1px)', backgroundSize: '24px 24px' }}
-        />
-
-        {/* Main Context Grid Wrapper */}
-        <main className="relative z-10 max-w-5xl mx-auto px-6 pt-12">
-
-          {/* Header Block with fluid typography scaling */}
-          <header className="mb-24 text-left relative max-w-4xl pb-12 border-b border-zinc-900/60">
-            <GridLine className="bottom-0 opacity-40" />
-
-            <div className="inline-block border border-red-900/50 bg-red-900/10 px-3 py-1 mb-8">
-              <span className="text-red-500 text-xs font-bold font-mono tracking-widest uppercase">// ARCHIVE_PREVIEW</span>
-            </div>
-
-            <h1
-              className="font-display font-black tracking-tighter uppercase text-white leading-[0.88]"
-              style={{ fontSize: 'clamp(2.5rem, 7.5vw + 1rem, 5.5rem)' }}
-            >
-              Technical <br />
-              Case Studies
-            </h1>
-
-            <p className="text-sm sm:text-base text-neutral-400 leading-relaxed font-mono mt-8 max-w-2xl text-left">
-              // Deep-dive analysis of systems architecture, BLE thread isolation,
-              high-availability multi-tenant nodes, and WebGL drawing optimizations.
-            </p>
-          </header>
-
-          {/* Table Breakdown Row Listing */}
-          <section className="space-y-8 relative z-10">
-            <div className="flex justify-between items-end mb-8 border-b border-zinc-900/60 pb-4">
-              <div className="text-left">
-                <h2 className="text-sm font-mono text-zinc-500 mb-2">/// INDEX_LIST_03</h2>
-                <h1 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight">System Breakdown Index</h1>
-              </div>
-            </div>
-
-            <div className="flex flex-col border-t border-zinc-900/60 overflow-hidden">
-              {(showAll ? projectsData : projectsData.slice(0, 3)).map((proj) => {
-                const meta = CASE_STUDIES_META[proj.slug] || DEFAULT_META;
-
+            {/* Every case study renders up front; the list is short enough not to need a "show all". */}
+            <ul className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
+              {cards.map((card, i) => {
+                const wide = i % 3 === 0;
                 return (
-                  <CaseStudyRow
-                    key={proj.id}
-                    proj={proj}
-                    colorMap={meta.color}
-                    metricVal={meta.metric}
-                    onMouseEnter={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
-                  />
+                  <li key={card.slug} className={`min-w-0 ${wide ? 'md:col-span-2' : ''}`}>
+                    <CaseStudyCard card={card} eager={i === 0} wide={wide} />
+                  </li>
                 );
               })}
-            </div>
-
-            {projectsData.length > 3 && (
-              <div className="flex justify-center pt-12">
-                <button
-                  onClick={() => setShowAll(!showAll)}
-                  className="group relative px-6 py-3 border border-zinc-800 hover:border-red-500/50 bg-zinc-900/20 text-xs font-mono tracking-widest text-zinc-400 hover:text-white uppercase transition-all duration-300 rounded cursor-pointer"
-                >
-                  <span className="relative z-10">{showAll ? '/// COLLAPSE_INDEX' : '/// SHOW_ALL_STUDIES'}</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-red-500/0 via-red-500/5 to-red-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </button>
-              </div>
-            )}
+            </ul>
           </section>
         </main>
+        {/* Inside the clipping wrapper so nothing in the footer can widen the page on a phone. */}
+        <Footer />
       </div>
     </>
   );

@@ -1,106 +1,82 @@
-import React from 'react';
+import React, { useSyncExternalStore } from 'react';
 import Head from 'next/head';
+import Seo from '@/components/Seo';
 import dynamic from 'next/dynamic';
-import {
-  FreelanceHero,
-  useFreelance,
-} from '@/features/Freelance';
+import { lazyOnView } from '@/components/LazyOnView';
+import FreelanceHero from '@/features/Freelance/components/FreelanceHero';
 
 const TimelineCursorPreview = dynamic(() => import('@/features/Freelance/components/TimelineCursorPreview'), { ssr: false });
-const ProjectsTimeline = dynamic(() => import('@/features/Freelance/components/ProjectsTimeline'), { ssr: true });
-const SkillsGrid = dynamic(() => import('@/features/Freelance/components/SkillsGrid'), { ssr: true });
-const CostCalculator = dynamic(() => import('@/features/Freelance/components/CostCalculator'), { ssr: true });
-const TrustSection = dynamic(() => import('@/features/Freelance/components/TrustSection'), { ssr: true });
-const FaqSection = dynamic(() => import('@/features/Freelance/components/FaqSection'), { ssr: true });
+// Below the fold: HTML stays in the static page, JS loads when the section nears the viewport.
+const ProjectsTimeline = lazyOnView(() => import('@/features/Freelance/components/ProjectsTimeline'));
+const SkillsGrid = lazyOnView(() => import('@/features/Freelance/components/SkillsGrid'));
+const FaqSection = lazyOnView(() => import('@/features/Freelance/components/FaqSection'));
+const CostCalculator = lazyOnView(() => import('@/features/Freelance/components/CostCalculator'));
+
+const HOVER_QUERY = '(hover: hover)';
+const subscribeHover = (onChange: () => void) => {
+  const mql = window.matchMedia(HOVER_QUERY);
+  mql.addEventListener('change', onChange);
+  return () => mql.removeEventListener('change', onChange);
+};
+const getHoverSnapshot = () => window.matchMedia(HOVER_QUERY).matches;
+const getHoverServerSnapshot = () => false;
+
+/** True only on devices with a real hover pointer; false during SSR and on touch devices. */
+const useCanHover = () => useSyncExternalStore(subscribeHover, getHoverSnapshot, getHoverServerSnapshot);
+
+const FREELANCE_STRUCTURED_DATA = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Daffa Aditya | Freelance Software Engineer",
+  "image": "https://daffaaditya.id/image/profile-768.webp",
+  "url": "https://daffaaditya.id/freelance",
+  "email": "daffaaditya.me@gmail.com",
+  "description": "Freelance software engineer in Jakarta, Indonesia. I build fast Next.js websites and admin/finance systems for small businesses and schools.",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Jakarta",
+    "addressCountry": "ID"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "-6.2088",
+    "longitude": "106.8456"
+  },
+  "knowsAbout": [
+    "Next.js",
+    "React",
+    "TypeScript",
+    "Node.js",
+    "Go",
+    "PostgreSQL",
+    "Web Performance"
+  ],
+  "sameAs": [
+    "https://github.com/DaffaAdityaDev",
+    "https://www.linkedin.com/in/daffaadityarahman-14b588192/"
+  ]
+};
 
 
 export default function FreelancePage() {
-  const {
-    showAllProjects,
-    setShowAllProjects,
-    hoveredNode,
-    setHoveredNode,
-    calculatorInputs,
-    setCalculatorInputs,
-    formSubmitted,
-    formData,
-    setFormData,
-    estimatedQuote,
-    handlePackageChange,
-    handleAddonToggle,
-    handleFormSubmit,
-  } = useFreelance();
+  const canHover = useCanHover();
 
   return (
     <>
+      <Seo
+        path="/freelance"
+        title="Freelance Web Developer | Daffa Aditya"
+        description="Daffa Aditya, a freelance software engineer in Jakarta, Indonesia. I build fast Next.js websites and admin/finance systems for small businesses and schools."
+        jsonLd={FREELANCE_STRUCTURED_DATA}
+      />
+      {/* Tags <Seo> does not cover */}
       <Head>
-        <title>Freelance Full-Stack Developer & UI/UX Designer | Daffa Aditya Rahman</title>
-        <meta 
-          name="description" 
-          content="Hire Daffa Aditya Rahman, a freelance Full-Stack Software Engineer and UI/UX Designer specialized in building high-performance Next.js websites, custom APIs, and autonomous AI workflows." 
-        />
-        <meta name="keywords" content="Freelance Software Engineer, Full-Stack Developer, UI/UX Designer, Next.js Developer, React Developer, Node.js API, Go API, Custom AI Integration, Jakarta Developer, Freelance Next.js Developer Indonesia, Hire Web Developer Jakarta, Freelance Software Engineer Indonesia, Custom AI Workflow Integration, UI UX Designer Jakarta" />
-        <meta name="author" content="Daffa Aditya Rahman" />
-        <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://daffaaditya.id/freelance" />
-        
-        {/* Open Graph / Facebook */}
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://daffaaditya.id/freelance" />
-        <meta property="og:title" content="Freelance Full-Stack Developer & UI/UX Designer | Daffa Aditya Rahman" />
-        <meta property="og:description" content="Build high-performance web systems and AI applications with clean architecture and perfect Lighthouse scores. Check out case studies and get an instant cost estimate." />
-        <meta property="og:image" content="/image/Profile.jpg" />
-        <meta property="og:locale" content="en_US" />
-
-        {/* Twitter */}
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://daffaaditya.id/freelance" />
-        <meta property="twitter:title" content="Freelance Full-Stack Developer & UI/UX Designer | Daffa Aditya Rahman" />
-        <meta property="twitter:description" content="Build high-performance web systems and AI applications with clean architecture and perfect Lighthouse scores. Check out case studies and get an instant cost estimate." />
-        <meta property="twitter:image" content="/image/Profile.jpg" />
-
-        {/* JSON-LD Structured Data */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "ProfessionalService",
-              "name": "Daffa Aditya Rahman | Freelance Full-Stack Developer & UI/UX Designer",
-              "image": "https://daffaaditya.id/image/Profile.jpg",
-              "url": "https://daffaaditya.id/freelance",
-              "email": "daffaaditya.me@gmail.com",
-              "description": "Professional freelance software engineer and UI/UX designer specializing in high-performance Next.js web applications, custom API backend systems, and autonomous AI agent integrations.",
-              "address": {
-                "@type": "PostalAddress",
-                "addressLocality": "Jakarta",
-                "addressCountry": "ID"
-              },
-              "geo": {
-                "@type": "GeoCoordinates",
-                "latitude": "-6.2088",
-                "longitude": "106.8456"
-              },
-              "priceRange": "$$$",
-              "knowsAbout": [
-                "Full-Stack Web Development",
-                "UI/UX Design",
-                "Next.js & React",
-                "Node.js & Go API Development",
-                "AI Agents & LangGraph Integration",
-                "PostgreSQL & MongoDB Database Design",
-                "Performance Optimization & Core Web Vitals"
-              ],
-              "sameAs": [
-                "https://github.com/DaffaAdityaDev",
-                "https://www.linkedin.com/in/daffaadityarahman-14b588192/"
-              ]
-            })
-          }}
-        />
+        <meta name="keywords" content="Freelance Software Engineer, Freelance Web Developer, Next.js Developer, React Developer, Jakarta Developer, Freelance Next.js Developer Indonesia, Hire Web Developer Jakarta" />
+        <meta name="author" content="Daffa Aditya" />
       </Head>
 
-      <TimelineCursorPreview hoveredNode={hoveredNode} />
+      {/* Cursor preview follows the mouse over timeline rows; touch devices never load it */}
+      {canHover && <TimelineCursorPreview />}
 
       {/* Edge-to-edge layout wrapper spanning full screen width up to 4K */}
       <div className="min-h-screen bg-[#070709] text-white pt-16 relative flex flex-col selection:bg-red-600 selection:text-white w-full overflow-x-hidden">
@@ -118,34 +94,17 @@ export default function FreelancePage() {
           {/* SECTION 1: HERO SECTION */}
           <FreelanceHero />
 
-          {/* SECTION 2: PROJECTS PIPELINE TIMELINE */}
-          <ProjectsTimeline 
-            showAllProjects={showAllProjects}
-            setShowAllProjects={setShowAllProjects}
-            setHoveredNode={setHoveredNode}
-          />
+          {/* SECTION 2: FREELANCE PROJECTS */}
+          <ProjectsTimeline />
 
           {/* SECTION 3: SKILLS GRID */}
           <SkillsGrid />
 
-          {/* SECTION 5: DE-RISKING & TRUST BUILDERS */}
-          {/* <TrustSection /> */}
-
-          {/* SECTION 6: FAQ ACCORDION */}
+          {/* SECTION 4: FAQ ACCORDION */}
           <FaqSection />
 
-          {/* SECTION 7: INTERACTIVE SCOPE CONFIGURATOR */}
-          <CostCalculator 
-            calculatorInputs={calculatorInputs}
-            estimatedQuote={estimatedQuote}
-            formData={formData}
-            formSubmitted={formSubmitted}
-            setCalculatorInputs={setCalculatorInputs}
-            setFormData={setFormData}
-            handlePackageChange={handlePackageChange}
-            handleAddonToggle={handleAddonToggle}
-            handleFormSubmit={handleFormSubmit}
-          />
+          {/* SECTION 5: COST ESTIMATE & BRIEF */}
+          <CostCalculator />
 
         </main>
       </div>

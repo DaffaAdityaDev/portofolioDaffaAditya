@@ -12,6 +12,7 @@ GEMINI.md
 
 # next.js
 /.next/
+/.next-verify/
 /out/
 
 # production
@@ -41,3 +42,5 @@ skills-lock.json
 .cursorrules
 .agents
 /docs
+# env files (copy .env.example to .env)
+.env
