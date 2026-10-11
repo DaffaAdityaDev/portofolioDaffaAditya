@@ -136,8 +136,8 @@ function createEngine(opts: EngineOptions): Engine {
   let lumGrid: Float32Array | null = null;
   /** Fixed per-cell intensity (see `buildMask`): dark under the text, full behind the shots. */
   let mask: Float32Array | null = null;
-  let levels = new Uint8Array(0);
-  let scratch = new Uint8Array(0);
+  let levels: Uint8Array = new Uint8Array(0);
+  let scratch: Uint8Array = new Uint8Array(0);
   let atlas: GlyphAtlas | null = null;
   let art: HTMLCanvasElement | null = null;
   let artCtx: CanvasRenderingContext2D | null = null;

@@ -3,7 +3,7 @@
  * Zero Magic Numbers & Centralized Config
  */
 
-export const MARQUEE_TEXT = "SOFTWARE ENGINEER /// NEXT.JS /// TYPESCRIPT /// LARAVEL /// POSTGRESQL /// JAKARTA ///";
+export const MARQUEE_TEXT = "SOFTWARE ENGINEER /// SYSTEM DESIGNER /// SYSTEM ARCHITECT /// UI/UX DESIGNER /// END TO END SOLUTION ///";
 
 export const DEFAULT_MARQUEE_SPEED = 35;
 

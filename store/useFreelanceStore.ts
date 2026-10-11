@@ -1,98 +1,43 @@
 import { create } from 'zustand';
-import type {
-  TimelineNode,
-  PackageType,
-  CalculatorInputs,
-  FreelanceFormData,
-} from '@/types/timeline';
+import type { BriefFormData, BriefStatus, BudgetCurrency, ServiceId } from '@/types/freelance';
+import { EMPTY_BRIEF } from '@/features/Freelance/constants/inquiry';
 
 export interface FreelanceStoreState {
-  showAllProjects: boolean;
-  hoveredNode: TimelineNode | null;
-  calculatorInputs: CalculatorInputs;
-  formSubmitted: boolean;
-  formData: FreelanceFormData;
+  brief: BriefFormData;
+  briefStatus: BriefStatus;
+  /** True once the visitor picked a currency themselves, so the time-zone guess never overrides it. */
+  currencyChosen: boolean;
 
-  // Actions
-  setShowAllProjects: (show: boolean | ((prev: boolean) => boolean)) => void;
-  toggleShowAllProjects: () => void;
-  setHoveredNode: (node: TimelineNode | null) => void;
-  setCalculatorInputs: (
-    inputs: CalculatorInputs | ((prev: CalculatorInputs) => CalculatorInputs)
-  ) => void;
-  handlePackageChange: (pkg: PackageType) => void;
-  handleAddonToggle: (addonId: string) => void;
-  setFormData: (
-    data: FreelanceFormData | ((prev: FreelanceFormData) => FreelanceFormData)
-  ) => void;
-  setFormSubmitted: (submitted: boolean) => void;
-  resetForm: () => void;
+  setBriefField: <K extends keyof BriefFormData>(field: K, value: BriefFormData[K]) => void;
+  /** Selects a project type in the inquiry form, e.g. from a Services card. */
+  pickService: (id: ServiceId) => void;
+  /** Switches budget currency; the budget is cleared because its ranges differ per currency. */
+  setCurrency: (currency: BudgetCurrency, options?: { auto?: boolean }) => void;
+  setBriefStatus: (status: BriefStatus) => void;
+  resetBrief: () => void;
 }
 
-const DEFAULT_CALCULATOR_INPUTS: CalculatorInputs = {
-  selectedPackage: 'crud',
-  screenCount: 5,
-  apiNodes: 3,
-  selectedAddons: [],
-  timelineSpeed: 'standard',
-  supportCoverage: 'standard',
-};
-
-const DEFAULT_FORM_DATA: FreelanceFormData = {
-  name: '',
-  email: '',
-  projectDesc: '',
-};
-
 export const useFreelanceStore = create<FreelanceStoreState>((set) => ({
-  showAllProjects: false,
-  hoveredNode: null,
-  calculatorInputs: DEFAULT_CALCULATOR_INPUTS,
-  formSubmitted: false,
-  formData: DEFAULT_FORM_DATA,
+  brief: EMPTY_BRIEF,
+  briefStatus: 'idle',
+  currencyChosen: false,
 
-  setShowAllProjects: (show) =>
-    set((state) => ({
-      showAllProjects: typeof show === 'function' ? show(state.showAllProjects) : show,
-    })),
+  setBriefField: (field, value) =>
+    set((state) => ({ brief: { ...state.brief, [field]: value }, briefStatus: state.briefStatus === 'sending' ? 'sending' : 'idle' })),
 
-  toggleShowAllProjects: () =>
-    set((state) => ({ showAllProjects: !state.showAllProjects })),
+  pickService: (id) => set((state) => ({ brief: { ...state.brief, service: id } })),
 
-  setHoveredNode: (node) => set({ hoveredNode: node }),
-
-  setCalculatorInputs: (inputs) =>
-    set((state) => ({
-      calculatorInputs:
-        typeof inputs === 'function' ? inputs(state.calculatorInputs) : inputs,
-    })),
-
-  handlePackageChange: (pkg) =>
-    set((state) => ({
-      calculatorInputs: { ...state.calculatorInputs, selectedPackage: pkg },
-    })),
-
-  handleAddonToggle: (addonId) =>
+  setCurrency: (currency, options) =>
     set((state) => {
-      const exists = state.calculatorInputs.selectedAddons.includes(addonId);
-      const nextAddons = exists
-        ? state.calculatorInputs.selectedAddons.filter((id) => id !== addonId)
-        : [...state.calculatorInputs.selectedAddons, addonId];
+      if (options?.auto && state.currencyChosen) return state;
+      if (state.brief.currency === currency) return { currencyChosen: state.currencyChosen || !options?.auto };
       return {
-        calculatorInputs: { ...state.calculatorInputs, selectedAddons: nextAddons },
+        currencyChosen: state.currencyChosen || !options?.auto,
+        brief: { ...state.brief, currency, budget: '' },
       };
     }),
 
-  setFormData: (data) =>
-    set((state) => ({
-      formData: typeof data === 'function' ? data(state.formData) : data,
-    })),
+  setBriefStatus: (status) => set({ briefStatus: status }),
 
-  setFormSubmitted: (submitted) => set({ formSubmitted: submitted }),
-
-  resetForm: () =>
-    set({
-      formData: DEFAULT_FORM_DATA,
-      formSubmitted: false,
-    }),
+  resetBrief: () => set((state) => ({ brief: { ...EMPTY_BRIEF, currency: state.brief.currency } })),
 }));

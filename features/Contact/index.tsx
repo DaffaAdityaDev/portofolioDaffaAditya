@@ -15,11 +15,24 @@ const Contact = () => {
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
+  const rectRef = React.useRef<DOMRect | null>(null);
+
+  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+    rectRef.current = e.currentTarget.getBoundingClientRect();
+    setIsHoveringGrid(true);
+  };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const { left, top } = e.currentTarget.getBoundingClientRect();
-    mouseX.set(e.clientX - left);
-    mouseY.set(e.clientY - top);
+    if (!rectRef.current) {
+      rectRef.current = e.currentTarget.getBoundingClientRect();
+    }
+    mouseX.set(e.clientX - rectRef.current.left);
+    mouseY.set(e.clientY - rectRef.current.top);
+  };
+
+  const handleMouseLeave = () => {
+    rectRef.current = null;
+    setIsHoveringGrid(false);
   };
 
   const spotlightBg = useMotionTemplate`radial-gradient(320px circle at ${mouseX}px ${mouseY}px, rgba(239, 68, 68, 0.16), rgba(255, 255, 255, 0.04) 40%, transparent 80%)`;
@@ -56,10 +69,8 @@ const Contact = () => {
         <m.div
           variants={FADE_IN_UP_ITEM}
           onMouseMove={handleMouseMove}
-          onMouseEnter={() => setIsHoveringGrid(true)}
-          onMouseLeave={() => {
-            setIsHoveringGrid(false);
-          }}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
           className="grid md:grid-cols-3 gap-px bg-neutral-800 border border-neutral-800/80 rounded-2xl overflow-hidden mb-12 shadow-2xl relative group/grid"
         >
           {/* Round Cursor-Tracking Spotlight Gradient */}

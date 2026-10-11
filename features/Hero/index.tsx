@@ -87,7 +87,7 @@ const Hero = () => {
               <p
                 className={`max-w-xl text-neutral-300 text-base md:text-lg leading-relaxed font-sans ${intro.bio}`}
               >
-                Software engineer at Run System in Jakarta. I build Accounting+ and an enterprise low-code platform, deliver integrations for BUMN and government clients, and mentor the interns.
+                Engineering industrial-grade systems and high-performance web architectures built for speed, resilience, and scale.
               </p>
             </div>
 

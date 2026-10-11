@@ -474,9 +474,10 @@ export const FractalGlass: React.FC<FractalGlassProps> = ({
     mount.appendChild(canvas);
 
     // 6. Mouse Interaction Listeners
+    let isOnScreen = false;
     const eventTarget = targetRef?.current || mount;
     const handleMouseMove = (e: MouseEvent) => {
-      if (!interactive) return;
+      if (!interactive || !isOnScreen) return;
       const rect = eventTarget.getBoundingClientRect();
       const x = (e.clientX - rect.left) / rect.width;
       const y = 1.0 - (e.clientY - rect.top) / rect.height;
@@ -540,7 +541,7 @@ export const FractalGlass: React.FC<FractalGlassProps> = ({
     };
 
     const start = () => {
-      if (animationFrameId !== null) return;
+      if (animationFrameId !== null || document.hidden || !isOnScreen) return;
       // Reset the clock so the first frame after a pause does not jump.
       lastTime = performance.now();
       animationFrameId = requestAnimationFrame(animate);
@@ -552,6 +553,12 @@ export const FractalGlass: React.FC<FractalGlassProps> = ({
       animationFrameId = null;
     };
 
+    const handleVisibility = () => {
+      if (document.hidden) stop();
+      else if (isOnScreen) start();
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+
     // 9. Intersection Observer for Power Efficiency (no rAF at all while off-screen)
     // Observe the in-flow target, not `mount`: the Footer renders this inside a
     // `position: fixed` layer, which always intersects the viewport even while page
@@ -559,6 +566,7 @@ export const FractalGlass: React.FC<FractalGlassProps> = ({
     const intersectionObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
+          isOnScreen = entry.isIntersecting;
           if (entry.isIntersecting) start();
           else stop();
         });
@@ -572,6 +580,7 @@ export const FractalGlass: React.FC<FractalGlassProps> = ({
       stop();
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
+      document.removeEventListener('visibilitychange', handleVisibility);
 
       if (interactive) {
         window.removeEventListener('mousemove', handleMouseMove);

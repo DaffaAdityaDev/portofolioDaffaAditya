@@ -27,8 +27,29 @@ export function useFlowAutoplay<TStep extends FlowStep>(flow: FlowConfig<TStep>,
 
   useEffect(() => {
     if (!isPlaying || !isVisible || reduceMotion) return;
-    const id = setInterval(advance, FLOW_STEP_MS);
-    return () => clearInterval(id);
+
+    let id: ReturnType<typeof setInterval> | null = null;
+    const start = () => {
+      if (!id && !document.hidden) id = setInterval(advance, FLOW_STEP_MS);
+    };
+    const stop = () => {
+      if (id) {
+        clearInterval(id);
+        id = null;
+      }
+    };
+
+    start();
+    const onVisibility = () => {
+      if (document.hidden) stop();
+      else start();
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+
+    return () => {
+      stop();
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
   }, [isPlaying, isVisible, reduceMotion, advance]);
 
   useEffect(() => reset, [reset]);

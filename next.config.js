@@ -29,13 +29,14 @@ const nextConfig = {
   reactStrictMode: true,
   reactCompiler: true,
   poweredByHeader: false,
+  compress: true,
   crossOrigin: 'anonymous',
   compiler: {
     // Remove console logs in production for better performance and cleaner logs
     removeConsole: process.env.NODE_ENV === 'production',
   },
   experimental: {
-    optimizePackageImports: ['lucide-react', 'framer-motion'],
+    optimizePackageImports: ['lucide-react', 'framer-motion', 'zustand', 'prismjs'],
   },
   // Lets a verification build write to its own folder without clobbering the dev server's .next.
   distDir: process.env.NEXT_DIST_DIR || '.next',

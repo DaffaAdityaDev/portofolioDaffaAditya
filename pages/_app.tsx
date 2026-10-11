@@ -29,8 +29,9 @@ function MyApp({ Component, pageProps, router }: AppProps) {
     return <Component {...pageProps} />;
   }
 
-  // Key on the path without the hash so in-page section links don't remount the page.
-  const transitionKey = router.asPath.split('#')[0];
+  // Key on the path without query params or hash so shallow URL updates
+  // (e.g. ?category=tech) and in-page anchor links don't remount or trigger page transitions.
+  const transitionKey = router.asPath.split('?')[0].split('#')[0];
 
   return (
     <LazyMotion features={loadMotionFeatures} strict>

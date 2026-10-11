@@ -91,9 +91,17 @@ export const buildPostToc = async (Post: ComponentType): Promise<TocItem[]> => {
     const { prelude } = await prerenderToNodeStream(createElement(Post), {
       signal: AbortSignal.timeout(RENDER_TIMEOUT_MS),
     });
-    const chunks: Buffer[] = [];
-    for await (const chunk of prelude) chunks.push(Buffer.from(chunk));
-    return extractToc(Buffer.concat(chunks).toString('utf8'));
+    const decoder = new TextDecoder();
+    let html = '';
+    for await (const chunk of prelude) {
+      if (typeof chunk === 'string') {
+        html += chunk;
+      } else if (chunk instanceof Uint8Array) {
+        html += decoder.decode(chunk, { stream: true });
+      }
+    }
+    html += decoder.decode();
+    return extractToc(html);
   } catch (error) {
     console.warn('[blog] Could not build the table of contents at build time:', error);
     return [];

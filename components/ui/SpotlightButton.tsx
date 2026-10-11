@@ -27,13 +27,22 @@ export const SpotlightButton: React.FC<SpotlightButtonProps> = ({
   const mouseX = useMotionValue(DEFAULT_OFFSCREEN_COORD);
   const mouseY = useMotionValue(DEFAULT_OFFSCREEN_COORD);
 
+  const rectRef = useRef<DOMRect | null>(null);
+
+  const handleMouseEnter = (e: React.MouseEvent<HTMLElement>) => {
+    rectRef.current = e.currentTarget.getBoundingClientRect();
+  };
+
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    mouseX.set(e.clientX - rect.left);
-    mouseY.set(e.clientY - rect.top);
+    if (!rectRef.current) {
+      rectRef.current = e.currentTarget.getBoundingClientRect();
+    }
+    mouseX.set(e.clientX - rectRef.current.left);
+    mouseY.set(e.clientY - rectRef.current.top);
   };
 
   const handleMouseLeave = () => {
+    rectRef.current = null;
     mouseX.set(DEFAULT_OFFSCREEN_COORD);
     mouseY.set(DEFAULT_OFFSCREEN_COORD);
   };
@@ -91,6 +100,7 @@ export const SpotlightButton: React.FC<SpotlightButtonProps> = ({
         target={target}
         rel={rel}
         onClick={onClick as unknown as React.MouseEventHandler<HTMLAnchorElement>}
+        onMouseEnter={handleMouseEnter}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         className={`${baseStyles} ${className}`}
@@ -105,6 +115,7 @@ export const SpotlightButton: React.FC<SpotlightButtonProps> = ({
       ref={containerRef as React.RefObject<HTMLButtonElement>}
       type="button"
       onClick={onClick}
+      onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className={`${baseStyles} ${className}`}

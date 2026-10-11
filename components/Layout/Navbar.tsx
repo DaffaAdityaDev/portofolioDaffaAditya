@@ -12,6 +12,8 @@ export type { NavItem, SocialLink };
 const navItems: NavItem[] = [
   { label: 'HOME', id: 'hero' },
   { label: 'CASE STUDIES', path: '/case-studies' },
+  // Hidden while the /freelance page is being tuned; restore to show it again.
+  // { label: 'FREELANCE', path: '/freelance' },
   { label: 'BLOG', path: '/blog' },
   { label: 'SOCIALS' }
 ];
@@ -34,8 +36,24 @@ const Navbar = () => {
   const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
-    handleScroll();
+    let ticking = false;
+    let lastScrolled = window.scrollY > 50;
+    setIsScrolled(lastScrolled);
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const next = window.scrollY > 50;
+          if (next !== lastScrolled) {
+            lastScrolled = next;
+            setIsScrolled(next);
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -161,7 +179,7 @@ const Navbar = () => {
             {/* Middle Section (Nav Menu with Unified Sliding Glass Pill) - Hidden on scroll */}
             <nav
               className={`flex items-center gap-1 relative px-1 py-0.5 whitespace-nowrap ${transitionClass} ${isExpanded
-                  ? 'max-w-[500px] opacity-100 pointer-events-auto'
+                  ? 'max-w-[600px] opacity-100 pointer-events-auto'
                   : 'max-w-0 opacity-0 pointer-events-none overflow-hidden'
                 } ${isSocialOpen ? 'overflow-visible' : 'overflow-hidden'}`}
               onMouseLeave={() => setHoveredIndex(null)}
@@ -294,7 +312,7 @@ const Navbar = () => {
           layout
           transition={shouldReduceMotion ? { duration: 0.2 } : SPRING_MOBILE_OS}
           className={`pointer-events-auto overflow-hidden relative flex flex-col justify-start items-center group ${isMobileMenuOpen
-            ? 'w-[calc(100vw-2rem)] max-w-[384px] h-[352px] rounded-3xl'
+            ? 'w-[calc(100vw-2rem)] max-w-[384px] h-[400px] rounded-3xl'
             : 'w-[calc(100vw-2rem)] max-w-[320px] h-[44px] rounded-full'
             }`}
         >

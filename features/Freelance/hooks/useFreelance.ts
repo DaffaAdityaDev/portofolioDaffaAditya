@@ -1,135 +1,99 @@
-import { useMemo, useCallback } from 'react';
-import type { PackageType, CalculatorInputs, FreelanceFormData } from '@/types/timeline';
+import { useCallback, useEffect } from 'react';
 import { useFreelanceStore } from '@/store/useFreelanceStore';
-import {
-  calculateFreelanceQuote,
-  PACKAGE_PRESETS,
-  ADDON_PRICES,
-} from '../utils/calculator';
+import { buildBriefSubject, buildBriefText, buildMailtoUrl, guessCurrencyFromTimeZone, validateBrief } from '../utils/brief';
+import type { BriefFormData, BriefStatus, BudgetCurrency, ServiceId } from '@/types/freelance';
 
-export type { PackageType, CalculatorInputs, FreelanceFormData };
+/** Longest mailto URL that common mail apps open without cutting it off. */
+const MAILTO_MAX_LENGTH = 1800;
 
-/**
- * Calculator-scoped state hook (Logic & State Layer).
- * Subscribes only to the calculator/form slices of the Zustand store, so timeline hover
- * and "show all projects" updates never re-render the cost calculator. Timeline components
- * select their own fields straight from useFreelanceStore.
- */
-export const useFreelanceCalculator = () => {
-  const calculatorInputs = useFreelanceStore((state) => state.calculatorInputs);
-  const setCalculatorInputs = useFreelanceStore((state) => state.setCalculatorInputs);
-  const formSubmitted = useFreelanceStore((state) => state.formSubmitted);
-  const setFormSubmitted = useFreelanceStore((state) => state.setFormSubmitted);
-  const formData = useFreelanceStore((state) => state.formData);
-  const setFormData = useFreelanceStore((state) => state.setFormData);
-  const resetForm = useFreelanceStore((state) => state.resetForm);
+export interface UseFreelanceReturn {
+  brief: BriefFormData;
+  briefStatus: BriefStatus;
+  /** Validation or delivery problem to show above the submit button. */
+  briefError: string | null;
+  setBriefField: <K extends keyof BriefFormData>(field: K, value: BriefFormData[K]) => void;
+  pickService: (id: ServiceId) => void;
+  setCurrency: (currency: BudgetCurrency) => void;
+  handleBriefSubmit: (e: React.FormEvent) => Promise<void>;
+}
 
-  // Derived Real-Time Quote Calculation
-  const estimatedQuote = useMemo(() => {
-    return calculateFreelanceQuote(calculatorInputs);
-  }, [calculatorInputs]);
+export function useFreelance(): UseFreelanceReturn {
+  const brief = useFreelanceStore((s) => s.brief);
+  const briefStatus = useFreelanceStore((s) => s.briefStatus);
+  const setBriefField = useFreelanceStore((s) => s.setBriefField);
+  const pickService = useFreelanceStore((s) => s.pickService);
+  const setCurrencyInStore = useFreelanceStore((s) => s.setCurrency);
+  const setBriefStatus = useFreelanceStore((s) => s.setBriefStatus);
+  const resetBrief = useFreelanceStore((s) => s.resetBrief);
 
-  // Package Selection Action (resets screens and apis to package recommendations)
-  const handlePackageChange = useCallback(
-    (pkg: PackageType) => {
-      const preset = PACKAGE_PRESETS[pkg] || PACKAGE_PRESETS.crud;
-      setCalculatorInputs((prev) => ({
-        ...prev,
-        selectedPackage: pkg,
-        screenCount: preset.includedScreens,
-        apiNodes: preset.includedApis,
-      }));
-    },
-    [setCalculatorInputs]
-  );
+  // Show budgets in the visitor's likely currency, once, on the client.
+  useEffect(() => {
+    try {
+      setCurrencyInStore(guessCurrencyFromTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone), { auto: true });
+    } catch {
+      // Ignore environments without Intl time zone support.
+    }
+  }, [setCurrencyInStore]);
 
-  // Service Addon Toggle Action
-  const handleAddonToggle = useCallback(
-    (addonId: string) => {
-      setCalculatorInputs((prev) => {
-        const active = prev.selectedAddons.includes(addonId);
-        return {
-          ...prev,
-          selectedAddons: active
-            ? prev.selectedAddons.filter((id) => id !== addonId)
-            : [...prev.selectedAddons, addonId],
-        };
-      });
-    },
-    [setCalculatorInputs]
-  );
+  const setCurrency = useCallback((currency: BudgetCurrency) => setCurrencyInStore(currency), [setCurrencyInStore]);
 
-  // Proposal Submission Handler
-  const handleFormSubmit = useCallback(
-    (e: React.FormEvent) => {
+  // Sends through /api/brief. When the site cannot send (not configured, offline, server error),
+  // the brief opens in the visitor's mail app instead, so it is never lost.
+  const handleBriefSubmit = useCallback(
+    async (e: React.FormEvent) => {
       e.preventDefault();
-
-      const preset = PACKAGE_PRESETS[calculatorInputs.selectedPackage] || PACKAGE_PRESETS.crud;
-      const pkgLabel = preset.label;
-
-      const addonsList = calculatorInputs.selectedAddons.map(
-        (id) => `- ${ADDON_PRICES[id]?.label || id} (+$${ADDON_PRICES[id]?.price || 0})`
-      );
-      const addonsStr = addonsList.length > 0 ? addonsList.join('\n') : 'None selected';
-
-      const emailSubject = `Project Inquiry: ${pkgLabel} - ${formData.name}`;
-      const emailBody = `Hi Daffa,
-
-I'd like to talk about a project. Here is what I picked in the estimator on your freelance page:
-
-## PROJECT OVERVIEW
-- Project type: ${pkgLabel}
-- Screens: ${calculatorInputs.screenCount}
-- Third-party integrations: ${calculatorInputs.apiNodes}
-- Schedule: ${calculatorInputs.timelineSpeed === 'urgent' ? 'Urgent (+35%)' : 'Standard'}
-- Support hours: ${calculatorInputs.supportCoverage === '24_7' ? 'Extended (+$1,000)' : 'Working hours'}
-- Extras:
-${addonsStr}
-
-## ROUGH ESTIMATE (NOT A QUOTE)
-- From $${estimatedQuote.toLocaleString()} USD
-
-## CLIENT DETAILS
-- Name: ${formData.name}
-- Email: ${formData.email}
-
-## BRIEF
-${formData.projectDesc}
-
----
-Sent from daffaaditya.id/freelance`;
-
-      const mailtoUrl = `mailto:daffaaditya.me@gmail.com?subject=${encodeURIComponent(
-        emailSubject
-      )}&body=${encodeURIComponent(emailBody)}`;
-
-      window.location.href = mailtoUrl;
-
-      setFormSubmitted(true);
-      setTimeout(() => {
-        resetForm();
-      }, 4000);
+      if (validateBrief(brief)) {
+        setBriefStatus('error');
+        return;
+      }
+      setBriefStatus('sending');
+      try {
+        const res = await fetch('/api/brief', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(brief),
+        });
+        if (res.ok) {
+          resetBrief();
+          setBriefStatus('sent');
+          return;
+        }
+        // A rejected brief (400) is the visitor's to fix; anything else falls back to the mail app.
+        if (res.status === 400) {
+          setBriefStatus('error');
+          return;
+        }
+      } catch {
+        // Network failure: fall through to the mail app.
+      }
+      const subject = buildBriefSubject(brief);
+      const body = buildBriefText(brief);
+      const url = buildMailtoUrl(subject, body);
+      if (url.length <= MAILTO_MAX_LENGTH) {
+        window.location.href = url;
+      } else {
+        // Too long for a mailto link: put the full brief on the clipboard to paste.
+        try {
+          await navigator.clipboard.writeText(body);
+        } catch {
+          // The notice still offers the email address.
+        }
+        window.location.href = buildMailtoUrl(subject, 'My project brief is on my clipboard. I will paste it here.');
+      }
+      setBriefStatus('mail-app');
     },
-    [calculatorInputs, formData, estimatedQuote, setFormSubmitted, resetForm]
+    [brief, resetBrief, setBriefStatus],
   );
 
   return {
-    calculatorInputs,
-    setCalculatorInputs,
-    formSubmitted,
-    setFormSubmitted,
-    formData,
-    setFormData,
-    resetForm,
-
-    estimatedQuote,
-    handlePackageChange,
-    handleAddonToggle,
-    handleFormSubmit,
+    brief,
+    briefStatus,
+    briefError: briefStatus === 'error' ? validateBrief(brief) ?? "Couldn't send the brief. Please try again or email me directly." : null,
+    setBriefField,
+    pickService,
+    setCurrency,
+    handleBriefSubmit,
   };
-};
+}
 
-/** @deprecated Kept for the features/Freelance barrel export; use useFreelanceCalculator. */
-export const useFreelance = useFreelanceCalculator;
-
-export default useFreelanceCalculator;
+export default useFreelance;

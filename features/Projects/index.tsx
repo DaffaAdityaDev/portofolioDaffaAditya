@@ -20,18 +20,17 @@ const subscribeHover = (onChange: () => void) => {
 const getHoverSnapshot = () => window.matchMedia(HOVER_QUERY).matches;
 const getHoverServerSnapshot = () => false;
 
+const WORK_PROJECTS = projectsData.filter(p => !p.nature || p.nature === 'work');
+const FREELANCE_PROJECTS = projectsData.filter(p => p.nature === 'freelance');
+const SIDE_PROJECTS = projectsData.filter(p => p.nature === 'side');
+
 const Projects = () => {
   const [hoveredProject, setHoveredProject] = useState<Project | null>(null);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [activeTab, setActiveTab] = useState<'work' | 'freelance' | 'side'>('work');
   const canHover = useSyncExternalStore(subscribeHover, getHoverSnapshot, getHoverServerSnapshot);
 
-  // Filter projects by nature
-  const workProjects = projectsData.filter(p => !p.nature || p.nature === 'work');
-  const freelanceProjects = projectsData.filter(p => p.nature === 'freelance');
-  const sideProjects = projectsData.filter(p => p.nature === 'side');
-
-  const displayedProjects = activeTab === 'work' ? workProjects : activeTab === 'freelance' ? freelanceProjects : sideProjects;
+  const displayedProjects = activeTab === 'work' ? WORK_PROJECTS : activeTab === 'freelance' ? FREELANCE_PROJECTS : SIDE_PROJECTS;
 
   const tabs: Array<{ id: 'work' | 'freelance' | 'side'; label: string }> = [
     { id: 'work', label: 'Work' },

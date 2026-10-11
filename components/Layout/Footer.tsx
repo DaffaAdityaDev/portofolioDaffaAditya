@@ -190,6 +190,7 @@ const Footer = () => {
                     <span className="group-hover:text-white font-medium transition-colors">resume</span>
                   </Link>
                 </li>
+                {/* /freelance link hidden while the page is being tuned; restore to show it again.
                 <li>
                   <Link
                     href="/freelance"
@@ -199,6 +200,7 @@ const Footer = () => {
                     <span className="group-hover:text-white font-medium transition-colors">freelance</span>
                   </Link>
                 </li>
+                */}
               </ul>
             </div>
 
