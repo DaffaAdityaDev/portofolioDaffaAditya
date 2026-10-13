@@ -12,8 +12,7 @@ export type { NavItem, SocialLink };
 const navItems: NavItem[] = [
   { label: 'HOME', id: 'hero' },
   { label: 'CASE STUDIES', path: '/case-studies' },
-  // Hidden while the /freelance page is being tuned; restore to show it again.
-  // { label: 'FREELANCE', path: '/freelance' },
+  { label: 'FREELANCE', path: '/freelance' },
   { label: 'BLOG', path: '/blog' },
   { label: 'SOCIALS' }
 ];

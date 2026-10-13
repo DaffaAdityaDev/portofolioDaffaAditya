@@ -13,6 +13,9 @@ const AboutFreelancer = lazyOnView(() => import('@/features/Freelance/components
 const FaqSection = lazyOnView(() => import('@/features/Freelance/components/FaqSection'));
 const StartProject = lazyOnView(() => import('@/features/Freelance/components/StartProject'));
 
+// Mobile-only bar that appears after the hero; never part of the first screen, so client-only
+const StickyStartBar = dynamic(() => import('@/features/Freelance/components/StickyStartBar'), { ssr: false });
+
 // Sticky reveal footer matching case-studies and blog pages
 const Footer = dynamic(() => import('@/components/Layout/Footer'), { ssr: true });
 
@@ -83,6 +86,8 @@ export default function FreelancePage() {
             <StartProject />
           </div>
         </main>
+
+        <StickyStartBar />
 
         <Footer />
       </div>

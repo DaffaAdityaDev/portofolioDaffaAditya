@@ -1,8 +1,12 @@
 import React from 'react';
 import Image from 'next/image';
-import { MapPin } from 'lucide-react';
-import { ABOUT_ME_DATA } from '../constants/content';
+import Link from 'next/link';
+import { ArrowUpRight, MapPin } from 'lucide-react';
+import { ABOUT_ME_DATA, GITHUB_URL, LINKEDIN_URL } from '../constants/content';
 import { Section, SectionHeader } from './SectionHeader';
+import { monoLinkClass } from './styles';
+
+const linkClass = `${monoLinkClass} text-neutral-300 hover:text-red-400`;
 
 export const AboutFreelancer: React.FC = () => {
   return (
@@ -50,6 +54,20 @@ export const AboutFreelancer: React.FC = () => {
               </li>
             ))}
           </ul>
+
+          {/* Everything above can be checked outside this site */}
+          <div className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-1">
+            <span className="font-mono text-[11px] uppercase tracking-widest text-neutral-500">Check my background</span>
+            <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className={linkClass}>
+              LinkedIn <ArrowUpRight size={14} />
+            </a>
+            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className={linkClass}>
+              GitHub <ArrowUpRight size={14} />
+            </a>
+            <Link href="/resume" className={linkClass}>
+              Resume <ArrowUpRight size={14} />
+            </Link>
+          </div>
         </div>
       </div>
     </Section>

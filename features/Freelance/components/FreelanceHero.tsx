@@ -1,19 +1,22 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
-import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import Image from 'next/image';
+import { ArrowRight } from 'lucide-react';
 import SpotlightButton from '@/components/ui/SpotlightButton';
 import { coverStyle } from '@/features/Projects/components/CaseStudyArt/coverStyle';
-import { AVAILABILITY, BOOKING_URL, ENGAGEMENT_SPEC, HERO_COPY, PROOF_METRICS } from '../constants/content';
+import { ABOUT_ME_DATA, AVAILABILITY, CAL_LINK, ENGAGEMENT_SPEC, HERO_COPY, PROOF_METRICS, REPLY_WINDOW } from '../constants/content';
 import StatusBadge from './StatusBadge';
+import { useFreelanceStore } from '@/store/useFreelanceStore';
 
 // The same generative pixel field as the home hero, so the page reads as part of the site.
 const DotMatrixArt = dynamic(() => import('@/components/ui/DotMatrixArt'), { ssr: false });
 const HERO_ART = coverStyle({ slug: 'freelance', color: { accent: 'red' } });
 
 export const FreelanceHero: React.FC = () => {
+  const setStartMode = useFreelanceStore((s) => s.setStartMode);
   return (
     <>
-      <section aria-label="Freelance services" className="relative overflow-hidden">
+      <section id="freelance-hero" aria-label="Freelance services" className="relative overflow-hidden">
         <div className="absolute inset-0 z-0 pointer-events-none">
           <DotMatrixArt
             seed="freelance"
@@ -41,12 +44,12 @@ export const FreelanceHero: React.FC = () => {
               <p className="max-w-xl text-base md:text-lg leading-relaxed text-neutral-300">{HERO_COPY.subtext}</p>
 
               <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-1">
-                <SpotlightButton as="a" href="#start" variant="primary">
+                <SpotlightButton as="a" href="#start" onClick={() => setStartMode('brief')} variant="primary">
                   START A PROJECT <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </SpotlightButton>
-                {BOOKING_URL ? (
-                  <SpotlightButton as="a" href={BOOKING_URL} target="_blank" rel="noopener noreferrer" variant="secondary">
-                    BOOK A CALL <ArrowUpRight size={16} />
+                {CAL_LINK ? (
+                  <SpotlightButton as="a" href="#start" onClick={() => setStartMode('call')} variant="secondary">
+                    BOOK A CALL <ArrowRight size={16} />
                   </SpotlightButton>
                 ) : (
                   <SpotlightButton as="a" href="#work-section" variant="secondary">
@@ -54,6 +57,19 @@ export const FreelanceHero: React.FC = () => {
                   </SpotlightButton>
                 )}
               </div>
+
+              {/* Who the visitor would hire, visible before they scroll */}
+              <a href="#about-section" className="group flex max-w-md items-center gap-3 border-t border-neutral-800 pt-6">
+                <span className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-neutral-700 bg-neutral-900">
+                  <Image src={ABOUT_ME_DATA.image} alt="" fill sizes="44px" className="object-cover" loading="eager" />
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-sm font-semibold text-white transition-colors group-hover:text-red-400">{ABOUT_ME_DATA.name}</span>
+                  <span className="block text-xs leading-snug text-neutral-400">
+                    {ABOUT_ME_DATA.credential} · Replies {REPLY_WINDOW.toLowerCase()}
+                  </span>
+                </span>
+              </a>
             </div>
 
             {/* Terms of working together, in the case-study spec-sheet format, floating over the art like the home bento */}

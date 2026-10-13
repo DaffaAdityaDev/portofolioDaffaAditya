@@ -7,6 +7,9 @@ import type { StaticImageData } from 'next/image';
 
 export type ServiceId = 'website' | 'admin-system' | 'web-app' | 'improve';
 
+/** Project types in the inquiry form: every service plus a few common asks, and a free-text 'other'. */
+export type ProjectTypeId = ServiceId | 'landing-page' | 'online-store' | 'integration' | 'other';
+
 export interface Service {
   id: ServiceId;
   /** Short name used in cards, the inquiry form and the brief. */
@@ -71,7 +74,9 @@ export interface BriefFormData {
   name: string;
   email: string;
   company: string;
-  service: ServiceId;
+  service: ProjectTypeId;
+  /** What the visitor is building, in their words, when service is 'other'. */
+  serviceOther: string;
   currency: BudgetCurrency;
   /** Label of the chosen budget range, or empty when not picked. */
   budget: string;
@@ -83,6 +88,7 @@ export interface BriefFormData {
 
 /**
  * 'sent': delivered by the site. 'mail-app': handed to the visitor's mail app because direct
- * sending is not configured or failed. 'error': nothing could be sent.
+ * sending is not configured or failed. 'saved-mail-app': saved by the site but not emailed, so the mail app
+ * also opens with a copy. 'error': nothing could be sent.
  */
-export type BriefStatus = 'idle' | 'sending' | 'sent' | 'mail-app' | 'error';
+export type BriefStatus = 'idle' | 'sending' | 'sent' | 'mail-app' | 'saved-mail-app' | 'error';

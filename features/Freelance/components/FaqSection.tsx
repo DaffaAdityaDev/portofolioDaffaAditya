@@ -29,16 +29,27 @@ export const FaqSection: React.FC = () => {
                 <Plus
                   size={18}
                   aria-hidden
-                  className={`mt-1 text-neutral-500 transition-transform duration-300 ${isOpen ? 'rotate-45 text-red-400' : ''}`}
+                  className={`mt-1 shrink-0 text-neutral-500 transition-[transform,color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${isOpen ? 'rotate-45 text-red-400' : ''}`}
                 />
               </button>
-              <p
+              {/* Animates height by moving the row from 0fr to 1fr, so the answer needs no measured height */}
+              <div
                 id={`faq-answer-${i}`}
-                hidden={!isOpen}
-                className="-mt-2 max-w-3xl pb-6 pr-8 text-base leading-relaxed text-neutral-400 sm:pl-[3.75rem]"
+                aria-hidden={!isOpen}
+                className={`grid transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
+                  isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                }`}
               >
-                {faq.a}
-              </p>
+                <div className="overflow-hidden">
+                  <p
+                    className={`max-w-3xl pb-6 pr-8 text-base leading-relaxed text-neutral-400 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none sm:pl-[3.75rem] ${
+                      isOpen ? 'translate-y-0' : '-translate-y-2'
+                    }`}
+                  >
+                    {faq.a}
+                  </p>
+                </div>
+              </div>
             </li>
           );
         })}

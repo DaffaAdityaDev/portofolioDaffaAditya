@@ -1,12 +1,13 @@
 import React from 'react';
 import Link from 'next/link';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { useFreelanceStore } from '@/store/useFreelanceStore';
 import { SERVICES } from '../constants/content';
-import { useFreelance } from '../hooks/useFreelance';
 import { Section, SectionHeader } from './SectionHeader';
+import { monoLinkClass } from './styles';
 
 export const Services: React.FC = () => {
-  const { pickService } = useFreelance();
+  const setStartMode = useFreelanceStore((s) => s.setStartMode);
 
   return (
     <Section id="services-section" labelledBy="services-heading">
@@ -55,8 +56,8 @@ export const Services: React.FC = () => {
                 )}
                 <a
                   href="#start"
-                  onClick={() => pickService(service.id)}
-                  className="inline-flex min-h-11 items-center gap-2 font-mono text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:text-red-400"
+                  onClick={() => setStartMode('brief', service.id)}
+                  className={`${monoLinkClass} text-white hover:text-red-400`}
                 >
                   Start a project <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
                 </a>

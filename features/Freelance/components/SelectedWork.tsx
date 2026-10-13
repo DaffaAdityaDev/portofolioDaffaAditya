@@ -4,8 +4,8 @@ import Image from 'next/image';
 import { ArrowUpRight } from 'lucide-react';
 import { WORK_PROOF } from '../constants/content';
 import { Section, SectionHeader } from './SectionHeader';
-
-const linkClass = 'inline-flex min-h-11 items-center gap-2 font-mono text-xs font-semibold uppercase tracking-widest transition-colors';
+import { monoLinkClass as linkClass } from './styles';
+import WorkCtaStrip from './WorkCtaStrip';
 
 export const SelectedWork: React.FC = () => {
   return (
@@ -109,4 +109,12 @@ export const SelectedWork: React.FC = () => {
   );
 };
 
-export default SelectedWork;
+/** The work plus its "Have a similar project?" strip, so the strip rides in this lazy chunk instead of its own. */
+const SelectedWorkWithCta: React.FC = () => (
+  <>
+    <SelectedWork />
+    <WorkCtaStrip />
+  </>
+);
+
+export default SelectedWorkWithCta;

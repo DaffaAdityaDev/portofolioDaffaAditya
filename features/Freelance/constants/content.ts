@@ -29,10 +29,10 @@ export const CALL_WINDOW = 'After 17:00 WIB';
 export const REPLY_WINDOW = 'Within 24 hours';
 
 /**
- * Cal.com or Calendly link for the free 30-minute call, e.g. 'https://cal.com/daffa-aditya/30min'.
- * Leave empty until it exists: every "Book a call" button stays hidden while this is ''.
+ * Cal.com event for the free 30-minute call, as "username/event", e.g. 'daffa-aditya/30min'.
+ * Empty until it exists: every "Book a call" button and the booking calendar stay hidden.
  */
-export const BOOKING_URL = '';
+export const CAL_LINK = process.env.NEXT_PUBLIC_CAL_LINK ?? '';
 
 export const HERO_COPY = {
   kicker: 'Freelance software engineer · Jakarta',
@@ -181,15 +181,19 @@ export const PROCESS_STEPS: readonly ProcessStep[] = [
   },
 ];
 
+/** The day job, shown next to the photo in the hero and in the About highlights. */
+const CREDENTIAL = 'Software Engineer at Run System (PT Global Sukses Solusi Tbk)';
+
 export const ABOUT_ME_DATA = {
   name: 'Daffa Aditya',
   role: 'Software Engineer',
   location: 'Jakarta, Indonesia',
   image: profilePhoto as StaticImageData,
   imageAlt: 'Daffa Aditya, software engineer',
+  credential: CREDENTIAL,
   bio: 'I am a software engineer in Jakarta. I build fast web apps, admin and finance systems, and the databases behind them, and I care most that what I ship is easy to use and stays reliable.',
   highlights: [
-    'Day job: Software Engineer at Run System (PT Global Sukses Solusi Tbk) since 2024, delivering integrations for BUMN and government program clients on Accounting+.',
+    `Day job: ${CREDENTIAL} since 2024, delivering integrations for BUMN and government program clients on Accounting+.`,
     'Led the intern team that built an inventory system for Ombudsman RI and deployed it to production in three months.',
     'Freelance: a studio website that loads in under a second on 3G and 4G, and a school finance ledger with 500+ students on it.',
   ],
@@ -206,7 +210,11 @@ export const FAQS: readonly FaqItem[] = [
   },
   {
     q: 'How do payment and invoices work?',
-    a: 'The second half is due once everything is tested on your domain, and every payment comes with an invoice.',
+    a: `${PAYMENT_TERMS}. The second half is due only once everything is tested and live on your domain, and every payment comes with an invoice.`,
+  },
+  {
+    q: 'Who owns the code when we are done?',
+    a: 'You do. The code moves to your GitHub, and the domain, hosting and every service account are registered in your name from day one. You are never locked in to me, and any developer can pick the project up from the docs I hand over.',
   },
   {
     q: 'What if I want to change something mid-project?',
