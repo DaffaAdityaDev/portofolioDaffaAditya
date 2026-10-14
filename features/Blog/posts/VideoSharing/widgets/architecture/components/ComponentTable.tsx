@@ -1,11 +1,12 @@
 import React from 'react';
+import BlogTable from '@/features/Blog/components/BlogTable';
 import { ARCHITECTURE_NODES } from '../constants';
 
 const NODES = Object.values(ARCHITECTURE_NODES);
 
 /** The components of the architecture as a table, from the same data as the diagram. */
 const ComponentTable: React.FC = () => (
-  <table>
+  <BlogTable>
     <thead>
       <tr>
         <th>Component</th>
@@ -20,7 +21,7 @@ const ComponentTable: React.FC = () => (
         </tr>
       ))}
     </tbody>
-  </table>
+  </BlogTable>
 );
 
 export default ComponentTable;

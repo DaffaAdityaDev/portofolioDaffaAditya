@@ -3,6 +3,7 @@ import Callout from '../../components/Callout';
 import CodeBlock from '../../components/CodeBlock';
 import Reveal from '../../components/Reveal';
 import { lazyOnView } from '../../components/LazyOnView';
+import BlogTable from '../../components/BlogTable';
 import ComponentTable from './widgets/architecture/components/ComponentTable';
 
 // Every widget sits below the first screen: its HTML is in the static page, its JS loads on scroll.
@@ -71,7 +72,7 @@ export default function VideoSharing() {
 
         <p>The happy path is easy. A design is judged by what happens when a user does something odd, or when something breaks halfway. These are the cases the system has to survive:</p>
 
-        <table>
+        <BlogTable>
           <thead>
             <tr>
               <th>The user</th>
@@ -126,7 +127,7 @@ export default function VideoSharing() {
               <td>Let the CDN and the metadata cache absorb the spike, and keep the origin for the first miss only.</td>
             </tr>
           </tbody>
-        </table>
+        </BlogTable>
 
         <p>Every row is answered later in the post, and the recap at the end collects them all.</p>
       </Reveal>
@@ -202,7 +203,7 @@ export default function VideoSharing() {
 
         <ApiModulesDiagram />
 
-        <table>
+        <BlogTable>
           <thead>
             <tr>
               <th>Module</th>
@@ -237,7 +238,7 @@ export default function VideoSharing() {
               <td>An event stream. An aggregator removes duplicates, keeps the totals in memory and flushes them to the database in batches.</td>
             </tr>
           </tbody>
-        </table>
+        </BlogTable>
 
         <p>A comment storm should not slow down playback, and a heavy dashboard query should not lock the database that serves the watch page. Giving each module its own store and its own limits means one of them can fail or be overloaded while the others keep working. A practical path is to start with one API codebase split into modules, and to pull a module out as its own service only when its load or its data store really differs from the rest.</p>
 
@@ -330,7 +331,7 @@ export default function VideoSharing() {
 
         <p>The order is the point: write, then publish, then ack. A crash between any two steps causes a repeat, never a loss. This is called at-least-once delivery: a message can arrive more than once but is never dropped, so everyone who receives one must handle a duplicate.</p>
 
-        <table>
+        <BlogTable>
           <thead>
             <tr>
               <th>The worker dies between</th>
@@ -355,7 +356,7 @@ export default function VideoSharing() {
               <td>The task's completion row already exists, so the duplicate changes nothing.</td>
             </tr>
           </tbody>
-        </table>
+        </BlogTable>
 
         <p>Replay each of those crashes below. Watch the worker loop on the left, and on the right what the broker and the upload service believe about the same task.</p>
       </Reveal>
@@ -385,7 +386,7 @@ export default function VideoSharing() {
         <h3>A video's status</h3>
         <p>Every video moves through explicit states, and only the upload service moves it:</p>
 
-        <table>
+        <BlogTable>
           <thead>
             <tr>
               <th>Status</th>
@@ -425,7 +426,7 @@ export default function VideoSharing() {
               <td>Viewers see "not available".</td>
             </tr>
           </tbody>
-        </table>
+        </BlogTable>
 
         <p>Every change is a conditional update: <code>UPDATE videos SET status = 'processing' WHERE id = ? AND status = 'uploading'</code>. When the finish hint and the sweep notice the same upload in the same second, one changes a row and the other changes none and stops, so the tasks are queued once. The same rule guards every arrow below, so a late or repeated trigger is always harmless.</p>
       </Reveal>
@@ -448,7 +449,7 @@ export default function VideoSharing() {
         <h3>Auto quality: switching resolution mid-video</h3>
         <p>The "Auto" entry in a player's quality menu is adaptive bitrate streaming. Every video is stored as a ladder of renditions, the same video encoded at several sizes:</p>
 
-        <table>
+        <BlogTable>
           <thead>
             <tr>
               <th>Rendition</th>
@@ -483,7 +484,7 @@ export default function VideoSharing() {
               <td>Home Wi-Fi</td>
             </tr>
           </tbody>
-        </table>
+        </BlogTable>
 
         <p><strong>Why the switch is seamless.</strong> Every rendition is cut at exactly the same timestamps, and every segment starts with a keyframe: a complete picture that does not depend on earlier frames. Segment 5 at 240p and segment 5 at 720p cover the same four seconds. So the player can fetch segment 5 in one quality and segment 6 in another, and the decoder starts the new one cleanly. Nothing restarts. At most, the viewer sees the picture turn sharper or softer. The transcoders make this possible by placing a keyframe at every segment boundary, with a fixed keyframe interval and no extra keyframes at scene changes, so every rendition breaks at the same frames. That is also what lets the upload service split the work into one task per segment and resolution.</p>
 
@@ -590,7 +591,7 @@ export default function VideoSharing() {
         <h3>Surviving the loss of a whole region</h3>
         <p>Replicas and shards protect against a failed machine, not against a whole data center going dark. For that, the metadata needs a copy in a second region. Two numbers decide how much that costs. The <strong>RPO</strong> (recovery point objective) is how much recent data you can afford to lose. The <strong>RTO</strong> (recovery time objective) is how long you can afford to be down.</p>
 
-        <table>
+        <BlogTable>
           <thead>
             <tr>
               <th>Approach</th>
@@ -619,7 +620,7 @@ export default function VideoSharing() {
               <td>By far the hardest, because two regions can change the same record at the same moment.</td>
             </tr>
           </tbody>
-        </table>
+        </BlogTable>
 
         <p>For a video service, backups plus a warm standby are the sensible choice. Losing a few seconds of view counts or comments hurts nobody, and a status change that was lost is caught again by the sweep, which compares the database with what storage actually holds. Two other things must fail over together with the database. The processed zone of video storage is copied to the second region with bucket replication (raw uploads are not worth it, they are deleted soon anyway). And the DNS name of the API must point to the promoted region, so that clients follow. A failover that has never been tried is only a hope, so it is practised on a schedule.</p>
       </Reveal>
@@ -687,7 +688,7 @@ export default function VideoSharing() {
 
         <h3>What the bill is made of</h3>
         <p>A rough estimate with the numbers from the start of the post, at public cloud prices. Assume the 100 MB upload is a few minutes of 1080p video, and that the whole ladder from 240p to 1080p takes about twice the size of its top rung.</p>
-        <table>
+        <BlogTable>
           <thead>
             <tr>
               <th>Part</th>
@@ -717,13 +718,13 @@ export default function VideoSharing() {
               <td>A few thousand dollars</td>
             </tr>
           </tbody>
-        </table>
+        </BlogTable>
 
         <p>The numbers are rough, but the order is not. The services, the database and the cache that took most of this post are a rounding error. That decides where effort goes: a 1% better hit ratio at the edges, a newer codec such as AV1 for popular videos (roughly a third less bandwidth for the same picture), a cheaper storage class for videos nobody watches, or storing a re-uploaded file once, found by a hash of its content, saves more than any database tuning.</p>
 
         <h3>Own the baseline, rent the peak</h3>
         <p>The cloud charges for flexibility: a thousand machines in minutes, given back an hour later. Your own servers in a rented rack cost far less for the same work, but you pay for them whether they are busy or not, and adding more takes weeks. So the split follows the shape of the load: what is large and steady runs on your own hardware, and what spikes, or mostly waits, runs in the cloud.</p>
-        <table>
+        <BlogTable>
           <thead>
             <tr>
               <th>Part</th>
@@ -758,7 +759,7 @@ export default function VideoSharing() {
               <td>The warm standby from the disaster recovery plan: machines that mostly wait are the worst case for owned hardware and the best case for the cloud.</td>
             </tr>
           </tbody>
-        </table>
+        </BlogTable>
         <p>The mix works because the same tools run on both sides: Kubernetes for the services and Terraform for everything around them, so a workload can move without being rewritten, and the second region is a copy of the first. Start fully in the cloud with managed services, when the load is small and unpredictable. Bring a line home when its bill clearly outweighs the people it needs: someone on call, spare parts on a shelf, capacity ordered weeks ahead. Edges come first, then storage, then the GPUs for an ordinary day.</p>
 
         <h3>Shipping a change</h3>
@@ -812,7 +813,7 @@ export default function VideoSharing() {
 
         <p>Each of those steps has its own defense:</p>
 
-        <table>
+        <BlogTable>
           <thead>
             <tr>
               <th>Defense</th>
@@ -857,7 +858,7 @@ export default function VideoSharing() {
               <td>The last step of the cascade, even if a deep check slipped in.</td>
             </tr>
           </tbody>
-        </table>
+        </BlogTable>
 
         <p>The architecture already contains the blast radius at a larger scale. The upload service, the API and the delivery service are separate fleets with separate data stores, so a flood of uploads cannot slow down playback. The broker sits between the services and the workers, so a burst queues up instead of knocking anything over. And playback leans on copies: segments come from the edge, metadata from the cache, so viewers of a popular video keep watching for a while even when the database is down. Splitting by load is what makes this possible. These defenses make sure one bad dependency stays inside its own box.</p>
 
@@ -920,7 +921,7 @@ export default function VideoSharing() {
           <div className="px-4 pb-2">
 
         <h4>Uploads</h4>
-        <table>
+        <BlogTable>
           <thead>
             <tr>
               <th>The catch</th>
@@ -955,10 +956,10 @@ export default function VideoSharing() {
               <td>Quota and expiry up front, heartbeats, a sweep that asks storage, a grace period, and a storage lifecycle rule as the last net</td>
             </tr>
           </tbody>
-        </table>
+        </BlogTable>
 
         <h4>Transcoding</h4>
-        <table>
+        <BlogTable>
           <thead>
             <tr>
               <th>The catch</th>
@@ -993,10 +994,10 @@ export default function VideoSharing() {
               <td>The worker hands its task back on the stop signal</td>
             </tr>
           </tbody>
-        </table>
+        </BlogTable>
 
         <h4>Playback</h4>
-        <table>
+        <BlogTable>
           <thead>
             <tr>
               <th>The catch</th>
@@ -1031,10 +1032,10 @@ export default function VideoSharing() {
               <td>The status changes first, tokens expire in minutes, and the purge follows</td>
             </tr>
           </tbody>
-        </table>
+        </BlogTable>
 
         <h4>Data</h4>
-        <table>
+        <BlogTable>
           <thead>
             <tr>
               <th>The catch</th>
@@ -1069,10 +1070,10 @@ export default function VideoSharing() {
               <td>Backups and a warm standby in a second region, with failover practised on a schedule</td>
             </tr>
           </tbody>
-        </table>
+        </BlogTable>
 
         <h4>Caching and traffic</h4>
-        <table>
+        <BlogTable>
           <thead>
             <tr>
               <th>The catch</th>
@@ -1117,10 +1118,10 @@ export default function VideoSharing() {
               <td>Spare capacity kept on purpose</td>
             </tr>
           </tbody>
-        </table>
+        </BlogTable>
 
         <h4>Counts and abuse</h4>
-        <table>
+        <BlogTable>
           <thead>
             <tr>
               <th>The catch</th>
@@ -1155,10 +1156,10 @@ export default function VideoSharing() {
               <td>Growing delays, short locks, a slow hash and one error for both mistakes</td>
             </tr>
           </tbody>
-        </table>
+        </BlogTable>
 
         <h4>Shipping and hosting</h4>
-        <table>
+        <BlogTable>
           <thead>
             <tr>
               <th>The catch</th>
@@ -1188,7 +1189,7 @@ export default function VideoSharing() {
               <td>Own edges, cheaper storage for old videos, own hardware for the baseline and the cloud for the peak</td>
             </tr>
           </tbody>
-        </table>
+        </BlogTable>
 
           </div>
         </details>

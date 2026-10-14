@@ -3,6 +3,7 @@ import Callout from '../../components/Callout';
 import CodeBlock from '../../components/CodeBlock';
 import Reveal from '../../components/Reveal';
 import { lazyOnView } from '../../components/LazyOnView';
+import BlogTable from '../../components/BlogTable';
 
 // Every widget sits below the first screen: its HTML is in the static page, its JS loads on scroll.
 const SolidPlayground = lazyOnView(() => import('./widgets/playground/components/SolidPlayground'));
@@ -32,7 +33,7 @@ export default function SolidPrinciples() {
 
         <p>Here is how the terms map:</p>
 
-        <table>
+        <BlogTable>
           <thead>
             <tr>
               <th>The rules say</th>
@@ -57,7 +58,7 @@ export default function SolidPrinciples() {
               <td>Imports, or calls directly</td>
             </tr>
           </tbody>
-        </table>
+        </BlogTable>
       </Reveal>
 
       <Reveal>

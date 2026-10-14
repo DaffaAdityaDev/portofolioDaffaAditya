@@ -49,7 +49,7 @@ const ResumeHeader: React.FC<ResumeHeaderProps> = ({ downloadUrl }) => {
           <div className="absolute inset-0 bg-red-500 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
           <Download size={18} className="relative z-10 group-hover:text-white transition-colors" />
           <span className="relative z-10 group-hover:text-white transition-colors">Open PDF</span>
-          <span className="sr-only">(opens Google Drive in a new tab)</span>
+          <span className="sr-only">(opens the PDF in a new tab)</span>
         </a>
       </m.div>
     </div>

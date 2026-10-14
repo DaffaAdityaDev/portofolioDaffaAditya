@@ -24,5 +24,8 @@ export const IDLE_RADAR_TIMEOUT_MS = 2200;
 /** Runtime page that the blog's live React editor loads into its sandboxed preview iframe. */
 export const PLAYGROUND_RUNTIME_ROUTE = '/playground-runtime';
 
+/** Local-only CV editor (pages/cv.dev.tsx). The page only exists in development builds. */
+export const CV_EDITOR_ROUTE = '/cv';
+
 /** Pages rendered without the site shell, analytics and fonts. */
-export const BARE_PAGE_ROUTES: readonly string[] = [PLAYGROUND_RUNTIME_ROUTE];
+export const BARE_PAGE_ROUTES: readonly string[] = [PLAYGROUND_RUNTIME_ROUTE, CV_EDITOR_ROUTE];

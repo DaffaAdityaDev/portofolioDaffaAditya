@@ -4,6 +4,8 @@ import { useFreelanceStore } from '@/store/useFreelanceStore';
 
 const EMBED_SRC = 'https://app.cal.com/embed/embed.js';
 const NAMESPACE = 'freelance-call';
+// Containers that already have a calendar queued.
+const embedded = new WeakSet<HTMLElement>();
 
 type CalQueue = { (...args: unknown[]): void; q: unknown[][] };
 type CalApi = CalQueue & { loaded?: boolean; ns: Record<string, CalQueue> };
@@ -61,7 +63,9 @@ export const CalEmbed: React.FC = () => {
 
   useEffect(() => {
     const el = container.current;
-    if (!CAL_LINK || !el || el.childElementCount > 0) return;
+    // The iframe only appears once embed.js loads, so a child count can't tell that StrictMode's second run already queued one.
+    if (!CAL_LINK || !el || embedded.has(el)) return;
+    embedded.add(el);
     const { name, email, message } = useFreelanceStore.getState().brief;
     const api = cal();
     api('init', NAMESPACE, { origin: 'https://cal.com' });

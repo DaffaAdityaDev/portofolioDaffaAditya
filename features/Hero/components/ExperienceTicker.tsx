@@ -5,10 +5,9 @@ import { calculateDuration } from '@/utils/date';
 /**
  * Start of the experience count: the first internship (QQTech / Ombudsman RI, 2023).
  * The exact start month is an assumption; adjust it here and the About stats follow.
- * The label always says "incl. internships" so the number is not read as full-time years.
  */
 export const EXPERIENCE_START_DATE = new Date('2023-07-01T00:00:00');
-export const EXPERIENCE_LABEL = 'Experience (incl. internships)';
+export const EXPERIENCE_LABEL = 'Experience';
 
 type Experience = ReturnType<typeof calculateDuration>;
 

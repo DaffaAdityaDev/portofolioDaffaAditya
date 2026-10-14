@@ -24,7 +24,7 @@ const rawTechStacks = diagnosticStack.reduce(
 const roundedTechStacks = Math.floor(rawTechStacks / 5) * 5;
 
 const STATS = [
-  { val: `${Math.max(1, calculatedYears)}+`, label: "Years Exp (incl. internships)" },
+  { val: `${Math.max(1, calculatedYears)}+`, label: "Years Exp" },
   { val: `${projectsData.length}+`, label: "Projects" },
   { val: `${roundedTechStacks}+`, label: "Tech Stacks" },
   { val: `${companiesAndClients}`, label: "Companies & Clients" }

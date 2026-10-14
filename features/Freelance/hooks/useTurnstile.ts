@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 const SCRIPT_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+/** How long to wait for Cloudflare's first answer before treating the check as unavailable. */
+const GIVE_UP_MS = 10000;
 
 // One script per page, however many times the form mounts.
 let loading: Promise<void> | null = null;
@@ -45,6 +47,9 @@ export function useTurnstile(siteKey: string): UseTurnstileReturn {
   useEffect(() => {
     if (!siteKey) return;
     let cancelled = false;
+    let answered = false;
+    // Neither callback ever fires when the challenge iframe is blocked: stop waiting so the form can still send.
+    const giveUp = window.setTimeout(() => !answered && setFailed(true), GIVE_UP_MS);
     loadTurnstile()
       .then(() => {
         if (cancelled || !ref.current || !window.turnstile) return;
@@ -53,11 +58,13 @@ export function useTurnstile(siteKey: string): UseTurnstileReturn {
           theme: 'dark',
           appearance: 'interaction-only',
           callback: (t) => {
+            answered = true;
             setToken(t);
             setFailed(false);
           },
           'expired-callback': () => setToken(''),
           'error-callback': () => {
+            answered = true;
             setToken('');
             setFailed(true);
           },
@@ -66,6 +73,7 @@ export function useTurnstile(siteKey: string): UseTurnstileReturn {
       .catch(() => !cancelled && setFailed(true));
     return () => {
       cancelled = true;
+      window.clearTimeout(giveUp);
       if (widgetId.current && window.turnstile) window.turnstile.remove(widgetId.current);
       widgetId.current = null;
     };

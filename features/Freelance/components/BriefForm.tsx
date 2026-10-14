@@ -77,8 +77,8 @@ export const BriefForm: React.FC = () => {
   }, []);
 
   const onSubmit = async (e: React.FormEvent) => {
-    await handleBriefSubmit(e, { turnstileToken: token, turnstileFailed: failed, elapsedMs: Date.now() - shownAt.current });
-    reset();
+    const tokenUsed = await handleBriefSubmit(e, { turnstileToken: token, turnstileFailed: failed, elapsedMs: Date.now() - shownAt.current });
+    if (tokenUsed) reset();
   };
   // Turnstile usually passes within a second or two; until then the button waits instead of failing.
   const checking = !!TURNSTILE_SITE_KEY && engaged && !token && !failed;

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { m, useMotionValue, useMotionTemplate } from 'framer-motion';
-import { contactData, resumeLink } from './constants';
+import { contactData } from './constants';
 import { FADE_IN_UP_CONTAINER, FADE_IN_UP_ITEM } from '@/constant/animations';
 import SpotlightButton from '@/components/ui/SpotlightButton';
 

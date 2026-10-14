@@ -23,7 +23,7 @@ const ResumePage = () => {
         variants={FADE_IN_UP_CONTAINER}
         initial="hidden"
         animate="visible"
-        className="min-h-screen bg-[#0a0a0a] pt-36 md:pt-40 pb-20 px-6 lg:px-20 relative overflow-hidden"
+        className="min-h-screen bg-[#0a0a0a] pt-24 md:pt-28 pb-20 px-6 lg:px-20 relative overflow-hidden"
       >
         {/* Background Grain Effect */}
         <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none bg-[url('/svg/noise.svg')]"></div>

@@ -31,6 +31,10 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
   crossOrigin: 'anonymous',
+  // *.dev.tsx / *.dev.ts pages (the local /cv editor and its /api/cv routes) are routes only in dev. A production
+  // build still compiles them, as /cv.dev and /api/cv/*.dev (they match plain 'tsx'/'ts'), so each must refuse
+  // there itself: pages/cv.dev.tsx and features/CvEditor/server/api.ts point back here.
+  pageExtensions: process.env.NODE_ENV === 'production' ? ['tsx', 'ts', 'jsx', 'js'] : ['dev.tsx', 'dev.ts', 'tsx', 'ts', 'jsx', 'js'],
   compiler: {
     // Remove console logs in production for better performance and cleaner logs
     removeConsole: process.env.NODE_ENV === 'production',

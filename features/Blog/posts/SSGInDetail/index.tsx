@@ -3,6 +3,7 @@ import Callout from '../../components/Callout';
 import CodeBlock from '../../components/CodeBlock';
 import Reveal from '../../components/Reveal';
 import { lazyOnView } from '../../components/LazyOnView';
+import BlogTable from '../../components/BlogTable';
 
 // Every widget sits below the first screen: its HTML is in the static page, its JS loads on scroll.
 const FallbackModesVisualizer = lazyOnView(() => import('./widgets/fallback/components/FallbackModesVisualizer'));
@@ -281,7 +282,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
       <Reveal>
         <h2>SSG, ISR, SSR and CSR side by side</h2>
 
-        <table>
+        <BlogTable>
           <thead>
             <tr>
               <th>Approach</th>
@@ -316,7 +317,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
               <td>Personal or live parts of an otherwise public page</td>
             </tr>
           </tbody>
-        </table>
+        </BlogTable>
       </Reveal>
 
       <Reveal>
@@ -324,7 +325,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
 
         <p>The App Router (the <strong>app</strong> folder) has no getStaticProps or getStaticPaths. Pages are async server components (components that run only on the server) that fetch their own data, and caching is set where you fetch. The concepts map like this:</p>
 
-        <table>
+        <BlogTable>
           <thead>
             <tr>
               <th>Pages Router</th>
@@ -357,7 +358,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
               <td><strong>revalidatePath(&apos;/blog/x&apos;)</strong> in a route handler (the App Router version of an API route) or a server action (a server function you call from a form or button)</td>
             </tr>
           </tbody>
-        </table>
+        </BlogTable>
 
         <Callout variant="note" title="Cache Components">
           Next.js 16 also has an opt-in mode, <strong>cacheComponents</strong> in next.config, where you mark cached code with the &apos;use cache&apos; directive instead. The table above describes the default setup.

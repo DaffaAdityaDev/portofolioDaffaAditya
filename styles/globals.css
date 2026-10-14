@@ -320,7 +320,7 @@
   }
 
   table {
-    @apply w-full text-left text-sm my-6;
+    @apply w-full text-left text-sm;
 
     th,
     td {

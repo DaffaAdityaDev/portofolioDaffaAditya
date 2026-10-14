@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { buildBriefHtml, buildBriefSheetRow, buildBriefSubject, buildBriefText, validateBrief } from '@/features/Freelance/utils/brief';
-import { EMPTY_BRIEF, MIN_FILL_MS } from '@/features/Freelance/constants/inquiry';
+import { EMPTY_BRIEF, MIN_FILL_MS, TURNSTILE_SITE_KEY } from '@/features/Freelance/constants/inquiry';
 import type { BriefFormData } from '@/types/freelance';
 
 /**
@@ -13,23 +13,27 @@ import type { BriefFormData } from '@/types/freelance';
 
 const RATE_LIMIT = 5;
 const RATE_WINDOW_MS = 10 * 60 * 1000;
+const RATE_SWEEP_SIZE = 1000;
 const SHEET_TIMEOUT_MS = 8000;
+const EMAIL_TIMEOUT_MS = 8000;
 // Per-instance memory only: enough to slow a single abusive client, not a global limit.
 const recent = new Map<string, number[]>();
 
 function rateLimited(ip: string): boolean {
   const now = Date.now();
-  // Drop IPs whose hits have all expired, so the map does not grow with every visitor.
-  for (const [key, times] of recent) if (now - times[times.length - 1] >= RATE_WINDOW_MS) recent.delete(key);
+  // Drop IPs whose hits have all expired, so the map does not grow with every visitor. Only once it is
+  // large, so a normal request never walks the whole map.
+  if (recent.size > RATE_SWEEP_SIZE) {
+    for (const [key, times] of recent) if (now - times[times.length - 1] >= RATE_WINDOW_MS) recent.delete(key);
+  }
   const hits = (recent.get(ip) ?? []).filter((t) => now - t < RATE_WINDOW_MS);
   hits.push(now);
   recent.set(ip, hits);
   return hits.length > RATE_LIMIT;
 }
 
-/** Runs a delivery channel; resolves to its error instead of throwing, or null on success. A channel that is off counts as failed. */
-async function attempt(channel: (() => Promise<void>) | false): Promise<unknown> {
-  if (!channel) return new Error('not configured');
+/** Runs a delivery channel; resolves to its error instead of throwing, or null on success. */
+async function attempt(channel: () => Promise<void>): Promise<unknown> {
   try {
     await channel();
     return null;
@@ -57,9 +61,12 @@ function sameOrigin(req: NextApiRequest): boolean {
   }
 }
 
-/** Asks Cloudflare whether the Turnstile token is real, unused and for this site. */
-async function turnstilePassed(token: string, secret: string, ip: string): Promise<boolean> {
-  if (!token) return false;
+/**
+ * Asks Cloudflare whether the Turnstile token is real, unused and for this site. 'unavailable' means
+ * Cloudflare could not answer: not the visitor's fault, so the page falls back to the mail app.
+ */
+async function checkTurnstile(token: string, secret: string, ip: string): Promise<'pass' | 'fail' | 'unavailable'> {
+  if (!token) return 'fail';
   try {
     const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
       method: 'POST',
@@ -67,9 +74,10 @@ async function turnstilePassed(token: string, secret: string, ip: string): Promi
       signal: AbortSignal.timeout(5000),
     });
     const result = (await res.json()) as { success?: boolean };
-    return result.success === true;
-  } catch {
-    return false;
+    return result.success === true ? 'pass' : 'fail';
+  } catch (err) {
+    console.error('[api/brief] Turnstile unavailable', err);
+    return 'unavailable';
   }
 }
 
@@ -85,6 +93,7 @@ async function sendEmail(brief: BriefFormData, apiKey: string, to: string): Prom
       text: buildBriefText(brief),
       html: buildBriefHtml(brief),
     }),
+    signal: AbortSignal.timeout(EMAIL_TIMEOUT_MS),
   });
   if (!sent.ok) throw new Error(`Resend answered ${sent.status}`);
 }
@@ -132,26 +141,34 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   ) as unknown as BriefFormData;
 
   // Bots fill the hidden field; pretend success so they do not retry.
-  if (brief.website) return res.status(200).json({ ok: true });
-  // Nobody fills the form in under 3 seconds; bots do. Same silent success.
-  if (typeof body.elapsedMs !== 'number' || body.elapsedMs < MIN_FILL_MS) return res.status(200).json({ ok: true });
+  if (brief.website) return res.status(200).json({ ok: true, openMailApp: false });
+  // Nobody fills the form in under 3 seconds; bots do. A real person who is that quick just sends again,
+  // so this is a visible 400 rather than a silent drop.
+  if (typeof body.elapsedMs !== 'number' || body.elapsedMs < MIN_FILL_MS) {
+    return res.status(400).json({ error: 'That was quick! Please check your brief and send it again.' });
+  }
 
   const invalid = validateBrief(brief);
   if (invalid) return res.status(400).json({ error: invalid });
 
-  // Off until TURNSTILE_SECRET_KEY is set, together with NEXT_PUBLIC_TURNSTILE_SITE_KEY for the form.
+  // On only when both keys are set: a secret without the site key would reject every brief.
   const turnstileSecret = process.env.TURNSTILE_SECRET_KEY;
-  if (turnstileSecret && !(await turnstilePassed(typeof body.turnstileToken === 'string' ? body.turnstileToken : '', turnstileSecret, ip))) {
-    return res.status(400).json({ error: 'The spam check did not pass. Please wait a moment and send again.' });
+  if (turnstileSecret && TURNSTILE_SITE_KEY) {
+    const check = await checkTurnstile(typeof body.turnstileToken === 'string' ? body.turnstileToken : '', turnstileSecret, ip);
+    if (check === 'fail') return res.status(400).json({ error: 'The spam check did not pass. Please wait a moment and send again.' });
+    // Cloudflare is down: not the visitor's fault, so not 400; the page opens the mail app instead.
+    if (check === 'unavailable') return res.status(503).json({ error: 'Spam check unavailable' });
   }
 
   // The Sheet goes first because it enforces the daily cap; when the cap is hit, the email is skipped too.
-  const sheetError = await attempt(sheetUrl && sheetSecret ? () => appendToSheet(brief, sheetUrl, sheetSecret) : false);
+  const sheetError = sheetUrl && sheetSecret ? await attempt(() => appendToSheet(brief, sheetUrl, sheetSecret)) : null;
   // Not 400: the page then opens the visitor's mail app, so a real client can still reach the inbox.
   if (sheetError instanceof DailyLimitError) return res.status(429).json({ error: 'Too many briefs today' });
-  const emailError = await attempt(apiKey && to ? () => sendEmail(brief, apiKey, to) : false);
+  const emailError = apiKey && to ? await attempt(() => sendEmail(brief, apiKey, to)) : null;
 
-  // emailed: false tells the page to also open the visitor's mail app, so the brief still reaches the inbox.
-  if (!emailError || !sheetError) return res.status(200).json({ ok: true, emailed: !emailError });
-  return res.status(502).json({ error: 'Could not deliver the brief' });
+  const saved = !!(sheetUrl && sheetSecret) && !sheetError;
+  const emailed = !!(apiKey && to) && !emailError;
+  if (!saved && !emailed) return res.status(502).json({ error: 'Could not deliver the brief' });
+  // Email is set up but failed: the brief is saved, but the page also opens the visitor's mail app so it reaches the inbox.
+  return res.status(200).json({ ok: true, openMailApp: !!(apiKey && to) && !emailed });
 }

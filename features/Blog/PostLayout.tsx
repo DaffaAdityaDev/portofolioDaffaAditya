@@ -131,8 +131,8 @@ export default function PostLayoutV4({ meta, toc: initialToc, children }: PostLa
           </div>
 
           {/* Content */}
-          <div className="px-6 lg:px-20 relative z-10 grid lg:grid-cols-12 gap-12">
-             <div className={cn('lg:col-span-8 lg:col-start-3', showToc && 'xl:col-start-2')}>
+          <div className="px-6 lg:px-20 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12">
+             <div className={cn('min-w-0 lg:col-span-8 lg:col-start-3', showToc && 'xl:col-start-2')}>
                <article ref={articleRef}>
                  {children}
                </article>

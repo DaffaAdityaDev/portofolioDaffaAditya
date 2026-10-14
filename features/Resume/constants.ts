@@ -1,5 +1,8 @@
-export const RESUME_URL = 'https://drive.google.com/file/d/16bp1lgGaVHe670IO1bR7khk01h6GaXdC/preview';
-export const DOWNLOAD_URL = 'https://drive.google.com/file/d/16bp1lgGaVHe670IO1bR7khk01h6GaXdC/view?usp=sharing';
+import { RESUME_PDF } from './resumePdf';
+
+// Self-hosted PDF; the hash query busts caches whenever /cv republishes it.
+export const DOWNLOAD_URL = `${RESUME_PDF.path}?v=${RESUME_PDF.hash}`;
+export const RESUME_URL = `${DOWNLOAD_URL}#view=FitH`;
 
 export const IDENTIFICATION = {
   name: 'Daffa Aditya',

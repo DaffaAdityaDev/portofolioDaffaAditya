@@ -54,11 +54,13 @@ const escapeHtml = (value: string) =>
 export function buildBriefHtml(form: BriefFormData): string {
   const f = briefFields(form);
   const email = escapeHtml(f.email);
+  // URL-encoded, so an address like "x@y.co?bcc=…" (which the email check allows) can't add recipients or headers.
+  const mailto = `mailto:${escapeHtml(encodeURIComponent(f.email).replace('%40', '@'))}`;
   const rows = detailRows(f).map(([label, value]) => [
     label,
-    label === 'Email' ? `<a href="mailto:${email}" style="color:#dc2626">${email}</a>` : escapeHtml(value),
+    label === 'Email' ? `<a href="${mailto}" style="color:#dc2626">${email}</a>` : escapeHtml(value),
   ]);
-  const reply = `mailto:${email}?subject=${encodeURIComponent(`Re: ${buildBriefSubject(form)}`)}`;
+  const reply = `${mailto}?subject=${encodeURIComponent(`Re: ${buildBriefSubject(form)}`)}`;
   return `<!doctype html><html><body style="margin:0;padding:24px;background:#f4f4f5;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#18181b">
 <table role="presentation" width="100%" style="max-width:560px;margin:0 auto;background:#fff;border:1px solid #e4e4e7;border-collapse:collapse">
 <tr><td style="padding:20px 24px;border-bottom:1px solid #e4e4e7">
@@ -93,7 +95,8 @@ export function buildMailtoUrl(subject: string, body: string): string {
 }
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const LINK_PATTERN = /https?:\/\/|www\./gi;
+// One match per URL: "https://www.x.com" counts once, because \S+ consumes the rest of it.
+const LINK_PATTERN = /(?:https?:\/\/|www\.)\S+/gi;
 
 /** Shared by the form and the API route, so both reject the same input. Returns an error message or null. */
 export function validateBrief(form: Partial<BriefFormData>): string | null {
