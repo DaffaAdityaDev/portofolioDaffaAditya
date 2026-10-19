@@ -227,6 +227,14 @@ export interface AnimatedNumberProps {
   className?: string;
 }
 
+export interface ResultTileProps {
+  label: string;
+  value: number;
+  format: (value: number) => string;
+  hint: string;
+  accent?: boolean;
+}
+
 export interface SliderFieldProps {
   label: string;
   value: number;

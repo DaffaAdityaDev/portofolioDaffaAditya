@@ -1,8 +1,7 @@
 import React from 'react';
 import { Calculator } from 'lucide-react';
-import { cn } from '@/utils/cn';
 import type { VideoConstraints } from '@/features/Blog/posts/VideoSharing/widgets/capacity/types';
-import AnimatedNumber from '@/features/Blog/components/AnimatedNumber';
+import ResultTile from '@/features/Blog/components/ResultTile';
 import SliderField from '@/features/Blog/components/SliderField';
 import WidgetFrame from '@/features/Blog/components/WidgetFrame';
 import { CONSTRAINT_LIMITS, DAYS_PER_YEAR } from '../constants';
@@ -29,26 +28,6 @@ const CONSTRAINT_FIELDS: ConstraintField[] = [
   { key: 'readWriteRatio', label: 'Views per upload', format: (v) => `${v} : 1` },
   { key: 'avgVideoSizeMb', label: 'Average video size', format: (v) => `${v} MB` },
 ];
-
-interface ResultTileProps {
-  label: string;
-  value: number;
-  format: (value: number) => string;
-  hint: string;
-  accent?: boolean;
-}
-
-const ResultTile: React.FC<ResultTileProps> = ({ label, value, format, hint, accent }) => (
-  <div className="border border-neutral-800 bg-[#0a0a0a] p-3">
-    <div className="font-mono text-[11px] uppercase tracking-wider text-neutral-500">{label}</div>
-    <AnimatedNumber
-      value={value}
-      format={format}
-      className={cn('block text-2xl font-black tabular-nums', accent ? 'text-red-500' : 'text-white')}
-    />
-    <div className="mt-1 text-xs leading-snug text-neutral-500">{hint}</div>
-  </div>
-);
 
 /** Sliders for the product constraints, with the capacity numbers they imply. */
 const CapacityEstimator: React.FC = () => {
