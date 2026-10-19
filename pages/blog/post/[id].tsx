@@ -12,6 +12,7 @@ const MAPPED_POSTS: Record<string, React.ComponentType> = {
   'SSGInDetail': dynamic(() => import('@/features/Blog/posts/SSGInDetail')),
   'videoSharing': dynamic(() => import('@/features/Blog/posts/VideoSharing')),
   'nextjs14Improvement': dynamic(() => import('@/features/Blog/posts/Nextjs14Improvement')),
+  'echoAgentService': dynamic(() => import('@/features/Blog/posts/EchoAgentService')),
 };
 
 // The same modules for getStaticProps, which renders each post once to build its table of
@@ -23,6 +24,7 @@ const POST_MODULES: Record<string, () => Promise<{ default: React.ComponentType 
   'SSGInDetail': () => import('@/features/Blog/posts/SSGInDetail'),
   'videoSharing': () => import('@/features/Blog/posts/VideoSharing'),
   'nextjs14Improvement': () => import('@/features/Blog/posts/Nextjs14Improvement'),
+  'echoAgentService': () => import('@/features/Blog/posts/EchoAgentService'),
 };
 
 interface PostProps {

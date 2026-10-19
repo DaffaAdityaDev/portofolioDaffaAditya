@@ -49,6 +49,18 @@ export const POSTS_DATA: PostData[] = [
     production: true
   },
   {
+    id: "echoAgentService",
+    category: "system-design",
+    title: "Scaling AI Agents as a Service",
+    date: "2026-10-15",
+    timeToRead: 30,
+    description: "Design a multi-agent service that scales by adding boxes, stays fast where users feel it, and stays easy to change: a gateway and stateless workers, sub-agents with limits, prompt caching, guardrails and registries.",
+    image: "/image/blogs/echoAgentService/banner.webp",
+    heroImage: "/image/blogs/echoAgentService/hero.webp",
+    ogImage: "/image/blogs/echoAgentService/og.jpg",
+    production: true
+  },
+  {
     id: "videoSharing",
     category: "system-design",
     title: "Designing a Distributed Video Streaming System",
