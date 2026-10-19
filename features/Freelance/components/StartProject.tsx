@@ -3,8 +3,17 @@ import dynamic from 'next/dynamic';
 import { ArrowUpRight, CalendarDays, FileText, Mail, type LucideIcon } from 'lucide-react';
 import SpotlightButton from '@/components/ui/SpotlightButton';
 import { useFreelanceStore, type StartMode } from '@/store/useFreelanceStore';
-import { AVAILABILITY, CAL_LINK, CALL_WINDOW, CONTACT_EMAIL, LINKEDIN_URL, REPLY_WINDOW } from '../constants/content';
+import {
+  AVAILABILITY,
+  CAL_LINK,
+  CALL_TIME,
+  CALL_WINDOW,
+  CONTACT_EMAIL,
+  LINKEDIN_URL,
+  REPLY_WINDOW,
+} from '../constants/content';
 import BriefForm from './BriefForm';
+import LocalTimeLink from './LocalTimeLink';
 import { Section, SectionHeader } from './SectionHeader';
 import StatusBadge from './StatusBadge';
 
@@ -18,7 +27,7 @@ const MODES: readonly { id: StartMode; label: string; icon: LucideIcon }[] = [
 
 const NEXT_STEPS = [
   { title: 'Send the brief', body: 'What you need, your budget and your timeline. Two minutes.' },
-  { title: 'I reply within 24 hours', body: 'With questions, and a time for a free 30-minute call after 17:00 WIB.' },
+  { title: 'I reply within 24 hours', body: `With questions, and a time for a free 30-minute call after ${CALL_TIME}.` },
   { title: 'You get a proposal', body: 'Within 2-3 days: the feature list, a week-by-week plan and one fixed price.' },
 ];
 
@@ -61,6 +70,7 @@ export const StartProject: React.FC = () => {
               <div className="border-r border-neutral-800 px-5 py-4">
                 <dt className="font-mono text-[11px] uppercase tracking-widest text-neutral-500">Calls</dt>
                 <dd className="mt-1 text-white">{CALL_WINDOW}</dd>
+                <LocalTimeLink className="mt-1" />
               </div>
               <div className="px-5 py-4">
                 <dt className="font-mono text-[11px] uppercase tracking-widest text-neutral-500">Messages</dt>

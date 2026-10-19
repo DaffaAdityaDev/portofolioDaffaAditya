@@ -4,7 +4,8 @@ import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import SpotlightButton from '@/components/ui/SpotlightButton';
 import { coverStyle } from '@/features/Projects/components/CaseStudyArt/coverStyle';
-import { ABOUT_ME_DATA, AVAILABILITY, CAL_LINK, ENGAGEMENT_SPEC, HERO_COPY, PROOF_METRICS, REPLY_WINDOW } from '../constants/content';
+import { ABOUT_ME_DATA, AVAILABILITY, CAL_LINK, ENGAGEMENT_SPEC, HERO_COPY, PROOF_POINTS, REPLY_WINDOW } from '../constants/content';
+import LocalTimeLink from './LocalTimeLink';
 import StatusBadge from './StatusBadge';
 import { useFreelanceStore } from '@/store/useFreelanceStore';
 
@@ -32,7 +33,7 @@ export const FreelanceHero: React.FC = () => {
           <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#0a0a0a] to-transparent" />
         </div>
 
-        <div className="relative z-10 px-4 sm:px-6 lg:px-20 pt-16 pb-20 md:pt-24 md:pb-28">
+        <div className="relative z-10 px-4 sm:px-6 lg:px-20 pt-8 pb-20 md:pt-12 md:pb-28">
           <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-12 lg:items-center">
             <div className="space-y-7 lg:col-span-7">
               <p className="font-mono text-xs font-semibold uppercase tracking-widest text-red-400">{HERO_COPY.kicker}</p>
@@ -87,6 +88,7 @@ export const FreelanceHero: React.FC = () => {
                     >
                       <dt className="font-mono text-[11px] uppercase tracking-widest text-neutral-500">{row.label}</dt>
                       <dd className="mt-1.5 text-sm font-medium leading-snug text-white">{row.value}</dd>
+                      {row.timeLink && <LocalTimeLink className="mt-1.5" />}
                     </div>
                   ))}
                 </dl>
@@ -96,22 +98,23 @@ export const FreelanceHero: React.FC = () => {
         </div>
       </section>
 
-      {/* Proof strip: two results from freelance clients, each detailed in Selected work below */}
-      <section aria-label="Results from client projects" className="border-t border-neutral-800 px-4 sm:px-6 lg:px-20">
-        <dl className="mx-auto grid max-w-7xl grid-cols-1 sm:grid-cols-2">
-          {PROOF_METRICS.map((item, i) => (
-            <div key={item.metric} className={`py-8 sm:py-10 ${i > 0 ? 'border-t border-neutral-800 sm:border-t-0 sm:border-l sm:pl-10' : ''}`}>
-              <dt className="sr-only">{item.label}</dt>
-              <dd className="flex flex-wrap items-baseline gap-x-5 gap-y-2">
-                <span className="text-5xl md:text-6xl font-black tracking-tighter text-white">{item.metric}</span>
-                <span>
-                  <span className="block text-sm text-neutral-300">{item.label}</span>
-                  <span className="mt-1 block font-mono text-[11px] uppercase tracking-widest text-neutral-500">{item.client}</span>
-                </span>
-              </dd>
-            </div>
+      {/* Proof strip: how I work and two freelance results, each result detailed in Selected work below */}
+      <section aria-label="Why work with me" className="px-4 sm:px-6 lg:px-20 py-10">
+        <ul className="mx-auto grid max-w-7xl grid-cols-1 gap-px border border-neutral-800 bg-neutral-800 sm:grid-cols-2 lg:grid-cols-4">
+          {PROOF_POINTS.map((item, i) => (
+            <li key={item.kicker} className="flex flex-col bg-[#0a0a0a] p-6 md:p-7">
+              <span className="font-mono text-[11px] uppercase tracking-widest text-red-400">
+                0{i + 1} // {item.kicker}
+              </span>
+              {item.result && <span className="mt-4 text-5xl font-black tracking-tighter text-white">{item.result.metric}</span>}
+              <p className="mt-4 font-bold leading-snug tracking-[-0.02em] text-white">{item.title}</p>
+              <p className="mt-2 text-sm leading-relaxed text-neutral-400">{item.body}</p>
+              {item.result && (
+                <span className="mt-auto pt-4 font-mono text-[11px] uppercase tracking-widest text-neutral-500">{item.result.client}</span>
+              )}
+            </li>
           ))}
-        </dl>
+        </ul>
       </section>
     </>
   );

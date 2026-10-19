@@ -24,9 +24,16 @@ export const PAYMENT_TERMS = '50% to start, 50% at launch';
 /** The one availability phrase, used by every status badge on the page. */
 export const AVAILABILITY = 'Open for new projects';
 
-/** When the owner is reachable: client work happens outside office hours. */
-export const CALL_WINDOW = 'After 17:00 WIB';
+/**
+ * When the owner is reachable: client work happens outside office hours.
+ * WIB is always written with its offset so clients abroad can place it.
+ */
+export const CALL_TIME = '17:00 WIB (GMT+7)';
+export const CALL_WINDOW = `After ${CALL_TIME}`;
 export const REPLY_WINDOW = 'Within 24 hours';
+
+/** Shows the current Jakarta time and its difference from the visitor's own time zone. */
+export const TIME_CONVERTER_URL = 'https://www.timeanddate.com/worldclock/indonesia/jakarta';
 
 /**
  * Cal.com event for the free 30-minute call, as "username/event", e.g. 'daffa-aditya/30min'.
@@ -42,19 +49,45 @@ export const HERO_COPY = {
 } as const;
 
 /** The terms of every engagement. This is the only place they are listed. */
-export const ENGAGEMENT_SPEC: readonly { label: string; value: string }[] = [
+export const ENGAGEMENT_SPEC: readonly { label: string; value: string; timeLink?: boolean }[] = [
   { label: 'Pricing', value: 'Fixed price in a written proposal' },
   { label: 'Payment', value: PAYMENT_TERMS },
   { label: 'Progress', value: 'A working preview every week' },
   { label: 'After launch', value: `${FIX_WINDOW_DAYS}-day bug-fix warranty` },
   { label: 'Ownership', value: 'Code, domain and accounts in your name' },
-  { label: 'Availability', value: 'Calls after 17:00 WIB, chat anytime' },
+  { label: 'Availability', value: `Calls after ${CALL_TIME}, chat anytime`, timeLink: true },
 ];
 
-/** Freelance results only, quoted from engagements.ts. */
-export const PROOF_METRICS: readonly { metric: string; label: string; client: string }[] = [
-  { metric: '< 1s', label: 'Page load on 3G and 4G', client: 'Artifyo Creative Studio' },
-  { metric: '500+', label: 'Students moved from paper books to one ledger', client: 'Aliman Bulus Boarding School' },
+/** Why hire me, in four short claims. Metrics are freelance results quoted from engagements.ts. */
+export const PROOF_POINTS: readonly {
+  kicker: string;
+  title: string;
+  body: string;
+  /** A measured freelance result and the client it was for; the two are always quoted together. */
+  result?: { metric: string; client: string };
+}[] = [
+  {
+    kicker: 'Our approach',
+    title: 'Not vibe-coded. Professionally engineered.',
+    body: 'Clean code and real engineering, built for performance, security and scale.',
+  },
+  {
+    kicker: 'Performance',
+    title: 'Page load on 3G and 4G.',
+    body: 'Speed is engineered, not assumed.',
+    result: { metric: '< 1s', client: 'Artifyo Creative Studio' },
+  },
+  {
+    kicker: 'Real-world impact',
+    title: 'Students. One digital system.',
+    body: 'Paper records replaced by one ledger.',
+    result: { metric: '500+', client: 'Aliman Bulus Boarding School' },
+  },
+  {
+    kicker: 'Ownership',
+    title: 'Your code. Your domain. Your control.',
+    body: 'Full ownership, zero lock-in.',
+  },
 ];
 
 export const SERVICES: readonly Service[] = [
@@ -202,7 +235,7 @@ export const ABOUT_ME_DATA = {
 export const FAQS: readonly FaqItem[] = [
   {
     q: 'You have a full-time job. When do you work on my project?',
-    a: 'I work on client projects outside my office hours, and calls are scheduled after 17:00 WIB (UTC+7). You can message me any time, and I reply within 24 hours.',
+    a: `I work on client projects outside my office hours, and calls are scheduled after ${CALL_TIME}. You can message me any time, and I reply within 24 hours.`,
   },
   {
     q: 'How do you price a project?',
