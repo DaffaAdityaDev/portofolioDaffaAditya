@@ -4,7 +4,9 @@ import { ArrowUpRight } from 'lucide-react';
 import { m, AnimatePresence, LayoutGroup } from 'framer-motion';
 import { experienceData, ExperienceItem } from './constants';
 import dynamic from 'next/dynamic';
-import { FADE_IN_UP_CONTAINER, FADE_IN_UP_ITEM } from '@/constant/animations';
+import Section from '@/components/ui/Section';
+import SectionHeader from '@/components/ui/SectionHeader';
+import StatusBadge from '@/components/ui/StatusBadge';
 
 // Only needed once a row is opened, so its code loads on demand.
 const loadExperienceMorphModal = () => import('./components/ExperienceMorphModal');
@@ -15,42 +17,27 @@ const Experience = () => {
 
   return (
     <LayoutGroup id="experience-group">
-      <m.section 
-        id="experience-section"
-        variants={FADE_IN_UP_CONTAINER}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-        className="relative py-10 md:py-20 px-4 sm:px-6 lg:px-20 border-t border-zinc-800 scroll-mt-20"
-      >
-        <div className="relative z-20 max-w-7xl mx-auto">
-          {/* Section Header matching Projects and TechStack */}
-          <m.div 
-            variants={FADE_IN_UP_ITEM} 
-            className="flex flex-col md:flex-row md:items-end justify-between mb-6 md:mb-12 pb-3 md:pb-4 border-b border-zinc-800 gap-4"
-          >
-            <div>
-              <div className="text-xs font-mono text-zinc-500 mb-1 tracking-widest uppercase">
-                [ 02 // CAREER ]
-              </div>
-              <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight">
-                Experience
-              </h2>
-            </div>
-            <p className="max-w-md text-zinc-400 font-mono text-xs md:text-sm leading-relaxed">
-              Where I have worked, newest first. Open a row for details, or read the case study.
-            </p>
-          </m.div>
+      <Section id="experience-section" labelledBy="experience-title" containerClassName="z-20">
+        {/* Scroll reveals are CSS (globals.css .reveal): visible by default, so the static HTML never hides. */}
+        <div className="reveal">
+          <SectionHeader
+            id="experience-title"
+            index="02"
+            label="CAREER"
+            title="Experience"
+            description="Where I have worked, newest first. Open a row for details, or read the case study."
+          />
+        </div>
 
-          {/* Experience Table Rows */}
-          <div className="divide-y divide-zinc-800/80 border-b border-zinc-800/80">
-            {experienceData.map((exp, idx) => {
-              const isCurrent = exp.year.toLowerCase().includes('now');
+        {/* Experience Table Rows */}
+        <div className="divide-y divide-border border-b border-border">
+          {experienceData.map((exp, idx) => {
+            const isCurrent = exp.year.toLowerCase().includes('now');
 
-              return (
+            return (
+              // The reveal sits on a wrapper so its animation never touches the morphing row's styles.
+              <div key={idx} className="reveal">
                 <m.div
-                  key={idx}
-                  variants={FADE_IN_UP_ITEM}
                   layoutId={`exp-card-${idx}`}
                   // Warm the modal chunk before the click so the first open still morphs straight away.
                   onPointerEnter={() => void loadExperienceMorphModal()}
@@ -65,17 +52,14 @@ const Experience = () => {
                   tabIndex={0}
                   role="button"
                   aria-label={`View details for ${exp.role} at ${exp.company}`}
-                  className="group relative flex flex-col md:flex-row md:items-center justify-between py-6 px-4 md:px-6 -mx-4 md:-mx-6 rounded-2xl hover:bg-zinc-900/40 active:bg-zinc-900/60 transition-all duration-300 cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-red-500/50"
+                  className="group relative flex flex-col md:flex-row md:items-center justify-between py-6 px-4 md:px-6 -mx-4 md:-mx-6 rounded-lg hover:bg-neutral-900/40 active:bg-neutral-900/60 transition-colors duration-300 cursor-pointer"
                 >
                   {/* Left Column: Timeline & System Status Badge */}
                   <div className="flex items-center gap-3 w-full md:w-56 shrink-0 mb-3 md:mb-0">
                     {isCurrent ? (
-                      <span className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-900/20 border border-emerald-500/30 text-[11px] font-mono font-bold text-emerald-400 tracking-wider">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                        PRESENT
-                      </span>
+                      <StatusBadge label="Present" className="font-bold" />
                     ) : (
-                      <span className="text-xs font-mono text-zinc-400 font-medium tracking-wide">
+                      <span className="text-xs font-mono text-muted-foreground font-medium tracking-wide">
                         {exp.year}
                       </span>
                     )}
@@ -84,15 +68,15 @@ const Experience = () => {
                   {/* Center Column: Role, Company & Summary */}
                   <div className="flex-1 md:pr-8">
                     <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-3">
-                      <h3 className="text-lg md:text-xl font-black text-white uppercase tracking-tight group-hover:text-red-500 group-hover:translate-x-1 transition-all duration-200">
+                      <h3 className="text-lg md:text-xl font-black text-white uppercase tracking-tight group-hover:text-accent-brand group-hover:translate-x-1 transition-all duration-200">
                         {exp.role}
                       </h3>
-                      <span className="text-sm font-mono text-zinc-400">
+                      <span className="text-sm font-mono text-muted-foreground">
                         @{exp.company}
                       </span>
                     </div>
 
-                    <p className="text-xs md:text-sm text-zinc-400 font-sans leading-relaxed mt-2 line-clamp-2 group-hover:text-zinc-300 transition-colors">
+                    <p className="text-xs md:text-sm text-muted-foreground font-sans leading-relaxed mt-2 line-clamp-2 group-hover:text-neutral-300 transition-colors">
                       {exp.description}
                     </p>
 
@@ -102,7 +86,7 @@ const Experience = () => {
                         // The row opens the detail modal; the link goes to the page instead.
                         onClick={(e) => e.stopPropagation()}
                         onKeyDown={(e) => e.stopPropagation()}
-                        className="inline-flex items-center gap-1 mt-2 text-xs font-mono text-zinc-400 hover:text-red-400 underline-offset-4 hover:underline transition-colors"
+                        className="inline-flex items-center gap-1 mt-2 text-xs font-mono text-muted-foreground hover:text-accent-brand-hover underline-offset-4 hover:underline transition-colors"
                       >
                         Case study <ArrowUpRight size={12} aria-hidden="true" />
                       </Link>
@@ -111,20 +95,20 @@ const Experience = () => {
 
                   {/* Right Column: Action Cue */}
                   <div className="flex items-center gap-3 mt-4 md:mt-0 shrink-0 self-end md:self-center">
-                    <span className="text-xs font-mono text-zinc-500 group-hover:text-zinc-300 transition-colors hidden sm:inline">
+                    <span className="text-xs font-mono text-neutral-500 group-hover:text-neutral-300 transition-colors hidden sm:inline">
                       View Details
                     </span>
-                    <div className="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 group-hover:border-zinc-600 group-hover:bg-zinc-800 flex items-center justify-center transition-all duration-200 shadow-sm">
+                    <div className="w-8 h-8 rounded-full bg-neutral-900 border border-border group-hover:border-neutral-600 group-hover:bg-neutral-800 flex items-center justify-center transition-all duration-200 shadow-sm">
                       <ArrowUpRight 
                         size={14} 
-                        className="text-zinc-400 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" 
+                        className="text-muted-foreground group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" 
                       />
                     </div>
                   </div>
                 </m.div>
-              );
-            })}
-          </div>
+              </div>
+            );
+          })}
         </div>
 
         {/* Modal Morph Detail */}
@@ -137,10 +121,9 @@ const Experience = () => {
             />
           )}
         </AnimatePresence>
-      </m.section>
+      </Section>
     </LayoutGroup>
   );
 };
 
 export default Experience;
-export { Experience };

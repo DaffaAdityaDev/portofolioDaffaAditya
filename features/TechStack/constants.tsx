@@ -41,13 +41,13 @@ export const diagnosticStack: TechModule[] = [
     pillars: [
       { label: 'MAIN STACK', value: 'Next.js, React, TypeScript' },
       { label: 'DATA', value: 'TanStack Query, Zustand' },
-      { label: 'WHERE', value: 'Run System, Ombudsman RI, freelance' },
+      { label: 'WHERE', value: 'PNM, Run System, Ombudsman RI, freelance' },
     ],
     processes: [
       {
         name: 'React',
         roleLabel: 'UI',
-        role: 'Used at Run System and on the Ombudsman RI inventory system.',
+        role: 'Used at PNM, at Run System and on the Ombudsman RI office and inventory system.',
         usage: 'project',
         patterns: ['Custom Hooks', 'Memoization', 'Component Composition'],
       },
@@ -127,7 +127,7 @@ export const diagnosticStack: TechModule[] = [
     pillars: [
       { label: 'MAIN STACK', value: 'Laravel, Node.js, PostgreSQL' },
       { label: 'DATA', value: 'Relational schemas, transactions' },
-      { label: 'WHERE', value: 'QQTech, Ombudsman RI, Aliman Bulus' },
+      { label: 'WHERE', value: 'PNM, QQTech, Ombudsman RI, Aliman Bulus' },
     ],
     processes: [
       {
@@ -173,6 +173,13 @@ export const diagnosticStack: TechModule[] = [
         patterns: ['Goroutines & Channels', 'Standard Library'],
       },
       {
+        name: 'Fiber',
+        roleLabel: 'Go Web',
+        role: 'Fast REST APIs in Go with Express-style routing and middleware.',
+        usage: 'familiar',
+        patterns: ['REST API', 'Middleware'],
+      },
+      {
         name: 'Kafka',
         roleLabel: 'Messaging',
         role: 'Event streaming between services with topics and consumer groups.',
@@ -215,11 +222,39 @@ export const diagnosticStack: TechModule[] = [
         patterns: ['Schema Migrations', 'Typed Queries'],
       },
       {
-        name: 'BullMQ',
-        roleLabel: 'Job Queues',
-        role: 'Redis-backed background jobs with retries.',
+        name: 'CodeIgniter',
+        roleLabel: 'Backend',
+        role: 'The services behind the PNM internal systems I modernize with React and Next.js.',
+        usage: 'project',
+        patterns: ['MVC', 'REST API'],
+      },
+      {
+        name: 'SQL Server',
+        roleLabel: 'Database',
+        role: 'The database behind the PNM internal systems.',
+        usage: 'project',
+        patterns: ['Relational Schemas', 'T-SQL'],
+      },
+      {
+        name: 'MySQL',
+        roleLabel: 'Database',
+        role: 'The database of the Ombudsman RI office and inventory system.',
+        usage: 'project',
+        patterns: ['Relational Schemas', 'SQL Queries'],
+      },
+      {
+        name: 'SQLite',
+        roleLabel: 'Embedded DB',
+        role: 'File-based database for local apps, prototypes and tests.',
         usage: 'familiar',
-        patterns: ['Background Jobs', 'Retries'],
+        patterns: ['Embedded Storage', 'Zero Config'],
+      },
+      {
+        name: 'Python',
+        roleLabel: 'Scripting',
+        role: 'Scripts and small services for automation and data tasks.',
+        usage: 'familiar',
+        patterns: ['Scripting', 'Automation'],
       },
     ],
   },
@@ -228,8 +263,8 @@ export const diagnosticStack: TechModule[] = [
     name: 'MOBILE & DESKTOP',
     headline: 'Mobile and Desktop',
     description:
-      'I built Recyclops as a native Android app in Kotlin with Firebase, with offline sync. I have also worked with React Native, Expo, Electron and Tauri.',
-    status: 'SIDE PROJECT',
+      'I built Recyclops, my Bangkit Academy team capstone, as a native Android app in Kotlin with Firebase, ML waste classification and offline sync. I have also worked with React Native, Expo, Electron and Tauri.',
+    status: 'USED IN PROJECTS',
     icon: <TabletSmartphone size={18} />,
     pillars: [
       { label: 'NATIVE', value: 'Android (Kotlin)' },
@@ -286,6 +321,13 @@ export const diagnosticStack: TechModule[] = [
         usage: 'familiar',
         patterns: ['Rust Backend', 'Small Binaries'],
       },
+      {
+        name: 'Jetpack Compose',
+        roleLabel: 'Android UI',
+        role: 'Declarative Android screens built from composables.',
+        usage: 'familiar',
+        patterns: ['Composables', 'State Hoisting'],
+      },
     ],
   },
   {
@@ -299,7 +341,7 @@ export const diagnosticStack: TechModule[] = [
     pillars: [
       { label: 'CONTAINERS', value: 'Docker' },
       { label: 'CLOUD', value: 'AWS, GCP, Cloudflare' },
-      { label: 'WHERE', value: 'Ombudsman RI, Aliman Bulus' },
+      { label: 'WHERE', value: 'PNM, Ombudsman RI, Aliman Bulus' },
     ],
     processes: [
       {
@@ -343,6 +385,48 @@ export const diagnosticStack: TechModule[] = [
         role: 'Exception tracking and alerts in production apps.',
         usage: 'familiar',
         patterns: ['Stack Traces', 'Alerts'],
+      },
+      {
+        name: 'Playwright',
+        roleLabel: 'E2E Tests',
+        role: 'End-to-end tests at PNM that run on every merge request.',
+        usage: 'project',
+        patterns: ['E2E Tests', 'Merge Request Checks'],
+      },
+      {
+        name: 'GitLab CI & Jenkins',
+        roleLabel: 'Pipelines',
+        role: 'The PNM CI pipelines that run the Playwright suite before release.',
+        usage: 'project',
+        patterns: ['Pipelines', 'Regression Gates'],
+      },
+      {
+        name: 'Git & GitHub',
+        roleLabel: 'Version Control',
+        role: 'Branching, pull requests and code review on every project.',
+        usage: 'familiar',
+        patterns: ['Branching', 'Pull Requests'],
+      },
+      {
+        name: 'Vercel',
+        roleLabel: 'Hosting',
+        role: 'Hosting and preview deploys for Next.js apps.',
+        usage: 'familiar',
+        patterns: ['Preview Deploys', 'Edge Network'],
+      },
+      {
+        name: 'Grafana',
+        roleLabel: 'Dashboards',
+        role: 'Dashboards and alerts for service metrics.',
+        usage: 'familiar',
+        patterns: ['Dashboards', 'Alerts'],
+      },
+      {
+        name: 'Microservices',
+        roleLabel: 'Architecture',
+        role: 'Splitting a system into services that talk over APIs and queues.',
+        usage: 'familiar',
+        patterns: ['Service Boundaries', 'Async Messaging'],
       },
     ],
   },
@@ -389,11 +473,11 @@ export const diagnosticStack: TechModule[] = [
         patterns: ['Component Isolation', 'Docs'],
       },
       {
-        name: 'Adobe Creative Suite',
+        name: 'Photoshop & Adobe XD',
         roleLabel: 'Assets',
-        role: 'Vector assets and SVG exports.',
+        role: 'Image editing, vector assets, SVG exports and quick UI mockups.',
         usage: 'familiar',
-        patterns: ['Vector Graphics', 'SVG Export'],
+        patterns: ['Vector Graphics', 'SVG Export', 'Mockups'],
       },
     ],
   },

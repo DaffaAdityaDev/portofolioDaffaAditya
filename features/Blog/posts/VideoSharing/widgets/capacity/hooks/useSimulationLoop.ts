@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useVideoDesignStore } from '@/features/Blog/posts/VideoSharing/widgets/capacity/store';
+import { useVideoDesignStore } from '../store';
 import { SIM } from '../constants';
 
 /** Advances the traffic simulation on an interval while `isActive` is true. */

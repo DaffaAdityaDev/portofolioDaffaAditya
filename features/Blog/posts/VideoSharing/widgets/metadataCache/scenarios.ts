@@ -4,7 +4,7 @@ import type {
   CacheNodeId,
   CacheScenarioId,
   CacheStep,
-} from '@/features/Blog/posts/VideoSharing/widgets/metadataCache/types';
+} from './types';
 
 const step = (
   id: string,

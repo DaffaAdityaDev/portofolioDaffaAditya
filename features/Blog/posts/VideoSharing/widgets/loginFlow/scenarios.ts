@@ -1,5 +1,5 @@
 import type { FlowScenario } from '@/features/Blog/flow/types';
-import type { LoginScenarioId, LoginStep } from '@/features/Blog/posts/VideoSharing/widgets/loginFlow/types';
+import type { LoginScenarioId, LoginStep } from './types';
 import { ACCESS_TOKEN_MINUTES, LOGIN_ATTEMPT_LIMIT, REFRESH_TOKEN_DAYS } from './constants';
 
 const SEND_CREDENTIALS: LoginStep = {

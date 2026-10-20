@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useVideoDesignStore } from '@/features/Blog/posts/VideoSharing/widgets/capacity/store';
+import { useVideoDesignStore } from '../store';
 import { calculateEstimates } from '../utils/simulation';
 
 /*

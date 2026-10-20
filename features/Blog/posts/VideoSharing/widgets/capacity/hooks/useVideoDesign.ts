@@ -1,4 +1,4 @@
-import { useVideoDesignStore } from '@/features/Blog/posts/VideoSharing/widgets/capacity/store';
+import { useVideoDesignStore } from '../store';
 import { deriveDesign } from '../utils/simulation';
 
 /**

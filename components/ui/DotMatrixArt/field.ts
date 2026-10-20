@@ -17,8 +17,6 @@ export type DotMatrixImageFit = 'blend' | 'trace';
 /** Five colours, level 0 (background) to level 4 (brightest). */
 export type DotMatrixRamp = [string, string, string, string, string];
 
-export const LEVELS = 5;
-
 /** 4x4 ordered-dither matrix. */
 export const BAYER4: readonly (readonly number[])[] = [
   [0, 8, 2, 10],

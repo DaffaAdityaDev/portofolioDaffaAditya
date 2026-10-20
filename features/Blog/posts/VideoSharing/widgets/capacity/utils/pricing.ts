@@ -1,5 +1,5 @@
 import { clamp, lerp } from '@/utils/math';
-import type { PriceTier } from '@/features/Blog/posts/VideoSharing/widgets/capacity/types';
+import type { PriceTier } from '../types';
 
 /**
  * Average price per GB for a month of traffic under tiered pricing. Each tier

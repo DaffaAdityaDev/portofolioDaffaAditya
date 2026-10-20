@@ -1,4 +1,5 @@
-import type { DiagramEdge, DiagramNodeLayout, VideoNodeId } from '@/features/Blog/posts/VideoSharing/widgets/capacity/types';
+import type { DiagramEdge, DiagramNodeLayout, VideoNodeId } from '../types';
+import { WIDGET_COLORS } from '@/features/Blog/components/widgetStyles';
 
 export const DIAGRAM_WIDTH = 720;
 export const DIAGRAM_HEIGHT = 340;
@@ -77,6 +78,6 @@ export const CHART = {
   /** Loads above this are clipped to the top of the chart (300%). */
   maxLoad: 3,
   trafficColor: '#737373',
-  loadColor: '#ef4444',
-  thresholdColor: '#404040',
+  loadColor: WIDGET_COLORS.error,
+  thresholdColor: WIDGET_COLORS.idle,
 } as const;

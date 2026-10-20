@@ -4,7 +4,7 @@ import { cn } from '@/utils/cn';
 import AnimatedNumber from '@/features/Blog/components/AnimatedNumber';
 import WidgetFrame from '@/features/Blog/components/WidgetFrame';
 import ToggleButton from '@/features/Blog/components/ToggleButton';
-import { FLOW_METER_LABEL_CLASS } from '@/features/Blog/flow/constants';
+import { WIDGET_LABEL_CLASS } from '@/features/Blog/components/widgetStyles';
 import { CURVE_MODEL, PRESET_ORDER, SCHEDULE_PRESETS } from '../constants';
 import { useForgettingCurve } from '../hooks/useForgettingCurve';
 import ForgettingCurveChart from './ForgettingCurveChart';
@@ -25,7 +25,7 @@ const ForgettingCurveSimulator: React.FC = () => {
     <WidgetFrame title="Forgetting curve" icon={BrainCircuit}>
       <div className="flex flex-col gap-5 p-4">
         <div>
-          <div className={cn('mb-1.5', FLOW_METER_LABEL_CLASS)}>Schedule</div>
+          <div className={cn('mb-1.5', WIDGET_LABEL_CLASS)}>Schedule</div>
           <div className="flex flex-wrap gap-2" role="group" aria-label="Schedule">
             {PRESET_ORDER.map((id) => {
               const isSelected = id === activePreset;
@@ -39,7 +39,7 @@ const ForgettingCurveSimulator: React.FC = () => {
         </div>
 
         <div>
-          <div className={cn('mb-1.5', FLOW_METER_LABEL_CLASS)}>Or click the days you review</div>
+          <div className={cn('mb-1.5', WIDGET_LABEL_CLASS)}>Or click the days you review</div>
           <div className="flex flex-wrap gap-1" role="group" aria-label="Review days">
             {DAYS.map((day) => {
               const isOn = reviewDays.includes(day);
@@ -51,10 +51,10 @@ const ForgettingCurveSimulator: React.FC = () => {
                   aria-label={`Day ${day}`}
                   onClick={() => toggleDay(day)}
                   className={cn(
-                    'size-8 border font-mono text-[11px] tabular-nums transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-red-500',
+                    'size-8 rounded-lg border font-mono text-2xs tabular-nums transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-brand',
                     isOn
-                      ? 'border-red-500 bg-red-500/20 text-red-300'
-                      : 'border-neutral-800 text-neutral-500 hover:border-neutral-600 hover:text-neutral-300 ',
+                      ? 'border-accent-brand bg-accent-brand/20 text-red-300'
+                      : 'border-border text-neutral-500 hover:border-neutral-600 hover:text-neutral-300',
                   )}
                 >
                   {day}
@@ -66,7 +66,7 @@ const ForgettingCurveSimulator: React.FC = () => {
 
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
           <div>
-            <div className={cn('mb-0.5', FLOW_METER_LABEL_CLASS)}>Average recall</div>
+            <div className={cn('mb-0.5', WIDGET_LABEL_CLASS)}>Average recall</div>
             <AnimatedNumber
               value={result.averageRecall * 100}
               format={formatPercent}
@@ -74,7 +74,7 @@ const ForgettingCurveSimulator: React.FC = () => {
             />
           </div>
           <div>
-            <div className={cn('mb-0.5', FLOW_METER_LABEL_CLASS)}>Recall at day {CURVE_MODEL.days}</div>
+            <div className={cn('mb-0.5', WIDGET_LABEL_CLASS)}>Recall at day {CURVE_MODEL.days}</div>
             <AnimatedNumber
               value={result.recallAtEnd * 100}
               format={formatPercent}
@@ -82,7 +82,7 @@ const ForgettingCurveSimulator: React.FC = () => {
             />
           </div>
           <div>
-            <div className={cn('mb-0.5', FLOW_METER_LABEL_CLASS)}>Reviews</div>
+            <div className={cn('mb-0.5', WIDGET_LABEL_CLASS)}>Reviews</div>
             <AnimatedNumber
               value={reviewDays.length}
               format={formatCount}

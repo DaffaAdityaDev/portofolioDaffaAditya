@@ -1,6 +1,6 @@
 import type { FlowConfig } from '@/features/Blog/flow/types';
-import type { MapStep } from '@/features/Blog/posts/EchoAgentService/widgets/systemMap/types';
-import { useSystemMapStore } from '@/features/Blog/posts/EchoAgentService/widgets/systemMap/store';
+import type { MapStep } from './types';
+import { useSystemMapStore } from './store';
 import { MAP_EDGE_LABELS, MAP_EDGES, MAP_NODES } from './constants';
 import { FLOW_DIAGRAM_SIZE } from '@/features/Blog/flow/constants';
 import { MAP_SCENARIO_ORDER, MAP_SCENARIOS } from './scenarios';

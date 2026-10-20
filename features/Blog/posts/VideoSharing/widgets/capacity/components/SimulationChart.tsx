@@ -1,10 +1,10 @@
 import React from 'react';
 import { cn } from '@/utils/cn';
 import { clamp } from '@/utils/math';
-import type { SimSample } from '@/features/Blog/posts/VideoSharing/widgets/capacity/types';
-import { FLOW_METER_LABEL_CLASS } from '@/features/Blog/flow/constants';
+import type { SimSample } from '../types';
+import { WIDGET_LABEL_CLASS } from '@/features/Blog/components/widgetStyles';
 import { SIM } from '../constants';
-import { CHART } from '../diagram';
+import { CHART } from '../constants/diagram';
 
 const stepX = CHART.width / (SIM.historyLength - 1);
 
@@ -29,7 +29,7 @@ const SimulationChart: React.FC<{ history: SimSample[] }> = ({ history }) => {
         viewBox={`0 0 ${CHART.width} ${CHART.height}`}
         role="img"
         aria-label="Chart of traffic and of the busiest component's load over the last minute"
-        className="block h-auto w-full border border-neutral-800 bg-[#0a0a0a]"
+        className="block h-auto w-full rounded-lg border border-border bg-background"
       >
         <line
           x1={0}
@@ -59,9 +59,9 @@ const SimulationChart: React.FC<{ history: SimSample[] }> = ({ history }) => {
           </>
         )}
       </svg>
-      <figcaption className={cn('mt-1 flex gap-4', FLOW_METER_LABEL_CLASS)}>
+      <figcaption className={cn('mt-1 flex gap-4', WIDGET_LABEL_CLASS)}>
         <span>
-          <span className="text-neutral-400">&#9632;</span> Traffic
+          <span className="text-muted-foreground">&#9632;</span> Traffic
         </span>
         <span>
           <span className="text-red-500">&#9632;</span> Busiest component

@@ -1,5 +1,5 @@
 import type { FlowEdgeLabel, FlowEdgeLayout, FlowNodeLayout } from '@/features/Blog/flow/types';
-import type { ActionEdgeId, ActionNodeId } from '@/features/Blog/posts/Nextjs14Improvement/widgets/serverActionFlow/types';
+import type { ActionEdgeId, ActionNodeId } from './types';
 
 export const ACTION_NODES: Record<ActionNodeId, FlowNodeLayout> = {
   browser: { x: 10, y: 134, label: 'Browser form', caption: '<form>' },

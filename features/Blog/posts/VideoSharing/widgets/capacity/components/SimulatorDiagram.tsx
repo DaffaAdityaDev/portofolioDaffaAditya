@@ -8,7 +8,7 @@ import type {
   NodeMetric,
   VideoDesignChoices,
   VideoNodeId,
-} from '@/features/Blog/posts/VideoSharing/widgets/capacity/types';
+} from '../types';
 import { STATUS_COLORS } from '../constants';
 import {
   DIAGRAM,
@@ -19,7 +19,7 @@ import {
   NODE_IDS,
   NODE_LAYOUT,
   NODE_WIDTH,
-} from '../diagram';
+} from '../constants/diagram';
 import { FLOW_DIAGRAM } from '@/features/Blog/flow/constants';
 import { usePauseSvgOffscreen } from '@/features/Blog/flow/hooks/usePauseSvgOffscreen';
 import { useVideoDesign } from '../hooks/useVideoDesign';

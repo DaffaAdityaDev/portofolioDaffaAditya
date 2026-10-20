@@ -1,9 +1,9 @@
 import React from 'react';
-import Callout from '../../components/Callout';
-import CodeBlock from '../../components/CodeBlock';
-import Reveal from '../../components/Reveal';
-import { lazyOnView } from '../../components/LazyOnView';
-import BlogTable from '../../components/BlogTable';
+import Callout from '@/features/Blog/components/Callout';
+import CodeBlock from '@/features/Blog/components/CodeBlock';
+import Reveal from '@/features/Blog/components/Reveal';
+import { lazyOnView } from '@/features/Blog/components/LazyOnView';
+import BlogTable from '@/features/Blog/components/BlogTable';
 import ComponentTable from './widgets/architecture/components/ComponentTable';
 
 // Every widget sits below the first screen: its HTML is in the static page, its JS loads on scroll.
@@ -42,7 +42,7 @@ export default function VideoSharing() {
         <li><strong>Press Go viral</strong> at the end and see which part breaks first.</li>
       </ul>
 
-      <p>It takes about 45 minutes. The working code is in the <a href="https://github.com/DaffaAdityaDev/streaming_video.git" target="_blank" rel="noopener noreferrer">streaming_video repository on GitHub</a>.</p>
+      <p>The working code is in the <a href="https://github.com/DaffaAdityaDev/streaming_video.git" target="_blank" rel="noopener noreferrer">streaming_video repository on GitHub</a>.</p>
 
       <Reveal>
         <h2>Requirements</h2>
@@ -893,7 +893,7 @@ export default function VideoSharing() {
       </Reveal>
 
       <Reveal>
-        <h2>What we learned</h2>
+        <h2>What to keep</h2>
 
         <p>Pressing play looked simple at the start. It took a whole post to make it survive real users, real networks and real failures. Here is what to keep.</p>
 

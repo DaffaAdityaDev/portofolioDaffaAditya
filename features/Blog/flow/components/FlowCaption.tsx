@@ -10,7 +10,7 @@ const TONE_BADGE: Record<StepTone, { text: string; className: string } | null> =
 };
 
 const TONE_BORDER: Record<StepTone, string> = {
-  normal: 'border-neutral-800 ',
+  normal: 'border-border',
   error: 'border-red-500/60',
   recovery: 'border-emerald-400/60',
 };
@@ -23,18 +23,18 @@ const FlowCaption = <TStep extends FlowStep>({ flow }: { flow: FlowConfig<TStep>
 
   return (
     <div
-      className={cn('border bg-[#0a0a0a] p-3 transition-colors duration-300', TONE_BORDER[tone])}
+      className={cn('rounded-lg border bg-background p-3 transition-colors duration-300', TONE_BORDER[tone])}
       role="status"
       aria-live="polite"
     >
-      <div className="flex items-center justify-between gap-2 font-mono text-[11px] uppercase tracking-wider">
+      <div className="flex items-center justify-between gap-2 font-mono text-2xs uppercase tracking-wider">
         <span className="text-neutral-500">
           Step {stepIndex + 1} of {totalSteps}
         </span>
         {badge && <span className={badge.className}>{badge.text}</span>}
       </div>
       <div className="mt-1 font-bold text-white">{step.title}</div>
-      <div className="mt-1 text-sm leading-relaxed text-neutral-400">{step.detail}</div>
+      <div className="mt-1 text-sm leading-relaxed text-muted-foreground">{step.detail}</div>
     </div>
   );
 };

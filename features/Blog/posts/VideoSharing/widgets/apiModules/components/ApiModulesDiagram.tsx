@@ -1,11 +1,12 @@
 import React, { useId } from 'react';
-import { Boxes, X } from 'lucide-react';
+import { Boxes } from 'lucide-react';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { cn } from '@/utils/cn';
-import type { ApiModuleNodeId } from '@/features/Blog/posts/VideoSharing/widgets/apiModules/types';
 import WidgetFrame from '@/features/Blog/components/WidgetFrame';
-import { ARCHITECTURE_CATEGORIES } from '../../architecture/constants';
 import { FlowEdge, FlowEdgeLabels, FlowMarkers, FlowNode } from '@/features/Blog/flow/components/FlowParts';
+import { ARCHITECTURE_CATEGORIES } from '../../architecture/constants';
+import NodeDetailPanel from '../../shared/components/NodeDetailPanel';
+import type { ApiModuleNodeId } from '../types';
 import { API_MODULE_EDGE_LABELS, API_MODULE_EDGES, API_MODULE_NODES, API_MODULES_DIAGRAM, API_MODULES_SUMMARY } from '../constants';
 import { useApiModulesDiagram } from '../hooks/useApiModulesDiagram';
 
@@ -102,39 +103,12 @@ const ApiModulesDiagram: React.FC = () => {
           </svg>
         </div>
 
-        <div className="min-h-[96px] border border-neutral-800 bg-[#0a0a0a] p-3" role="status" aria-live="polite">
-          {diagram.selected ? (
-            <>
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <div className="font-bold text-white">{diagram.selected.name}</div>
-                  <div
-                    className="mt-0.5 font-mono text-[11px] uppercase tracking-wider"
-                    style={{ color: ARCHITECTURE_CATEGORIES[diagram.selected.category].color }}
-                  >
-                    {ARCHITECTURE_CATEGORIES[diagram.selected.category].label}
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={diagram.clearSelection}
-                  aria-label="Clear selection"
-                  className="cursor-pointer text-neutral-500 transition-colors hover:text-white"
-                >
-                  <X className="size-4" aria-hidden="true" />
-                </button>
-              </div>
-              <div className="mt-1 text-sm leading-relaxed text-neutral-400">{diagram.selected.description}</div>
-              {diagram.neighbors.length > 0 && (
-                <div className="mt-2 font-mono text-[11px] uppercase tracking-wider text-neutral-500">
-                  Talks to: {diagram.neighbors.join(', ')}
-                </div>
-              )}
-            </>
-          ) : (
-            <div className="text-sm text-neutral-500">Click a module or a store to see what it does and what it talks to.</div>
-          )}
-        </div>
+        <NodeDetailPanel
+          selected={diagram.selected}
+          neighbors={diagram.neighbors}
+          hint="Click a module or a store to see what it does and what it talks to."
+          onClear={diagram.clearSelection}
+        />
       </div>
     </WidgetFrame>
   );

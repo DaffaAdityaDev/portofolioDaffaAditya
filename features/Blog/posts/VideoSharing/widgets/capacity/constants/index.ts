@@ -5,7 +5,8 @@ import type {
   PriceTier,
   VideoConstraints,
   VideoDesignChoices,
-} from '@/features/Blog/posts/VideoSharing/widgets/capacity/types';
+} from '../types';
+import { WIDGET_COLORS } from '@/features/Blog/components/widgetStyles';
 
 export const SECONDS_PER_DAY = 86_400;
 export const SECONDS_PER_HOUR = 3_600;
@@ -140,10 +141,10 @@ export const SUCCESS_THRESHOLDS = {
 } as const;
 
 export const STATUS_COLORS: Record<NodeStatus, string> = {
-  ok: '#34d399',
+  ok: WIDGET_COLORS.recovery,
   warn: '#fbbf24',
-  critical: '#ef4444',
-  off: '#404040',
+  critical: WIDGET_COLORS.error,
+  off: WIDGET_COLORS.idle,
 };
 
 export const MAX_DISPLAY_LOAD = 9.99;

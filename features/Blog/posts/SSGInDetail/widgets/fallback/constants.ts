@@ -1,5 +1,5 @@
 import type { FlowEdgeLabel, FlowEdgeLayout, FlowNodeLayout } from '@/features/Blog/flow/types';
-import type { FallbackEdgeId, FallbackNodeId } from '@/features/Blog/posts/SSGInDetail/widgets/fallback/types';
+import type { FallbackEdgeId, FallbackNodeId } from './types';
 
 export const FALLBACK_NODES: Record<FallbackNodeId, FlowNodeLayout> = {
   visitorA: { x: 10, y: 50, label: 'Visitor A', caption: 'first to ask' },

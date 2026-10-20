@@ -1,44 +1,26 @@
 @import "tailwindcss";
-@custom-variant dark (&:is(.dark *));
+/* Design tokens. The site is dark-only, so :root holds the one palette (no light set, no
+   .dark override). Neutral grays reference Tailwind's own scale so `bg-surface-1` and friends
+   paint exactly what the hard-coded neutral-* classes did. */
 :root {
   --font-size: clamp(12px, 4.26vw, 18px);
-  --background: #ffffff;
-  --foreground: oklch(0.145 0 0);
-  --card: #ffffff;
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: #030213;
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.95 0.0058 264.53);
-  --secondary-foreground: #030213;
-  --muted: #ececf0;
-  --muted-foreground: #717182;
-  --accent: #e9ebef;
-  --accent-foreground: #030213;
-  --destructive: #d4183d;
-  --destructive-foreground: #ffffff;
-  --border: rgba(0, 0, 0, 0.1);
-  --input: transparent;
-  --input-background: #f3f3f5;
-  --switch-background: #cbced4;
+  --background: #0a0a0a;
+  --foreground: #ffffff;
+  /* Cards and tiles that sit on the page. */
+  --surface-1: #0d0d0d;
+  /* Raised chrome: modals, nav, popovers. */
+  --surface-2: #141414;
+  --muted: var(--color-neutral-800);
+  --muted-foreground: var(--color-neutral-400);
+  /* Default hairline, and the emphasis hairline for hovered/selected outlines. */
+  --border: var(--color-neutral-800);
+  --border-strong: var(--color-neutral-700);
+  --ring: var(--color-neutral-600);
+  --accent-brand: var(--color-red-500);
+  --accent-brand-hover: var(--color-red-400);
   --font-weight-medium: 500;
   --font-weight-normal: 400;
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: #030213;
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
 }
 
 @media (min-width: 1024px) {
@@ -47,82 +29,28 @@
   }
 }
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.145 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.145 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.985 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.396 0.141 25.723);
-  --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: oklch(0.269 0 0);
-  --input: oklch(0.269 0 0);
-  --ring: oklch(0.439 0 0);
-  --font-weight-medium: 500;
-  --font-weight-normal: 400;
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(0.269 0 0);
-  --sidebar-ring: oklch(0.439 0 0);
+@theme {
+  /* `text-2xs` replaces the px sizes (text-[10px], text-[11px]) used for micro labels. */
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: calc(1 / 0.6875);
+  /* The site's default ease (EASE_OUT_EXPO in constant/animations.ts): `ease-out-expo`. */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
-  --color-input: var(--input);
-  --color-input-background: var(--input-background);
-  --color-switch-background: var(--switch-background);
+  --color-border-strong: var(--border-strong);
   --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
+  --color-accent-brand: var(--accent-brand);
+  --color-accent-brand-hover: var(--accent-brand-hover);
   --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
   --font-sans: var(--font-inter), sans-serif;
   --font-display: var(--font-outfit), sans-serif;
 }
@@ -136,10 +64,10 @@
     @apply bg-background text-foreground;
   }
 
-  /* Keyboard focus ring for every focusable element. In @layer base with :where() (zero
-     specificity), so any component that sets its own outline or focus-visible ring wins. */
+  /* The site's single focus style: keyboard-only (:focus-visible), 2px accent outline. In
+     @layer base with :where() (zero specificity), so a component's own outline still wins. */
   :where(a, button, input, select, textarea, summary, [tabindex], [contenteditable]):focus-visible {
-    outline: 2px solid var(--color-red-500);
+    outline: 2px solid var(--accent-brand);
     outline-offset: 2px;
   }
 
@@ -195,6 +123,14 @@
   }
 }
 
+/* Inset focus outline, for elements inside an overflow-hidden box that would clip the global one.
+   A utility, so it lands in a later layer than the base :focus-visible rule and its offset wins. */
+@utility focus-inset {
+  &:focus-visible {
+    outline-offset: -2px;
+  }
+}
+
 /* Marquee Animations */
 @keyframes marquee {
   0% {
@@ -242,7 +178,7 @@
   height: calc(100% + 2px);
   pointer-events: none;
   overflow: visible;
-  border-radius: 0.75rem;
+  border-radius: var(--radius);
   z-index: 20;
 }
 
@@ -251,8 +187,8 @@
   stroke: #ffffff;
   stroke-opacity: 0.85;
   stroke-width: 1.5px;
-  rx: 12px;
-  ry: 12px;
+  rx: var(--radius);
+  ry: var(--radius);
   stroke-dasharray: 100;
   stroke-dashoffset: 100;
   transition: stroke-dashoffset 0.7s cubic-bezier(0.4, 0, 0.2, 1);
@@ -282,15 +218,15 @@
 /* Static Blog Typography mapping (Replaces MDX components) */
 .blog-content-static {
   h1 {
-    @apply text-3xl font-black uppercase tracking-tight mt-12 mb-6 text-white;
+    @apply text-3xl font-black uppercase tracking-tight mt-12 mb-6 text-foreground;
   }
 
   h2 {
-    @apply text-2xl font-bold uppercase tracking-tight mt-10 mb-5 text-white border-l-2 border-red-500 pl-4;
+    @apply text-2xl font-bold uppercase tracking-tight mt-10 mb-5 text-foreground border-l-2 border-accent-brand pl-4;
   }
 
   h3 {
-    @apply text-xl font-bold uppercase mt-8 mb-4 text-white;
+    @apply text-xl font-bold uppercase mt-8 mb-4 text-foreground;
   }
 
   /* Jumps from the table of contents land below the fixed navbar. */
@@ -300,23 +236,23 @@
   }
 
   p {
-    @apply mb-6 text-neutral-400 leading-relaxed max-w-3xl;
+    @apply mb-6 text-muted-foreground leading-relaxed max-w-3xl;
   }
 
   ul {
-    @apply list-disc list-inside mb-6 text-neutral-400 space-y-2;
+    @apply list-disc list-inside mb-6 text-muted-foreground space-y-2;
   }
 
   ol {
-    @apply list-decimal list-inside mb-6 text-neutral-400 space-y-2;
+    @apply list-decimal list-inside mb-6 text-muted-foreground space-y-2;
   }
 
   a {
-    @apply text-red-500 hover:text-red-400 uppercase font-mono text-sm border-b border-red-500/50 pb-0.5 transition-colors;
+    @apply text-accent-brand hover:text-accent-brand-hover uppercase font-mono text-sm border-b border-accent-brand/50 pb-0.5 transition-colors;
   }
 
   blockquote {
-    @apply border-l-4 border-neutral-700 pl-6 italic my-8 text-neutral-500 font-serif text-lg;
+    @apply border-l-4 border-border-strong pl-6 italic my-8 text-neutral-500 font-serif text-lg;
   }
 
   table {
@@ -324,15 +260,15 @@
 
     th,
     td {
-      @apply p-3 border border-neutral-800;
+      @apply p-3 border border-border;
     }
 
     th {
-      @apply bg-neutral-900 font-bold text-white uppercase tracking-wider text-xs;
+      @apply bg-neutral-900 font-bold text-foreground uppercase tracking-wider text-xs;
     }
 
     td {
-      @apply text-neutral-400;
+      @apply text-muted-foreground;
     }
   }
 }
@@ -483,88 +419,60 @@
   }
 }
 
-/* CDN price slider: a native range whose track and thumb geometry we control,
-   so the provider labels above it line up exactly. --fill is set inline. */
-.checkpoint-range {
-  display: block;
-  width: 100%;
-  height: 1.5rem;
-  margin: 0;
-  background: transparent;
-  cursor: pointer;
-  appearance: none;
-
-  &::-webkit-slider-runnable-track {
-    height: 4px;
-    border-radius: 9999px;
-    background: linear-gradient(to right, #ef4444 var(--fill), #262626 var(--fill));
-  }
-
-  &::-moz-range-track {
-    height: 4px;
-    border-radius: 9999px;
-    background: linear-gradient(to right, #ef4444 var(--fill), #262626 var(--fill));
-  }
-
-  &::-webkit-slider-thumb {
-    box-sizing: border-box;
-    width: var(--thumb);
-    height: var(--thumb);
-    margin-top: -6px;
-    border: 2px solid #0d0d0d;
-    border-radius: 9999px;
-    background: #ef4444;
-    box-shadow: 0 0 0 1px #ef4444;
-    appearance: none;
-  }
-
-  &::-moz-range-thumb {
-    box-sizing: border-box;
-    width: var(--thumb);
-    height: var(--thumb);
-    border: 2px solid #0d0d0d;
-    border-radius: 9999px;
-    background: #ef4444;
-    box-shadow: 0 0 0 1px #ef4444;
-  }
-
-  &:focus {
-    outline: none;
-  }
-
-  &:focus-visible::-webkit-slider-thumb {
-    box-shadow: 0 0 0 1px #ef4444, 0 0 0 4px rgb(239 68 68 / 0.35);
-  }
-
-  &:focus-visible::-moz-range-thumb {
-    box-shadow: 0 0 0 1px #ef4444, 0 0 0 4px rgb(239 68 68 / 0.35);
-  }
-}
-
-/* Blog scroll reveal (features/Blog/components/Reveal.tsx).
+/* Scroll reveal: blog posts (features/Blog/components/Reveal.tsx), /resume and the home sections.
    Visible by default: only browsers with scroll-driven animations, and readers who
-   allow motion, get the short fade and lift as the block's top enters the viewport. */
+   allow motion, get the short fade and lift as the block's top enters the viewport.
+   Only a `from` keyframe with backwards fill: once the block has entered, the animation
+   lets go, and `translate` / `scale` compose with framer's inline transform (hover lifts),
+   so the two never fight. */
 @keyframes reveal-in {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    translate: 0 12px;
   }
+}
 
-  to {
-    opacity: 1;
-    transform: none;
+/* Divider that draws its width from the left. */
+@keyframes reveal-draw {
+  from {
+    scale: 0 1;
   }
+}
+
+/* Children of .reveal-stagger reveal one after another when they enter together (a grid row):
+   each later child starts a little further into the scroll. */
+.reveal-stagger > :nth-child(2) {
+  --reveal-delay: 32px;
+}
+
+.reveal-stagger > :nth-child(3) {
+  --reveal-delay: 64px;
+}
+
+.reveal-stagger > :nth-child(n + 4) {
+  --reveal-delay: 96px;
+}
+
+.reveal-draw {
+  transform-origin: left;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
-    .reveal {
+    .reveal,
+    .reveal-stagger > *,
+    .reveal-draw {
       /* Longhands, not the shorthand: the shorthand resets animation-timeline. */
       animation-name: reveal-in;
-      animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-      animation-fill-mode: both;
+      animation-timing-function: var(--ease-out-expo);
+      animation-fill-mode: backwards;
       animation-timeline: view();
-      animation-range: entry 0% entry 160px;
+      animation-range: entry var(--reveal-delay, 0px) entry calc(160px + var(--reveal-delay, 0px));
+    }
+
+    .reveal-draw {
+      animation-name: reveal-draw;
+      --reveal-delay: 48px;
     }
   }
 }

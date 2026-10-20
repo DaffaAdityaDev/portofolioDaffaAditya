@@ -1,9 +1,8 @@
 /**
- * Calculates the duration between a start date and the current time.
+ * Calculates the duration between a start date and `now` (the current time by default).
  * Returns the duration formatted as Years, Months, Days, Hours, Minutes, and Seconds.
  */
-export const calculateDuration = (startDate: Date) => {
-  const now = new Date();
+export const calculateDuration = (startDate: Date, now: Date = new Date()) => {
   const diff = now.getTime() - startDate.getTime();
 
   const seconds = Math.floor(diff / 1000);

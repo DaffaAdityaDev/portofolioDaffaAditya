@@ -1,6 +1,6 @@
 import type { FlowConfig } from '@/features/Blog/flow/types';
-import type { StatusStep } from '@/features/Blog/posts/VideoSharing/widgets/videoStatus/types';
-import { useVideoStatusStore } from '@/features/Blog/posts/VideoSharing/widgets/videoStatus/store';
+import type { StatusStep } from './types';
+import { useVideoStatusStore } from './store';
 import { STATUS_EDGE_LABELS, STATUS_EDGES, STATUS_NODES } from './constants';
 import { FLOW_DIAGRAM_SIZE } from '@/features/Blog/flow/constants';
 import { STATUS_SCENARIO_ORDER, STATUS_SCENARIOS } from './scenarios';

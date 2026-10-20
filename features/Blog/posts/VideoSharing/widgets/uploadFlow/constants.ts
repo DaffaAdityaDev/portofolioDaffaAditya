@@ -1,5 +1,5 @@
 import type { FlowEdgeLabel, FlowEdgeLayout, FlowNodeLayout } from '@/features/Blog/flow/types';
-import type { UploadEdgeId, UploadNodeId, VideoStatus } from '@/features/Blog/posts/VideoSharing/widgets/uploadFlow/types';
+import type { UploadEdgeId, UploadNodeId, VideoStatus } from './types';
 
 export const UPLOAD_CHUNKS_TOTAL = 8;
 export const UPLOAD_SEGMENTS_TOTAL = 6;

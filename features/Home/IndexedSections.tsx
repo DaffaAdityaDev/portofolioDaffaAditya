@@ -3,6 +3,7 @@ import AboutMe from '@/features/AboutMe';
 import Experience from '@/features/Experience';
 import Projects from '@/features/Projects';
 import TechStack from '@/features/TechStack';
+import LayoutMotion from '@/components/LayoutMotion';
 
 interface IndexedSectionsProps {
   /** Runs once the client copy has replaced the static markup (the old section nodes are gone by then). */
@@ -21,13 +22,14 @@ const IndexedSections: React.FC<IndexedSectionsProps> = ({ onMount }) => {
     onMount?.();
   }, [onMount]);
 
+  // Experience, Projects and TechStack morph cards into modals (layoutId) and slide tab pills.
   return (
-    <>
+    <LayoutMotion>
       <AboutMe />
       <Experience />
       <Projects />
       <TechStack />
-    </>
+    </LayoutMotion>
   );
 };
 

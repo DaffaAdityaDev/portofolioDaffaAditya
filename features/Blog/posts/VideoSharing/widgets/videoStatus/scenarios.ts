@@ -4,7 +4,7 @@ import type {
   StatusNodeId,
   StatusScenarioId,
   StatusStep,
-} from '@/features/Blog/posts/VideoSharing/widgets/videoStatus/types';
+} from './types';
 
 const step = (
   id: string,

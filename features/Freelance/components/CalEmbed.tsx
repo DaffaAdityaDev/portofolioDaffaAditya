@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { CAL_LINK } from '../constants/content';
-import { useFreelanceStore } from '@/store/useFreelanceStore';
+import { useFreelanceStore } from '../store';
 
 const EMBED_SRC = 'https://app.cal.com/embed/embed.js';
 const NAMESPACE = 'freelance-call';
@@ -58,7 +58,7 @@ function cal(): CalApi {
  * The Cal.com booking calendar, inline and in the site's dark theme. Every booking gets a Google Meet
  * room from the Cal.com event type. Name and email typed into the brief are carried over.
  */
-export const CalEmbed: React.FC = () => {
+const CalEmbed: React.FC = () => {
   const container = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

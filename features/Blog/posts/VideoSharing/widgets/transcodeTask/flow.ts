@@ -1,6 +1,6 @@
 import type { FlowConfig } from '@/features/Blog/flow/types';
-import type { TaskStep } from '@/features/Blog/posts/VideoSharing/widgets/transcodeTask/types';
-import { useTranscodeTaskStore } from '@/features/Blog/posts/VideoSharing/widgets/transcodeTask/store';
+import type { TaskStep } from './types';
+import { useTranscodeTaskStore } from './store';
 import { TASK_EDGE_LABELS, TASK_EDGES, TASK_NODES } from './constants';
 import { FLOW_DIAGRAM_SIZE } from '@/features/Blog/flow/constants';
 import { TASK_SCENARIO_ORDER, TASK_SCENARIOS } from './scenarios';

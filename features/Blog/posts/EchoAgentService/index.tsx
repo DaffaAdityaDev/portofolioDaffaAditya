@@ -1,9 +1,9 @@
 import React from 'react';
-import Callout from '../../components/Callout';
-import CodeBlock from '../../components/CodeBlock';
-import Reveal from '../../components/Reveal';
-import { lazyOnView } from '../../components/LazyOnView';
-import BlogTable from '../../components/BlogTable';
+import Callout from '@/features/Blog/components/Callout';
+import CodeBlock from '@/features/Blog/components/CodeBlock';
+import Reveal from '@/features/Blog/components/Reveal';
+import { lazyOnView } from '@/features/Blog/components/LazyOnView';
+import BlogTable from '@/features/Blog/components/BlogTable';
 
 // Every widget sits below the first screen: its HTML is in the static page, its JS loads on scroll.
 const AgentCapacityEstimator = lazyOnView(() => import('./widgets/capacity/components/AgentCapacityEstimator'));
@@ -26,7 +26,7 @@ export default function EchoAgentService() {
         <li><strong>Follow a sub-agent</strong> from the parent&apos;s tool call to its result.</li>
       </ul>
 
-      <p>It takes about 30 minutes. The code is in the <a href="https://github.com/DaffaAdityaDev/echo" target="_blank" rel="noopener noreferrer">echo repository on GitHub</a>.</p>
+      <p>The code is in the <a href="https://github.com/DaffaAdityaDev/echo" target="_blank" rel="noopener noreferrer">echo repository on GitHub</a>.</p>
 
       <Reveal>
         <h2>Requirements</h2>
@@ -441,7 +441,7 @@ memoryGroup.Post("/episodic/recall", memoryHandler.HandleGetEpisodic)`}</CodeBlo
       </Reveal>
 
       <Reveal>
-        <h2>What we learned</h2>
+        <h2>What to keep</h2>
 
         <BlogTable>
           <thead>

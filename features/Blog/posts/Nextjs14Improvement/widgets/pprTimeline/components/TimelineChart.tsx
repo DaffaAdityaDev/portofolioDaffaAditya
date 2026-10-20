@@ -1,7 +1,7 @@
 import React from 'react';
 import { cn } from '@/utils/cn';
-import type { PartTiming, PprResponse } from '@/features/Blog/posts/Nextjs14Improvement/widgets/pprTimeline/types';
-import { FLOW_METER_LABEL_CLASS } from '@/features/Blog/flow/constants';
+import type { PartTiming, PprResponse } from '../types';
+import { WIDGET_LABEL_CLASS } from '@/features/Blog/components/widgetStyles';
 import { TIMELINE_MAX_MS, TIMELINE_TICKS } from '../constants';
 
 const percent = (ms: number): string => `${(Math.min(ms, TIMELINE_MAX_MS) / TIMELINE_MAX_MS) * 100}%`;
@@ -18,7 +18,7 @@ const ROWS: { key: 'shell' | 'cart' | 'products'; label: string }[] = [
  */
 const Row: React.FC<{ label: string; part: PartTiming; isFirstPaint: boolean }> = ({ label, part, isFirstPaint }) => (
   <div className="flex items-center gap-3">
-    <div className={cn('w-16 shrink-0', FLOW_METER_LABEL_CLASS)}>{label}</div>
+    <div className={cn('w-16 shrink-0', WIDGET_LABEL_CLASS)}>{label}</div>
     <div
       className="relative h-4 flex-1 bg-neutral-900"
       role="img"
@@ -58,7 +58,7 @@ const TimelineChart: React.FC<TimelineChartProps> = ({ response, clockMs }) => {
           {TIMELINE_TICKS.map((tick) => (
             <span
               key={tick}
-              className="absolute -translate-x-1/2 font-mono text-[9px] text-neutral-400"
+              className="absolute -translate-x-1/2 font-mono text-[9px] text-muted-foreground"
               style={{ left: percent(tick) }}
             >
               {tick === 0 ? '0' : `${tick / 1000}s`}

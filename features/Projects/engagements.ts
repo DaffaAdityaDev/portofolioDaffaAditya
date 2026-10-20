@@ -4,7 +4,8 @@ import { CASE_STUDIES_META, projectsData } from './constants';
 /**
  * Case studies, one per company or client ("engagement"). Projects at the same company share a page.
  *
- * Every figure here is owner-confirmed; other pages may only quote metrics that appear in this file.
+ * Every figure here is owner-confirmed; other pages may only quote metrics that appear in this file
+ * (roles without a case study keep their owner-confirmed figures in features/Experience/constants.ts).
  * Leave a field out when it is empty, never `field: undefined`: these objects go through getStaticProps,
  * which rejects undefined values. Sections without data do not render.
  *
@@ -36,7 +37,7 @@ export const ENGAGEMENTS: Engagement[] = [
       company: 'PT Global Sukses Solusi Tbk (Run System)',
       companyType: 'Publicly listed enterprise software company',
       role: 'Software Engineer',
-      period: '2024 - now',
+      period: 'Dec 2024 - May 2026',
       stack: ['Next.js', 'TypeScript', 'TanStack Query', 'Zustand'],
     },
     problem: [
@@ -93,7 +94,7 @@ export const ENGAGEMENTS: Engagement[] = [
       { kind: 'h', text: 'The job' },
       {
         kind: 'p',
-        text: 'I joined Run System in 2024 as a software engineer, and I work on both of its products. The first is Accounting+, a multi-service accounting SaaS for businesses. Next to the main app it ships companion apps: an e-signature app where people sign documents sent to them by email, and a POS cashier app for stores.',
+        text: 'I joined Run System in December 2024 as a software engineer and worked on both of its products until May 2026. The first is Accounting+, a multi-service accounting SaaS for businesses. Next to the main app it ships companion apps: an e-signature app where people sign documents sent to them by email, and a POS cashier app for stores.',
       },
       {
         kind: 'p',
@@ -133,7 +134,7 @@ export const ENGAGEMENTS: Engagement[] = [
     slug: 'ombudsman-ri',
     title: 'Ombudsman RI',
     summary:
-      'Software engineering intern at Ombudsman RI. I led the team that built and deployed a full inventory management system in three months, with item tracking, role-based access and audit logging.',
+      'Software engineering intern at Ombudsman RI. I led the team that built and deployed a full office and inventory management system in three months, with item tracking, role-based access and audit logging.',
     kind: 'work',
     projectSlugs: ['ombudsman-item-management'],
     image: '/image/projects/ombudsman.webp',
@@ -145,16 +146,16 @@ export const ENGAGEMENTS: Engagement[] = [
       companyType: 'State institution',
       role: 'Software Engineer (Internship)',
       period: '2023, 3 months',
-      stack: ['React', 'TypeScript', 'TanStack Query', 'Tailwind CSS', 'Laravel', 'Docker'],
+      stack: ['React', 'TypeScript', 'TanStack Query', 'Tailwind CSS', 'Laravel', 'MySQL', 'Docker'],
     },
     problem: [
-      'Ombudsman needed an inventory system to track its items, with role-based access and secure data handling.',
+      'Ombudsman needed an office and inventory management system to track its items, with role-based access and secure data handling.',
       'Records had to hold up under audit, so transaction history could not be removed by normal delete actions.',
       'The system was meant for Ombudsman\'s administrative offices across the country.',
     ],
     responsibilities: [
       'Lead the project team for three months, through to a full delivery and production deployment.',
-      'Build the inventory management system with React and Laravel.',
+      'Build the office and inventory management system with React, Laravel and MySQL.',
       'Build role-based access control.',
       'Build reporting features and database workflows.',
       'Build audit logging for government assets.',
@@ -200,7 +201,7 @@ export const ENGAGEMENTS: Engagement[] = [
       { kind: 'h', text: 'The job' },
       {
         kind: 'p',
-        text: 'In 2023 I spent three months at Ombudsman Republik Indonesia as a software engineering intern, working directly for the institution, and I led the team on the project. Ombudsman needed an inventory system to track its items. It had to support role-based access and handle data securely. It was meant for Ombudsman\'s administrative offices across the country.',
+        text: 'In 2023 I spent three months at Ombudsman Republik Indonesia as a software engineering intern, working directly for the institution, and I led the team on the project. Ombudsman needed an office and inventory management system to track its items. It had to support role-based access and handle data securely. It was meant for Ombudsman\'s administrative offices across the country.',
       },
       {
         kind: 'p',
@@ -209,13 +210,13 @@ export const ENGAGEMENTS: Engagement[] = [
       { kind: 'h', text: 'What I built' },
       {
         kind: 'p',
-        text: 'We built the system with React and TypeScript on the front end, TanStack Query for data fetching, Tailwind CSS for styling and Laravel on the back end. It gave Ombudsman one place to track its items and assets. On top of that I added role-based access control, reporting features and the database workflows behind them.',
+        text: 'We built the system with React and TypeScript on the front end, TanStack Query for data fetching, Tailwind CSS for styling and Laravel with MySQL on the back end. It gave Ombudsman one place to track its items and assets. On top of that I added role-based access control, reporting features and the database workflows behind them.',
       },
       {
         kind: 'image',
         src: '/image/projects/ombudsman.webp',
-        alt: 'Inventory management system built for Ombudsman RI',
-        caption: 'The inventory system for Ombudsman RI.',
+        alt: 'Office and inventory management system built for Ombudsman RI',
+        caption: 'The office and inventory management system for Ombudsman RI.',
       },
       {
         kind: 'p',
@@ -540,7 +541,7 @@ export const ENGAGEMENTS: Engagement[] = [
     slug: 'recyclops',
     title: 'Recyclops',
     summary:
-      'An Android app I built that shows people how to sort their waste, where to take it, and rewards them with points for recycling.',
+      'An Android app my Bangkit Academy capstone team built that classifies waste with machine learning, shows people where to take it, and rewards them with points for recycling.',
     kind: 'side',
     projectSlugs: ['recyclops'],
     image: '/image/projects/recyclops.webp',
@@ -548,10 +549,10 @@ export const ENGAGEMENTS: Engagement[] = [
     links: [{ label: 'Source on GitHub', href: 'https://github.com/DaffaAdityaDev/recyclops' }],
     headlineMetric: 'Works offline',
     context: {
-      company: 'Side project',
-      companyType: 'Personal project',
+      company: 'Bangkit Academy',
+      companyType: 'Team capstone project',
       role: 'Android Developer',
-      period: '2022',
+      period: '2023',
       stack: ['Android', 'Kotlin', 'Firebase', 'Google Maps API'],
     },
     problem: [
@@ -561,13 +562,13 @@ export const ENGAGEMENTS: Engagement[] = [
     ],
     responsibilities: [
       'Build the native Android app in Kotlin, with Firebase as the backend.',
-      'Build waste classification, so users know how to sort an item.',
+      'Connect the machine learning model that classifies waste from a photo, so users know how to sort an item.',
       'Add camera barcode scanning and routing to the nearest recycling point.',
       'Build the points system that rewards each recycling action.',
       'Make the app work offline and sync to Firebase when back online.',
     ],
     shipped: [
-      { title: 'Waste classification', detail: 'Users can check how to sort an item before they throw it away.' },
+      { title: 'Waste classification', detail: 'A machine learning model classifies an item from a photo, so users know how to sort it before they throw it away.' },
       { title: 'Camera barcode scanning', detail: 'Users scan a product barcode with the phone camera to look it up.' },
       { title: 'Route to the nearest recycling point', detail: 'The app uses the user location to find and route to the closest recycling point.' },
       { title: 'Points and carbon savings tracker', detail: 'Each recycling action earns points and adds to an estimate of carbon saved.' },
@@ -581,12 +582,12 @@ export const ENGAGEMENTS: Engagement[] = [
       { kind: 'h', text: 'The idea' },
       {
         kind: 'p',
-        text: 'Most people are willing to recycle. What stops them is two small questions: how do I sort this, and where do I take it? Recyclops is an Android app I built in 2022 to answer both on the spot, and to reward people with points so the habit sticks.',
+        text: 'Most people are willing to recycle. What stops them is two small questions: how do I sort this, and where do I take it? Recyclops is an Android app I built with my team as our Bangkit Academy capstone in 2023, to answer both on the spot, and to reward people with points so the habit sticks.',
       },
       { kind: 'h', text: 'What it does' },
       {
         kind: 'p',
-        text: 'A user picks up an item and checks how to sort it, or scans its barcode with the phone camera to look it up. When the bag is full, the app finds the nearest recycling point and routes them there with Google Maps. Every recycling action earns points.',
+        text: 'A user takes a photo of an item and a machine learning model tells them how to sort it, or they scan its barcode with the phone camera to look it up. When the bag is full, the app finds the nearest recycling point and routes them there with Google Maps. Every recycling action earns points.',
       },
       {
         kind: 'image',
@@ -597,7 +598,7 @@ export const ENGAGEMENTS: Engagement[] = [
       { kind: 'h', text: 'How I built it' },
       {
         kind: 'p',
-        text: 'I built it as a native Android app in Kotlin, with Firebase as the backend. Recycling points are often in places with a weak signal, so the app works offline: each action is saved on the device first and syncs to Firebase once the connection is back. Nothing a user does gets lost because of a bad connection.',
+        text: 'We built it as a native Android app in Kotlin, with Firebase as the backend, and I connected the waste classification model to the app. Recycling points are often in places with a weak signal, so the app works offline: each action is saved on the device first and syncs to Firebase once the connection is back. Nothing a user does gets lost because of a bad connection.',
       },
       { kind: 'h', text: 'How it went' },
       {

@@ -1,10 +1,27 @@
-import { useCallback, useEffect } from 'react';
-import { useFreelanceStore } from '@/store/useFreelanceStore';
+import { useEffect } from 'react';
+import { useFreelanceStore } from '../store';
 import { buildBriefSubject, buildBriefText, buildMailtoUrl, guessCurrencyFromTimeZone, validateBrief } from '../utils/brief';
-import type { BriefFormData, BriefStatus, BudgetCurrency, ProjectTypeId } from '@/types/freelance';
+import type { BriefFormData, BriefRequest, BriefStatus, BudgetCurrency, ProjectTypeId } from '@/types/freelance';
 
 /** Longest mailto URL that common mail apps open without cutting it off. */
 const MAILTO_MAX_LENGTH = 1800;
+
+/** Only the fields /api/brief reads; serviceOther only matters when the project type is 'other'. */
+function buildBriefRequest(brief: BriefFormData, guard: BriefGuard): BriefRequest {
+  return {
+    name: brief.name,
+    email: brief.email,
+    company: brief.company,
+    service: brief.service,
+    serviceOther: brief.service === 'other' ? brief.serviceOther : '',
+    budget: brief.budget,
+    timeline: brief.timeline,
+    message: brief.message,
+    website: brief.website,
+    turnstileToken: guard.turnstileToken,
+    elapsedMs: guard.elapsedMs,
+  };
+}
 
 /**
  * The brief as a mailto link. A message too long for the link is shortened and marked, rather than
@@ -59,13 +76,12 @@ export function useFreelance(): UseFreelanceReturn {
     }
   }, [setCurrencyInStore]);
 
-  const setCurrency = useCallback((currency: BudgetCurrency) => setCurrencyInStore(currency), [setCurrencyInStore]);
+  const setCurrency = (currency: BudgetCurrency) => setCurrencyInStore(currency);
 
   // Sends through /api/brief. When the brief was not emailed (Resend failed, offline, server error),
   // it also opens in the visitor's mail app, so it always reaches the inbox.
   // Resolves to true when the Turnstile token was sent, so the form knows to fetch a fresh one.
-  const handleBriefSubmit = useCallback(
-    async (e: React.FormEvent, guard: BriefGuard) => {
+  const handleBriefSubmit = async (e: React.FormEvent, guard: BriefGuard) => {
       e.preventDefault();
       if (validateBrief(brief)) {
         setBriefStatus('error');
@@ -80,7 +96,7 @@ export function useFreelance(): UseFreelanceReturn {
           const res = await fetch('/api/brief', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ...brief, turnstileToken: guard.turnstileToken, elapsedMs: guard.elapsedMs }),
+            body: JSON.stringify(buildBriefRequest(brief, guard)),
           });
           const result = (await res.json().catch(() => null)) as { ok?: boolean; openMailApp?: boolean; error?: string } | null;
           if (res.ok && result?.ok) {
@@ -107,9 +123,7 @@ export function useFreelance(): UseFreelanceReturn {
         setBriefStatus('mail-app');
       }
       return !guard.turnstileFailed;
-    },
-    [brief, resetBrief, setBriefStatus],
-  );
+  };
 
   return {
     brief,
@@ -122,5 +136,3 @@ export function useFreelance(): UseFreelanceReturn {
     handleBriefSubmit,
   };
 }
-
-export default useFreelance;

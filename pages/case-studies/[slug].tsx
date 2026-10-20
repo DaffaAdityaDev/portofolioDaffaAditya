@@ -1,7 +1,9 @@
 import React from 'react';
 import type { GetStaticPaths, GetStaticProps } from 'next';
-import dynamic from 'next/dynamic';
 import Seo from '@/components/Seo';
+// Below the fold: static HTML, JS loaded as the page nears the bottom.
+import Footer from '@/components/Layout/LazyFooter';
+import { siteConfig } from '@/config/metadata.config';
 import { ENGAGEMENTS, ENGAGEMENT_KIND_LABELS, getEngagementProjects, projectTitle } from '@/features/Projects/engagements';
 import EngagementLayout, {
   type CaseStudyEngagement,
@@ -9,9 +11,6 @@ import EngagementLayout, {
   type NextCaseStudyRef,
 } from '@/features/Projects/components/Engagement/EngagementLayout';
 import { filled } from '@/features/Projects/components/Engagement/utils';
-
-// Below the fold: the site footer closes the page, as on the blog.
-const Footer = dynamic(() => import('@/components/Layout/Footer'), { ssr: true });
 
 // One page per engagement (company or client). Old per-project slugs redirect here from next.config.js.
 
@@ -28,6 +27,8 @@ export interface CaseStudyPageProps {
   projectTitles: string[];
   /** The following engagement, wrapping to the first. */
   next: NextCaseStudyRef;
+  /** 1200x630 share image. The hero screenshots are .webp (one portrait), which social cards handle poorly. */
+  ogImage: string;
 }
 
 // Everything is computed here so the engagement data stays out of the client bundle.
@@ -61,21 +62,22 @@ export const getStaticProps: GetStaticProps<CaseStudyPageProps, { slug: string }
       shots: getEngagementProjects(e).map((p) => ({ src: p.image, title: projectTitle(p.slug) })),
       projectTitles: e.projectSlugs.map(projectTitle),
       next,
+      ogImage: e.ogImage ?? siteConfig.ogImage,
     },
   };
 };
 
-export default function CaseStudyPage({ engagement, shots, projectTitles, next }: CaseStudyPageProps) {
+export default function CaseStudyPage({ engagement, shots, projectTitles, next, ogImage }: CaseStudyPageProps) {
   return (
     <>
       <Seo
         path={`/case-studies/${engagement.slug}`}
-        title={`${engagement.title} case study | Daffa Aditya`}
+        title={`${engagement.title} Case Study`}
         description={engagement.summary}
-        image={engagement.image}
+        image={ogImage}
         type="article"
       />
-      <div className="selection:bg-red-600 selection:text-white">
+      <div className="selection:bg-accent-brand selection:text-white">
         <EngagementLayout engagement={engagement} shots={shots} projectTitles={projectTitles} next={next} />
       </div>
       <Footer />

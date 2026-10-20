@@ -1,5 +1,5 @@
 import type { FlowEdgeLabel, FlowEdgeLayout, FlowNodeLayout } from '@/features/Blog/flow/types';
-import type { AccessTokenState, LoginEdgeId, LoginNodeId, RefreshTokenState } from '@/features/Blog/posts/VideoSharing/widgets/loginFlow/types';
+import type { AccessTokenState, LoginEdgeId, LoginNodeId, RefreshTokenState } from './types';
 
 /** Failed logins allowed before the account is locked for a while. */
 export const LOGIN_ATTEMPT_LIMIT = 5;

@@ -1,9 +1,9 @@
 import React from 'react';
-import Callout from '../../components/Callout';
-import CodeBlock from '../../components/CodeBlock';
-import Reveal from '../../components/Reveal';
-import { lazyOnView } from '../../components/LazyOnView';
-import BlogTable from '../../components/BlogTable';
+import Callout from '@/features/Blog/components/Callout';
+import CodeBlock from '@/features/Blog/components/CodeBlock';
+import Reveal from '@/features/Blog/components/Reveal';
+import { lazyOnView } from '@/features/Blog/components/LazyOnView';
+import BlogTable from '@/features/Blog/components/BlogTable';
 
 // Every widget sits below the first screen: its HTML is in the static page, its JS loads on scroll.
 const SolidPlayground = lazyOnView(() => import('./widgets/playground/components/SolidPlayground'));

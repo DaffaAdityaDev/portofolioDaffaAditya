@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import { GitBranch } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import AnimatedNumber from '@/features/Blog/components/AnimatedNumber';
-import ActionButton from '@/features/Blog/components/ActionButton';
+import ToggleButton from '@/features/Blog/components/ToggleButton';
 import WidgetFrame from '@/features/Blog/components/WidgetFrame';
-import { FLOW_METER_LABEL_CLASS } from '@/features/Blog/flow/constants';
+import { WIDGET_LABEL_CLASS } from '@/features/Blog/components/widgetStyles';
 import type {
   ChangeRequest,
   ChangeRequestId,
   Codebase,
   FileEdit,
-} from '@/features/Blog/posts/SolidPrinciples/widgets/changeRipple/types';
+} from '../types';
 import { CHANGE_REQUESTS, CHANGE_REQUEST_ORDER, CODEBASES, CODEBASE_ORDER } from '../constants';
 
 const formatCount = (value: number): string => Math.round(value).toString();
@@ -18,8 +18,8 @@ const formatCount = (value: number): string => Math.round(value).toString();
 const FileCard: React.FC<{ path: string; role: string; edit?: FileEdit }> = ({ path, role, edit }) => (
   <li
     className={cn(
-      'border px-3 py-2 transition-colors',
-      !edit && 'border-neutral-800 text-neutral-500',
+      'rounded-lg border px-3 py-2 transition-colors',
+      !edit && 'border-border text-neutral-500',
       edit?.kind === 'edited' && 'border-red-500/70 bg-red-500/10 text-neutral-100',
       edit?.kind === 'new' && 'border-dashed border-neutral-400 text-neutral-100',
     )}
@@ -29,7 +29,7 @@ const FileCard: React.FC<{ path: string; role: string; edit?: FileEdit }> = ({ p
       {edit && (
         <span
           className={cn(
-            'shrink-0 px-1.5 py-px text-[10px] uppercase tracking-wider',
+            'shrink-0 rounded-lg px-1.5 py-px text-2xs uppercase tracking-wider',
             edit.kind === 'edited' ? 'bg-red-500 text-white' : 'border border-neutral-400 text-neutral-300',
           )}
         >
@@ -37,7 +37,7 @@ const FileCard: React.FC<{ path: string; role: string; edit?: FileEdit }> = ({ p
         </span>
       )}
     </div>
-    <div className={cn('mt-0.5 text-[11px] leading-snug', edit ? 'text-neutral-400' : 'text-neutral-500')}>
+    <div className={cn('mt-0.5 text-2xs leading-snug', edit ? 'text-muted-foreground' : 'text-neutral-500')}>
       {edit ? edit.why : role}
     </div>
   </li>
@@ -54,7 +54,7 @@ const CodebaseColumn: React.FC<{ codebase: Codebase; change: ChangeRequest }> = 
       <div className="flex items-end justify-between gap-2">
         <div>
           <div className="font-mono text-sm font-bold text-neutral-200">{codebase.label}</div>
-          <div className="text-[11px] text-neutral-500">{codebase.caption}</div>
+          <div className="text-2xs text-neutral-500">{codebase.caption}</div>
         </div>
         <div className="text-right">
           {/* Screen readers get the final count once, not every frame of the spring. */}
@@ -63,9 +63,9 @@ const CodebaseColumn: React.FC<{ codebase: Codebase; change: ChangeRequest }> = 
             {newFiles.length > 0 && `, ${newFiles.length} new`}
           </span>
           <div aria-hidden="true">
-            <div className={FLOW_METER_LABEL_CLASS}>files edited</div>
+            <div className={WIDGET_LABEL_CLASS}>files edited</div>
             <AnimatedNumber value={editedCount} format={formatCount} className="font-mono text-2xl text-red-500" />
-            {newFiles.length > 0 && <span className="ml-1 font-mono text-xs text-neutral-400">+{newFiles.length} new</span>}
+            {newFiles.length > 0 && <span className="ml-1 font-mono text-xs text-muted-foreground">+{newFiles.length} new</span>}
           </div>
         </div>
       </div>
@@ -94,21 +94,18 @@ const ChangeRipple: React.FC = () => {
       <div className="flex flex-col gap-4 p-4">
         <div className="-mx-4 overflow-x-auto px-4">
           <div className="flex w-max gap-2" role="group" aria-label="Change request">
-            {CHANGE_REQUEST_ORDER.map((id) => {
-              const isSelected = id === changeId;
-              return (
-                <ActionButton
-                  key={id}
-                  variant={isSelected ? 'solid' : 'bordered'}
-                  aria-pressed={isSelected}
-                  onClick={() => setChangeId(id)}
-                  className="font-mono text-xs"
-                >
-                  <span className="font-bold">{CHANGE_REQUESTS[id].letters.join(' ')}</span>
-                  <span>{CHANGE_REQUESTS[id].label}</span>
-                </ActionButton>
-              );
-            })}
+            {CHANGE_REQUEST_ORDER.map((id) => (
+              <ToggleButton
+                key={id}
+                selected={id === changeId}
+                onClick={() => setChangeId(id)}
+                // The labels are sentences, so keep their own casing.
+                className="normal-case tracking-normal"
+              >
+                <span className="font-bold">{CHANGE_REQUESTS[id].letters.join(' ')}</span>
+                <span>{CHANGE_REQUESTS[id].label}</span>
+              </ToggleButton>
+            ))}
           </div>
         </div>
 
@@ -118,7 +115,7 @@ const ChangeRipple: React.FC = () => {
           ))}
         </div>
 
-        <p className="border-t border-neutral-800 pt-3 text-xs leading-relaxed text-neutral-400">{change.lesson}</p>
+        <p className="border-t border-border pt-3 text-xs leading-relaxed text-muted-foreground">{change.lesson}</p>
       </div>
     </WidgetFrame>
   );

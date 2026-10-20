@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import GridLine from '@/components/ui/GridLine';
 import BentoGrid from './components/BentoGrid';
 import SpotlightButton from '@/components/ui/SpotlightButton';
+import PageTitle from '@/components/ui/PageTitle';
 import { coverStyle } from '@/features/Projects/components/CaseStudyArt/coverStyle';
 import { siteConfig } from '@/config/metadata.config';
 import intro from './HeroIntro.module.css';
@@ -23,11 +24,11 @@ const Hero = () => {
       {/* Intro layer over the first viewport: backdrop while the headline glides in, plus the system indicator.
           Plain CSS (HeroIntro.module.css), so it plays without waiting for JS and is skipped under reduced motion. */}
       <div aria-hidden="true" className="absolute inset-x-0 top-0 h-[100dvh] z-30 pointer-events-none">
-        <div className={`absolute inset-0 bg-[#0a0a0a] ${intro.backdrop}`} />
+        <div className={`absolute inset-0 bg-background ${intro.backdrop}`} />
         <div
           className={`absolute bottom-12 inset-x-0 flex items-center justify-center gap-2 text-xs font-mono text-neutral-500 uppercase tracking-widest select-none ${intro.indicator}`}
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+          <span className="w-1.5 h-1.5 rounded-full bg-accent-brand animate-pulse" />
           <span>INITIALIZING SYSTEM</span>
         </div>
       </div>
@@ -48,8 +49,8 @@ const Hero = () => {
             motion="idle"
           />
           {/* Subtle perimeter vignettes ensuring crisp headline readability and smooth border blending */}
-          <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-[#0a0a0a]/55 via-transparent to-[#0a0a0a]/35" />
-          <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_45%,#0a0a0a_96%)]" />
+          <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-background/55 via-transparent to-background/35" />
+          <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_45%,var(--background)_96%)]" />
         </div>
 
         {/* Left Section: Content */}
@@ -68,20 +69,18 @@ const Hero = () => {
               <div className="flex items-center gap-2.5 flex-wrap">
                 {/* Software Engineer Badge */}
                 <div
-                  className={`inline-flex items-center gap-2 border border-red-500/20 bg-red-500/10 px-3 py-1 rounded-full ${intro.badge}`}
+                  className={`inline-flex items-center gap-2 border border-accent-brand/20 bg-accent-brand/10 px-3 py-1 rounded-lg ${intro.badge}`}
                 >
-                  <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                  <span className="text-red-400 text-xs font-semibold font-mono tracking-widest uppercase">Software Engineer</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent-brand animate-pulse" />
+                  <span className="text-accent-brand-hover text-xs font-semibold font-mono tracking-widest uppercase">Software Engineer</span>
                 </div>
               </div>
 
               {/* Headline: the LCP text, static from the first paint. */}
-              <h1
-                className={`text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white leading-[0.95] tracking-tighter uppercase relative z-40`}
-              >
+              <PageTitle size="xl" className="sm:text-6xl tracking-tighter relative z-40">
                 Daffa <br />
                 Aditya <br />
-              </h1>
+              </PageTitle>
 
               {/* Subtitle Bio Paragraph */}
               <p
@@ -132,4 +131,3 @@ const Hero = () => {
 };
 
 export default Hero;
-export { Hero as HeroComponent };

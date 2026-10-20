@@ -78,7 +78,7 @@ const PlaygroundEditor: React.FC<PlaygroundEditorProps> = ({ path, value, onChan
   };
 
   return (
-    <div className="playground-editor relative flex h-full min-h-0 overflow-hidden bg-[#0d0d0d] focus-within:ring-1 focus-within:ring-inset focus-within:ring-red-500">
+    <div className="playground-editor relative flex h-full min-h-0 overflow-hidden bg-surface-1 focus-within:ring-1 focus-within:ring-inset focus-within:ring-accent-brand">
       <div className="shrink-0 overflow-hidden border-r border-neutral-900 text-neutral-600 select-none" aria-hidden="true">
         <div ref={gutterRef} className={cn(TEXT_CLASS, 'min-w-11 pl-2 pr-3 text-right')}>
           {lines.map((_, index) => (
@@ -128,7 +128,7 @@ const PlaygroundEditor: React.FC<PlaygroundEditorProps> = ({ path, value, onChan
           className={cn(
             TEXT_CLASS,
             'absolute inset-0 size-full resize-none overflow-auto border-0 bg-transparent text-transparent caret-neutral-100 outline-none',
-            'selection:bg-red-500/30 [-webkit-text-fill-color:transparent]',
+            'selection:bg-accent-brand/30 [-webkit-text-fill-color:transparent]',
           )}
         />
         <span id={hintId} className="sr-only">

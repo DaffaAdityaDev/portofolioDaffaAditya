@@ -25,15 +25,15 @@ const PlaygroundToolbar: React.FC<PlaygroundToolbarProps> = ({
   onToggleConsole,
   onReset,
 }) => (
-  <div className="flex h-8 items-center justify-between border border-b-0 border-neutral-800 bg-neutral-900/50 pl-3 pr-1 font-mono text-xs">
-    <div className="flex min-w-0 items-center gap-2 text-neutral-400">
+  <div className="flex h-8 items-center justify-between border-b border-border bg-neutral-900/50 pl-3 pr-1 font-mono text-xs">
+    <div className="flex min-w-0 items-center gap-2 text-muted-foreground">
       <span className="relative flex size-2 shrink-0" aria-hidden="true">
-        <span className="absolute inline-flex size-full animate-ping rounded-full bg-red-500 opacity-60" />
-        <span className="relative inline-flex size-2 rounded-full bg-red-500" />
+        <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent-brand opacity-60" />
+        <span className="relative inline-flex size-2 rounded-full bg-accent-brand" />
       </span>
       <span className="truncate">{title ?? 'Live React'}</span>
       {title && (
-        <span className="hidden shrink-0 border border-neutral-800 px-1.5 py-px text-[10px] uppercase tracking-wider text-neutral-400 sm:inline">
+        <span className="hidden shrink-0 rounded-lg border border-border px-1.5 py-px text-2xs uppercase tracking-wider text-muted-foreground sm:inline">
           Live React
         </span>
       )}
@@ -94,7 +94,7 @@ const PlaygroundBody: React.FC<PlaygroundBodyProps> = ({
   };
 
   return (
-    <div className="react-playground">
+    <div className="react-playground overflow-hidden rounded-lg border border-border">
       <PlaygroundToolbar
         title={title}
         showConsole={showConsole}
@@ -103,8 +103,8 @@ const PlaygroundBody: React.FC<PlaygroundBodyProps> = ({
         onReset={reset}
       />
       {/* Side by side from md up, stacked below it. */}
-      <div className="grid border border-neutral-800 md:grid-cols-2">
-        <div className="flex min-w-0 flex-col border-neutral-800 max-md:border-b md:border-r" style={{ height }}>
+      <div className="grid md:grid-cols-2">
+        <div className="flex min-w-0 flex-col border-border max-md:border-b md:border-r" style={{ height }}>
           <PlaygroundFileTabs paths={paths} activePath={activePath} onSelect={setActivePath} panelId={panelId} />
           <div
             id={panelId}
@@ -159,7 +159,7 @@ const Playground: React.FC<ReactPlaygroundProps> = ({
 
   if (paths.length === 0) {
     return (
-      <div className="border border-neutral-800 p-4 font-mono text-xs text-neutral-500" role="alert">
+      <div className="rounded-lg border border-border p-4 font-mono text-xs text-neutral-500" role="alert">
         ReactPlayground needs code: pass a string as children, or a files object.
       </div>
     );

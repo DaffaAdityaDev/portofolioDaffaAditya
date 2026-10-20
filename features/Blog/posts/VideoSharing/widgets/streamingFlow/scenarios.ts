@@ -1,5 +1,5 @@
 import type { FlowScenario } from '@/features/Blog/flow/types';
-import type { StreamScenarioId, StreamStep } from '@/features/Blog/posts/VideoSharing/widgets/streamingFlow/types';
+import type { StreamScenarioId, StreamStep } from './types';
 import { STREAM_NO_QUALITY } from './constants';
 
 const PRESS_PLAY: StreamStep = {

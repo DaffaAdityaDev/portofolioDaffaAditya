@@ -1,9 +1,9 @@
 import React from 'react';
 import { Flame, RotateCcw } from 'lucide-react';
-import type { DesignPreset, VideoDesignChoices } from '@/features/Blog/posts/VideoSharing/widgets/capacity/types';
+import type { DesignPreset, VideoDesignChoices } from '../types';
 import ActionButton from '@/features/Blog/components/ActionButton';
 import SliderField from '@/features/Blog/components/SliderField';
-import SwitchField from '@/features/Blog/components/SwitchField';
+import SwitchField from './SwitchField';
 import ToggleButton from '@/features/Blog/components/ToggleButton';
 import {
   CHOICE_LIMITS,
@@ -85,7 +85,7 @@ export const DesignControls: React.FC = () => {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Start from preset">
-        <span className="mr-1 font-mono text-[11px] uppercase tracking-wider text-neutral-500" aria-hidden="true">
+        <span className="mr-1 font-mono text-2xs uppercase tracking-wider text-neutral-500" aria-hidden="true">
           Start from
         </span>
         {PRESETS.map((preset) => (

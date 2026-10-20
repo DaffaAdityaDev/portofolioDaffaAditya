@@ -1,6 +1,6 @@
 import type { FlowConfig } from '@/features/Blog/flow/types';
-import type { LbStep } from '@/features/Blog/posts/VideoSharing/widgets/loadBalancer/types';
-import { useLoadBalancerStore } from '@/features/Blog/posts/VideoSharing/widgets/loadBalancer/store';
+import type { LbStep } from './types';
+import { useLoadBalancerStore } from './store';
 import { LB_EDGE_LABELS, LB_EDGES, LB_NODES } from './constants';
 import { FLOW_DIAGRAM_SIZE } from '@/features/Blog/flow/constants';
 import { LB_SCENARIO_ORDER, LB_SCENARIOS } from './scenarios';

@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import type { LucideIcon } from 'lucide-react';
-import { FLOW_COLORS, FLOW_DIAGRAM } from '../constants';
+import { FLOW_DIAGRAM } from '../constants';
+import { WIDGET_COLORS } from '@/features/Blog/components/widgetStyles';
 import { usePauseSvgOffscreen } from '../hooks/usePauseSvgOffscreen';
 
 const PARTICLE_INDEXES = Array.from({ length: FLOW_DIAGRAM.particleCount }, (_, index) => index);
@@ -22,7 +23,7 @@ export const FlowMarkers: React.FC<FlowMarkersProps> = ({ idleId, activeId, acti
   return (
     <defs ref={ref}>
       {[
-        { id: idleId, fill: FLOW_COLORS.idle },
+        { id: idleId, fill: WIDGET_COLORS.idle },
         { id: activeId, fill: activeColor },
       ].map((marker) => (
         <marker key={marker.id} id={marker.id} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
@@ -49,7 +50,7 @@ export const FlowEdge: React.FC<FlowEdgeProps> = ({ path, particleKey, isActive,
     <path
       d={path}
       fill="none"
-      stroke={isActive ? color : FLOW_COLORS.idle}
+      stroke={isActive ? color : WIDGET_COLORS.idle}
       strokeWidth={isActive ? 2 : 1.25}
       strokeOpacity={isActive ? 1 : 0.6}
       markerEnd={`url(#${markerUrl})`}
@@ -123,7 +124,7 @@ export const FlowNode: React.FC<FlowNodeProps> = ({
             onSelect();
           }
         },
-        className: 'cursor-pointer outline-none [&:focus-visible>rect]:stroke-red-500',
+        className: 'cursor-pointer outline-none [&:focus-visible>rect]:stroke-accent-brand',
       }
     : {};
 
@@ -137,7 +138,7 @@ export const FlowNode: React.FC<FlowNodeProps> = ({
           height={height}
           rx={FLOW_DIAGRAM.nodeRadius}
           fill="#0d0d0d"
-          stroke={isActive ? color : FLOW_COLORS.idle}
+          stroke={isActive ? color : WIDGET_COLORS.idle}
           strokeOpacity={0.5}
           className="pointer-events-none"
         />
@@ -147,7 +148,7 @@ export const FlowNode: React.FC<FlowNodeProps> = ({
         height={height}
         rx={FLOW_DIAGRAM.nodeRadius}
         fill="#0d0d0d"
-        stroke={isActive ? color : FLOW_COLORS.idle}
+        stroke={isActive ? color : WIDGET_COLORS.idle}
         strokeWidth={isSelected ? 3 : isActive ? 2 : 1}
       />
       <text x={width / 2} y={21} textAnchor="middle" fontSize={12} fontWeight={700} className="pointer-events-none fill-neutral-200 font-mono uppercase">
@@ -158,20 +159,20 @@ export const FlowNode: React.FC<FlowNodeProps> = ({
         y={38}
         textAnchor="middle"
         fontSize={10}
-        fill={isHighlighted && isActive ? color : FLOW_COLORS.text}
+        fill={isHighlighted && isActive ? color : WIDGET_COLORS.text}
         className="pointer-events-none font-mono"
       >
         {caption}
       </text>
       {Icon && (
         <g className="pointer-events-none">
-          <circle r={BADGE.radius} fill="#0d0d0d" stroke={isActive ? color : FLOW_COLORS.idle} strokeWidth={1.5} />
+          <circle r={BADGE.radius} fill="#0d0d0d" stroke={isActive ? color : WIDGET_COLORS.idle} strokeWidth={1.5} />
           <Icon
             x={-BADGE.iconSize / 2}
             y={-BADGE.iconSize / 2}
             width={BADGE.iconSize}
             height={BADGE.iconSize}
-            color={isActive ? color : FLOW_COLORS.text}
+            color={isActive ? color : WIDGET_COLORS.text}
             aria-hidden="true"
           />
         </g>

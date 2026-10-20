@@ -1,25 +1,24 @@
 import React from 'react';
-import { m } from 'framer-motion';
 import { Mail, MapPin, Briefcase, Github, Linkedin } from 'lucide-react';
-import { FADE_IN_UP_ITEM } from '@/constant/animations';
 import { siteConfig } from '@/config/metadata.config';
 import {
   IDENTIFICATION,
   CORE_COMPETENCIES,
-  TECHNICAL_SKILLS,
-  EXTENDED_STACK,
+  SKILL_GROUPS,
 } from '../constants';
+import ResumeHeading from './ResumeHeading';
 
-const HEADING = 'text-xs font-mono text-neutral-500 uppercase tracking-[0.3em] border-b border-neutral-800 pb-2 font-bold';
 const ROW = 'flex items-center gap-4 text-neutral-300';
 const LINK = 'text-sm md:text-base font-medium underline underline-offset-4 decoration-neutral-700 hover:text-white hover:decoration-neutral-400 transition-colors break-all';
 
 const ResumeSidebar = () => {
+  // Grid placement lives on the lazyOnView wrapper in pages/resume.tsx. CSS scroll reveal
+  // (globals.css .reveal): visible by default, so the static HTML never hides.
   return (
-    <m.aside variants={FADE_IN_UP_ITEM} className="lg:col-span-4 xl:col-span-3 space-y-12" aria-label="Contact and skills">
+    <aside className="reveal space-y-12" aria-label="Contact and skills">
       {/* Contact */}
       <section className="space-y-6">
-        <h2 className={HEADING}>Contact</h2>
+        <ResumeHeading>Contact</ResumeHeading>
         <ul className="space-y-5">
           <li className={ROW}>
             <Briefcase size={18} className="text-neutral-600 shrink-0" aria-hidden="true" />
@@ -52,44 +51,40 @@ const ResumeSidebar = () => {
 
       {/* Core Competencies */}
       <section className="space-y-6">
-        <h2 className={HEADING}>Core Competencies</h2>
+        <ResumeHeading>Core Competencies</ResumeHeading>
         <ul className="space-y-4">
           {CORE_COMPETENCIES.map(comp => (
             <li key={comp} className="flex items-center gap-3 text-neutral-300">
-              <div className="w-1.5 h-1.5 bg-red-500 shrink-0" aria-hidden="true"></div>
+              <div className="w-1.5 h-1.5 bg-accent-brand shrink-0" aria-hidden="true"></div>
               <span className="text-sm md:text-base font-medium">{comp}</span>
             </li>
           ))}
         </ul>
       </section>
 
-      {/* Technical Skills */}
+      {/* Skills: same groups as the PDF (cv-src/cv/skills.tex) */}
       <section className="space-y-6">
-        <h2 className={HEADING}>Technical Skills</h2>
-        <ul className="flex flex-wrap gap-2">
-          {TECHNICAL_SKILLS.map(skill => (
-            <li key={skill} className="px-3 py-1.5 bg-neutral-900 border border-neutral-800 text-[11px] md:text-xs font-mono text-neutral-400 uppercase tracking-tight hover:border-neutral-600 transition-colors">
-              {skill}
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      {/* Extended Stack */}
-      <section className="space-y-6">
-        <h2 className={HEADING}>Extended Stack</h2>
+        <ResumeHeading>Skills</ResumeHeading>
         <dl className="space-y-5">
-          {EXTENDED_STACK.map(item => (
-            <div key={item.category} className="space-y-2">
-              <dt className="text-[10px] md:text-xs font-mono text-neutral-400 uppercase tracking-widest font-medium">
-                {item.category}
+          {SKILL_GROUPS.map(group => (
+            <div key={group.category} className="space-y-2">
+              <dt className="text-2xs md:text-xs font-mono text-muted-foreground uppercase tracking-widest font-medium">
+                {group.category}
               </dt>
-              <dd className="text-sm text-neutral-400 font-medium leading-relaxed">{item.tech}</dd>
+              <dd>
+                <ul className="flex flex-wrap gap-2">
+                  {group.skills.map(skill => (
+                    <li key={skill} className="px-2.5 py-1 rounded-lg bg-surface-1 border border-border text-2xs md:text-xs font-mono text-muted-foreground hover:border-border-strong transition-colors">
+                      {skill}
+                    </li>
+                  ))}
+                </ul>
+              </dd>
             </div>
           ))}
         </dl>
       </section>
-    </m.aside>
+    </aside>
   );
 };
 

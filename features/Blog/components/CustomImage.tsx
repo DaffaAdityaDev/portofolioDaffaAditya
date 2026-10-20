@@ -14,7 +14,7 @@ interface CustomImageProps {
 
 const CustomImage: React.FC<CustomImageProps> = ({ src, alt, width = 1200, height = 675 }) => {
   return (
-    <div className="my-8 border border-neutral-800 bg-[#0a0a0a] p-2">
+    <div className="my-8 rounded-lg border border-border bg-background p-2">
       <Image
         src={src}
         alt={alt || ''}

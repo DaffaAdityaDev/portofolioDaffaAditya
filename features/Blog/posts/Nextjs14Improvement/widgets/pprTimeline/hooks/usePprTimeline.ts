@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-import type { RenderMode } from '@/features/Blog/posts/Nextjs14Improvement/widgets/pprTimeline/types';
+import type { RenderMode } from '../types';
 import { DEFAULT_LATENCY, TIMELINE_MAX_MS } from '../constants';
 import { modelResponse } from '../utils/model';
 
@@ -20,10 +20,7 @@ export function usePprTimeline() {
   const response = useMemo(() => modelResponse(mode, cartMs, productsMs), [mode, cartMs, productsMs]);
 
   useEffect(() => {
-    if (runId === 0 || reduceMotion) {
-      setClockMs(null);
-      return;
-    }
+    if (runId === 0 || reduceMotion) return;
     let frame = 0;
     const start = performance.now();
     const tick = (now: number) => {
@@ -35,12 +32,14 @@ export function usePprTimeline() {
       setClockMs(elapsed);
       frame = requestAnimationFrame(tick);
     };
-    setClockMs(0);
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
   }, [runId, reduceMotion]);
 
-  const replay = () => setRunId((id) => id + 1);
+  const replay = () => {
+    setClockMs(0);
+    setRunId((id) => id + 1);
+  };
 
   // Switching mode replays, so the reader sees the difference in timing.
   const setMode = (next: RenderMode) => {
@@ -48,5 +47,12 @@ export function usePprTimeline() {
     replay();
   };
 
-  return { mode, cartMs, productsMs, response, clockMs, setMode, setCartMs, setProductsMs, replay };
+  return {
+    mode,
+    cartMs,
+    productsMs,
+    response,
+    // With reduced motion there is no replay, so the chart shows the end state.
+    clockMs: runId === 0 || reduceMotion ? null : clockMs,
+    setMode, setCartMs, setProductsMs, replay };
 }

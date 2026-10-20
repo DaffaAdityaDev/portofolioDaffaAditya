@@ -38,8 +38,8 @@ const SHADOW = 'shadow-[0_28px_60px_-18px_rgba(0,0,0,0.9),0_0_0_1px_rgba(0,0,0,0
 const ChromeDots = () => (
   <span aria-hidden="true" className="flex shrink-0 gap-1">
     <span className="h-1.5 w-1.5 bg-[var(--cs-accent)]" />
-    <span className="h-1.5 w-1.5 bg-[#3f3f46]" />
-    <span className="h-1.5 w-1.5 bg-[#3f3f46]" />
+    <span className="h-1.5 w-1.5 bg-neutral-700" />
+    <span className="h-1.5 w-1.5 bg-neutral-700" />
   </span>
 );
 
@@ -48,17 +48,18 @@ const Img: React.FC<{ src: string; alt: string; priority: boolean }> = ({ src, a
   const crop = CROPS[src];
   const common = {
     src,
-    alt,
     width,
     height,
     sizes: SIZES,
     loading: priority ? ('eager' as const) : ('lazy' as const),
+    // The first shot is the page's likely LCP: preload it from the head instead of waiting for the <img>.
+    preload: priority,
     fetchPriority: priority ? ('high' as const) : ('auto' as const),
     decoding: 'async' as const,
   };
 
   if (!crop) {
-    return <Image {...common} className="block h-auto w-full bg-[#111114]" style={{ aspectRatio: `${width} / ${height}` }} />;
+    return <Image {...common} alt={alt} className="block h-auto w-full bg-surface-2" style={{ aspectRatio: `${width} / ${height}` }} />;
   }
 
   // The box keeps the crop's ratio, so nothing shifts while the image loads. Percent margins
@@ -66,11 +67,12 @@ const Img: React.FC<{ src: string; alt: string; priority: boolean }> = ({ src, a
   const scale = 1 / crop.w;
   return (
     <div
-      className="relative overflow-hidden bg-[#111114]"
+      className="relative overflow-hidden bg-surface-2"
       style={{ aspectRatio: `${crop.w * width} / ${crop.h * height}` }}
     >
       <Image
         {...common}
+        alt={alt}
         className="absolute left-0 top-0 block h-auto max-w-none"
         style={{
           width: `${scale * 100}%`,
@@ -90,9 +92,9 @@ const ShotFrame: React.FC<ShotFrameProps> = ({ src, title, priority, className =
 
   if (isPortraitShot(src)) {
     return (
-      <figure className={`min-w-0 border border-white/[0.12] bg-[#0e0e11] p-1.5 ${SHADOW} ${className}`}>
+      <figure className={`min-w-0 rounded-lg border border-border bg-surface-1 p-1.5 ${SHADOW} ${className}`}>
         <Img src={src} alt={alt} priority={priority} />
-        <figcaption className="flex items-center gap-2 px-1 pt-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-zinc-300">
+        <figcaption className="flex items-center gap-2 px-1 pt-1.5 font-mono text-2xs uppercase tracking-widest text-neutral-300">
           <ChromeDots />
           {caption}
         </figcaption>
@@ -101,8 +103,8 @@ const ShotFrame: React.FC<ShotFrameProps> = ({ src, title, priority, className =
   }
 
   return (
-    <figure className={`min-w-0 overflow-hidden border border-white/[0.12] bg-[#0e0e11] ${SHADOW} ${className}`}>
-      <figcaption className="flex h-6 items-center gap-2.5 border-b border-white/[0.08] bg-[#141417] px-2.5 font-mono text-[10px] uppercase tracking-[0.14em] text-zinc-300">
+    <figure className={`min-w-0 overflow-hidden rounded-lg border border-border bg-surface-1 ${SHADOW} ${className}`}>
+      <figcaption className="flex h-6 items-center gap-2.5 border-b border-border bg-surface-2 px-2.5 font-mono text-2xs uppercase tracking-widest text-neutral-300">
         <ChromeDots />
         {caption}
       </figcaption>

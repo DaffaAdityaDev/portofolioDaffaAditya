@@ -1,6 +1,6 @@
 import type { FlowConfig } from '@/features/Blog/flow/types';
-import type { ActionStep } from '@/features/Blog/posts/Nextjs14Improvement/widgets/serverActionFlow/types';
-import { useServerActionStore } from '@/features/Blog/posts/Nextjs14Improvement/widgets/serverActionFlow/store';
+import type { ActionStep } from './types';
+import { useServerActionStore } from './store';
 import { FLOW_DIAGRAM_SIZE } from '@/features/Blog/flow/constants';
 import { ACTION_EDGE_LABELS, ACTION_EDGES, ACTION_NODES } from './constants';
 import { ACTION_SCENARIO_ORDER, ACTION_SCENARIOS } from './scenarios';

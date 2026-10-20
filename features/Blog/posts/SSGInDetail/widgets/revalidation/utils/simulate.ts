@@ -4,7 +4,7 @@ import type {
   ResponseKind,
   TimelineRequest,
   TimelineResult,
-} from '@/features/Blog/posts/SSGInDetail/widgets/revalidation/types';
+} from '../types';
 import { TIMELINE } from '../constants';
 
 type Version = 'old' | 'new';

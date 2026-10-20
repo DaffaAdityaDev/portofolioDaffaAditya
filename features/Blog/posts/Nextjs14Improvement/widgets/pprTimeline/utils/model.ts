@@ -3,7 +3,7 @@ import type {
   PartTiming,
   PprResponse,
   RenderMode,
-} from '@/features/Blog/posts/Nextjs14Improvement/widgets/pprTimeline/types';
+} from '../types';
 import { SHELL_RENDER_MS } from '../constants';
 
 /**

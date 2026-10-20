@@ -1,5 +1,5 @@
 import type { SequenceLane, SequenceLegendEntry, SequenceStep } from '@/features/Blog/sequence/types';
-import type { HitlLaneId } from '@/features/Blog/posts/EchoAgentService/widgets/hitlSequence/types';
+import type { HitlLaneId } from './types';
 
 export const HITL_LANES: Record<HitlLaneId, SequenceLane> = {
   client: { label: 'Client', caption: 'approval modal', x: 110 },

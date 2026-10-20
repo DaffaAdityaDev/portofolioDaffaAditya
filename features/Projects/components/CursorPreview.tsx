@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { m, useMotionValue, useSpring } from 'framer-motion';
 import { Project } from '../constants';
+import { useHydrated } from '@/hooks/useHydrated';
 import Image from 'next/image';
 
 interface CursorPreviewProps {
@@ -17,18 +18,10 @@ const CursorPreview: React.FC<CursorPreviewProps> = ({ hoveredProject }) => {
   const x = useSpring(cursorX, springConfig);
   const y = useSpring(cursorY, springConfig);
 
+  // The last hovered project, kept while the preview fades out after the pointer leaves.
   const [activeProject, setActiveProject] = useState<Project | null>(null);
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (hoveredProject) {
-      setActiveProject(hoveredProject);
-    }
-  }, [hoveredProject]);
+  if (hoveredProject && hoveredProject !== activeProject) setActiveProject(hoveredProject);
+  const isMounted = useHydrated();
 
   useEffect(() => {
     if (!hoveredProject) return;
@@ -44,7 +37,7 @@ const CursorPreview: React.FC<CursorPreviewProps> = ({ hoveredProject }) => {
 
   const content = (
     <m.div 
-      className="fixed pointer-events-none z-[100] w-[300px] h-[200px] rounded-lg overflow-hidden hidden lg:block border border-zinc-800 shadow-2xl bg-zinc-900"
+      className="fixed pointer-events-none z-[100] w-[300px] h-[200px] rounded-lg overflow-hidden hidden lg:block border border-border shadow-2xl bg-neutral-900"
       style={{ 
         x, 
         y,
@@ -78,7 +71,7 @@ const CursorPreview: React.FC<CursorPreviewProps> = ({ hoveredProject }) => {
             <div className="absolute inset-0 bg-black/30 pointer-events-none" />
 
             <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/90 to-transparent pointer-events-none">
-              <span className="text-white text-[10px] font-mono tracking-widest uppercase pointer-events-none">
+              <span className="text-white text-2xs font-mono tracking-widest uppercase pointer-events-none">
                 {activeProject.title}
               </span>
             </div>

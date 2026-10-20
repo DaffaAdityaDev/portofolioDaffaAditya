@@ -39,7 +39,8 @@ export const usePlaygroundPreview = (files: Record<string, string>, entry: strin
   const isReady = useRef(false);
   const runId = useRef(0);
   const entryId = useRef(0);
-  const lastHeard = useRef(Date.now());
+  // The heartbeat effect starts the clock on mount, so render stays pure.
+  const lastHeard = useRef(0);
   // Set once a running frame got stuck, cleared when a frame says it is ready again.
   const hadStuckFrame = useRef(false);
   const latest = useRef({ files, entry });

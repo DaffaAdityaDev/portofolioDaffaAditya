@@ -86,6 +86,15 @@ export interface BriefFormData {
   website: string;
 }
 
+/** The brief as the API reads it: the currency only picks which budget labels the form shows, so it is not sent. */
+export type BriefContent = Omit<BriefFormData, 'currency'>;
+
+/** POST /api/brief body: the brief plus the spam checks the API verifies. */
+export interface BriefRequest extends BriefContent {
+  turnstileToken: string;
+  elapsedMs: number;
+}
+
 /**
  * 'sent': delivered by the site. 'mail-app': handed to the visitor's mail app because direct
  * sending is not configured or failed. 'saved-mail-app': saved by the site but not emailed, so the mail app

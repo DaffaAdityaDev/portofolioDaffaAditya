@@ -1,7 +1,7 @@
 import React, { useId } from 'react';
 import { Table2 } from 'lucide-react';
 import { cn } from '@/utils/cn';
-import type { SchemaColumnRef, SchemaGroup, SchemaTable } from '@/features/Blog/posts/VideoSharing/widgets/schemaDiagram/types';
+import type { SchemaColumnRef, SchemaGroup, SchemaTable } from '../types';
 import WidgetFrame from '@/features/Blog/components/WidgetFrame';
 import {
   SCHEMA_CLUSTER,

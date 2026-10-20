@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import type { NetworkProfileId, QualityMode } from '@/features/Blog/posts/VideoSharing/widgets/abr/types';
+import type { NetworkProfileId, QualityMode } from '../types';
 import { ABR_PROFILES } from '../constants';
 import { simulateAbr } from '../utils/simulate';
 

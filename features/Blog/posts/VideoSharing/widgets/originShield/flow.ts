@@ -1,6 +1,6 @@
 import type { FlowConfig } from '@/features/Blog/flow/types';
-import type { ShieldStep } from '@/features/Blog/posts/VideoSharing/widgets/originShield/types';
-import { useOriginShieldStore } from '@/features/Blog/posts/VideoSharing/widgets/originShield/store';
+import type { ShieldStep } from './types';
+import { useOriginShieldStore } from './store';
 import { SHIELD_EDGE_LABELS, SHIELD_EDGES, SHIELD_NODES } from './constants';
 import { FLOW_DIAGRAM_SIZE } from '@/features/Blog/flow/constants';
 import { SHIELD_SCENARIO_ORDER, SHIELD_SCENARIOS } from './scenarios';

@@ -150,7 +150,7 @@ const SequenceDiagram = <TLane extends string>({ definition }: { definition: Seq
               paintOrder="stroke"
               className="font-mono uppercase"
             >
-              <tspan fontWeight={700} className="fill-red-500">
+              <tspan fontWeight={700} className="fill-accent-brand">
                 {step.number}
               </tspan>
               <tspan dx={8} className="fill-neutral-300">

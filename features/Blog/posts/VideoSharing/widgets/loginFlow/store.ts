@@ -1,4 +1,4 @@
-import { LOGIN_SCENARIOS } from '@/features/Blog/posts/VideoSharing/widgets/loginFlow/scenarios';
+import { LOGIN_SCENARIOS } from './scenarios';
 import { createFlowStore } from '@/features/Blog/flow/createFlowStore';
 
 /** Playback state (scenario, step, playing) for the login flow visualizer. */

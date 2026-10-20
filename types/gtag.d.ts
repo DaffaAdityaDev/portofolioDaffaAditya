@@ -1,16 +1,11 @@
-export interface GTagEvent {
-  action: string;
-  category: string;
-  label?: string;
-  value?: number;
-}
+export {};
 
 declare global {
   interface Window {
     gtag: (
       command: 'config' | 'event',
       targetId: string,
-      config?: Record<string, any>
+      config?: Record<string, unknown>
     ) => void;
   }
 }

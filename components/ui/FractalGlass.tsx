@@ -231,6 +231,7 @@ void main() {
  */
 const GRAIN_SIZE = 256;
 const NOISE_FBO_SIZE = 256;
+const FRAME_MS = 1000 / 30;
 
 function createFilmGrainData(): Uint8Array {
   const size = GRAIN_SIZE;
@@ -258,6 +259,25 @@ function createFilmGrainData(): Uint8Array {
 }
 
 type GL = WebGLRenderingContext | WebGL2RenderingContext;
+
+interface GLResources {
+  noiseProgram: WebGLProgram;
+  mainProgram: WebGLProgram;
+  vertexBuffer: WebGLBuffer;
+  noiseFramebuffer: WebGLFramebuffer;
+  noiseTexture: WebGLTexture;
+  grainTexture: WebGLTexture;
+  noiseTimeLoc: WebGLUniformLocation | null;
+  resolutionLoc: WebGLUniformLocation | null;
+  mainTimeLoc: WebGLUniformLocation | null;
+  mouseLoc: WebGLUniformLocation | null;
+}
+
+/** The GL objects to delete, each nullable so a half-built set from a failed init can be passed as is. */
+type OwnedResources = {
+  [K in 'noiseProgram' | 'mainProgram' | 'vertexBuffer' | 'noiseFramebuffer' | 'noiseTexture' | 'grainTexture']:
+    GLResources[K] | null;
+};
 
 /**
  * Shader prefixes mirroring what three's ShaderMaterial injected (three 0.185):
@@ -375,59 +395,8 @@ export const FractalGlass: React.FC<FractalGlassProps> = ({
     // No WebGL: leave the mount empty so the caller's static fallback shows through.
     if (!gl) return;
     const ctx: GL = gl;
-
-    const noiseProgram = createProgram(ctx, isGL2, noiseVertexShader, noiseFragmentShader);
-    const mainProgram = createProgram(ctx, isGL2, mainVertexShader, mainFragmentShader);
-
-    // 2. Full-screen triangle (covers clip space; uv derived from position)
-    const vertexBuffer = ctx.createBuffer();
-    ctx.bindBuffer(ctx.ARRAY_BUFFER, vertexBuffer);
-    ctx.bufferData(ctx.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), ctx.STATIC_DRAW);
-
-    // 3. Offscreen FBO for Simplex Noise Domain Warping (256x256 RGBA8, mirrored repeat)
-    const noiseTexture = createTexture(ctx, NOISE_FBO_SIZE, null, ctx.MIRRORED_REPEAT);
-    const noiseFramebuffer = ctx.createFramebuffer();
-    ctx.bindFramebuffer(ctx.FRAMEBUFFER, noiseFramebuffer);
-    ctx.framebufferTexture2D(ctx.FRAMEBUFFER, ctx.COLOR_ATTACHMENT0, ctx.TEXTURE_2D, noiseTexture, 0);
-    ctx.bindFramebuffer(ctx.FRAMEBUFFER, null);
-
-    // 4. Film Grain Procedural Texture
-    const grainTexture = createTexture(ctx, GRAIN_SIZE, createFilmGrainData(), ctx.REPEAT);
-
     const loseContext = ctx.getExtension('WEBGL_lose_context');
-    const releaseGL = () => {
-      ctx.deleteProgram(noiseProgram);
-      ctx.deleteProgram(mainProgram);
-      ctx.deleteBuffer(vertexBuffer);
-      ctx.deleteFramebuffer(noiseFramebuffer);
-      ctx.deleteTexture(noiseTexture);
-      ctx.deleteTexture(grainTexture);
-      loseContext?.loseContext();
-    };
 
-    if (!noiseProgram || !mainProgram || !vertexBuffer || !noiseFramebuffer || !noiseTexture || !grainTexture) {
-      releaseGL();
-      return;
-    }
-
-    // Fixed GL state: no blending / depth (three disabled blending for opaque ShaderMaterials)
-    ctx.disable(ctx.BLEND);
-    ctx.disable(ctx.DEPTH_TEST);
-    ctx.disable(ctx.CULL_FACE);
-    ctx.clearColor(0, 0, 0, 0);
-    ctx.enableVertexAttribArray(0);
-    ctx.vertexAttribPointer(0, 2, ctx.FLOAT, false, 0, 0);
-
-    const loc = (program: WebGLProgram, name: string) => ctx.getUniformLocation(program, name);
-
-    // Noise pass uniforms
-    const noiseTimeLoc = loc(noiseProgram, 'uTime');
-    ctx.useProgram(noiseProgram);
-    ctx.uniform1f(loc(noiseProgram, 'uNoiseScaleX'), 0.35);
-    ctx.uniform1f(loc(noiseProgram, 'uNoiseScaleY'), 0.55);
-    ctx.uniform1f(loc(noiseProgram, 'uWarpSpeed'), 0.12);
-
-    // 5. Main Shader
     // Neon Flux & Cyan Palette tuned to Daffa's dark sleek theme:
     // [0] Deep Royal Azure, [1] Magenta / Purple, [2] Crimson, [3] Amber / Tangerine, [4] Vivid Cyan / Teal
     const palette: [number, number, number][] = [
@@ -440,35 +409,109 @@ export const FractalGlass: React.FC<FractalGlassProps> = ({
 
     const exposureValue = intensity === 'vibrant' ? 0.95 : 0.72;
 
-    const resolutionLoc = loc(mainProgram, 'uResolution');
-    const mainTimeLoc = loc(mainProgram, 'uTime');
-    const mouseLoc = loc(mainProgram, 'uMouse');
-    ctx.useProgram(mainProgram);
-    ctx.uniform1f(loc(mainProgram, 'uPixelRatio'), pixelRatio);
-    ctx.uniform2f(mouseLoc, 0.5, 0.5);
-    ctx.uniform1f(loc(mainProgram, 'uWarpStrength'), 0.38);
-    ctx.uniform1i(loc(mainProgram, 'uNoiseMap'), 0);
-    ctx.uniform1i(loc(mainProgram, 'uGrainTexture'), 1);
-    ctx.uniform2f(loc(mainProgram, 'uGrainTextureSize'), GRAIN_SIZE, GRAIN_SIZE);
-    ctx.uniform1f(loc(mainProgram, 'uGrainStrength'), 0.12);
-    ctx.uniform1f(loc(mainProgram, 'uFluteWidth'), 65.0);     // Width of each fluted column
-    ctx.uniform1f(loc(mainProgram, 'uFluteStrength'), 110.0); // Intensity of glass refraction
-    ctx.uniform1f(loc(mainProgram, 'uToneMapExposure'), exposureValue);
-    palette.forEach((c, i) => ctx.uniform3f(loc(mainProgram, `uC${i + 1}`), c[0], c[1], c[2]));
+    const deleteResources = (r: OwnedResources) => {
+      ctx.deleteProgram(r.noiseProgram);
+      ctx.deleteProgram(r.mainProgram);
+      ctx.deleteBuffer(r.vertexBuffer);
+      ctx.deleteFramebuffer(r.noiseFramebuffer);
+      ctx.deleteTexture(r.noiseTexture);
+      ctx.deleteTexture(r.grainTexture);
+    };
 
-    // Texture units are fixed for the component's lifetime.
-    ctx.activeTexture(ctx.TEXTURE1);
-    ctx.bindTexture(ctx.TEXTURE_2D, grainTexture);
-    ctx.activeTexture(ctx.TEXTURE0);
-    ctx.bindTexture(ctx.TEXTURE_2D, noiseTexture);
+    // Builds every GL object and uploads the fixed state. Runs on mount and again after a
+    // context restore, since a lost context invalidates all of it.
+    const initGL = (): GLResources | null => {
+      const noiseProgram = createProgram(ctx, isGL2, noiseVertexShader, noiseFragmentShader);
+      const mainProgram = createProgram(ctx, isGL2, mainVertexShader, mainFragmentShader);
+
+      // 2. Full-screen triangle (covers clip space; uv derived from position)
+      const vertexBuffer = ctx.createBuffer();
+      ctx.bindBuffer(ctx.ARRAY_BUFFER, vertexBuffer);
+      ctx.bufferData(ctx.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), ctx.STATIC_DRAW);
+
+      // 3. Offscreen FBO for Simplex Noise Domain Warping (256x256 RGBA8, mirrored repeat)
+      const noiseTexture = createTexture(ctx, NOISE_FBO_SIZE, null, ctx.MIRRORED_REPEAT);
+      const noiseFramebuffer = ctx.createFramebuffer();
+      ctx.bindFramebuffer(ctx.FRAMEBUFFER, noiseFramebuffer);
+      ctx.framebufferTexture2D(ctx.FRAMEBUFFER, ctx.COLOR_ATTACHMENT0, ctx.TEXTURE_2D, noiseTexture, 0);
+      ctx.bindFramebuffer(ctx.FRAMEBUFFER, null);
+
+      // 4. Film Grain Procedural Texture (the 256 KB pixel array is built here and dropped after upload)
+      const grainTexture = createTexture(ctx, GRAIN_SIZE, createFilmGrainData(), ctx.REPEAT);
+
+      if (!noiseProgram || !mainProgram || !vertexBuffer || !noiseFramebuffer || !noiseTexture || !grainTexture) {
+        deleteResources({ noiseProgram, mainProgram, vertexBuffer, noiseFramebuffer, noiseTexture, grainTexture });
+        return null;
+      }
+
+      // Fixed GL state: no blending / depth (three disabled blending for opaque ShaderMaterials)
+      ctx.disable(ctx.BLEND);
+      ctx.disable(ctx.DEPTH_TEST);
+      ctx.disable(ctx.CULL_FACE);
+      ctx.clearColor(0, 0, 0, 0);
+      ctx.enableVertexAttribArray(0);
+      ctx.vertexAttribPointer(0, 2, ctx.FLOAT, false, 0, 0);
+
+      const loc = (program: WebGLProgram, name: string) => ctx.getUniformLocation(program, name);
+
+      // Noise pass uniforms
+      const noiseTimeLoc = loc(noiseProgram, 'uTime');
+      ctx.useProgram(noiseProgram);
+      ctx.uniform1f(loc(noiseProgram, 'uNoiseScaleX'), 0.35);
+      ctx.uniform1f(loc(noiseProgram, 'uNoiseScaleY'), 0.55);
+      ctx.uniform1f(loc(noiseProgram, 'uWarpSpeed'), 0.12);
+
+      // 5. Main Shader
+      const resolutionLoc = loc(mainProgram, 'uResolution');
+      const mainTimeLoc = loc(mainProgram, 'uTime');
+      const mouseLoc = loc(mainProgram, 'uMouse');
+      ctx.useProgram(mainProgram);
+      ctx.uniform1f(loc(mainProgram, 'uPixelRatio'), pixelRatio);
+      ctx.uniform2f(mouseLoc, 0.5, 0.5);
+      ctx.uniform1f(loc(mainProgram, 'uWarpStrength'), 0.38);
+      ctx.uniform1i(loc(mainProgram, 'uNoiseMap'), 0);
+      ctx.uniform1i(loc(mainProgram, 'uGrainTexture'), 1);
+      ctx.uniform2f(loc(mainProgram, 'uGrainTextureSize'), GRAIN_SIZE, GRAIN_SIZE);
+      ctx.uniform1f(loc(mainProgram, 'uGrainStrength'), 0.12);
+      ctx.uniform1f(loc(mainProgram, 'uFluteWidth'), 65.0);     // Width of each fluted column
+      ctx.uniform1f(loc(mainProgram, 'uFluteStrength'), 110.0); // Intensity of glass refraction
+      ctx.uniform1f(loc(mainProgram, 'uToneMapExposure'), exposureValue);
+      palette.forEach((c, i) => ctx.uniform3f(loc(mainProgram, `uC${i + 1}`), c[0], c[1], c[2]));
+
+      // Texture units are fixed for the context's lifetime.
+      ctx.activeTexture(ctx.TEXTURE1);
+      ctx.bindTexture(ctx.TEXTURE_2D, grainTexture);
+      ctx.activeTexture(ctx.TEXTURE0);
+      ctx.bindTexture(ctx.TEXTURE_2D, noiseTexture);
+
+      return {
+        noiseProgram,
+        mainProgram,
+        vertexBuffer,
+        noiseFramebuffer,
+        noiseTexture,
+        grainTexture,
+        noiseTimeLoc,
+        resolutionLoc,
+        mainTimeLoc,
+        mouseLoc,
+      };
+    };
+
+    let res = initGL();
+    if (!res) {
+      loseContext?.loseContext();
+      return;
+    }
 
     const setSize = (w: number, h: number) => {
       canvas.width = Math.floor(w * pixelRatio);
       canvas.height = Math.floor(h * pixelRatio);
       canvas.style.width = `${w}px`;
       canvas.style.height = `${h}px`;
-      ctx.useProgram(mainProgram);
-      ctx.uniform2f(resolutionLoc, w, h);
+      if (!res) return;
+      ctx.useProgram(res.mainProgram);
+      ctx.uniform2f(res.resolutionLoc, w, h);
     };
     setSize(mount.clientWidth, mount.clientHeight);
     mount.appendChild(canvas);
@@ -508,42 +551,53 @@ export const FractalGlass: React.FC<FractalGlassProps> = ({
     let animationFrameId: number | null = null;
     let lastTime = performance.now();
     let time = 0;
+    let frameIndex = 0;
 
     const animate = (now: number) => {
       animationFrameId = requestAnimationFrame(animate);
-      if (ctx.isContextLost()) return;
+      if (!res || ctx.isContextLost()) return;
 
+      // Capped at ~30 fps: a slow ambient blur gains nothing from 60-120 Hz, and each frame is
+      // two passes. `time` advances by real elapsed time, so the motion speed is unchanged.
+      if (now - lastTime < FRAME_MS - 1) return;
       const delta = Math.min((now - lastTime) / 1000, 0.1);
       lastTime = now;
 
-      // Smooth mouse lerp via pure math utility
-      mouseCurrentRef.current.x = lerp(mouseCurrentRef.current.x, mouseTargetRef.current.x, MOUSE_LERP_FACTOR);
-      mouseCurrentRef.current.y = lerp(mouseCurrentRef.current.y, mouseTargetRef.current.y, MOUSE_LERP_FACTOR);
+      // Smooth mouse lerp. MOUSE_LERP_FACTOR is the step per 60 Hz frame; scaling it by the elapsed
+      // time keeps the follow speed the same under the 30 fps cap (or any frame rate).
+      const mouseStep = 1 - Math.pow(1 - MOUSE_LERP_FACTOR, delta * 60);
+      mouseCurrentRef.current.x = lerp(mouseCurrentRef.current.x, mouseTargetRef.current.x, mouseStep);
+      mouseCurrentRef.current.y = lerp(mouseCurrentRef.current.y, mouseTargetRef.current.y, mouseStep);
 
       // Advance time
       time += delta;
 
-      // Pass 1: Render Simplex Noise into FBO
-      ctx.bindFramebuffer(ctx.FRAMEBUFFER, noiseFramebuffer);
-      ctx.viewport(0, 0, NOISE_FBO_SIZE, NOISE_FBO_SIZE);
-      ctx.useProgram(noiseProgram);
-      ctx.uniform1f(noiseTimeLoc, time);
-      ctx.drawArrays(ctx.TRIANGLES, 0, 3);
+      // Pass 1: Render Simplex Noise into FBO. The warp field drifts slowly (uWarpSpeed 0.12), so
+      // refreshing it every other frame (~15 Hz) looks the same and halves that pass.
+      if ((frameIndex++ & 1) === 0) {
+        ctx.bindFramebuffer(ctx.FRAMEBUFFER, res.noiseFramebuffer);
+        ctx.viewport(0, 0, NOISE_FBO_SIZE, NOISE_FBO_SIZE);
+        ctx.useProgram(res.noiseProgram);
+        ctx.uniform1f(res.noiseTimeLoc, time);
+        ctx.drawArrays(ctx.TRIANGLES, 0, 3);
+        ctx.bindFramebuffer(ctx.FRAMEBUFFER, null);
+      }
 
       // Pass 2: Render Main Fractal Glass to Screen
-      ctx.bindFramebuffer(ctx.FRAMEBUFFER, null);
       ctx.viewport(0, 0, canvas.width, canvas.height);
       ctx.clear(ctx.COLOR_BUFFER_BIT);
-      ctx.useProgram(mainProgram);
-      ctx.uniform1f(mainTimeLoc, time);
-      ctx.uniform2f(mouseLoc, mouseCurrentRef.current.x, mouseCurrentRef.current.y);
+      ctx.useProgram(res.mainProgram);
+      ctx.uniform1f(res.mainTimeLoc, time);
+      ctx.uniform2f(res.mouseLoc, mouseCurrentRef.current.x, mouseCurrentRef.current.y);
       ctx.drawArrays(ctx.TRIANGLES, 0, 3);
     };
 
     const start = () => {
-      if (animationFrameId !== null || document.hidden || !isOnScreen) return;
-      // Reset the clock so the first frame after a pause does not jump.
-      lastTime = performance.now();
+      if (animationFrameId !== null || document.hidden || !isOnScreen || !res) return;
+      // Reset the clock so the first frame after a pause does not jump (and is not skipped by the cap).
+      lastTime = performance.now() - FRAME_MS;
+      // Frame 0 always refreshes the noise FBO, which is empty after a context restore.
+      frameIndex = 0;
       animationFrameId = requestAnimationFrame(animate);
     };
 
@@ -558,6 +612,26 @@ export const FractalGlass: React.FC<FractalGlassProps> = ({
       else if (isOnScreen) start();
     };
     document.addEventListener('visibilitychange', handleVisibility);
+
+    // Context loss (common on iOS after backgrounding): stop the loop and drop the dead handles.
+    // preventDefault() opts in to `webglcontextrestored`, where everything is rebuilt. If the
+    // rebuild fails, the canvas is removed so the caller's static gradient shows through.
+    const handleContextLost = (e: Event) => {
+      e.preventDefault();
+      stop();
+      res = null;
+    };
+    const handleContextRestored = () => {
+      res = initGL();
+      if (!res) {
+        if (mount.contains(canvas)) mount.removeChild(canvas);
+        return;
+      }
+      setSize(mount.clientWidth, mount.clientHeight);
+      start();
+    };
+    canvas.addEventListener('webglcontextlost', handleContextLost);
+    canvas.addEventListener('webglcontextrestored', handleContextRestored);
 
     // 9. Intersection Observer for Power Efficiency (no rAF at all while off-screen)
     // Observe the in-flow target, not `mount`: the Footer renders this inside a
@@ -581,13 +655,17 @@ export const FractalGlass: React.FC<FractalGlassProps> = ({
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
       document.removeEventListener('visibilitychange', handleVisibility);
+      // Detach first: loseContext() below would otherwise fire handleContextLost.
+      canvas.removeEventListener('webglcontextlost', handleContextLost);
+      canvas.removeEventListener('webglcontextrestored', handleContextRestored);
 
       if (interactive) {
         window.removeEventListener('mousemove', handleMouseMove);
         eventTarget.removeEventListener('mouseleave', handleMouseLeave);
       }
 
-      releaseGL();
+      if (res) deleteResources(res);
+      loseContext?.loseContext();
       if (mount.contains(canvas)) {
         mount.removeChild(canvas);
       }

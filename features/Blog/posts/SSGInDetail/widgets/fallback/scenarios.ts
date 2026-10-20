@@ -4,7 +4,7 @@ import type {
   FallbackNodeId,
   FallbackScenarioId,
   FallbackStep,
-} from '@/features/Blog/posts/SSGInDetail/widgets/fallback/types';
+} from './types';
 
 const step = (
   id: string,

@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://daffaaditya.id/api/sitemap.xml
+Sitemap: https://daffaaditya.id/sitemap.xml

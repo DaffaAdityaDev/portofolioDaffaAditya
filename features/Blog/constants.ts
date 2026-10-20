@@ -1,4 +1,4 @@
-import type { BlogCategory, PostData } from 'types/blog';
+import type { BlogCategory, PostData } from '@/types/blog';
 
 /** Blog groups, in the order the filter shows them. */
 export const BLOG_CATEGORIES: { id: BlogCategory; label: string }[] = [
@@ -11,80 +11,98 @@ export const BLOG_CATEGORY_LABELS = Object.fromEntries(
   BLOG_CATEGORIES.map(({ id, label }) => [id, label]),
 ) as Record<BlogCategory, string>;
 
-export const POSTS_DATA: PostData[] = [
+/**
+ * Every post, newest first. The single list of post metadata: the blog page, the sitemap and
+ * the post route read it, and `PostId` makes the post route's content map list exactly these ids.
+ * `id` is the public URL slug (kebab-case); renaming one needs a redirect in next.config.js.
+ */
+export const POSTS_DATA = [
   {
-    id: "LearnHowToLearn",
-    category: "blog",
-    title: "How I Learned to Learn",
-    date: "2025-05-12",
+    id: 'scaling-ai-agents-as-a-service',
+    category: 'system-design',
+    title: 'Scaling AI Agents as a Service',
+    date: '2026-10-15',
+    timeToRead: 18,
+    description:
+      'Design a multi-agent service that scales by adding boxes and stays fast: stateless workers, sub-agents with limits, prompt caching and guardrails.',
+    image: '/image/blogs/scaling-ai-agents-as-a-service/banner.webp',
+    heroImage: '/image/blogs/scaling-ai-agents-as-a-service/hero.webp',
+    ogImage: '/image/blogs/scaling-ai-agents-as-a-service/og.jpg',
+    production: true,
+  },
+  {
+    id: 'how-i-learned-to-learn',
+    category: 'blog',
+    title: 'How I Learned to Learn',
+    date: '2025-05-12',
     timeToRead: 7,
-    description: "Learn the basics first, test yourself instead of re-reading, and space your reviews. Try a forgetting curve to see why spacing wins.",
-    image: "/image/blogs/LearnHowToLearn/banner.webp",
-    heroImage: "/image/blogs/LearnHowToLearn/hero.webp",
-    ogImage: "/image/blogs/LearnHowToLearn/og.jpg",
-    production: true
+    description:
+      'Learn the basics first, test yourself instead of re-reading, and space your reviews. Try a forgetting curve to see why spacing wins.',
+    image: '/image/blogs/how-i-learned-to-learn/banner.webp',
+    heroImage: '/image/blogs/how-i-learned-to-learn/hero.webp',
+    ogImage: '/image/blogs/how-i-learned-to-learn/og.jpg',
+    production: true,
   },
   {
-    id: "solid-5-principles-that-can-improve-your-codebase",
-    category: "tech",
-    title: "SOLID: 5 Principles That Make Your Codebase Easier to Change",
-    date: "2025-02-18",
+    id: 'solid-5-principles-that-make-your-codebase-easier-to-change',
+    category: 'tech',
+    title: 'SOLID: 5 Principles That Make Your Codebase Easier to Change',
+    seoTitle: 'SOLID Principles: Make Code Easier to Change',
+    date: '2025-02-18',
     timeToRead: 12,
-    description: "One React profile form, refactored once per SOLID principle, with before and after TypeScript code and a live editor where you edit the uploader, press Save, and read the console.",
-    image: "/image/blogs/solidPrinciples/banner.webp",
-    heroImage: "/image/blogs/solidPrinciples/hero.webp",
-    ogImage: "/image/blogs/solidPrinciples/og.jpg",
-    production: true
+    description:
+      'Refactor one React profile form once per SOLID principle, with before and after TypeScript code and a live editor to test each change.',
+    image: '/image/blogs/solid-5-principles-that-make-your-codebase-easier-to-change/banner.webp',
+    heroImage: '/image/blogs/solid-5-principles-that-make-your-codebase-easier-to-change/hero.webp',
+    ogImage: '/image/blogs/solid-5-principles-that-make-your-codebase-easier-to-change/og.jpg',
+    production: true,
   },
   {
-    id: "SSGInDetail",
-    category: "tech",
-    title: "Static Site Generation in Next.js: getStaticProps, getStaticPaths and ISR",
-    date: "2024-02-28",
+    id: 'nextjs-14-to-16',
+    category: 'tech',
+    title: 'Next.js 14 to 16: Turbopack, Server Actions and PPR',
+    seoTitle: 'Next.js 14 to 16: Turbopack, Actions and PPR',
+    date: '2024-02-28',
+    updated: '2026-10-20',
     timeToRead: 10,
-    description: "Build pages once instead of on every request: when to use getStaticProps and getStaticPaths, how ISR keeps them fresh, and when SSR or client fetching fits better.",
-    image: "/image/blogs/SSGInDetail/banner.webp",
-    heroImage: "/image/blogs/SSGInDetail/hero.webp",
-    ogImage: "/image/blogs/SSGInDetail/og.jpg",
-    production: true
+    description:
+      'Learn what Turbopack, Server Actions and Partial Prerendering do and what changed by Next.js 16: useActionState, await cookies() and Cache Components.',
+    image: '/image/blogs/nextjs-14-to-16/banner.webp',
+    heroImage: '/image/blogs/nextjs-14-to-16/hero.webp',
+    ogImage: '/image/blogs/nextjs-14-to-16/og.jpg',
+    production: true,
   },
   {
-    id: "echoAgentService",
-    category: "system-design",
-    title: "Scaling AI Agents as a Service",
-    date: "2026-10-15",
-    timeToRead: 30,
-    description: "Design a multi-agent service that scales by adding boxes, stays fast where users feel it, and stays easy to change: a gateway and stateless workers, sub-agents with limits, prompt caching, guardrails and registries.",
-    image: "/image/blogs/echoAgentService/banner.webp",
-    heroImage: "/image/blogs/echoAgentService/hero.webp",
-    ogImage: "/image/blogs/echoAgentService/og.jpg",
-    production: true
+    id: 'static-site-generation-in-nextjs',
+    category: 'tech',
+    title: 'Static Site Generation in Next.js: getStaticProps, getStaticPaths and ISR',
+    seoTitle: 'Next.js Static Site Generation and ISR',
+    date: '2024-02-28',
+    timeToRead: 10,
+    description:
+      'Build pages once, not on every request: when to use getStaticProps and getStaticPaths, how ISR keeps them fresh, and when SSR fits better.',
+    image: '/image/blogs/static-site-generation-in-nextjs/banner.webp',
+    heroImage: '/image/blogs/static-site-generation-in-nextjs/hero.webp',
+    ogImage: '/image/blogs/static-site-generation-in-nextjs/og.jpg',
+    production: true,
   },
   {
-    id: "videoSharing",
-    category: "system-design",
-    title: "Designing a Distributed Video Streaming System",
-    date: "2024-02-26",
+    id: 'designing-a-distributed-video-streaming-system',
+    category: 'system-design',
+    title: 'Designing a Distributed Video Streaming System',
+    seoTitle: 'Distributed Video Streaming System Design',
+    date: '2024-02-26',
     timeToRead: 45,
-    description: "Design a distributed video streaming system: estimate the scale, choose the architecture, then break it with a traffic spike you control.",
-    image: "/image/blogs/videoSharing/banner.webp",
-    heroImage: "/image/blogs/videoSharing/hero.webp",
-    ogImage: "/image/blogs/videoSharing/og.jpg",
-    production: true
+    description:
+      'Design a distributed video streaming system: estimate the scale, choose the architecture, then break it with a traffic spike you control.',
+    image: '/image/blogs/designing-a-distributed-video-streaming-system/banner.webp',
+    heroImage: '/image/blogs/designing-a-distributed-video-streaming-system/hero.webp',
+    ogImage: '/image/blogs/designing-a-distributed-video-streaming-system/og.jpg',
+    production: true,
   },
-  {
-    id: "nextjs14Improvement",
-    category: "tech",
-    title: "Next.js 14 First Look: Turbopack, Server Actions and Partial Prerendering",
-    date: "2024-02-28",
-    timeToRead: 8,
-    description: "What Turbopack, Server Actions and Partial Prerendering do in Next.js 14, why they exist, and what changed in Next.js 15 and 16.",
-    image: "/image/blogs/nextjs14Improvement/banner.webp",
-    heroImage: "/image/blogs/nextjs14Improvement/hero.webp",
-    ogImage: "/image/blogs/nextjs14Improvement/og.jpg",
-    production: true
-  }
-];
+] as const satisfies readonly PostData[];
+
+export type PostId = (typeof POSTS_DATA)[number]['id'];
 
 // --- Table of contents ---
 /** Headings that become entries. Anything inside [data-toc-ignore] is skipped. */

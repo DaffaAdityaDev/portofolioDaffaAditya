@@ -1,7 +1,7 @@
 import React from 'react';
 import { ListOrdered } from 'lucide-react';
 import type { SequenceDefinition } from '@/features/Blog/sequence/types';
-import type { UploadLaneId } from '@/features/Blog/posts/VideoSharing/widgets/uploadSequence/types';
+import type { UploadLaneId } from '../types';
 import SequenceDiagram from '@/features/Blog/sequence/components/SequenceDiagram';
 import { UPLOAD_LANES, UPLOAD_SEQUENCE_LEGEND, UPLOAD_SEQUENCE_STEPS } from '../constants';
 

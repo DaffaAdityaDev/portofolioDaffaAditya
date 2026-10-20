@@ -1,5 +1,5 @@
 import type { SequenceLane, SequenceLegendEntry, SequenceStep } from '@/features/Blog/sequence/types';
-import type { ChatTurnLaneId } from '@/features/Blog/posts/EchoAgentService/widgets/chatTurnSequence/types';
+import type { ChatTurnLaneId } from './types';
 
 export const CHAT_TURN_LANES: Record<ChatTurnLaneId, SequenceLane> = {
   client: { label: 'Client', caption: 'web app', x: 110 },

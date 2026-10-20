@@ -1,4 +1,4 @@
-import type { NetworkProfile, NetworkProfileId, Rendition } from '@/features/Blog/posts/VideoSharing/widgets/abr/types';
+import type { NetworkProfile, NetworkProfileId, Rendition } from './types';
 
 /** The bitrate ladder: one rendition per rung, typical H.264 bitrates. */
 export const ABR_LADDER: Rendition[] = [

@@ -4,7 +4,7 @@ import type {
   CountNodeId,
   CountScenarioId,
   CountStep,
-} from '@/features/Blog/posts/VideoSharing/widgets/viewCount/types';
+} from './types';
 
 const step = (
   id: string,

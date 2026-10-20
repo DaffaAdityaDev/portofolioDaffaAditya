@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { cn } from '@/utils/cn';
 import { clamp } from '@/utils/math';
-import type { AbrResult } from '@/features/Blog/posts/VideoSharing/widgets/abr/types';
-import { FLOW_METER_LABEL_CLASS } from '@/features/Blog/flow/constants';
+import type { AbrResult } from '../types';
+import { WIDGET_LABEL_CLASS } from '@/features/Blog/components/widgetStyles';
 import { ABR, ABR_CHART as C, ABR_LADDER } from '../constants';
 
 const PLOT_WIDTH = C.width - C.padLeft - C.padRight;
@@ -52,7 +52,7 @@ const AbrChart: React.FC<{ result: AbrResult }> = ({ result }) => {
 
   return (
     <figure className="m-0">
-      <div className="mb-2 min-h-[2.5rem] font-mono text-[11px] leading-relaxed text-neutral-400" aria-live="polite">
+      <div className="mb-2 min-h-[2.5rem] font-mono text-2xs leading-relaxed text-muted-foreground" aria-live="polite">
         {active ? (
           <>
             <span className="text-neutral-200">
@@ -77,7 +77,7 @@ const AbrChart: React.FC<{ result: AbrResult }> = ({ result }) => {
           onBlur={() => setHovered(null)}
           onMouseLeave={() => setHovered(null)}
           aria-label={`Network bandwidth, picked quality and buffer over ${formatTime(segments.length * ABR.segmentSeconds)} of video. ${result.stalls} freezes.`}
-          className={cn('block h-auto w-full outline-none focus-visible:ring-1 focus-visible:ring-red-500', C.minWidthClass)}
+          className={cn('block h-auto w-full outline-none focus-visible:ring-1 focus-visible:ring-accent-brand', C.minWidthClass)}
         >
           {RATE_TICKS.map((tick) => (
             <g key={`rate-${tick}`}>
@@ -171,7 +171,7 @@ const AbrChart: React.FC<{ result: AbrResult }> = ({ result }) => {
         </svg>
       </div>
 
-      <figcaption className={cn('mt-2 flex flex-wrap gap-x-4 gap-y-1', FLOW_METER_LABEL_CLASS)}>
+      <figcaption className={cn('mt-2 flex flex-wrap gap-x-4 gap-y-1', WIDGET_LABEL_CLASS)}>
         <span>
           <span style={{ color: C.networkColor }}>&#9632;</span> Network bandwidth
         </span>

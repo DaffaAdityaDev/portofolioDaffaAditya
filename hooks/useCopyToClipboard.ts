@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type CopyStatus = 'idle' | 'copied' | 'error';
 
@@ -12,19 +12,16 @@ export function useCopyToClipboard(resetMs: number) {
 
   useEffect(() => () => clearTimeout(timer.current), []);
 
-  const copy = useCallback(
-    async (text: string) => {
-      try {
-        await navigator.clipboard.writeText(text);
-        setStatus('copied');
-      } catch {
-        setStatus('error');
-      }
-      clearTimeout(timer.current);
-      timer.current = setTimeout(() => setStatus('idle'), resetMs);
-    },
-    [resetMs],
-  );
+  const copy = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setStatus('copied');
+    } catch {
+      setStatus('error');
+    }
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => setStatus('idle'), resetMs);
+  };
 
   return { status, copy };
 }

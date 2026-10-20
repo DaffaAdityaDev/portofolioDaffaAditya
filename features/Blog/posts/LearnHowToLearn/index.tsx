@@ -1,8 +1,8 @@
 import React from 'react';
-import Callout from '../../components/Callout';
-import CodeBlock from '../../components/CodeBlock';
-import Reveal from '../../components/Reveal';
-import { lazyOnView } from '../../components/LazyOnView';
+import Callout from '@/features/Blog/components/Callout';
+import CodeBlock from '@/features/Blog/components/CodeBlock';
+import Reveal from '@/features/Blog/components/Reveal';
+import { lazyOnView } from '@/features/Blog/components/LazyOnView';
 
 // The only widget sits far below the first screen: its HTML is in the static page, its JS loads on scroll.
 const ForgettingCurveSimulator = lazyOnView(() => import('./widgets/forgettingCurve/components/ForgettingCurveSimulator'));

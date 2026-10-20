@@ -1,5 +1,5 @@
 import type { FlowScenario, StepTone } from '@/features/Blog/flow/types';
-import type { MapEdgeId, MapNodeId, MapScenarioId, MapStep } from '@/features/Blog/posts/EchoAgentService/widgets/systemMap/types';
+import type { MapEdgeId, MapNodeId, MapScenarioId, MapStep } from './types';
 
 const step = (
   id: string,

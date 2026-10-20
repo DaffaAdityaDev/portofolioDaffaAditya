@@ -25,21 +25,6 @@ export const lerp = (start: number, end: number, factor: number): number => {
 };
 
 /**
- * Maps a value from an input range to a corresponding value in an output range.
- */
-export const mapRange = (
-  value: number,
-  inMin: number,
-  inMax: number,
-  outMin: number,
-  outMax: number
-): number => {
-  if (inMax - inMin === 0) return outMin;
-  const normalized = (value - inMin) / (inMax - inMin);
-  return outMin + normalized * (outMax - outMin);
-};
-
-/**
  * Normalizes a number between 0 and 1 given an input domain.
  */
 export const normalize = (value: number, min: number, max: number): number => {
@@ -53,15 +38,4 @@ export const normalize = (value: number, min: number, max: number): number => {
 export const roundTo = (value: number, decimals: number = 2): number => {
   const factor = Math.pow(10, decimals);
   return Math.round(value * factor) / factor;
-};
-
-/**
- * Frame-rate independent smooth damping (ideal for RAF game/physics loops).
- * @param current - Current value
- * @param target - Target value
- * @param lambda - Smoothing speed (higher = faster snap)
- * @param dt - Delta time in seconds
- */
-export const damp = (current: number, target: number, lambda: number, dt: number): number => {
-  return lerp(current, target, 1 - Math.exp(-lambda * dt));
 };

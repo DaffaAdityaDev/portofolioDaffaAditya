@@ -1,6 +1,6 @@
 import type { FlowConfig } from '@/features/Blog/flow/types';
-import type { DeployStep } from '@/features/Blog/posts/VideoSharing/widgets/deployPipeline/types';
-import { useDeployPipelineStore } from '@/features/Blog/posts/VideoSharing/widgets/deployPipeline/store';
+import type { DeployStep } from './types';
+import { useDeployPipelineStore } from './store';
 import { DEPLOY_EDGE_LABELS, DEPLOY_EDGES, DEPLOY_NODES } from './constants';
 import { FLOW_DIAGRAM_SIZE } from '@/features/Blog/flow/constants';
 import { DEPLOY_SCENARIO_ORDER, DEPLOY_SCENARIOS } from './scenarios';

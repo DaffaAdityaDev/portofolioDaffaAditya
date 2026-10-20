@@ -1,6 +1,6 @@
 import type { FlowConfig } from '@/features/Blog/flow/types';
-import type { UploadStep } from '@/features/Blog/posts/VideoSharing/widgets/uploadFlow/types';
-import { useUploadFlowStore } from '@/features/Blog/posts/VideoSharing/widgets/uploadFlow/store';
+import type { UploadStep } from './types';
+import { useUploadFlowStore } from './store';
 import {
   UPLOAD_EDGE_LABELS,
   UPLOAD_EDGES,

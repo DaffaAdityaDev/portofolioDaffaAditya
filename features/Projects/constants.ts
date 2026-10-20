@@ -95,9 +95,9 @@ export const projectsData: Project[] = [
     id: 5,
     title: "Recyclops",
     slug: "recyclops",
-    client: "Side Project",
-    description: "A native Android app that shows people how to sort their waste, routes them to the nearest recycling point and rewards them with points. It works offline.",
-    year: "2022",
+    client: "Bangkit Academy Capstone",
+    description: "A native Android app, built as a team capstone, that classifies waste with machine learning, routes people to the nearest recycling point and rewards them with points. It works offline.",
+    year: "2023",
     type: "MOBILE",
     category: "MOBILE",
     featured: true,
@@ -108,7 +108,7 @@ export const projectsData: Project[] = [
     tech: ["Kotlin", "Android", "Firebase"],
     nature: "side",
     achievements: [
-      "Built the app in Kotlin with Firebase as the backend.",
+      "Built the app in Kotlin with Firebase as the backend, and connected the waste classification model to it.",
       "Added camera barcode scanning and routing to the nearest recycling point with Google Maps.",
       "Made it work offline: actions are saved on the device and sync to Firebase when the connection returns."
     ]

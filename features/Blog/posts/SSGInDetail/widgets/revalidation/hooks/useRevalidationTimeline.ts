@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import type { RenderMode } from '@/features/Blog/posts/SSGInDetail/widgets/revalidation/types';
+import type { RenderMode } from '../types';
 import { TIMELINE } from '../constants';
 import { simulateTimeline } from '../utils/simulate';
 

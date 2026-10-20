@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const SCRIPT_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
 /** How long to wait for Cloudflare's first answer before treating the check as unavailable. */
@@ -79,12 +79,10 @@ export function useTurnstile(siteKey: string): UseTurnstileReturn {
     };
   }, [siteKey]);
 
-  const reset = useCallback(() => {
+  const reset = () => {
     setToken('');
     if (widgetId.current && window.turnstile) window.turnstile.reset(widgetId.current);
-  }, []);
+  };
 
   return { ref, token, failed, reset };
 }
-
-export default useTurnstile;

@@ -1,4 +1,4 @@
-import type { RenderMode, RenderModeInfo } from '@/features/Blog/posts/Nextjs14Improvement/widgets/pprTimeline/types';
+import type { RenderMode, RenderModeInfo } from './types';
 
 export const RENDER_MODES: Record<RenderMode, RenderModeInfo> = {
   ssr: {

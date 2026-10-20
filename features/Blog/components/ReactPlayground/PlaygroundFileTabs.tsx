@@ -25,7 +25,7 @@ const PlaygroundFileTabs: React.FC<PlaygroundFileTabsProps> = ({ paths, activePa
       ref={listRef}
       role="tablist"
       aria-label="Files"
-      className="flex shrink-0 overflow-x-auto border-b border-neutral-800 bg-neutral-900/50 font-mono text-xs"
+      className="flex shrink-0 overflow-x-auto border-b border-border bg-neutral-900/50 font-mono text-xs"
     >
       {paths.map((path, index) => {
         const isActive = path === activePath;
@@ -42,8 +42,8 @@ const PlaygroundFileTabs: React.FC<PlaygroundFileTabsProps> = ({ paths, activePa
             onKeyDown={(event) => handleKeyDown(event, index)}
             className={cn(
               'shrink-0 cursor-pointer border-b-2 px-3 py-2 transition-colors',
-              'focus-visible:outline focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-red-500',
-              isActive ? 'border-red-500 text-neutral-100' : 'border-transparent text-neutral-500 hover:text-neutral-200',
+              'focus-inset',
+              isActive ? 'border-accent-brand text-neutral-100' : 'border-transparent text-neutral-500 hover:text-neutral-200',
             )}
           >
             {fileLabel(path)}

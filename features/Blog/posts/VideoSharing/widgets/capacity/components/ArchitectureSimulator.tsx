@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useInView } from 'framer-motion';
 import { Activity } from 'lucide-react';
-import { useVideoDesignStore } from '@/features/Blog/posts/VideoSharing/widgets/capacity/store';
+import { useVideoDesignStore } from '../store';
 import WidgetFrame from '@/features/Blog/components/WidgetFrame';
 import { SIM } from '../constants';
 import { useSimulationLoop } from '../hooks/useSimulationLoop';
@@ -29,7 +29,7 @@ const ArchitectureSimulator: React.FC = () => {
         <TrafficControls />
         <SimulatorDiagram />
         <SimulatorReadout />
-        <div className="border-t border-neutral-800 pt-5">
+        <div className="border-t border-border pt-5">
           <DesignControls />
         </div>
       </div>

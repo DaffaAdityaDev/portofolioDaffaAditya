@@ -1,5 +1,5 @@
 import type { FlowEdgeLabel, FlowEdgeLayout, FlowNodeLayout } from '@/features/Blog/flow/types';
-import type { LbEdgeId, LbNodeId } from '@/features/Blog/posts/VideoSharing/widgets/loadBalancer/types';
+import type { LbEdgeId, LbNodeId } from './types';
 
 export const LB_NODES: Record<LbNodeId, FlowNodeLayout> = {
   clients: { x: 10, y: 134, label: 'Clients', caption: 'apps, browsers' },

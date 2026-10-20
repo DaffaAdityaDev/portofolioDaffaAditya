@@ -1,4 +1,4 @@
-import type { ChangeRequest, ChangeRequestId, Codebase, CodebaseId } from '@/features/Blog/posts/SolidPrinciples/widgets/changeRipple/types';
+import type { ChangeRequest, ChangeRequestId, Codebase, CodebaseId } from './types';
 
 export const CODEBASE_ORDER: CodebaseId[] = ['tangled', 'solid'];
 

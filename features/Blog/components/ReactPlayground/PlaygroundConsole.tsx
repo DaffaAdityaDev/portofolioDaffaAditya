@@ -23,10 +23,10 @@ const PlaygroundConsole: React.FC<PlaygroundConsoleProps> = ({ entries, onClear 
 
   return (
     <div
-      className="flex flex-col border border-t-0 border-neutral-800 bg-[#0d0d0d]"
+      className="flex flex-col border-t border-border bg-surface-1"
       style={{ height: PLAYGROUND_CONSOLE_HEIGHT }}
     >
-      <div className="flex shrink-0 items-center justify-between border-b border-neutral-800 bg-neutral-900/50 py-0.5 pl-3 pr-1 font-mono text-[11px] uppercase tracking-wider text-neutral-500">
+      <div className="flex shrink-0 items-center justify-between border-b border-border bg-neutral-900/50 py-0.5 pl-3 pr-1 font-mono text-2xs uppercase tracking-wider text-neutral-500">
         <span>Console</span>
         <ToolbarButton label="Clear console" onClick={onClear}>
           <Ban className="size-3.5" aria-hidden="true" />

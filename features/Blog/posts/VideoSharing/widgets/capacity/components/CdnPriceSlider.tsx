@@ -1,6 +1,7 @@
 import React from 'react';
 import { clamp, roundTo } from '@/utils/math';
 import { cn } from '@/utils/cn';
+import { SLIDER_RANGE_CLASS } from '@/features/Blog/components/SliderField';
 import {
   AWS_CLOUDFRONT_TIERS,
   CDN_PRICE_POINTS,
@@ -26,7 +27,8 @@ const formatPrice = (value: number): string => `$${value.toFixed(3)}`;
 /**
  * Horizontal position of a point along the track. A native range thumb never
  * reaches the very edge, so the track is inset by half a thumb on each side.
- * Labels, stems and the filled track all use this same formula.
+ * Labels and stems use this formula; the shared range class fills the track
+ * the same way for its 20px thumb.
  */
 const trackOffset = (fraction: number): string =>
   `calc(var(--thumb) / 2 + (100% - var(--thumb)) * ${fraction})`;
@@ -68,11 +70,11 @@ const CdnPriceSlider: React.FC = () => {
 
   return (
     <div className="flex min-w-0 flex-col gap-1.5">
-      <div className="font-mono text-xs uppercase tracking-wider text-neutral-400">
+      <div className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
         CDN price per GB
       </div>
 
-      <div className="px-4" style={{ '--thumb': '16px' } as React.CSSProperties}>
+      <div className="px-4" style={{ '--thumb': '20px' } as React.CSSProperties}>
         <div className="relative h-14" aria-hidden="true">
           {CDN_PRICE_POINTS.map((point, index) => {
             const isUpperRow = index % 2 === 0;
@@ -94,7 +96,7 @@ const CdnPriceSlider: React.FC = () => {
                     'absolute -mx-1 flex -translate-x-1/2 cursor-pointer flex-col items-center whitespace-nowrap px-1 font-mono text-[10px] leading-tight transition-colors',
                     // Neighbours alternate between two rows so seven labels fit a narrow column.
                     isUpperRow ? 'top-0' : 'top-7',
-                    point === active ? 'text-red-500' : 'text-neutral-500 hover:text-neutral-200',
+                    point === active ? 'text-accent-brand' : 'text-neutral-500 hover:text-neutral-200',
                   )}
                 >
                   <span className="font-bold">{point.short}</span>
@@ -107,7 +109,7 @@ const CdnPriceSlider: React.FC = () => {
 
         <input
           type="range"
-          className="checkpoint-range"
+          className={SLIDER_RANGE_CLASS}
           aria-label="CDN price per GB"
           aria-valuetext={`${formatPrice(price)} per GB${active ? `, ${active.label}` : ''}`}
           min={0}
@@ -116,7 +118,7 @@ const CdnPriceSlider: React.FC = () => {
           value={position}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
-          style={{ '--fill': trackOffset(position / LAST_POSITION) } as React.CSSProperties}
+          style={{ '--fill': position / LAST_POSITION } as React.CSSProperties}
         />
       </div>
 

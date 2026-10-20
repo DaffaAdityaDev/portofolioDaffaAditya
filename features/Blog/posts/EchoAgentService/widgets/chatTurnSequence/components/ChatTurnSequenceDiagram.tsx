@@ -1,7 +1,7 @@
 import React from 'react';
 import { MessagesSquare } from 'lucide-react';
 import type { SequenceDefinition } from '@/features/Blog/sequence/types';
-import type { ChatTurnLaneId } from '@/features/Blog/posts/EchoAgentService/widgets/chatTurnSequence/types';
+import type { ChatTurnLaneId } from '../types';
 import SequenceDiagram from '@/features/Blog/sequence/components/SequenceDiagram';
 import { CHAT_TURN_LANES, CHAT_TURN_LEGEND, CHAT_TURN_STEPS } from '../constants';
 

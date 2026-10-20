@@ -6,7 +6,7 @@ import ActionButton from '@/features/Blog/components/ActionButton';
 import ToggleButton from '@/features/Blog/components/ToggleButton';
 import SliderField from '@/features/Blog/components/SliderField';
 import AnimatedNumber from '@/features/Blog/components/AnimatedNumber';
-import { FLOW_METER_LABEL_CLASS } from '@/features/Blog/flow/constants';
+import { WIDGET_LABEL_CLASS } from '@/features/Blog/components/widgetStyles';
 import { LATENCY_RANGE, RENDER_MODE_ORDER, RENDER_MODES, SHELL_RENDER_MS } from '../constants';
 import { usePprTimeline } from '../hooks/usePprTimeline';
 import StorePreview from './StorePreview';
@@ -16,7 +16,7 @@ const formatMs = (value: number): string => `${Math.round(value)} ms`;
 
 const Stat: React.FC<{ label: string; children: React.ReactNode }> = ({ label, children }) => (
   <div>
-    <div className={cn('mb-0.5', FLOW_METER_LABEL_CLASS)}>{label}</div>
+    <div className={cn('mb-0.5', WIDGET_LABEL_CLASS)}>{label}</div>
     <div className="font-mono text-lg font-bold tabular-nums text-neutral-100">{children}</div>
   </div>
 );
@@ -45,7 +45,7 @@ const PprTimeline: React.FC = () => {
             <ActionButton
               variant="light"
               onClick={replay}
-              className="ml-auto font-mono uppercase tracking-wider text-neutral-400"
+              className="ml-auto font-mono uppercase tracking-wider text-muted-foreground"
             >
               <RotateCcw className="size-3.5" aria-hidden="true" />
               Replay

@@ -1,75 +1,51 @@
 import React from 'react';
-import Head from 'next/head';
-import Link from 'next/link';
-import { m } from 'framer-motion';
-import Footer from '@/components/Layout/Footer';
-import Marquee from '@/components/ui/Marquee';
+import Seo from '@/components/Seo';
+import { ArrowRight } from 'lucide-react';
+import { lazyOnView } from '@/components/LazyOnView';
+import Footer from '@/components/Layout/LazyFooter';
+import Button from '@/components/ui/Button';
+import Eyebrow from '@/components/ui/Eyebrow';
+import PageTitle from '@/components/ui/PageTitle';
 import { MARQUEE_TEXT } from '@/constant/constant';
+
+// Below the fold: static HTML, JS loaded as the block nears the viewport.
+const Marquee = lazyOnView(() => import('@/components/ui/Marquee'));
 
 export const Custom404Content = () => {
   return (
     <>
-      <Head>
-        <title>404 - Page Not Found | Daffa Aditya</title>
-        <meta name="description" content="The page you are looking for does not exist." />
-      </Head>
+      {/* The 404 renders at whatever URL was requested, so no canonical/og:url pointing at /404. */}
+      <Seo
+        path="/404"
+        title="Page Not Found"
+        description="The page you are looking for does not exist."
+        noindex
+        noCanonical
+      />
 
-      <div className="min-h-screen bg-[#0a0a0a] text-white font-sans selection:bg-red-600 selection:text-white overflow-x-hidden relative flex flex-col">
+      <div className="min-h-screen bg-background text-white font-sans selection:bg-red-600 selection:text-white overflow-x-hidden relative flex flex-col">
         <main className="flex-1 relative flex flex-col items-center justify-center min-h-[80vh] px-4">
-          <m.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-center"
-          >
-            <m.h1 
-              className="text-7xl md:text-9xl font-bold tracking-tighter"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-            >
-              404
-            </m.h1>
-            
-            <m.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="mt-6 space-y-4"
-            >
-              <h2 className="text-xl md:text-2xl text-neutral-400 font-medium tracking-tight">
-                Page not found
-              </h2>
-              <p className="max-w-md mx-auto text-neutral-500 text-sm md:text-base">
-                The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
-              </p>
-            </m.div>
+          {/* No JS entrance: the message paints with the server HTML instead of waiting for hydration. */}
+          <div className="flex flex-col items-center text-center">
+            <div>
+              <Eyebrow tone="accent">[ 404 {'//'} Not found ]</Eyebrow>
+            </div>
 
-            <m.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.6 }}
-              className="mt-10"
-            >
-              <Link 
-                href="/"
-                className="group relative inline-flex items-center justify-center gap-2 px-8 py-3 text-sm font-medium tracking-wide text-white transition-all bg-white/5 border border-white/10 rounded-full hover:bg-white/10 overflow-hidden"
-              >
-                <span className="relative z-10 transition-transform group-hover:-translate-x-1">
-                  Return Home
-                </span>
-                <svg 
-                  className="w-4 h-4 relative z-10 transition-all opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
-                  stroke="currentColor" 
-                  strokeWidth={2}
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-              </Link>
-            </m.div>
-          </m.div>
+            <div className="mt-4">
+              <PageTitle size="lg">Page not found</PageTitle>
+            </div>
+
+            <p className="mt-6 max-w-md text-sm md:text-base leading-relaxed text-muted-foreground">
+              The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
+            </p>
+
+            <div className="mt-10">
+              <Button href="/" className="group">
+                Return home
+                <ArrowRight size={16} aria-hidden className="transition-transform motion-safe:group-hover:translate-x-1" />
+              </Button>
+            </div>
+          </div>
         </main>
 
         {/* Footer Marquee */}

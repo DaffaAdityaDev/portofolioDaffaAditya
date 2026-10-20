@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { ArchitectureNodeId, ArchitectureView } from '@/features/Blog/posts/VideoSharing/widgets/architecture/types';
+import type { ArchitectureNodeId, ArchitectureView } from '../types';
 import { ARCHITECTURE_EDGES, ARCHITECTURE_NODES, ARCHITECTURE_VIEWS } from '../constants';
 
 const EDGE_ENTRIES = Object.entries(ARCHITECTURE_EDGES);

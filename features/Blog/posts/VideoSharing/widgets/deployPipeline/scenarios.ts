@@ -4,7 +4,7 @@ import type {
   DeployNodeId,
   DeployScenarioId,
   DeployStep,
-} from '@/features/Blog/posts/VideoSharing/widgets/deployPipeline/types';
+} from './types';
 
 const step = (
   id: string,

@@ -1,4 +1,4 @@
-import { FALLBACK_SCENARIOS } from '@/features/Blog/posts/SSGInDetail/widgets/fallback/scenarios';
+import { FALLBACK_SCENARIOS } from './scenarios';
 import { createFlowStore } from '@/features/Blog/flow/createFlowStore';
 
 /** Playback state (scenario, step, playing) for the fallback flow. */

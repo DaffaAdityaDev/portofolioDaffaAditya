@@ -2,7 +2,8 @@ import React, { useId } from 'react';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { cn } from '@/utils/cn';
 import type { FlowConfig, FlowStep } from '@/features/Blog/flow/types';
-import { FLOW_COLORS, FLOW_DIAGRAM } from '../constants';
+import { FLOW_DIAGRAM } from '../constants';
+import { WIDGET_COLORS } from '@/features/Blog/components/widgetStyles';
 import { useFlow } from '../hooks/useFlow';
 import { FlowEdge, FlowEdgeLabels, FlowMarkers, FlowNode } from './FlowParts';
 
@@ -11,7 +12,7 @@ const FlowDiagram = <TStep extends FlowStep>({ flow }: { flow: FlowConfig<TStep>
   const { definition, step, stepIndex, totalSteps } = useFlow(flow);
   const reduceMotion = usePrefersReducedMotion();
   const markerBase = useId().replace(/:/g, '');
-  const color = FLOW_COLORS[step.tone ?? 'normal'];
+  const color = WIDGET_COLORS[step.tone ?? 'normal'];
   const idleMarker = `${markerBase}-idle`;
   const activeMarker = `${markerBase}-active`;
 

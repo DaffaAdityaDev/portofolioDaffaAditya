@@ -1,9 +1,9 @@
 import React from 'react';
-import Link from 'next/link';
-import { m } from 'framer-motion';
-import { ArrowLeft, Download } from 'lucide-react';
-import { FADE_IN_UP_ITEM } from '@/constant/animations';
-import { IDENTIFICATION } from '../constants';
+import { Download } from 'lucide-react';
+import BackLink from '@/components/ui/BackLink';
+import { buttonClasses } from '@/components/ui/Button';
+import PageTitle from '@/components/ui/PageTitle';
+import { IDENTIFICATION, RESUME_FILE_NAME } from '../constants';
 
 interface ResumeHeaderProps {
   downloadUrl: string;
@@ -12,20 +12,18 @@ interface ResumeHeaderProps {
 const ResumeHeader: React.FC<ResumeHeaderProps> = ({ downloadUrl }) => {
   return (
     <div className="grid lg:grid-cols-12 gap-12 items-start mb-16">
-      <m.div variants={FADE_IN_UP_ITEM} className="lg:col-span-8">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-xs font-mono text-neutral-500 hover:text-white transition-colors mb-8 uppercase tracking-[0.2em]"
-        >
-          <ArrowLeft size={14} /> Back to home
-        </Link>
+      {/* No entrance animation: this is the LCP block, so it paints with the server HTML. */}
+      <div className="lg:col-span-8">
+        <BackLink href="/" className="mb-8">
+          Back to home
+        </BackLink>
 
         <div className="flex flex-col md:flex-row md:items-end gap-6 md:gap-10">
-          <h1 className="text-6xl md:text-8xl font-black text-white uppercase tracking-tighter leading-[0.8] mb-2">
-            Resume<span className="text-red-500">.</span>
-          </h1>
-          <div className="flex flex-col border-l border-neutral-800 pl-6 py-1">
-            <span className="text-xs font-mono text-neutral-500 uppercase tracking-widest mb-1">Status</span>
+          <PageTitle size="xl" className="mb-2">
+            Resume<span className="text-accent-brand">.</span>
+          </PageTitle>
+          <div className="flex flex-col border-l border-border pl-6 py-1">
+            <span className="text-xs font-mono text-muted-foreground uppercase tracking-widest mb-1">Status</span>
             <span className="text-sm md:text-base font-bold text-neutral-200 uppercase tracking-tight">
               Open to work <br />
               & Freelance
@@ -37,21 +35,23 @@ const ResumeHeader: React.FC<ResumeHeaderProps> = ({ downloadUrl }) => {
           {IDENTIFICATION.name}
           <span className="text-neutral-500 font-medium"> / {IDENTIFICATION.role} / {IDENTIFICATION.location}</span>
         </p>
-      </m.div>
+      </div>
 
-      <m.div variants={FADE_IN_UP_ITEM} className="lg:col-span-4 flex justify-start lg:justify-end">
+      <div className="lg:col-span-4 flex justify-start lg:justify-end">
         <a
           href={downloadUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group relative flex items-center gap-4 bg-white text-black px-10 py-5 font-black text-sm hover:bg-neutral-200 transition-all active:scale-95 uppercase tracking-widest overflow-hidden"
+          download={RESUME_FILE_NAME}
+          className={buttonClasses({ variant: 'primary', size: 'lg', className: 'group relative overflow-hidden' })}
         >
-          <div className="absolute inset-0 bg-red-500 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+          {/* Accent wipe from the bottom on hover, clipped to the rounded corners */}
+          <span
+            aria-hidden="true"
+            className="absolute inset-0 translate-y-full bg-accent-brand transition-transform duration-300 ease-out-expo group-hover:translate-y-0 motion-reduce:transition-none"
+          />
           <Download size={18} className="relative z-10 group-hover:text-white transition-colors" />
-          <span className="relative z-10 group-hover:text-white transition-colors">Open PDF</span>
-          <span className="sr-only">(opens the PDF in a new tab)</span>
+          <span className="relative z-10 group-hover:text-white transition-colors">Download PDF</span>
         </a>
-      </m.div>
+      </div>
     </div>
   );
 };

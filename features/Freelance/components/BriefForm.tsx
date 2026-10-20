@@ -11,7 +11,8 @@ import {
 } from '../constants/inquiry';
 import { useFreelance } from '../hooks/useFreelance';
 import { useTurnstile } from '../hooks/useTurnstile';
-import { solidButtonClass } from './styles';
+import Button from '@/components/ui/Button';
+import Eyebrow from '@/components/ui/Eyebrow';
 import type { BriefStatus, BudgetCurrency } from '@/types/freelance';
 
 const CURRENCIES: readonly BudgetCurrency[] = ['IDR', 'USD'];
@@ -22,7 +23,7 @@ const SUCCESS_TONE = 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300';
 const STATUS_NOTICES: Partial<Record<BriefStatus, { tone: string; Icon: LucideIcon; text: string }>> = {
   sent: { tone: SUCCESS_TONE, Icon: CheckCircle2, text: "Brief received. I'll reply within 24 hours." },
   'mail-app': {
-    tone: 'border-neutral-700 bg-white/[0.03] text-neutral-300',
+    tone: 'border-border-strong bg-white/[0.03] text-neutral-300',
     Icon: Mail,
     text: `Your email app should now be open with the brief. If nothing opened, email ${CONTACT_EMAIL} and I'll reply within 24 hours.`,
   },
@@ -34,12 +35,12 @@ const STATUS_NOTICES: Partial<Record<BriefStatus, { tone: string; Icon: LucideIc
 };
 
 const inputClass =
-  'w-full border border-neutral-800 bg-transparent px-3 py-3 text-sm text-white placeholder:text-neutral-600 focus:border-white focus:outline-none transition-colors';
+  'w-full rounded-lg border border-border bg-transparent px-3 py-3 text-sm text-white placeholder:text-neutral-600 transition-colors';
 
 /** A selectable chip; white when selected, like the rest of the page's toggles. */
 const chipClass = (selected: boolean) =>
-  `min-h-11 cursor-pointer border px-3 py-2 text-left text-sm transition-colors ${
-    selected ? 'border-white bg-white text-black' : 'border-neutral-800 text-neutral-300 hover:border-neutral-600 hover:text-white'
+  `min-h-11 cursor-pointer rounded-lg border px-3 py-2 text-left text-sm transition-colors ${
+    selected ? 'border-white bg-white text-black' : 'border-border text-neutral-300 hover:border-neutral-600 hover:text-white'
   }`;
 
 const FieldLabel: React.FC<{ htmlFor?: string; n: number; className?: string; children: React.ReactNode }> = ({
@@ -47,24 +48,14 @@ const FieldLabel: React.FC<{ htmlFor?: string; n: number; className?: string; ch
   n,
   className: spacing = 'mb-3 block',
   children,
-}) => {
-  const content = (
-    <>
-      <span className="text-red-400">0{n}</span> · {children}
-    </>
-  );
-  const className = `${spacing} font-mono text-xs uppercase tracking-widest text-neutral-500`;
-  return htmlFor ? (
-    <label htmlFor={htmlFor} className={className}>
-      {content}
-    </label>
-  ) : (
-    <p className={className}>{content}</p>
-  );
-};
+}) => (
+  <Eyebrow as={htmlFor ? 'label' : 'p'} htmlFor={htmlFor} className={`${spacing} text-neutral-500`}>
+    <span className="text-accent-brand">0{n}</span> · {children}
+  </Eyebrow>
+);
 
 /** The project brief: contact details, project type, budget, timeline and a message. Sends through useFreelance. */
-export const BriefForm: React.FC = () => {
+const BriefForm: React.FC = () => {
   const { brief, briefStatus, briefError, setBriefField, pickService, setCurrency, handleBriefSubmit } = useFreelance();
   const sending = briefStatus === 'sending';
   // Turnstile loads on the first focus inside the form, not for every visitor who scrolls past it.
@@ -85,19 +76,19 @@ export const BriefForm: React.FC = () => {
   const notice = STATUS_NOTICES[briefStatus];
 
   return (
-    <form id="brief" onSubmit={onSubmit} onFocus={() => setEngaged(true)} noValidate className="scroll-mt-24 border border-neutral-800">
-      <div className="border-b border-neutral-800 px-5 py-3 sm:px-6">
-        <span className="font-mono text-xs uppercase tracking-widest text-neutral-400">Project brief</span>
+    <form id="brief" onSubmit={onSubmit} onFocus={() => setEngaged(true)} noValidate className="scroll-mt-24 rounded-lg border border-border">
+      <div className="border-b border-border px-5 py-3 sm:px-6">
+        <Eyebrow as="span">Project brief</Eyebrow>
       </div>
 
       <div className="space-y-8 p-5 sm:p-6">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div>
-            <label htmlFor="brief-name" className="mb-1.5 block text-sm text-neutral-400">Name *</label>
+            <label htmlFor="brief-name" className="mb-1.5 block text-sm text-muted-foreground">Name *</label>
             <input id="brief-name" required autoComplete="name" value={brief.name} onChange={(e) => setBriefField('name', e.target.value)} className={inputClass} />
           </div>
           <div>
-            <label htmlFor="brief-email" className="mb-1.5 block text-sm text-neutral-400">Email *</label>
+            <label htmlFor="brief-email" className="mb-1.5 block text-sm text-muted-foreground">Email *</label>
             <input
               id="brief-email"
               type="email"
@@ -109,7 +100,7 @@ export const BriefForm: React.FC = () => {
             />
           </div>
           <div className="sm:col-span-2">
-            <label htmlFor="brief-company" className="mb-1.5 block text-sm text-neutral-400">Company</label>
+            <label htmlFor="brief-company" className="mb-1.5 block text-sm text-muted-foreground">Company</label>
             <input id="brief-company" autoComplete="organization" value={brief.company} onChange={(e) => setBriefField('company', e.target.value)} className={inputClass} />
           </div>
         </div>
@@ -126,7 +117,7 @@ export const BriefForm: React.FC = () => {
           </div>
           {brief.service === 'other' && (
             <div className="mt-3">
-              <label htmlFor="brief-service-other" className="mb-1.5 block text-sm text-neutral-400">
+              <label htmlFor="brief-service-other" className="mb-1.5 block text-sm text-muted-foreground">
                 What are you building? *
               </label>
               <input
@@ -149,15 +140,15 @@ export const BriefForm: React.FC = () => {
             <FieldLabel n={2} className="block">
               Your budget
             </FieldLabel>
-            <div className="flex border border-neutral-800" role="group" aria-label="Budget currency">
+            <div className="flex gap-0.5 rounded-lg border border-border p-0.5" role="group" aria-label="Budget currency">
               {CURRENCIES.map((code) => (
                 <button
                   key={code}
                   type="button"
                   aria-pressed={brief.currency === code}
                   onClick={() => setCurrency(code)}
-                  className={`min-h-9 min-w-12 cursor-pointer px-3 font-mono text-xs transition-colors ${
-                    brief.currency === code ? 'bg-white text-black' : 'text-neutral-400 hover:text-white'
+                  className={`min-h-8 min-w-12 cursor-pointer rounded-lg px-3 font-mono text-xs transition-colors ${
+                    brief.currency === code ? 'bg-white text-black' : 'text-muted-foreground hover:text-white'
                   }`}
                 >
                   {code}
@@ -215,13 +206,13 @@ export const BriefForm: React.FC = () => {
         </div>
 
         {notice && (
-          <p role="status" className={`flex items-start gap-2 border p-3 text-sm ${notice.tone}`}>
+          <p role="status" className={`flex items-start gap-2 rounded-lg border p-3 text-sm ${notice.tone}`}>
             <notice.Icon size={16} className="mt-0.5 shrink-0" />
             <span>{notice.text}</span>
           </p>
         )}
         {briefError && (
-          <p role="alert" className="border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-300">
+          <p role="alert" className="border border-red-500/30 rounded-lg bg-red-500/10 p-3 text-sm text-red-300">
             {briefError}
           </p>
         )}
@@ -229,14 +220,10 @@ export const BriefForm: React.FC = () => {
         {/* Turnstile renders here only when Cloudflare needs the visitor to click */}
         <div ref={turnstileRef} className="empty:hidden" />
 
-        <button
-          type="submit"
-          disabled={sending || checking}
-          className={`group flex min-h-13 w-full cursor-pointer items-center justify-center gap-2 disabled:cursor-wait disabled:opacity-60 ${solidButtonClass}`}
-        >
+        <Button type="submit" size="lg" disabled={sending || checking} className="group w-full">
           {sending ? 'Sending…' : checking ? 'Checking for spam…' : 'Send brief'}
           {!sending && !checking && <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />}
-        </button>
+        </Button>
         <p className="text-center text-xs leading-relaxed text-neutral-500">
           Free and no commitment. Your brief goes straight to my inbox and is never shared.
         </p>

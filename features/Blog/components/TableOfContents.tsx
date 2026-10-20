@@ -22,8 +22,8 @@ const TocList: React.FC<TableOfContentsProps> = ({ items, activeId, onSelect }) 
               'block border-l py-1.5 pr-2 text-[13px] leading-snug transition-colors',
               item.level === 2 ? 'pl-3 font-medium' : 'pl-6 text-[12px]',
               isActive
-                ? 'border-red-500 text-white'
-                : 'border-neutral-800 text-neutral-500 hover:border-neutral-500 hover:text-neutral-200 ',
+                ? 'border-accent-brand text-white'
+                : 'border-border text-neutral-500 hover:border-neutral-500 hover:text-neutral-200',
             )}
           >
             {item.text}
@@ -35,8 +35,8 @@ const TocList: React.FC<TableOfContentsProps> = ({ items, activeId, onSelect }) 
 );
 
 const TocHeader: React.FC = () => (
-  <div className="mb-3 flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-neutral-400">
-    <ListTree className="size-3.5 text-red-500" aria-hidden="true" />
+  <div className="mb-3 flex items-center gap-2 font-mono text-2xs uppercase tracking-wider text-muted-foreground">
+    <ListTree className="size-3.5 text-accent-brand" aria-hidden="true" />
     On this page
   </div>
 );
@@ -64,9 +64,9 @@ export const TocSheet: React.FC<TableOfContentsProps> = ({ items, activeId, onSe
         onClick={() => setIsOpen(true)}
         aria-haspopup="dialog"
         aria-expanded={isOpen}
-        className="fixed bottom-4 right-4 z-[90] flex max-w-[calc(100vw-2rem)] cursor-pointer items-center gap-2 border border-neutral-700 bg-[#0d0d0d]/95 px-3 py-2 font-mono text-[11px] uppercase tracking-wider text-neutral-300 shadow-xl backdrop-blur transition-colors hover:border-red-500 hover:text-white"
+        className="fixed bottom-4 right-4 z-[90] flex max-w-[calc(100vw-2rem)] cursor-pointer items-center gap-2 rounded-lg border border-border-strong bg-surface-1/95 px-3 py-2 font-mono text-2xs uppercase tracking-wider text-neutral-300 shadow-xl backdrop-blur transition-colors hover:border-accent-brand hover:text-white"
       >
-        <ListTree className="size-3.5 shrink-0 text-red-500" aria-hidden="true" />
+        <ListTree className="size-3.5 shrink-0 text-accent-brand" aria-hidden="true" />
         <span className="truncate">{activeText ?? 'Contents'}</span>
       </button>
 
@@ -77,7 +77,7 @@ export const TocSheet: React.FC<TableOfContentsProps> = ({ items, activeId, onSe
             aria-modal="true"
             aria-label="Table of contents"
             onClick={(event) => event.stopPropagation()}
-            className="max-h-[75vh] w-full overflow-y-auto border-t border-neutral-800 bg-[#0d0d0d] p-4 pb-8"
+            className="max-h-[75vh] w-full overflow-y-auto rounded-t-lg border-t border-border bg-surface-1 p-4 pb-8"
           >
             <div className="flex items-start justify-between">
               <TocHeader />

@@ -1,5 +1,5 @@
 import type { FlowEdgeLabel, FlowEdgeLayout, FlowNodeLayout } from '@/features/Blog/flow/types';
-import type { CdnResult, StreamEdgeId, StreamNodeId } from '@/features/Blog/posts/VideoSharing/widgets/streamingFlow/types';
+import type { CdnResult, StreamEdgeId, StreamNodeId } from './types';
 
 /** The resolutions the player can switch between, lowest first. */
 export const STREAM_QUALITIES = ['360p', '480p', '720p', '1080p'] as const;

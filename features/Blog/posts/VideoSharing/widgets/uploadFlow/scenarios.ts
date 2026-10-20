@@ -1,5 +1,5 @@
 import type { FlowScenario } from '@/features/Blog/flow/types';
-import type { UploadScenarioId, UploadStep } from '@/features/Blog/posts/VideoSharing/widgets/uploadFlow/types';
+import type { UploadScenarioId, UploadStep } from './types';
 import { UPLOAD_CHUNKS_TOTAL, UPLOAD_SEGMENTS_TOTAL } from './constants';
 
 const CREATE: UploadStep = {

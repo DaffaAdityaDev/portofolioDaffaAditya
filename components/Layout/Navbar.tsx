@@ -1,13 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef, useSyncExternalStore } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { m, useReducedMotion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Github, Linkedin, Mail, ArrowUpRight } from 'lucide-react';
+import dynamic from 'next/dynamic';
+import { m, AnimatePresence } from 'framer-motion';
+import { Menu, Github, Linkedin, Mail, ArrowUpRight } from 'lucide-react';
 import { siteConfig } from '@/config/metadata.config';
-import { SPRING_MOBILE_OS } from '@/constant/animations';
+import { EASE_OUT_EXPO } from '@/constant/animations';
+import { buttonClasses } from '@/components/ui/Button';
+import StatusBadge from '@/components/ui/StatusBadge';
 import type { NavItem, SocialLink } from '@/types/navigation';
 
-export type { NavItem, SocialLink };
+// The open mobile sheet only loads when needed; the trigger warms it on pointerdown/focus.
+const loadMobileMenu = () => import('./MobileMenu');
+const MobileMenu = dynamic(loadMobileMenu, { ssr: false });
 
 const navItems: NavItem[] = [
   { label: 'HOME', id: 'hero' },
@@ -23,39 +28,105 @@ const socialLinks: SocialLink[] = [
   { label: 'EMAIL', href: `mailto:${siteConfig.links.email}`, Icon: Mail, aria: 'Send Email' }
 ];
 
+const mobileNavItems = navItems.filter((item) => item.label !== 'SOCIALS');
+
+const SCROLLED_THRESHOLD = 50;
+const MOBILE_MENU_ID = 'mobile-nav-menu';
+const SOCIAL_MENU_ID = 'desktop-socials-menu';
+
+// Read through useSyncExternalStore: React re-renders only when the boolean flips, and the
+// server snapshot (not scrolled) keeps the first client render identical to the SSR HTML.
+const subscribeScroll = (onChange: () => void) => {
+  window.addEventListener('scroll', onChange, { passive: true });
+  return () => window.removeEventListener('scroll', onChange);
+};
+const getScrolledSnapshot = () => window.scrollY > SCROLLED_THRESHOLD;
+const getScrolledServerSnapshot = () => false;
+
+/** Box of a desktop nav item, relative to the <nav>. */
+interface ItemRect {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+}
+
+const PILL_CLASSES = 'bg-white/[0.08] border border-white/[0.12] rounded-full shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_2px_8px_rgba(0,0,0,0.3)]';
+const DOT_CLASSES = 'w-1 h-1 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.9)]';
+const DOT_SIZE = 4;
+// Gap between the dot and the item's bottom edge (bottom-0.5).
+const DOT_INSET = 2;
+// Expand/collapse and pill-slide timings; reduced motion drops the transition (static classes, so SSR-safe).
+const EXPAND_TRANSITION = 'motion-safe:transition-all motion-safe:duration-500 motion-safe:ease-out-expo';
+const SLIDE_TIMING = 'motion-safe:duration-300 motion-safe:ease-out-expo';
+
+// Read at click time, so no render ever branches on it.
+const scrollBehavior = (): ScrollBehavior =>
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+
+const sameRects = (a: ItemRect[] | null, b: ItemRect[]) =>
+  !!a && a.length === b.length && a.every((r, i) =>
+    r.left === b[i].left && r.top === b[i].top && r.width === b[i].width && r.height === b[i].height);
+
 const Navbar = () => {
   const router = useRouter();
-  const [isScrolled, setIsScrolled] = useState(false);
+  const isScrolled = useSyncExternalStore(subscribeScroll, getScrolledSnapshot, getScrolledServerSnapshot);
   const [isHovered, setIsHovered] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [isSocialOpen, setIsSocialOpen] = useState(false);
   // Hash set by in-page navigation, which bypasses the router (so asPath goes stale).
   const [inPageHash, setInPageHash] = useState<string | null>(null);
-  const shouldReduceMotion = useReducedMotion();
+  const socialRef = useRef<HTMLDivElement>(null);
+  const socialButtonRef = useRef<HTMLButtonElement>(null);
+  const navRef = useRef<HTMLElement>(null);
+  const itemRefs = useRef<(HTMLElement | null)[]>([]);
+  // Null until measured on the client; until then the pill and dot render statically inside their item.
+  const [itemRects, setItemRects] = useState<ItemRect[] | null>(null);
 
-  useEffect(() => {
-    let ticking = false;
-    let lastScrolled = window.scrollY > 50;
-    setIsScrolled(lastScrolled);
-
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const next = window.scrollY > 50;
-          if (next !== lastScrolled) {
-            lastScrolled = next;
-            setIsScrolled(next);
-          }
-          ticking = false;
-        });
-        ticking = true;
-      }
+  /**
+   * The hover pill and active dot are single elements slid with a CSS transform to the measured item,
+   * not framer `layoutId`s: layout animations need domMax, and the navbar is on every route.
+   * Items are re-measured when one or the nav resizes (font swap, the nav becoming visible at md, items shifting);
+   * the observer's initial callback does the first measure.
+   */
+  useLayoutEffect(() => {
+    const nav = navRef.current;
+    if (!nav) return;
+    const measure = () => {
+      const navBox = nav.getBoundingClientRect();
+      const next = itemRefs.current.map((el) => {
+        const box = el?.getBoundingClientRect();
+        return box
+          ? { left: box.left - navBox.left, top: box.top - navBox.top, width: box.width, height: box.height }
+          : { left: 0, top: 0, width: 0, height: 0 };
+      });
+      setItemRects((prev) => (sameRects(prev, next) ? prev : next));
     };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    const observer = new ResizeObserver(measure);
+    observer.observe(nav);
+    itemRefs.current.forEach((el) => el && observer.observe(el));
+    return () => observer.disconnect();
   }, []);
+
+  // While the socials menu is open: a click outside or Escape closes it (Escape returns focus to its button).
+  useEffect(() => {
+    if (!isSocialOpen) return;
+    const onPointerDown = (e: PointerEvent) => {
+      if (!socialRef.current?.contains(e.target as Node)) setIsSocialOpen(false);
+    };
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      setIsSocialOpen(false);
+      socialButtonRef.current?.focus();
+    };
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [isSocialOpen]);
 
   useEffect(() => {
     const resetHash = () => setInPageHash(null);
@@ -69,10 +140,10 @@ const Navbar = () => {
 
   const currentPath = inPageHash !== null && router.pathname === '/' ? `/${inPageHash}` : router.asPath;
 
-  const checkActive = (item: NavItem) => {
+  const checkActive = (item: NavItem): boolean => {
     return (item.id === 'hero' && router.pathname === '/' && !currentPath.includes('#')) ||
-      (item.id && currentPath.includes(`#${item.id}`)) ||
-      (item.path && router.pathname.startsWith(item.path));
+      (!!item.id && currentPath.includes(`#${item.id}`)) ||
+      (!!item.path && router.pathname.startsWith(item.path));
   };
 
   /**
@@ -90,19 +161,17 @@ const Navbar = () => {
     if (item.id && router.pathname === '/') {
       e.preventDefault();
       const element = document.getElementById(item.id);
-      if (element) element.scrollIntoView({ behavior: shouldReduceMotion ? 'auto' : 'smooth' });
+      if (element) element.scrollIntoView({ behavior: scrollBehavior() });
       replaceInPageUrl(`#${item.id}`);
     }
   };
 
   const isExpanded = !isScrolled || isHovered;
 
-  const transitionClass = shouldReduceMotion
-    ? ''
-    : 'transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]';
-
   const activeIndex = navItems.findIndex(checkActive);
   const currentPillIndex = hoveredIndex !== null ? hoveredIndex : activeIndex;
+  const pillRect = itemRects && currentPillIndex >= 0 ? itemRects[currentPillIndex] : null;
+  const dotRect = itemRects && activeIndex >= 0 ? itemRects[activeIndex] : null;
 
   return (
     <>
@@ -111,14 +180,14 @@ const Navbar = () => {
         <div
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => { setIsHovered(false); setHoveredIndex(null); }}
-          className={`pointer-events-auto relative flex items-center justify-center rounded-full group ${transitionClass} ${isExpanded ? 'h-[52px] px-6 gap-5' : 'h-11 px-4 gap-3'
+          className={`pointer-events-auto relative flex items-center justify-center rounded-full group ${EXPAND_TRANSITION} ${isExpanded ? 'h-[52px] px-6 gap-5' : 'h-11 px-4 gap-3'
             } ${isSocialOpen ? 'overflow-visible' : 'overflow-hidden'}`}
         >
           {/* Multi-layered Obsidian Glassmorphic Shell */}
-          <div className="absolute inset-0 bg-[#08080a]/90 backdrop-blur-md border border-white/[0.08] shadow-[0_20px_45px_rgba(0,0,0,0.85),_inset_0_1px_0_rgba(255,255,255,0.15),_inset_0_-1px_0_rgba(0,0,0,0.5)] group-hover:shadow-[0_24px_55px_rgba(0,0,0,0.95),_0_0_20px_rgba(255,255,255,0.03),_inset_0_1px_0_rgba(255,255,255,0.22)] rounded-full -z-10 pointer-events-none transition-all duration-300" />
+          <div className="absolute inset-0 bg-surface-2/90 backdrop-blur-md border border-border shadow-[0_20px_45px_rgba(0,0,0,0.85),_inset_0_1px_0_rgba(255,255,255,0.15),_inset_0_-1px_0_rgba(0,0,0,0.5)] group-hover:shadow-[0_24px_55px_rgba(0,0,0,0.95),_0_0_20px_rgba(255,255,255,0.03),_inset_0_1px_0_rgba(255,255,255,0.22)] rounded-full -z-10 pointer-events-none transition-all duration-300" />
 
           <div
-            className={`flex items-center justify-center whitespace-nowrap pointer-events-auto ${transitionClass} ${isExpanded ? 'gap-5' : 'gap-3'
+            className={`flex items-center justify-center whitespace-nowrap pointer-events-auto ${EXPAND_TRANSITION} ${isExpanded ? 'gap-5' : 'gap-3'
               }`}
           >
             {/* Logo & Brand Identity */}
@@ -130,60 +199,73 @@ const Navbar = () => {
                   setIsHovered(true);
                 } else if (router.pathname === '/') {
                   e.preventDefault();
-                  window.scrollTo({ top: 0, behavior: shouldReduceMotion ? 'auto' : 'smooth' });
+                  window.scrollTo({ top: 0, behavior: scrollBehavior() });
                   replaceInPageUrl('');
                 }
               }}
-              className="group/logo font-sans font-black text-xs tracking-[0.2em] text-white transition-colors duration-200 uppercase focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:outline-none rounded px-1.5 py-0.5 flex items-center gap-1.5"
+              className="group/logo font-sans font-black text-xs tracking-[0.2em] text-white transition-colors duration-200 uppercase rounded-lg px-1.5 py-0.5 flex items-center gap-1.5"
             >
               <span className="relative flex items-center h-6">
                 <span>D</span>
                 <span
-                  className={`${transitionClass} overflow-hidden flex items-center whitespace-nowrap ${isExpanded ? 'max-w-[200px] opacity-100 ml-0' : 'max-w-0 opacity-0 ml-0'
+                  className={`${EXPAND_TRANSITION} overflow-hidden flex items-center whitespace-nowrap ${isExpanded ? 'max-w-[200px] opacity-100 ml-0' : 'max-w-0 opacity-0 ml-0'
                     }`}
                 >
                   AFFA ADITYA
                 </span>
                 <span
-                  className={`${transitionClass} overflow-hidden flex items-center whitespace-nowrap ${!isExpanded ? 'max-w-[20px] opacity-100 ml-0.5' : 'max-w-0 opacity-0 ml-0'
+                  className={`${EXPAND_TRANSITION} overflow-hidden flex items-center whitespace-nowrap ${!isExpanded ? 'max-w-[20px] opacity-100 ml-0.5' : 'max-w-0 opacity-0 ml-0'
                     }`}
                 >
                   A
                 </span>
                 <span
-                  className={`text-[8.5px] font-mono font-medium text-neutral-400 tracking-[0.1em] transition-colors duration-200 group-hover/logo:text-neutral-300 whitespace-nowrap flex items-center h-6 ${transitionClass} ${isExpanded ? 'max-w-[280px] opacity-100 ml-1.5 overflow-visible' : 'max-w-0 opacity-0 ml-0 overflow-hidden'
+                  className={`text-2xs font-mono font-medium text-muted-foreground tracking-[0.1em] transition-colors duration-200 group-hover/logo:text-neutral-300 whitespace-nowrap flex items-center h-6 ${EXPAND_TRANSITION} ${isExpanded ? 'max-w-[280px] opacity-100 ml-1.5 overflow-visible' : 'max-w-0 opacity-0 ml-0 overflow-hidden'
                     }`}
                 >
-                  <span>// PORTFOLIO</span>
-                  <span className="inline-flex items-center gap-1.5 ml-2.5 overflow-visible">
-                    <span className="relative flex items-center justify-center w-3 h-3 shrink-0 overflow-visible">
-                      <span className="animate-ping absolute inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400/50 pointer-events-none" />
-                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.85)]" />
-                    </span>
-                    <span className="text-[8px] font-mono text-emerald-400 font-bold tracking-wider">
-                      AVAILABLE
-                    </span>
-                  </span>
+                  <span>{'// PORTFOLIO'}</span>
+                  <StatusBadge pulse label="Available" className="ml-2.5 font-bold" />
                 </span>
               </span>
             </Link>
 
             {/* Divider 1 */}
             <span
-              className={`h-4 bg-white/[0.1] shrink-0 ${transitionClass} ${isExpanded ? 'w-px opacity-100' : 'w-0 opacity-0 pointer-events-none overflow-hidden'
+              className={`h-4 bg-border shrink-0 ${EXPAND_TRANSITION} ${isExpanded ? 'w-px opacity-100' : 'w-0 opacity-0 pointer-events-none overflow-hidden'
                 }`}
               aria-hidden="true"
             />
 
             {/* Middle Section (Nav Menu with Unified Sliding Glass Pill) - Hidden on scroll */}
             <nav
-              className={`flex items-center gap-1 relative px-1 py-0.5 whitespace-nowrap ${transitionClass} ${isExpanded
+              ref={navRef}
+              className={`flex items-center gap-1 relative px-1 py-0.5 whitespace-nowrap ${EXPAND_TRANSITION} ${isExpanded
                   ? 'max-w-[600px] opacity-100 pointer-events-auto'
                   : 'max-w-0 opacity-0 pointer-events-none overflow-hidden'
                 } ${isSocialOpen ? 'overflow-visible' : 'overflow-hidden'}`}
               onMouseLeave={() => setHoveredIndex(null)}
               aria-label="Desktop navigation"
             >
+              {pillRect && (
+                <span
+                  aria-hidden="true"
+                  className={`absolute top-0 left-0 pointer-events-none motion-safe:transition-[transform,width,height] ${SLIDE_TIMING} ${PILL_CLASSES}`}
+                  style={{
+                    transform: `translate(${pillRect.left}px, ${pillRect.top}px)`,
+                    width: pillRect.width,
+                    height: pillRect.height,
+                  }}
+                />
+              )}
+              {dotRect && (
+                <span
+                  aria-hidden="true"
+                  className={`absolute top-0 left-0 z-10 pointer-events-none motion-safe:transition-transform ${SLIDE_TIMING} ${DOT_CLASSES}`}
+                  style={{
+                    transform: `translate(${dotRect.left + (dotRect.width - DOT_SIZE) / 2}px, ${dotRect.top + dotRect.height - DOT_INSET - DOT_SIZE}px)`,
+                  }}
+                />
+              )}
               {navItems.map((item, index) => {
                 const isActive = checkActive(item);
                 const isPillActive = currentPillIndex === index;
@@ -192,6 +274,7 @@ const Navbar = () => {
                   return (
                     <div
                       key={item.label}
+                      ref={socialRef}
                       className="relative h-full flex items-center"
                       onMouseEnter={() => {
                         setHoveredIndex(index);
@@ -200,35 +283,48 @@ const Navbar = () => {
                       onMouseLeave={() => {
                         setIsSocialOpen(false);
                       }}
+                      // Tabbing out of the button and its links closes the menu.
+                      onBlur={(e) => {
+                        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setIsSocialOpen(false);
+                      }}
                     >
                       <button
-                        className={`relative px-3.5 py-1.5 text-[10px] font-bold font-mono tracking-[0.15em] transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:outline-none rounded-full ${isSocialOpen || isActive ? 'text-white' : 'text-neutral-400 hover:text-white'
+                        ref={(el) => {
+                          socialButtonRef.current = el;
+                          itemRefs.current[index] = el;
+                        }}
+                        type="button"
+                        aria-haspopup="menu"
+                        aria-expanded={isSocialOpen}
+                        aria-controls={SOCIAL_MENU_ID}
+                        onClick={() => setIsSocialOpen((open) => !open)}
+                        className={`relative px-3.5 py-1.5 text-2xs font-bold font-mono tracking-[0.15em] transition-colors duration-200 focus-inset rounded-full ${isSocialOpen || isActive ? 'text-white' : 'text-muted-foreground hover:text-white'
                           } cursor-pointer`}
                       >
-                        {isPillActive && (
-                          <m.span
-                            layoutId="nav-glass-pill"
-                            className="absolute inset-0 bg-white/[0.08] border border-white/[0.12] rounded-full -z-10 shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_2px_8px_rgba(0,0,0,0.3)]"
-                            transition={{ type: "spring", stiffness: 420, damping: 30 }}
-                          />
+                        {!itemRects && isPillActive && (
+                          <span aria-hidden="true" className={`absolute inset-0 -z-10 ${PILL_CLASSES}`} />
                         )}
                         <span className="relative z-10">{item.label}</span>
                       </button>
                       <AnimatePresence>
                         {isSocialOpen && (
                           <m.div
+                            id={SOCIAL_MENU_ID}
+                            role="menu"
+                            aria-label="Social links"
                             initial={{ opacity: 0, y: 8, scale: 0.96 }}
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: 8, scale: 0.96 }}
-                            transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
-                            className="absolute top-[40px] left-1/2 -translate-x-1/2 bg-[#08080a]/95 backdrop-blur-2xl border border-white/[0.1] rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.8),_inset_0_1px_0_rgba(255,255,255,0.15)] p-2.5 flex flex-col gap-1 min-w-[145px] z-50 pointer-events-auto before:content-[''] before:absolute before:-top-5 before:left-0 before:w-full before:h-5 before:bg-transparent"
+                            transition={{ duration: 0.16, ease: EASE_OUT_EXPO }}
+                            className="absolute top-[40px] left-1/2 -translate-x-1/2 bg-surface-2/95 backdrop-blur-2xl border border-border rounded-lg shadow-[0_24px_48px_rgba(0,0,0,0.8),_inset_0_1px_0_rgba(255,255,255,0.15)] p-2.5 flex flex-col gap-1 min-w-[145px] z-50 pointer-events-auto before:content-[''] before:absolute before:-top-5 before:left-0 before:w-full before:h-5 before:bg-transparent"
                           >
                             {socialLinks.map(({ label, href, Icon, external }) => (
                               <a
                                 key={label}
                                 href={href}
+                                role="menuitem"
                                 {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                                className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-neutral-400 hover:text-white hover:bg-white/[0.08] transition-all duration-150 text-[10px] font-mono font-bold tracking-wider"
+                                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-muted-foreground hover:text-white hover:bg-white/[0.08] transition-all duration-150 text-2xs font-mono font-bold tracking-wider"
                               >
                                 {Icon && <Icon size={13} className="shrink-0 text-neutral-300" />}
                                 <span>{label}</span>
@@ -243,26 +339,21 @@ const Navbar = () => {
                 return (
                   <Link
                     key={item.label}
+                    ref={(el) => {
+                      itemRefs.current[index] = el;
+                    }}
                     href={item.path || `/#${item.id}`}
                     onClick={(e) => handleNavigation(e, item)}
                     onMouseEnter={() => setHoveredIndex(index)}
                     data-cursor="merge"
-                    className={`relative px-3.5 py-1.5 text-[10px] font-bold font-mono tracking-[0.15em] transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:outline-none rounded-full ${isActive ? 'text-white' : 'text-neutral-400 hover:text-white'
+                    className={`relative px-3.5 py-1.5 text-2xs font-bold font-mono tracking-[0.15em] transition-colors duration-200 focus-inset rounded-full ${isActive ? 'text-white' : 'text-muted-foreground hover:text-white'
                       }`}
                   >
-                    {isPillActive && (
-                      <m.span
-                        layoutId="nav-glass-pill"
-                        className="absolute inset-0 bg-white/[0.08] border border-white/[0.12] rounded-full -z-10 shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_2px_8px_rgba(0,0,0,0.3)]"
-                        transition={{ type: "spring", stiffness: 420, damping: 30 }}
-                      />
+                    {!itemRects && isPillActive && (
+                      <span aria-hidden="true" className={`absolute inset-0 -z-10 ${PILL_CLASSES}`} />
                     )}
-                    {isActive && (
-                      <m.span
-                        layoutId="active-dot-glow"
-                        className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.9)]"
-                        transition={{ type: "spring", stiffness: 350, damping: 28 }}
-                      />
+                    {!itemRects && isActive && (
+                      <span aria-hidden="true" className={`absolute bottom-0.5 left-1/2 -translate-x-1/2 ${DOT_CLASSES}`} />
                     )}
                     <span className="relative z-10">{item.label}</span>
                   </Link>
@@ -271,29 +362,29 @@ const Navbar = () => {
             </nav>
 
             {/* Status Pill (Visible ONLY when collapsed on scroll) */}
-            <div
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-950/30 border border-emerald-500/25 shadow-[0_0_12px_rgba(16,185,129,0.1)] whitespace-nowrap shrink-0 ${transitionClass} ${!isExpanded ? 'max-w-[160px] opacity-100 pointer-events-auto overflow-visible' : 'max-w-0 opacity-0 pointer-events-none overflow-hidden'
+            <StatusBadge
+              pulse
+              boxed
+              label="Available"
+              className={`${EXPAND_TRANSITION} ${!isExpanded ? 'max-w-[160px] opacity-100 pointer-events-auto overflow-visible' : 'max-w-0 opacity-0 pointer-events-none overflow-hidden'
                 }`}
-            >
-              <div className="relative flex items-center justify-center w-3 h-3 shrink-0 overflow-visible">
-                <span className="absolute w-2.5 h-2.5 rounded-full bg-emerald-500/40 animate-ping pointer-events-none" />
-                <span className="relative w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.85)]" />
-              </div>
-              <span className="text-[8px] font-bold font-mono text-emerald-400 tracking-[0.2em] uppercase">
-                AVAILABLE
-              </span>
-            </div>
+            />
 
             {/* Right Section (Resume Button - Visible when expanded) */}
             <div
-              className={`flex items-center overflow-hidden whitespace-nowrap ${transitionClass} ${isExpanded ? 'max-w-[160px] opacity-100 pointer-events-auto gap-4' : 'max-w-0 opacity-0 pointer-events-none gap-0'
+              className={`flex items-center overflow-hidden whitespace-nowrap ${EXPAND_TRANSITION} ${isExpanded ? 'max-w-[160px] opacity-100 pointer-events-auto gap-4' : 'max-w-0 opacity-0 pointer-events-none gap-0'
                 }`}
             >
-              <span className="h-4 w-px bg-white/[0.1] shrink-0" aria-hidden="true" />
+              <span className="h-4 w-px bg-border shrink-0" aria-hidden="true" />
               <Link
                 href="/resume"
                 data-cursor="merge"
-                className="group/resume relative px-4 py-1.5 overflow-hidden bg-white text-black font-extrabold font-mono text-[9px] rounded-full uppercase tracking-[0.18em] shadow-[0_8px_20px_-4px_rgba(255,255,255,0.3)] hover:shadow-[0_10px_25px_-2px_rgba(255,255,255,0.5)] hover:scale-[1.03] active:scale-95 transition-all duration-200 whitespace-nowrap shrink-0 flex items-center gap-1"
+                className={buttonClasses({
+                  variant: 'primary',
+                  size: 'sm',
+                  className:
+                    'group/resume relative h-8 overflow-hidden gap-1 shrink-0 shadow-[0_8px_20px_-4px_rgba(255,255,255,0.3)] focus-inset',
+                })}
               >
                 {/* Micro Light Sweep Shimmer on Hover */}
                 <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover/resume:translate-x-full transition-transform duration-700 ease-out pointer-events-none" />
@@ -307,138 +398,66 @@ const Navbar = () => {
 
       {/* ================= MOBILE NAVBAR ================= */}
       <div className="fixed top-6 left-0 w-full md:hidden flex justify-center items-start z-[100] pointer-events-none h-0 px-4">
-        <m.div
-          layout
-          transition={shouldReduceMotion ? { duration: 0.2 } : SPRING_MOBILE_OS}
-          className={`pointer-events-auto overflow-hidden relative flex flex-col justify-start items-center group ${isMobileMenuOpen
-            ? 'w-[calc(100vw-2rem)] max-w-[384px] h-[400px] rounded-3xl'
-            : 'w-[calc(100vw-2rem)] max-w-[320px] h-[44px] rounded-full'
+        {/* The size morph is a CSS transition, not a framer layout animation (that needs domMax). The closed radius
+            is half the 44px height rather than rounded-full, so it interpolates smoothly to the open corners. */}
+        <div
+          className={`pointer-events-auto overflow-hidden relative flex flex-col justify-start items-center group motion-safe:transition-[max-width,height,border-radius] motion-safe:duration-500 motion-safe:ease-out-expo ${isMobileMenuOpen
+            ? 'w-[calc(100vw-2rem)] max-w-[384px] h-[400px] rounded-lg'
+            : 'w-[calc(100vw-2rem)] max-w-[320px] h-[44px] rounded-[22px]'
             }`}
         >
           {/* Background Layer with heavy filters */}
-          <div className="absolute inset-0 bg-[#0a0a0c]/90 backdrop-blur-md border border-white/[0.08] shadow-[0_24px_50px_rgba(0,0,0,0.8)] -z-10 rounded-[inherit] pointer-events-none" />
+          <div className="absolute inset-0 bg-surface-2/90 backdrop-blur-md border border-border shadow-[0_24px_50px_rgba(0,0,0,0.8)] -z-10 rounded-[inherit] pointer-events-none" />
 
           <AnimatePresence initial={false}>
             {isMobileMenuOpen ? (
-              <m.div
+              <MobileMenu
                 key="mobile-expanded"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="flex flex-col w-full h-full pt-4 px-4 pb-6 pointer-events-auto absolute inset-0 justify-between"
-              >
-                <div className="flex items-center justify-between w-full pb-3 border-b border-white/[0.08] shrink-0">
-                  <div className="flex items-center gap-1.5">
-                    <span className="font-sans font-black text-xs tracking-[0.2em] text-white uppercase">DAFFA ADITYA</span>
-                    <span className="text-[8px] font-mono text-neutral-400 font-medium tracking-wider">// PORTFOLIO</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-950/40 border border-emerald-500/25">
-                      <span className="relative flex items-center justify-center w-2 h-2 shrink-0">
-                        <span className="absolute w-2 h-2 rounded-full bg-emerald-500/40 animate-ping" />
-                        <span className="relative w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                      </span>
-                      <span className="text-[7.5px] font-bold font-mono text-emerald-400 tracking-wider uppercase">
-                        AVAILABLE
-                      </span>
-                    </div>
-                    <button
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="text-neutral-400 hover:text-white rounded p-1 cursor-pointer focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:outline-none transition-colors duration-200"
-                      aria-label="Close navigation menu"
-                    >
-                      <X size={16} />
-                    </button>
-                  </div>
-                </div>
-                <nav className="flex flex-col gap-1 py-2 grow justify-center" aria-label="Mobile navigation">
-                  {navItems.filter(item => item.label !== 'SOCIALS').map((item) => (
-                    <Link
-                      key={item.label}
-                      href={item.path || `/#${item.id}`}
-                      onClick={(e) => { setIsMobileMenuOpen(false); handleNavigation(e, item); }}
-                      className={`block py-2.5 px-4 text-xs font-bold font-mono tracking-widest uppercase rounded-xl transition-colors focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:outline-none ${checkActive(item) ? 'bg-white/[0.06] text-white font-black' : 'text-neutral-400 hover:text-white hover:bg-white/[0.02]'}`}
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-                </nav>
-
-                {/* Social Links */}
-                <div className="flex items-center justify-center gap-6 py-2.5 border-t border-white/[0.08] shrink-0">
-                  {socialLinks.map(({ label, href, Icon, external, aria }) => (
-                    <a
-                      key={label}
-                      href={href}
-                      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                      className="text-neutral-400 hover:text-white transition-colors duration-200 p-1 rounded focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:outline-none"
-                      aria-label={aria}
-                    >
-                      {Icon && <Icon size={16} />}
-                    </a>
-                  ))}
-                </div>
-
-                <div className="pt-2.5 border-t border-white/[0.08] shrink-0">
-                  <Link
-                    href="/resume"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="w-full py-2.5 bg-white text-black font-extrabold font-mono text-xs rounded-xl hover:bg-neutral-200 transition-colors duration-200 uppercase tracking-wider flex items-center justify-center focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:outline-none"
-                  >
-                    Resume
-                  </Link>
-                </div>
-              </m.div>
+                id={MOBILE_MENU_ID}
+                navItems={mobileNavItems}
+                socialLinks={socialLinks}
+                isActive={checkActive}
+                onNavigate={handleNavigation}
+                onClose={() => setIsMobileMenuOpen(false)}
+              />
             ) : (
-              <m.div
+              <m.button
                 key="mobile-collapsed"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
+                type="button"
                 onClick={() => setIsMobileMenuOpen(true)}
-                role="button"
-                tabIndex={0}
+                onPointerEnter={() => void loadMobileMenu()}
+                onPointerDown={() => void loadMobileMenu()}
+                onFocus={() => void loadMobileMenu()}
                 aria-label="Open navigation menu"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    setIsMobileMenuOpen(true);
-                  }
-                }}
-                className="flex items-center justify-between w-full h-full px-3.5 pointer-events-auto absolute inset-0 cursor-pointer select-none active:scale-[0.98] transition-transform"
+                aria-expanded={false}
+                aria-controls={MOBILE_MENU_ID}
+                className="flex items-center justify-between w-full h-full px-3.5 pointer-events-auto absolute inset-0 cursor-pointer select-none active:scale-[0.98] transition-transform rounded-[inherit] text-left focus-inset"
               >
-                <div className="flex items-center gap-1.5 shrink-0">
-                  <span className="font-sans font-black text-xs tracking-[0.2em] text-white uppercase rounded px-1 py-0.5">
+                <span className="flex items-center gap-1.5 shrink-0">
+                  <span className="font-sans font-black text-xs tracking-[0.2em] text-white uppercase rounded-lg px-1 py-0.5">
                     DA
                   </span>
-                  <span className="text-[8px] font-mono text-neutral-400 font-medium tracking-wider">
-                    // PORTFOLIO
+                  <span className="text-2xs font-mono text-muted-foreground font-medium tracking-wider">
+                    {'// PORTFOLIO'}
                   </span>
-                </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-950/40 border border-emerald-500/25">
-                    <div className="relative flex items-center justify-center w-2 h-2 shrink-0">
-                      <span className="absolute w-2 h-2 rounded-full bg-emerald-500/40 animate-ping" />
-                      <span className="relative w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                    </div>
-                    <span className="text-[7.5px] font-bold font-mono text-emerald-400 tracking-wider uppercase">
-                      AVAILABLE
-                    </span>
-                  </div>
-                  <div className="text-neutral-400 group-hover:text-white rounded p-0.5 transition-colors duration-200">
+                </span>
+                <span className="flex items-center gap-2 shrink-0">
+                  <StatusBadge pulse boxed label="Available" />
+                  <span className="text-muted-foreground group-hover:text-white rounded-lg p-0.5 transition-colors duration-200">
                     <Menu size={15} />
-                  </div>
-                </div>
-              </m.div>
+                  </span>
+                </span>
+              </m.button>
             )}
           </AnimatePresence>
-        </m.div>
+        </div>
       </div>
     </>
   );
 };
 
 export default Navbar;
-export { Navbar as NavbarComponent };

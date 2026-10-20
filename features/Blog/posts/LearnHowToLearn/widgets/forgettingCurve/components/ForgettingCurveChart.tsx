@@ -1,7 +1,7 @@
 import React from 'react';
 import { cn } from '@/utils/cn';
-import type { CurvePoint, CurveResult } from '@/features/Blog/posts/LearnHowToLearn/widgets/forgettingCurve/types';
-import { FLOW_METER_LABEL_CLASS } from '@/features/Blog/flow/constants';
+import type { CurvePoint, CurveResult } from '../types';
+import { WIDGET_LABEL_CLASS } from '@/features/Blog/components/widgetStyles';
 import { CURVE_CHART as C, CURVE_MODEL } from '../constants';
 
 const PLOT_WIDTH = C.width - C.padLeft - C.padRight;
@@ -56,7 +56,7 @@ const ForgettingCurveChart: React.FC<{ result: CurveResult }> = ({ result }) => 
       </svg>
     </div>
 
-    <figcaption className={cn('mt-2 flex flex-wrap gap-x-4 gap-y-1', FLOW_METER_LABEL_CLASS)}>
+    <figcaption className={cn('mt-2 flex flex-wrap gap-x-4 gap-y-1', WIDGET_LABEL_CLASS)}>
       <span>
         <span className="text-neutral-300">&#9644;</span> Your schedule
       </span>

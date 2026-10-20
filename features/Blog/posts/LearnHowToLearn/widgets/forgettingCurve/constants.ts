@@ -1,4 +1,4 @@
-import type { PresetId, SchedulePreset } from '@/features/Blog/posts/LearnHowToLearn/widgets/forgettingCurve/types';
+import type { PresetId, SchedulePreset } from './types';
 
 /**
  * Illustrative model, not fitted to data: recall = exp(-t / S). S is the

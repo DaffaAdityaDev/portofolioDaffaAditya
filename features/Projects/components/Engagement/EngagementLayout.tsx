@@ -1,13 +1,18 @@
 import React from 'react';
+import { lazyOnView } from '@/components/LazyOnView';
+import Container from '@/components/ui/Container';
 import { coverStyle } from '../CaseStudyArt/coverStyle';
 import { CONTEXT_LABEL } from './constants';
 import type { CaseStudyEngagement } from './types';
 import EngagementHero from './EngagementHero';
 import type { HeroShot } from './HeroShots';
-import SpecSheet from './SpecSheet';
-import LinksFooter from './LinksFooter';
-import StoryBody from './StoryBody';
-import NextCaseStudy, { type NextCaseStudyRef } from './NextCaseStudy';
+import type { NextCaseStudyRef } from './NextCaseStudy';
+
+// Below the hero: the HTML stays in the static page, the JS loads as each block nears the viewport.
+const StoryBody = lazyOnView(() => import('./StoryBody'));
+const SpecSheet = lazyOnView(() => import('./SpecSheet'));
+const LinksFooter = lazyOnView(() => import('./LinksFooter'));
+const NextCaseStudy = lazyOnView(() => import('./NextCaseStudy'));
 
 export type { NextCaseStudyRef } from './NextCaseStudy';
 export type { CaseStudyEngagement } from './types';
@@ -29,10 +34,10 @@ const EngagementLayout: React.FC<EngagementLayoutProps> = ({ engagement, shots, 
   const cover = coverStyle(engagement);
 
   return (
-    <main className="relative overflow-x-clip bg-[#0a0a0a] pb-12 font-sans text-zinc-100" style={cover.cssVars}>
+    <main className="relative overflow-x-clip bg-background pb-12 font-sans text-neutral-100" style={cover.cssVars}>
       <EngagementHero engagement={engagement} cover={cover} firstSection={FIRST_SECTION} shots={shots} />
 
-      <div className="mx-auto max-w-[1320px] px-4 sm:px-6 lg:px-10">
+      <Container wide>
         <div id={FIRST_SECTION.id} className="scroll-mt-24 pt-8 md:pt-10 xl:grid xl:grid-cols-[minmax(0,1fr)_380px] xl:gap-14">
           <article className="min-w-0 max-w-[68ch]">
             <StoryBody blocks={engagement.story} skipImages={shots.map((s) => s.src)} />
@@ -43,7 +48,7 @@ const EngagementLayout: React.FC<EngagementLayoutProps> = ({ engagement, shots, 
         </div>
         {engagement.links.length > 0 && <LinksFooter links={engagement.links} />}
         <NextCaseStudy next={next} />
-      </div>
+      </Container>
     </main>
   );
 };

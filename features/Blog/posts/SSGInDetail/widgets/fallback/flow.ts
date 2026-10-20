@@ -1,6 +1,6 @@
 import type { FlowConfig } from '@/features/Blog/flow/types';
-import type { FallbackStep } from '@/features/Blog/posts/SSGInDetail/widgets/fallback/types';
-import { useFallbackStore } from '@/features/Blog/posts/SSGInDetail/widgets/fallback/store';
+import type { FallbackStep } from './types';
+import { useFallbackStore } from './store';
 import { FLOW_DIAGRAM_SIZE } from '@/features/Blog/flow/constants';
 import { FALLBACK_EDGE_LABELS, FALLBACK_EDGES, FALLBACK_NODES } from './constants';
 import { FALLBACK_SCENARIO_ORDER, FALLBACK_SCENARIOS } from './scenarios';

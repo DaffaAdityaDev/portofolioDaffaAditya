@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { ApiModuleNodeId } from '@/features/Blog/posts/VideoSharing/widgets/apiModules/types';
+import type { ApiModuleNodeId } from '../types';
 import { API_MODULE_EDGES, API_MODULE_NODES } from '../constants';
 
 const EDGE_ENTRIES = Object.entries(API_MODULE_EDGES);

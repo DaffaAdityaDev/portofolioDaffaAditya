@@ -1,73 +1,85 @@
-import { GetStaticProps, GetStaticPaths } from 'next';
-import PostLayoutV4 from '@/features/Blog/PostLayout';
-import { getAllPostIds, getPostData } from '@/lib/posts';
+import type { ComponentType } from 'react';
+import type { GetStaticPaths, GetStaticProps } from 'next';
 import dynamic from 'next/dynamic';
-import type { BlogPostMeta, TocItem } from '@/types/blog';
+import PostLayout from '@/features/Blog/PostLayout';
+import type { PostId } from '@/features/Blog/constants';
+import { getAllPostIds, getPostData } from '@/lib/posts';
+import type { PostData, TocItem } from '@/types/blog';
 import { buildPostToc } from '@/features/Blog/utils/postToc';
 
-// Map blog post slugs to their dynamically loaded React component
-const MAPPED_POSTS: Record<string, React.ComponentType> = {
-  'LearnHowToLearn': dynamic(() => import('@/features/Blog/posts/LearnHowToLearn')),
-  'solid-5-principles-that-can-improve-your-codebase': dynamic(() => import('@/features/Blog/posts/SolidPrinciples')),
-  'SSGInDetail': dynamic(() => import('@/features/Blog/posts/SSGInDetail')),
-  'videoSharing': dynamic(() => import('@/features/Blog/posts/VideoSharing')),
-  'nextjs14Improvement': dynamic(() => import('@/features/Blog/posts/Nextjs14Improvement')),
-  'echoAgentService': dynamic(() => import('@/features/Blog/posts/EchoAgentService')),
-};
+type PostModule = () => Promise<{ default: ComponentType }>;
 
-// The same modules for getStaticProps, which renders each post once to build its table of
-// contents. Kept apart from MAPPED_POSTS because next/dynamic needs the import() inline to
-// preload the chunk; only getStaticProps uses this, so it stays out of the browser bundle.
-const POST_MODULES: Record<string, () => Promise<{ default: React.ComponentType }>> = {
-  'LearnHowToLearn': () => import('@/features/Blog/posts/LearnHowToLearn'),
-  'solid-5-principles-that-can-improve-your-codebase': () => import('@/features/Blog/posts/SolidPrinciples'),
-  'SSGInDetail': () => import('@/features/Blog/posts/SSGInDetail'),
-  'videoSharing': () => import('@/features/Blog/posts/VideoSharing'),
-  'nextjs14Improvement': () => import('@/features/Blog/posts/Nextjs14Improvement'),
-  'echoAgentService': () => import('@/features/Blog/posts/EchoAgentService'),
-};
+interface PostContent {
+  /** Rendered by the page. */
+  Content: ComponentType;
+  /** Rendered once by getStaticProps to build the table of contents. */
+  load: PostModule;
+}
+
+/**
+ * The body of every post in POSTS_DATA, keyed by its id: one entry per post, and `satisfies`
+ * fails the build if an id is missing here or has no metadata.
+ *
+ * Each entry names the module twice on purpose. next/dynamic only preloads the chunk (and so
+ * hydrates without a flash) when its import() is written inline, so `Content` cannot be built
+ * from `load`, and a dynamic component exposes no loader to build `load` from either. Both
+ * import() calls resolve to the same chunk, so `load` adds nothing to download in the browser.
+ */
+const POSTS = {
+  'scaling-ai-agents-as-a-service': {
+    Content: dynamic(() => import('@/features/Blog/posts/EchoAgentService')),
+    load: () => import('@/features/Blog/posts/EchoAgentService'),
+  },
+  'how-i-learned-to-learn': {
+    Content: dynamic(() => import('@/features/Blog/posts/LearnHowToLearn')),
+    load: () => import('@/features/Blog/posts/LearnHowToLearn'),
+  },
+  'solid-5-principles-that-make-your-codebase-easier-to-change': {
+    Content: dynamic(() => import('@/features/Blog/posts/SolidPrinciples')),
+    load: () => import('@/features/Blog/posts/SolidPrinciples'),
+  },
+  'nextjs-14-to-16': {
+    Content: dynamic(() => import('@/features/Blog/posts/Nextjs14Improvement')),
+    load: () => import('@/features/Blog/posts/Nextjs14Improvement'),
+  },
+  'static-site-generation-in-nextjs': {
+    Content: dynamic(() => import('@/features/Blog/posts/SSGInDetail')),
+    load: () => import('@/features/Blog/posts/SSGInDetail'),
+  },
+  'designing-a-distributed-video-streaming-system': {
+    Content: dynamic(() => import('@/features/Blog/posts/VideoSharing')),
+    load: () => import('@/features/Blog/posts/VideoSharing'),
+  },
+} satisfies Record<PostId, PostContent>;
+
+/** Narrows the post itself, so the props can pass it on without copying it to retype `id`. */
+const hasContent = (post: PostData): post is PostData & { id: PostId } => post.id in POSTS;
 
 interface PostProps {
-  id: string;
-  meta: BlogPostMeta;
+  post: PostData & { id: PostId };
   toc: TocItem[];
 }
 
-export default function Post({ id, meta, toc }: PostProps) {
-  const PostContent = MAPPED_POSTS[id];
+export default function Post({ post, toc }: PostProps) {
+  const { Content } = POSTS[post.id];
 
   return (
-    <PostLayoutV4 meta={{ ...meta, id }} toc={toc}>
-      {PostContent ? (
-        <PostContent />
-      ) : (
-        <p className="text-neutral-500 font-mono text-sm uppercase py-20 text-center">
-          Post component is coming soon.
-        </p>
-      )}
-    </PostLayoutV4>
+    <PostLayout meta={post} toc={toc}>
+      <Content />
+    </PostLayout>
   );
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = getAllPostIds();
-  return {
-    paths,
-    fallback: false,
-  };
-};
+export const getStaticPaths: GetStaticPaths = async () => ({
+  paths: getAllPostIds(),
+  fallback: false,
+});
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const postData = await getPostData(params?.id as string);
-  const { id, ...meta } = postData;
-  const load = POST_MODULES[id];
-  const toc = load ? await buildPostToc((await load()).default) : [];
+export const getStaticProps: GetStaticProps<PostProps, { id: string }> = async ({ params }) => {
+  const post = params ? getPostData(params.id) : undefined;
+  if (!post || !hasContent(post)) return { notFound: true };
 
-  return {
-    props: {
-      id,
-      meta,
-      toc,
-    },
-  };
+  const toc = await buildPostToc((await POSTS[post.id].load()).default);
+
+  return { props: { post, toc } };
 };

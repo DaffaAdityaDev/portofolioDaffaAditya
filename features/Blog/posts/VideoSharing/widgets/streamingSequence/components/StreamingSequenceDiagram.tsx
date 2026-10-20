@@ -1,7 +1,7 @@
 import React from 'react';
 import { ListOrdered } from 'lucide-react';
 import type { SequenceDefinition } from '@/features/Blog/sequence/types';
-import type { StreamLaneId } from '@/features/Blog/posts/VideoSharing/widgets/streamingSequence/types';
+import type { StreamLaneId } from '../types';
 import SequenceDiagram from '@/features/Blog/sequence/components/SequenceDiagram';
 import { STREAM_LANES, STREAM_SEQUENCE_LEGEND, STREAM_SEQUENCE_STEPS } from '../constants';
 

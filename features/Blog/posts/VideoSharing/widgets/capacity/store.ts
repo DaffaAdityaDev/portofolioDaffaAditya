@@ -5,17 +5,17 @@ import {
   DEFAULT_PRESET,
   DESIGN_PRESETS,
   SIM,
-} from '@/features/Blog/posts/VideoSharing/widgets/capacity/constants';
+} from './constants';
 import {
   createInitialRuntime,
   stepSimulation,
-} from '@/features/Blog/posts/VideoSharing/widgets/capacity/utils/simulation';
+} from './utils/simulation';
 import type {
   DesignPreset,
   SimRuntime,
   VideoConstraints,
   VideoDesignChoices,
-} from '@/features/Blog/posts/VideoSharing/widgets/capacity/types';
+} from './types';
 
 export interface VideoDesignStoreState {
   constraints: VideoConstraints;

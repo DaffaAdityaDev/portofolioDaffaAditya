@@ -1,12 +1,12 @@
 import React from 'react';
 import { cn } from '@/utils/cn';
-import type { LeaseState, TaskFailure } from '@/features/Blog/posts/VideoSharing/widgets/transcodeTask/types';
-import { FLOW_METER_LABEL_CLASS } from '@/features/Blog/flow/constants';
+import type { LeaseState, TaskFailure } from '../types';
+import { WIDGET_BADGE_CLASS, WIDGET_LABEL_CLASS } from '@/features/Blog/components/widgetStyles';
 import { useFlow } from '@/features/Blog/flow/hooks/useFlow';
 import { LEASE_LABELS, TASK_LOOP_STEPS, TASK_MAX_ATTEMPTS } from '../constants';
 import { TRANSCODE_TASK_FLOW } from '../flow';
 
-const METER_LABEL_CLASS = cn('mb-1', FLOW_METER_LABEL_CLASS);
+const METER_LABEL_CLASS = cn('mb-1', WIDGET_LABEL_CLASS);
 
 const LEASE_CLASS: Record<LeaseState, string> = {
   held: 'border-sky-400 text-sky-400',
@@ -23,7 +23,7 @@ const WorkerLoop: React.FC<{ loopStep: number; failure?: TaskFailure }> = ({ loo
   return (
     <div>
       <div className={METER_LABEL_CLASS}>Worker loop</div>
-      <ol className="flex flex-col gap-0.5 font-mono text-[11px]">
+      <ol className="flex flex-col gap-0.5 font-mono text-2xs">
         {TASK_LOOP_STEPS.map((text, index) => {
           const number = index + 1;
           const isRunning = !failure && number === loopStep;
@@ -34,8 +34,8 @@ const WorkerLoop: React.FC<{ loopStep: number; failure?: TaskFailure }> = ({ loo
                 className={cn(
                   'flex gap-2 border-l-2 px-2 py-0.5 transition-colors duration-300',
                   isRunning && 'border-sky-400 bg-sky-400/10 text-sky-300',
-                  isDone && !isRunning && 'border-neutral-600 text-neutral-400',
-                  !isDone && !isRunning && 'border-neutral-800 text-neutral-500',
+                  isDone && !isRunning && 'border-neutral-600 text-muted-foreground',
+                  !isDone && !isRunning && 'border-border text-neutral-500',
                 )}
                 aria-current={isRunning ? 'step' : undefined}
               >
@@ -70,7 +70,7 @@ const Attempts: React.FC<{ attempt: number }> = ({ attempt }) => (
           key={index}
           className={cn(
             'h-2.5 flex-1 border transition-colors duration-300',
-            index < attempt ? 'border-sky-400 bg-sky-400' : 'border-neutral-700 ',
+            index < attempt ? 'border-sky-400 bg-sky-400' : 'border-border-strong',
           )}
         />
       ))}
@@ -81,12 +81,7 @@ const Attempts: React.FC<{ attempt: number }> = ({ attempt }) => (
 const Lease: React.FC<{ lease: LeaseState }> = ({ lease }) => (
   <div>
     <div className={METER_LABEL_CLASS}>Task in the broker</div>
-    <span
-      className={cn(
-        'inline-block border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider transition-colors duration-300',
-        LEASE_CLASS[lease],
-      )}
-    >
+    <span className={cn(WIDGET_BADGE_CLASS, LEASE_CLASS[lease])}>
       {LEASE_LABELS[lease]}
     </span>
   </div>
@@ -96,7 +91,7 @@ const Lease: React.FC<{ lease: LeaseState }> = ({ lease }) => (
 const DoneCount: React.FC<{ received: number; counted: boolean }> = ({ received, counted }) => (
   <div>
     <div className={METER_LABEL_CLASS}>Upload service</div>
-    <div className="font-mono text-[11px] text-neutral-400" role="status">
+    <div className="font-mono text-2xs text-muted-foreground" role="status">
       <span className={cn(received > 1 && 'text-amber-400')}>{received} done received</span>
       <span className="text-neutral-700"> / </span>
       <span className={cn(counted && 'text-emerald-400')}>{counted ? 1 : 0} counted</span>

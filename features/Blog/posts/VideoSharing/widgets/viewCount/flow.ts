@@ -1,6 +1,6 @@
 import type { FlowConfig } from '@/features/Blog/flow/types';
-import type { CountStep } from '@/features/Blog/posts/VideoSharing/widgets/viewCount/types';
-import { useViewCountStore } from '@/features/Blog/posts/VideoSharing/widgets/viewCount/store';
+import type { CountStep } from './types';
+import { useViewCountStore } from './store';
 import { COUNT_EDGE_LABELS, COUNT_EDGES, COUNT_NODES } from './constants';
 import { FLOW_DIAGRAM_SIZE } from '@/features/Blog/flow/constants';
 import { COUNT_SCENARIO_ORDER, COUNT_SCENARIOS } from './scenarios';

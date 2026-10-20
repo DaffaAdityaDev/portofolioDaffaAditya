@@ -1,7 +1,7 @@
 import React from 'react';
 import { RotateCcw } from 'lucide-react';
 import type { SequenceDefinition } from '@/features/Blog/sequence/types';
-import type { ResumeLaneId } from '@/features/Blog/posts/VideoSharing/widgets/resumeSequence/types';
+import type { ResumeLaneId } from '../types';
 import SequenceDiagram from '@/features/Blog/sequence/components/SequenceDiagram';
 import { RESUME_LANES, RESUME_SEQUENCE_LEGEND, RESUME_SEQUENCE_STEPS } from '../constants';
 

@@ -1,4 +1,4 @@
-import type { SchemaColumnTag, SchemaGroup, SchemaRelation, SchemaTable } from '@/features/Blog/posts/VideoSharing/widgets/schemaDiagram/types';
+import type { SchemaColumnTag, SchemaGroup, SchemaRelation, SchemaTable } from './types';
 
 export const SCHEMA_DIAGRAM = {
   width: 860,

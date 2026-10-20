@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type { BriefFormData, BriefStatus, BudgetCurrency, ProjectTypeId } from '@/types/freelance';
-import { EMPTY_BRIEF } from '@/features/Freelance/constants/inquiry';
+import { EMPTY_BRIEF } from './constants/inquiry';
 
 export type StartMode = 'brief' | 'call';
 

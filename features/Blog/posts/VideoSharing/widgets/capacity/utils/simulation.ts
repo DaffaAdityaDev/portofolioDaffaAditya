@@ -12,7 +12,7 @@ import type {
   VideoConstraints,
   VideoDesignChoices,
   VideoNodeId,
-} from '@/features/Blog/posts/VideoSharing/widgets/capacity/types';
+} from '../types';
 import {
   AUTOSCALE,
   CAPACITY,
@@ -26,7 +26,7 @@ import {
   STATUS_THRESHOLDS,
   TRAFFIC,
 } from '../constants';
-import { NODE_IDS } from '../diagram';
+import { NODE_IDS } from '../constants/diagram';
 import {
   formatCompact,
   formatDuration,

@@ -1,5 +1,5 @@
 import type { SequenceLane, SequenceLegendEntry, SequenceStep } from '@/features/Blog/sequence/types';
-import type { DelegationLaneId } from '@/features/Blog/posts/EchoAgentService/widgets/delegationSequence/types';
+import type { DelegationLaneId } from './types';
 
 export const DELEGATION_LANES: Record<DelegationLaneId, SequenceLane> = {
   gateway: { label: 'Go gateway', caption: 'one SSE stream', x: 110 },

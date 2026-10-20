@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useReducedMotion } from 'framer-motion';
 import { DEFAULT_MARQUEE_SPEED } from '@/constant/constant';
 
@@ -45,12 +45,7 @@ const Marquee: React.FC<MarqueeProps> = ({
   const isPaused = !isIntersecting || !!shouldReduceMotion;
 
   // Split items if separated by '///', or treat as single item
-  const items = useMemo(() => {
-    if (text.includes('///')) {
-      return text.split('///').map((s) => s.trim()).filter(Boolean);
-    }
-    return [text.trim()];
-  }, [text]);
+  const items = text.includes('///') ? text.split('///').map((s) => s.trim()).filter(Boolean) : [text.trim()];
 
   const isDark = type === 'dark';
 
@@ -65,9 +60,9 @@ const Marquee: React.FC<MarqueeProps> = ({
               className="inline-flex items-center gap-3.5 mx-3.5 md:mx-5 group/item select-none cursor-default"
             >
               <span
-                className={`text-[11px] md:text-xs font-mono font-extrabold tracking-[0.22em] uppercase transition-all duration-200 ${
+                className={`text-2xs md:text-xs font-mono font-extrabold tracking-[0.22em] uppercase transition-all duration-200 ${
                   isDark
-                    ? 'text-neutral-400 group-hover/item:text-white group-hover/item:scale-105'
+                    ? 'text-muted-foreground group-hover/item:text-white group-hover/item:scale-105'
                     : 'text-neutral-700 group-hover/item:text-black group-hover/item:scale-105'
                 }`}
               >
@@ -79,16 +74,16 @@ const Marquee: React.FC<MarqueeProps> = ({
                 <span
                   className={`w-1.5 h-1.5 rounded-full transition-transform group-hover/item:scale-125 ${
                     isDark
-                      ? 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.9)]'
+                      ? 'bg-accent-brand shadow-[0_0_8px_rgba(239,68,68,0.9)]'
                       : 'bg-red-600 shadow-[0_0_4px_rgba(220,38,38,0.4)]'
                   }`}
                 />
                 <span
-                  className={`text-[10px] font-mono font-black tracking-widest ${
+                  className={`text-2xs font-mono font-black tracking-widest ${
                     isDark ? 'text-neutral-600' : 'text-neutral-400'
                   }`}
                 >
-                  ///
+                  {'///'}
                 </span>
               </span>
             </div>
@@ -104,11 +99,11 @@ const Marquee: React.FC<MarqueeProps> = ({
       style={{ opacity }}
       className={`group relative w-full overflow-hidden whitespace-nowrap py-3 md:py-3.5 select-none transition-colors ${
         isDark
-          ? 'bg-[#060608] text-white'
+          ? 'bg-surface-1 text-white'
           : 'bg-white text-black shadow-[inset_0_1px_0_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.03)]'
       } ${
         border
-          ? `border-y ${isDark ? 'border-white/[0.08]' : 'border-neutral-200/90'}`
+          ? `border-y ${isDark ? 'border-border' : 'border-neutral-200/90'}`
           : ''
       } ${className}`}
     >
@@ -116,14 +111,14 @@ const Marquee: React.FC<MarqueeProps> = ({
       <div
         className={`pointer-events-none absolute inset-y-0 left-0 w-16 md:w-28 z-10 ${
           isDark
-            ? 'bg-gradient-to-r from-[#060608] to-transparent'
+            ? 'bg-gradient-to-r from-surface-1 to-transparent'
             : 'bg-gradient-to-r from-white to-transparent'
         }`}
       />
       <div
         className={`pointer-events-none absolute inset-y-0 right-0 w-16 md:w-28 z-10 ${
           isDark
-            ? 'bg-gradient-to-l from-[#060608] to-transparent'
+            ? 'bg-gradient-to-l from-surface-1 to-transparent'
             : 'bg-gradient-to-l from-white to-transparent'
         }`}
       />

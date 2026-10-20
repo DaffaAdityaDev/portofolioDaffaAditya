@@ -1,5 +1,5 @@
 import type { FlowEdgeLabel, FlowEdgeLayout, FlowNodeLayout } from '@/features/Blog/flow/types';
-import type { MapEdgeId, MapNodeId } from '@/features/Blog/posts/EchoAgentService/widgets/systemMap/types';
+import type { MapEdgeId, MapNodeId } from './types';
 
 export const MAP_NODES: Record<MapNodeId, FlowNodeLayout> = {
   clients: { x: 10, y: 134, label: 'Clients', caption: 'web, prototypes' },

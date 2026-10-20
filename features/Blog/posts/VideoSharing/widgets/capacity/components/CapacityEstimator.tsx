@@ -1,6 +1,6 @@
 import React from 'react';
 import { Calculator } from 'lucide-react';
-import type { VideoConstraints } from '@/features/Blog/posts/VideoSharing/widgets/capacity/types';
+import type { VideoConstraints } from '../types';
 import ResultTile from '@/features/Blog/components/ResultTile';
 import SliderField from '@/features/Blog/components/SliderField';
 import WidgetFrame from '@/features/Blog/components/WidgetFrame';
@@ -85,12 +85,12 @@ const CapacityEstimator: React.FC = () => {
           </div>
         </div>
 
-        <div className="border-t border-neutral-800 pt-5 md:col-span-2">
+        <div className="border-t border-border pt-5 md:col-span-2">
           <CdnPriceSlider />
         </div>
       </div>
 
-      <div className="border-t border-neutral-800 px-4 py-2 text-xs text-neutral-500">
+      <div className="border-t border-border px-4 py-2 text-xs text-neutral-500">
         These numbers also set the baseline traffic in the simulator further down.
       </div>
     </WidgetFrame>

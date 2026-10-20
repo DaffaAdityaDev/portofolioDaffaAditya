@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ArchitectureCategory } from '@/features/Blog/posts/VideoSharing/widgets/architecture/types';
+import type { ArchitectureCategory } from '../types';
 import { STACK_OFFSET } from '@/features/Blog/flow/components/FlowParts';
 import { ARCHITECTURE_CATEGORIES, ARCHITECTURE_DIAGRAM } from '../constants';
 

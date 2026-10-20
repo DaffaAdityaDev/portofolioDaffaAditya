@@ -1,5 +1,5 @@
-import type { RenderMode, ResponseKind } from '@/features/Blog/posts/SSGInDetail/widgets/revalidation/types';
-import { FLOW_COLORS } from '@/features/Blog/flow/constants';
+import type { RenderMode, ResponseKind } from './types';
+import { WIDGET_COLORS } from '@/features/Blog/components/widgetStyles';
 
 /** 4 minutes after the build, with 8 visitors at uneven times. */
 export const TIMELINE = {
@@ -29,8 +29,8 @@ export const RENDER_MODE_ORDER: RenderMode[] = ['ssg', 'isr', 'ssr'];
 
 export const RESPONSE_STYLES: Record<ResponseKind, { color: string; label: string }> = {
   current: { color: '#737373', label: 'Old post, before the edit' },
-  stale: { color: FLOW_COLORS.error, label: 'Old post after the edit (stale)' },
-  fresh: { color: FLOW_COLORS.recovery, label: 'New post' },
+  stale: { color: WIDGET_COLORS.error, label: 'Old post after the edit (stale)' },
+  fresh: { color: WIDGET_COLORS.recovery, label: 'New post' },
 };
 
 export const TIMELINE_CHART = {

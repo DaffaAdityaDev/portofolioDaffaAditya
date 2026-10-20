@@ -1,5 +1,5 @@
 import type { SequenceLane, SequenceLegendEntry, SequenceStep } from '@/features/Blog/sequence/types';
-import type { StreamLaneId } from '@/features/Blog/posts/VideoSharing/widgets/streamingSequence/types';
+import type { StreamLaneId } from './types';
 
 export const STREAM_LANES: Record<StreamLaneId, SequenceLane> = {
   player: { label: 'Player', caption: 'app or browser', x: 130 },

@@ -1,6 +1,8 @@
 import React, { useRef } from 'react';
 import { m, useMotionValue, useMotionTemplate } from 'framer-motion';
 import { DEFAULT_OFFSCREEN_COORD, SPOTLIGHT_BUTTON_METRICS } from '@/constant/constant';
+import { cn } from '@/utils/cn';
+import { buttonClasses } from './Button';
 
 export interface SpotlightButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
@@ -54,9 +56,15 @@ export const SpotlightButton: React.FC<SpotlightButtonProps> = ({
 
   const isPrimary = variant === 'primary';
 
-  const baseStyles = isPrimary
-    ? 'relative group h-13 px-7 bg-white text-black font-bold tracking-tight rounded-full overflow-hidden flex items-center justify-center gap-2.5 active:scale-95 whitespace-nowrap text-sm cursor-pointer shadow-lg shadow-white/5 transition-transform'
-    : 'relative group h-13 px-7 bg-[#0d0d0f] text-neutral-200 font-medium text-sm rounded-full overflow-hidden flex items-center justify-center gap-2.5 active:scale-95 whitespace-nowrap cursor-pointer transition-transform border border-neutral-800 hover:text-white';
+  // Button's lg classes; the cursor light replaces the plain hover colors, so those are pinned.
+  const baseStyles = buttonClasses({
+    variant,
+    size: 'lg',
+    className: cn(
+      'relative group overflow-hidden gap-2.5',
+      isPrimary ? 'shadow-lg shadow-white/5 hover:bg-white' : 'bg-surface-1 border-border hover:border-border',
+    ),
+  });
 
   const content = (
     <>
@@ -65,14 +73,14 @@ export const SpotlightButton: React.FC<SpotlightButtonProps> = ({
         <>
           {/* Following Cursor Border Glow */}
           <m.div
-            className="absolute -inset-px rounded-full pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100 -z-10"
+            className="absolute -inset-px rounded-lg pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100 -z-10"
             style={{ background: spotLightBorder }}
           />
           {/* Underlying Dark Mask */}
-          <div className="absolute inset-[1px] rounded-full bg-[#0d0d0f] -z-10" />
+          <div className="absolute inset-[1px] rounded-[calc(var(--radius)-1px)] bg-surface-1 -z-10" />
           {/* Following Cursor Surface Light */}
           <m.div
-            className="absolute inset-0 rounded-full pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+            className="absolute inset-0 rounded-lg pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
             style={{ background: spotLightBg }}
           />
         </>
@@ -80,10 +88,10 @@ export const SpotlightButton: React.FC<SpotlightButtonProps> = ({
         <>
           {/* Primary White Button Cursor-Tracking Specular Flare */}
           <m.div
-            className="absolute inset-0 rounded-full pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100 mix-blend-overlay"
+            className="absolute inset-0 rounded-lg pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100 mix-blend-overlay"
             style={{ background: primarySpecular }}
           />
-          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/[0.04] transition-colors rounded-full" />
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/[0.04] transition-colors rounded-lg" />
         </>
       )}
 
@@ -103,7 +111,7 @@ export const SpotlightButton: React.FC<SpotlightButtonProps> = ({
         onMouseEnter={handleMouseEnter}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        className={`${baseStyles} ${className}`}
+        className={cn(baseStyles, className)}
       >
         {content}
       </a>
@@ -118,7 +126,7 @@ export const SpotlightButton: React.FC<SpotlightButtonProps> = ({
       onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={`${baseStyles} ${className}`}
+      className={cn(baseStyles, className)}
       {...props}
     >
       {content}

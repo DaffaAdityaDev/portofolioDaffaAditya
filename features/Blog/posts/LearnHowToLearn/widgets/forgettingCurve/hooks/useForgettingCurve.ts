@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import type { PresetId } from '@/features/Blog/posts/LearnHowToLearn/widgets/forgettingCurve/types';
+import type { PresetId } from '../types';
 import { PRESET_ORDER, SCHEDULE_PRESETS } from '../constants';
 import { simulateCurve } from '../utils/model';
 

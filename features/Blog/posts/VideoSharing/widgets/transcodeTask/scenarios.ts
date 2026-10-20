@@ -1,5 +1,5 @@
 import type { FlowScenario } from '@/features/Blog/flow/types';
-import type { TaskScenarioId, TaskStep } from '@/features/Blog/posts/VideoSharing/widgets/transcodeTask/types';
+import type { TaskScenarioId, TaskStep } from './types';
 
 type StepFields = Omit<TaskStep, 'id' | 'title' | 'detail'>;
 

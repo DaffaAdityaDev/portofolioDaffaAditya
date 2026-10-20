@@ -8,15 +8,15 @@ export interface ActionButtonProps extends React.ButtonHTMLAttributes<HTMLButton
   iconOnly?: boolean;
 }
 
-// The palette the widgets were designed with (red-500 #f31260 and zinc-700 #3f3f46 from the old UI kit).
+// `bordered` and `light` use the colors of the site Button's `secondary` and `ghost` variants
+// (components/ui/Button); `solid` is the accent call to action, which Button has no variant for.
 const VARIANT_CLASS: Record<NonNullable<ActionButtonProps['variant']>, string> = {
-  solid: 'bg-[#f31260] text-white hover:opacity-80',
-  bordered:
-    'border-2 border-[#3f3f46] bg-transparent text-[#ecedee] hover:opacity-80',
-  light: 'bg-transparent text-white hover:bg-[#3f3f46]/40',
+  solid: 'bg-accent-brand text-white hover:bg-accent-brand-hover',
+  bordered: 'border border-border-strong bg-transparent text-neutral-200 hover:border-white hover:text-white',
+  light: 'bg-transparent text-neutral-200 hover:bg-white/10 hover:text-white',
 };
 
-/** Small square-cornered button used by the blog widgets' controls. */
+/** Small 32px tall button used by the blog widgets' controls. */
 const ActionButton: React.FC<ActionButtonProps> = ({
   variant = 'solid',
   iconOnly = false,
@@ -28,9 +28,9 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   <button
     type={type}
     className={cn(
-      'relative inline-flex h-8 cursor-pointer select-none items-center justify-center overflow-hidden whitespace-nowrap rounded-none text-xs font-normal',
-      'transition duration-250 active:scale-[0.97] motion-reduce:transition-none motion-reduce:active:scale-100 ',
-      'focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500',
+      'relative inline-flex h-8 cursor-pointer select-none items-center justify-center overflow-hidden whitespace-nowrap rounded-lg text-xs font-normal',
+      'transition duration-250 active:scale-[0.97] motion-reduce:transition-none motion-reduce:active:scale-100',
+      'focus-visible:z-10',
       'disabled:pointer-events-none disabled:opacity-50',
       iconOnly ? 'w-8 min-w-8 px-0' : 'min-w-16 gap-2 px-3',
       VARIANT_CLASS[variant],

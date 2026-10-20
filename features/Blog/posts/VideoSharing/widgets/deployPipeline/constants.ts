@@ -1,5 +1,5 @@
 import type { FlowEdgeLabel, FlowEdgeLayout, FlowNodeLayout } from '@/features/Blog/flow/types';
-import type { DeployEdgeId, DeployNodeId } from '@/features/Blog/posts/VideoSharing/widgets/deployPipeline/types';
+import type { DeployEdgeId, DeployNodeId } from './types';
 
 export const DEPLOY_NODES: Record<DeployNodeId, FlowNodeLayout> = {
   dev: { x: 10, y: 134, label: 'Developer', caption: 'merges to main' },

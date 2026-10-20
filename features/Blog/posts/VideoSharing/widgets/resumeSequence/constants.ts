@@ -1,5 +1,5 @@
 import type { SequenceLane, SequenceLegendEntry, SequenceStep } from '@/features/Blog/sequence/types';
-import type { ResumeLaneId } from '@/features/Blog/posts/VideoSharing/widgets/resumeSequence/types';
+import type { ResumeLaneId } from './types';
 
 export const RESUME_LANES: Record<ResumeLaneId, SequenceLane> = {
   client: { label: 'Client', caption: 'app or browser', x: 150 },

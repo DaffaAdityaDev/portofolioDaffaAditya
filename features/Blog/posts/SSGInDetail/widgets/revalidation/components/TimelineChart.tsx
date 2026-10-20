@@ -1,7 +1,7 @@
 import React from 'react';
 import { cn } from '@/utils/cn';
-import type { ResponseKind, TimelineResult } from '@/features/Blog/posts/SSGInDetail/widgets/revalidation/types';
-import { FLOW_COLORS } from '@/features/Blog/flow/constants';
+import type { ResponseKind, TimelineResult } from '../types';
+import { WIDGET_COLORS } from '@/features/Blog/components/widgetStyles';
 import { RESPONSE_STYLES, TIMELINE, TIMELINE_CHART as C } from '../constants';
 
 const PLOT_WIDTH = C.width - C.padLeft - C.padRight;
@@ -17,8 +17,8 @@ const RenderBlock: React.FC<{ at: number; label?: string }> = ({ at, label }) =>
       y={C.renderY}
       width={C.renderWidth}
       height={C.renderHeight}
-      fill={FLOW_COLORS.idle}
-      stroke={FLOW_COLORS.text}
+      fill={WIDGET_COLORS.idle}
+      stroke={WIDGET_COLORS.text}
       strokeWidth={1}
     />
     {label && (
@@ -65,7 +65,7 @@ const TimelineChart: React.FC<{ result: TimelineResult; editAt: number }> = ({ r
           </text>
         ))}
 
-        <line x1={x(editAt)} x2={x(editAt)} y1={22} y2={C.renderY + C.renderHeight} stroke={FLOW_COLORS.error} strokeDasharray="4 4" />
+        <line x1={x(editAt)} x2={x(editAt)} y1={22} y2={C.renderY + C.renderHeight} stroke={WIDGET_COLORS.error} strokeDasharray="4 4" />
         <text x={x(editAt)} y={14} textAnchor="middle" className="fill-red-400 font-mono text-[10px] uppercase">
           CMS edit
         </text>
@@ -88,7 +88,7 @@ const TimelineChart: React.FC<{ result: TimelineResult; editAt: number }> = ({ r
       </svg>
     </div>
 
-    <figcaption className="mt-3 flex flex-wrap gap-x-5 gap-y-2 font-mono text-[11px] text-neutral-400">
+    <figcaption className="mt-3 flex flex-wrap gap-x-5 gap-y-2 font-mono text-2xs text-muted-foreground">
       {LEGEND.map(({ kind }) => (
         <span key={kind} className="inline-flex items-center gap-1.5">
           <span className="inline-block size-2.5 rounded-full" style={{ backgroundColor: RESPONSE_STYLES[kind].color }} aria-hidden="true" />

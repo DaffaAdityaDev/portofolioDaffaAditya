@@ -1,4 +1,4 @@
-import type { CurvePoint, CurveResult } from '@/features/Blog/posts/LearnHowToLearn/widgets/forgettingCurve/types';
+import type { CurvePoint, CurveResult } from '../types';
 import { CURVE_MODEL as M } from '../constants';
 
 const sampleDays = (): number[] =>

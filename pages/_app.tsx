@@ -1,12 +1,13 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import { Outfit, Inter } from 'next/font/google';
-import { AnimatePresence, LazyMotion } from 'framer-motion';
+import { AnimatePresence, LazyMotion, MotionConfig } from 'framer-motion';
 import Navbar from '@/components/Layout/Navbar';
 import PageTransition from '@/components/Layout/PageTransition';
 import { BARE_PAGE_ROUTES } from '@/constant/constant';
 
 // Only the case-study pages use Outfit, so don't preload it on every route.
+// adjustFontFallback stays on (the default): the metric-matched fallback keeps the swap from reflowing the h1.
 const outfit = Outfit({
   subsets: ['latin'],
   variable: '--font-outfit',
@@ -15,6 +16,7 @@ const outfit = Outfit({
 });
 
 // Motion features load in their own chunk; components use `m.*` so they stay small.
+// Subtrees with layout animations add domMax through components/LayoutMotion.
 const loadMotionFeatures = () => import('@/lib/motionFeatures').then((mod) => mod.default);
 
 const inter = Inter({
@@ -35,14 +37,17 @@ function MyApp({ Component, pageProps, router }: AppProps) {
 
   return (
     <LazyMotion features={loadMotionFeatures} strict>
-      <div className={`${inter.variable} ${outfit.variable} font-sans`}>
-        <Navbar />
-        <AnimatePresence mode="wait" initial={false}>
-          <PageTransition key={transitionKey}>
-            <Component {...pageProps} />
-          </PageTransition>
-        </AnimatePresence>
-      </div>
+      {/* Readers who ask for reduced motion get opacity-only animations: transforms and layout morphs are skipped. */}
+      <MotionConfig reducedMotion="user">
+        <div className={`${inter.variable} ${outfit.variable} font-sans`}>
+          <Navbar />
+          <AnimatePresence mode="wait" initial={false}>
+            <PageTransition key={transitionKey}>
+              <Component {...pageProps} />
+            </PageTransition>
+          </AnimatePresence>
+        </div>
+      </MotionConfig>
     </LazyMotion>
   );
 }

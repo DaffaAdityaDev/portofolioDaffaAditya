@@ -1,22 +1,21 @@
 import React from 'react';
 import { cn } from '@/utils/cn';
-import type { AccessTokenState, RefreshTokenState } from '@/features/Blog/posts/VideoSharing/widgets/loginFlow/types';
-import { FLOW_METER_LABEL_CLASS } from '@/features/Blog/flow/constants';
+import type { AccessTokenState, RefreshTokenState } from '../types';
+import { WIDGET_BADGE_CLASS, WIDGET_BADGE_IDLE_CLASS, WIDGET_LABEL_CLASS } from '@/features/Blog/components/widgetStyles';
 import { useFlow } from '@/features/Blog/flow/hooks/useFlow';
 import { ACCESS_TOKEN_LABELS, LOGIN_ATTEMPT_LIMIT, REFRESH_TOKEN_LABELS } from '../constants';
 import { LOGIN_FLOW } from '../flow';
 
-const METER_LABEL_CLASS = cn('mb-1', FLOW_METER_LABEL_CLASS);
-const BADGE_CLASS = 'inline-block border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider transition-colors duration-300';
+const METER_LABEL_CLASS = cn('mb-1', WIDGET_LABEL_CLASS);
 
 const ACCESS_CLASS: Record<AccessTokenState, string> = {
-  none: 'border-neutral-800 text-neutral-400 ',
+  none: WIDGET_BADGE_IDLE_CLASS,
   valid: 'border-emerald-400 text-emerald-400',
   expired: 'border-amber-400 text-amber-400',
 };
 
 const REFRESH_CLASS: Record<RefreshTokenState, string> = {
-  none: 'border-neutral-800 text-neutral-400 ',
+  none: WIDGET_BADGE_IDLE_CLASS,
   valid: 'border-emerald-400 text-emerald-400',
   rotated: 'border-sky-400 text-sky-400',
   revoked: 'border-red-500 text-red-500',
@@ -25,7 +24,7 @@ const REFRESH_CLASS: Record<RefreshTokenState, string> = {
 const TokenBadge: React.FC<{ label: string; text: string; className: string }> = ({ label, text, className }) => (
   <div>
     <div className={METER_LABEL_CLASS}>{label}</div>
-    <span className={cn(BADGE_CLASS, className)}>{text}</span>
+    <span className={cn(WIDGET_BADGE_CLASS, className)}>{text}</span>
   </div>
 );
 
@@ -46,7 +45,7 @@ const AttemptMeter: React.FC<{ failed: number }> = ({ failed }) => {
             key={index}
             className={cn(
               'h-5 flex-1 border transition-colors duration-300',
-              index < failed ? (isLocked ? 'border-red-500 bg-red-500/60' : 'border-amber-400 bg-amber-400/40') : 'border-neutral-800 ',
+              index < failed ? (isLocked ? 'border-red-500 bg-red-500/60' : 'border-amber-400 bg-amber-400/40') : 'border-border',
             )}
           />
         ))}

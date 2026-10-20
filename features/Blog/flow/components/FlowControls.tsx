@@ -68,10 +68,10 @@ export const PlaybackControls = <TStep extends FlowStep>({ flow }: FlowProps<TSt
             aria-current={index === stepIndex ? 'step' : undefined}
             onClick={() => goToStep(index)}
             className={cn(
-              'h-2.5 w-6 cursor-pointer transition-colors focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-red-500',
-              index === stepIndex && 'bg-red-500',
+              'h-2.5 w-6 cursor-pointer transition-colors',
+              index === stepIndex && 'bg-accent-brand',
               index < stepIndex && 'bg-neutral-500',
-              index > stepIndex && 'bg-neutral-800 hover:bg-neutral-700 ',
+              index > stepIndex && 'bg-neutral-800 hover:bg-neutral-700',
             )}
           />
         ))}

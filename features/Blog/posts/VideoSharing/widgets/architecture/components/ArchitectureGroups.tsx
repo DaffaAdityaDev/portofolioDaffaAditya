@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ArchitectureGroupId, ArchitectureNodeId } from '@/features/Blog/posts/VideoSharing/widgets/architecture/types';
+import type { ArchitectureGroupId, ArchitectureNodeId } from '../types';
 import { ARCHITECTURE_DIAGRAM, ARCHITECTURE_GROUPS, ARCHITECTURE_NODES } from '../constants';
 
 const GROUP_ENTRIES = Object.entries(ARCHITECTURE_GROUPS) as [

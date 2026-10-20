@@ -1,4 +1,4 @@
-import type { BottleneckCopy, BottleneckKey } from '@/features/Blog/posts/VideoSharing/widgets/capacity/types';
+import type { BottleneckCopy, BottleneckKey } from '../types';
 
 export const BOTTLENECK_COPY: Record<BottleneckKey, BottleneckCopy> = {
   healthy: {

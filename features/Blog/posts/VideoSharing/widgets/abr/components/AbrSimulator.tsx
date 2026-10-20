@@ -1,10 +1,10 @@
 import React from 'react';
 import { Gauge } from 'lucide-react';
 import { cn } from '@/utils/cn';
-import type { QualityMode } from '@/features/Blog/posts/VideoSharing/widgets/abr/types';
+import type { QualityMode } from '../types';
 import WidgetFrame from '@/features/Blog/components/WidgetFrame';
 import ToggleButton from '@/features/Blog/components/ToggleButton';
-import { FLOW_METER_LABEL_CLASS } from '@/features/Blog/flow/constants';
+import { WIDGET_LABEL_CLASS } from '@/features/Blog/components/widgetStyles';
 import { ABR_LADDER, ABR_PROFILE_ORDER, ABR_PROFILES } from '../constants';
 import { useAbrSimulator } from '../hooks/useAbrSimulator';
 import AbrChart from './AbrChart';
@@ -24,7 +24,7 @@ interface PickerProps<T> {
 /** A row of toggle buttons, styled like the scenario picker of the flows. */
 const Picker = <T extends string | number>({ label, options, selected, onSelect }: PickerProps<T>) => (
   <div>
-    <div className={cn('mb-1.5', FLOW_METER_LABEL_CLASS)}>{label}</div>
+    <div className={cn('mb-1.5', WIDGET_LABEL_CLASS)}>{label}</div>
     <div className="flex flex-wrap gap-2" role="group" aria-label={label}>
       {options.map((option) => {
         const isSelected = option.value === selected;
@@ -44,7 +44,7 @@ const Picker = <T extends string | number>({ label, options, selected, onSelect 
 
 const Stat: React.FC<{ label: string; value: string; isBad?: boolean }> = ({ label, value, isBad }) => (
   <div>
-    <div className={cn('mb-0.5', FLOW_METER_LABEL_CLASS)}>{label}</div>
+    <div className={cn('mb-0.5', WIDGET_LABEL_CLASS)}>{label}</div>
     <div className={cn('font-mono text-lg font-bold tabular-nums', isBad ? 'text-red-400' : 'text-neutral-100')}>{value}</div>
   </div>
 );

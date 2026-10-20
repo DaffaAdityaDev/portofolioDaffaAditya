@@ -1,8 +1,7 @@
 import React, { useId } from 'react';
-import { Network, X } from 'lucide-react';
+import { Network } from 'lucide-react';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { cn } from '@/utils/cn';
-import type { ArchitectureNodeId } from '@/features/Blog/posts/VideoSharing/widgets/architecture/types';
 import WidgetFrame from '@/features/Blog/components/WidgetFrame';
 import ToggleButton from '@/features/Blog/components/ToggleButton';
 import { FlowEdge, FlowEdgeLabels, FlowMarkers, FlowNode } from '@/features/Blog/flow/components/FlowParts';
@@ -16,6 +15,8 @@ import {
   ARCHITECTURE_VIEWS,
 } from '../constants';
 import { useArchitectureOverview } from '../hooks/useArchitectureOverview';
+import type { ArchitectureNodeId } from '../types';
+import NodeDetailPanel from '../../shared/components/NodeDetailPanel';
 import ArchitectureGroups from './ArchitectureGroups';
 import ArchitectureLegend from './ArchitectureLegend';
 
@@ -104,42 +105,17 @@ const ArchitectureOverview: React.FC = () => {
           </svg>
         </div>
 
-        <div className="min-h-[96px] border border-neutral-800 bg-[#0a0a0a] p-3" role="status" aria-live="polite">
-          {overview.selected ? (
-            <>
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <div className="font-bold text-white">{overview.selected.name}</div>
-                  <div
-                    className="mt-0.5 font-mono text-[11px] uppercase tracking-wider"
-                    style={{ color: ARCHITECTURE_CATEGORIES[overview.selected.category].color }}
-                  >
-                    {ARCHITECTURE_CATEGORIES[overview.selected.category].label}
-                    {overview.selected.group && (
-                      <span className="text-neutral-500"> · part of the {ARCHITECTURE_GROUPS[overview.selected.group].label}</span>
-                    )}
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={overview.clearSelection}
-                  aria-label="Clear selection"
-                  className="cursor-pointer text-neutral-500 transition-colors hover:text-white"
-                >
-                  <X className="size-4" aria-hidden="true" />
-                </button>
-              </div>
-              <div className="mt-1 text-sm leading-relaxed text-neutral-400">{overview.selected.description}</div>
-              {overview.neighbors.length > 0 && (
-                <div className="mt-2 font-mono text-[11px] uppercase tracking-wider text-neutral-500">
-                  Talks to: {overview.neighbors.join(', ')}
-                </div>
-              )}
-            </>
-          ) : (
-            <div className="text-sm text-neutral-500">Click a component to see what it does and what it talks to.</div>
-          )}
-        </div>
+        <NodeDetailPanel
+          selected={overview.selected}
+          neighbors={overview.neighbors}
+          categoryNote={
+            overview.selected?.group && (
+              <span className="text-neutral-500"> · part of the {ARCHITECTURE_GROUPS[overview.selected.group].label}</span>
+            )
+          }
+          hint="Click a component to see what it does and what it talks to."
+          onClear={overview.clearSelection}
+        />
       </div>
     </WidgetFrame>
   );

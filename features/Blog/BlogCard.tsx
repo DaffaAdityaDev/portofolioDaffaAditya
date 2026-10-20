@@ -1,8 +1,9 @@
 import React from 'react';
 import { ArrowRight, Calendar, Clock } from 'lucide-react';
-import { IBlogProps } from '@/types/blog';
+import type { PostSummary } from '@/types/blog';
 import DateComponent from '@/components/ui/Date';
 import { BLOG_CATEGORY_LABELS } from './constants';
+import { chipClasses } from '@/components/ui/chip';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -14,7 +15,7 @@ const IMAGE_SIZES = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw';
 
 const smallVariant = (src: string) => src.replace(/(\.\w+)$/, `-${SMALL_IMAGE_WIDTH}$1`);
 
-interface BlogCardProps extends IBlogProps {
+interface BlogCardProps extends PostSummary {
   /** First card on the page: load its image eagerly, as it is likely the LCP element. */
   priority?: boolean;
 }
@@ -43,9 +44,9 @@ const BlogCard = ({ priority = false, ...props }: BlogCardProps) => {
 
   return (
     <Link href={targetUrl} onClick={handleNavigate} className="group block h-full">
-      <div className="bg-[#0a0a0a] border border-neutral-800 h-full flex flex-col hover:border-neutral-600 transition-colors">
+      <div className="bg-background border border-border rounded-lg overflow-hidden h-full flex flex-col hover:border-neutral-600 transition-colors">
         {/* Image Container */}
-        <div className="aspect-video w-full overflow-hidden border-b border-neutral-800 relative">
+        <div className="aspect-video w-full overflow-hidden border-b border-border relative">
           <div className="absolute inset-0 bg-neutral-900 animate-pulse" />
           <img
             src={image}
@@ -61,7 +62,7 @@ const BlogCard = ({ priority = false, ...props }: BlogCardProps) => {
             style={{ viewTransitionName: `blog-image-${id}` }}
           />
           <div 
-            className="absolute inset-0 bg-linear-to-t from-[#0a0a0a] to-transparent opacity-60 z-20" 
+            className="absolute inset-0 bg-linear-to-t from-background to-transparent opacity-60 z-20" 
           />
         </div>
 
@@ -69,7 +70,7 @@ const BlogCard = ({ priority = false, ...props }: BlogCardProps) => {
         <div className="p-6 flex flex-col flex-1">
           {/* Meta */}
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-4 text-xs font-mono text-neutral-500">
-            <span className="border border-red-900/50 bg-red-900/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-red-500">
+            <span className={chipClasses({ tone: 'accent', className: 'px-2 py-0.5 text-2xs' })}>
               {BLOG_CATEGORY_LABELS[category]}
             </span>
             <div className="flex items-center gap-1.5">
@@ -84,18 +85,18 @@ const BlogCard = ({ priority = false, ...props }: BlogCardProps) => {
 
           {/* Title & Desc */}
           <h2 
-            className="text-xl font-bold font-mono text-white mb-3 group-hover:text-red-500 transition-colors line-clamp-2"
+            className="text-xl font-bold tracking-tight text-white mb-3 group-hover:text-accent-brand transition-colors line-clamp-2"
             style={{ viewTransitionName: `blog-title-${id}` }}
           >
             {title}
           </h2>
-          <p className="text-neutral-400 text-sm leading-relaxed line-clamp-3 mb-6 flex-1">
+          <p className="text-muted-foreground text-sm leading-relaxed line-clamp-3 mb-6 flex-1">
             {description}
           </p>
 
           {/* CTA */}
-          <div className="flex items-center gap-2 text-xs font-mono text-white group-hover:gap-4 transition-all">
-            READ_ARTICLE <ArrowRight size={14} className="text-red-500" />
+          <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-white group-hover:gap-4 transition-all">
+            Read article <ArrowRight size={14} className="text-accent-brand" />
           </div>
         </div>
       </div>

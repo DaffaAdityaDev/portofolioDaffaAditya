@@ -1,6 +1,6 @@
 import type { FlowConfig } from '@/features/Blog/flow/types';
-import type { LoginStep } from '@/features/Blog/posts/VideoSharing/widgets/loginFlow/types';
-import { useLoginFlowStore } from '@/features/Blog/posts/VideoSharing/widgets/loginFlow/store';
+import type { LoginStep } from './types';
+import { useLoginFlowStore } from './store';
 import { LOGIN_EDGE_LABELS, LOGIN_EDGES, LOGIN_NODES } from './constants';
 import { FLOW_DIAGRAM_SIZE } from '@/features/Blog/flow/constants';
 import { LOGIN_SCENARIO_ORDER, LOGIN_SCENARIOS } from './scenarios';

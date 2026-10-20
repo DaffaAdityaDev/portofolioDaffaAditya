@@ -8,23 +8,30 @@ import { NextApiRequest, NextApiResponse } from 'next';
 // preview iframe, marked noindex) stay out on purpose.
 const STATIC_PAGES = ['/case-studies', '/freelance', '/resume'];
 
+// Static pages and case studies change only with a deploy, so the build time is their last change.
+// next.config.js inlines it at build; the fallback only covers running this file outside Next.
+const BUILD_DATE = process.env.BUILD_TIME ?? new Date().toISOString();
+
 const generateSitemap = (posts: PostData[]) => {
   return `<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
       <!-- Static pages -->
       <url>
         <loc>${siteConfig.url}</loc>
+        <lastmod>${BUILD_DATE}</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.7</priority>
       </url>
       <url>
         <loc>${siteConfig.url}/blog</loc>
+        <lastmod>${BUILD_DATE}</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.7</priority>
       </url>
       ${STATIC_PAGES.map((path) => `
       <url>
         <loc>${siteConfig.url}${path}</loc>
+        <lastmod>${BUILD_DATE}</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
       </url>`).join('')}
@@ -34,6 +41,7 @@ const generateSitemap = (posts: PostData[]) => {
         .map(({ slug }) => `
       <url>
         <loc>${siteConfig.url}/case-studies/${slug}</loc>
+        <lastmod>${BUILD_DATE}</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
       </url>`)
@@ -41,12 +49,11 @@ const generateSitemap = (posts: PostData[]) => {
       
       <!-- Dynamic blog posts -->
       ${posts
-        .filter(post => post.production !== false)
-        .map(({ id, date }) => {
+        .map(({ id, date, updated }) => {
           return `
             <url>
               <loc>${siteConfig.url}/blog/post/${id}</loc>
-              <lastmod>${new Date(date).toISOString()}</lastmod>
+              <lastmod>${new Date(updated ?? date).toISOString()}</lastmod>
               <changefreq>monthly</changefreq>
               <priority>0.5</priority>
             </url>

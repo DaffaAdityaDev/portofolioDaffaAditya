@@ -6,7 +6,7 @@ interface ResumeViewerProps {
 
 // Client-only (ResumePdf loads it with ssr: false) and only mounted where inline PDFs render.
 const ResumeViewer: React.FC<ResumeViewerProps> = ({ resumeUrl }) => (
-  <div className="relative rounded-xl overflow-hidden border border-neutral-800 bg-neutral-900">
+  <div className="relative rounded-lg overflow-hidden border border-border bg-neutral-900">
     <div className="relative bg-neutral-900 h-[700px] md:h-[1000px] w-full">
       <div className="absolute inset-0 flex items-center justify-center text-neutral-500 font-mono text-sm z-0">
         Loading PDF preview...

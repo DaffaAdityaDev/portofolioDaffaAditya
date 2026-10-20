@@ -1,4 +1,4 @@
-import type { AgentEstimates, AgentLoad } from '@/features/Blog/posts/EchoAgentService/widgets/capacity/types';
+import type { AgentEstimates, AgentLoad } from '../types';
 import {
   FLUSH_INTERVAL_SECONDS,
   MIN_AGENT_REPLICAS,

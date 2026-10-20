@@ -1,5 +1,5 @@
 import type { SequenceLane, SequenceLegendEntry, SequenceStep } from '@/features/Blog/sequence/types';
-import type { MemoryLaneId } from '@/features/Blog/posts/EchoAgentService/widgets/memorySequence/types';
+import type { MemoryLaneId } from './types';
 
 export const MEMORY_LANES: Record<MemoryLaneId, SequenceLane> = {
   agent: { label: 'Agent engine', caption: 'no Postgres credentials', x: 110 },

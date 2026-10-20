@@ -1,19 +1,19 @@
 import { IDR_TIME_ZONES, MAX_LINKS, MESSAGE_MAX_LENGTH, PROJECT_TYPES, SERVICE_OTHER_MAX_LENGTH, TIMELINE_OPTIONS } from '../constants/inquiry';
 import { CONTACT_EMAIL } from '../constants/content';
-import type { BriefFormData, BudgetCurrency } from '@/types/freelance';
+import type { BriefContent, BudgetCurrency } from '@/types/freelance';
 
 /** Shows budgets in rupiah to visitors in Indonesia, in dollars to everyone else. */
 export function guessCurrencyFromTimeZone(timeZone: string | undefined): BudgetCurrency {
   return timeZone && IDR_TIME_ZONES.includes(timeZone) ? 'IDR' : 'USD';
 }
 
-const serviceName = (form: BriefFormData) =>
+const serviceName = (form: BriefContent) =>
   form.service === 'other'
     ? form.serviceOther.trim() || 'Something else'
     : PROJECT_TYPES.find((t) => t.id === form.service)?.label ?? form.service;
 
 /** The brief's fields, trimmed and resolved to labels. Every output (email, Sheet row, mail-app text) renders from this. */
-function briefFields(form: BriefFormData) {
+function briefFields(form: BriefContent) {
   return {
     name: form.name.trim(),
     email: form.email.trim(),
@@ -36,13 +36,13 @@ const detailRows = (f: ReturnType<typeof briefFields>): [string, string][] =>
     ['Timeline', f.timeline],
   ].filter(([, value]) => value) as [string, string][];
 
-export function buildBriefSubject(form: BriefFormData): string {
+export function buildBriefSubject(form: BriefContent): string {
   const f = briefFields(form);
   return `Project inquiry: ${f.projectType} · ${f.company || f.name || 'New client'}${form.budget ? ` · ${form.budget}` : ''}`;
 }
 
 /** Plain-text brief, used for the email the site sends and for the mail-app fallback. */
-export function buildBriefText(form: BriefFormData): string {
+export function buildBriefText(form: BriefContent): string {
   const f = briefFields(form);
   return [...detailRows(f).map(([label, value]) => `${label}: ${value}`), '', f.message].join('\n');
 }
@@ -51,7 +51,7 @@ const escapeHtml = (value: string) =>
   value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 /** The same brief as an HTML email: a details table, the message, and a reply button. Inline styles only, for mail clients. */
-export function buildBriefHtml(form: BriefFormData): string {
+export function buildBriefHtml(form: BriefContent): string {
   const f = briefFields(form);
   const email = escapeHtml(f.email);
   // URL-encoded, so an address like "x@y.co?bcc=…" (which the email check allows) can't add recipients or headers.
@@ -86,7 +86,7 @@ ${rows.map(([label, value]) => `<tr><td style="padding:8px 0;width:96px;color:#7
 const sheetText = (value: string) => (/^[=+\-@\t\r]/.test(value) ? `'${value}` : value);
 
 /** A brief as the Google Sheet stores it: resolved labels, not ids. The Apps Script adds the timestamp and tracker columns. */
-export function buildBriefSheetRow(form: BriefFormData) {
+export function buildBriefSheetRow(form: BriefContent) {
   return Object.fromEntries(Object.entries(briefFields(form)).map(([key, value]) => [key, sheetText(value)])) as ReturnType<typeof briefFields>;
 }
 
@@ -99,7 +99,7 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const LINK_PATTERN = /(?:https?:\/\/|www\.)\S+/gi;
 
 /** Shared by the form and the API route, so both reject the same input. Returns an error message or null. */
-export function validateBrief(form: Partial<BriefFormData>): string | null {
+export function validateBrief(form: Partial<BriefContent>): string | null {
   if (!form.name?.trim()) return 'Please add your name.';
   if (!form.email?.trim() || !EMAIL_PATTERN.test(form.email.trim())) return 'Please add a valid email address.';
   if (!form.message?.trim()) return 'Please tell me a little about the project.';

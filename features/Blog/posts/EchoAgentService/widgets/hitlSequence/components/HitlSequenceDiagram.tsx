@@ -1,7 +1,7 @@
 import React from 'react';
 import { ShieldCheck } from 'lucide-react';
 import type { SequenceDefinition } from '@/features/Blog/sequence/types';
-import type { HitlLaneId } from '@/features/Blog/posts/EchoAgentService/widgets/hitlSequence/types';
+import type { HitlLaneId } from '../types';
 import SequenceDiagram from '@/features/Blog/sequence/components/SequenceDiagram';
 import { HITL_LANES, HITL_LEGEND, HITL_STEPS } from '../constants';
 

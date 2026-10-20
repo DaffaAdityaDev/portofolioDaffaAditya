@@ -1,7 +1,7 @@
 import React from 'react';
 import { Brain } from 'lucide-react';
 import type { SequenceDefinition } from '@/features/Blog/sequence/types';
-import type { MemoryLaneId } from '@/features/Blog/posts/EchoAgentService/widgets/memorySequence/types';
+import type { MemoryLaneId } from '../types';
 import SequenceDiagram from '@/features/Blog/sequence/components/SequenceDiagram';
 import { MEMORY_LANES, MEMORY_LEGEND, MEMORY_STEPS } from '../constants';
 

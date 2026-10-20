@@ -9,7 +9,7 @@ const ToolbarButton: React.FC<ToolbarButtonProps> = ({ label, onClick, pressed, 
     aria-label={label}
     aria-pressed={pressed}
     title={label}
-    className="inline-flex cursor-pointer items-center gap-1.5 rounded-sm px-2 py-1 font-mono text-[11px] uppercase tracking-wider text-neutral-500 transition-colors hover:text-white focus-visible:outline focus-visible:outline-1 focus-visible:outline-red-500 aria-pressed:text-red-500"
+    className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg px-2 py-1 font-mono text-2xs uppercase tracking-wider text-neutral-500 transition-colors hover:text-white aria-pressed:text-accent-brand"
   >
     {children}
   </button>

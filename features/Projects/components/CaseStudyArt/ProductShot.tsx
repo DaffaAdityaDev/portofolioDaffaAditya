@@ -27,6 +27,7 @@ export interface ShotItem {
 }
 
 interface FrameProps extends ShotItem {
+  /** Above the fold: loads eagerly, preloaded from the head at high priority (the index's LCP). */
   eager?: boolean;
   /** next/image `sizes`: the frame's rendered width. */
   sizes: string;
@@ -39,13 +40,13 @@ export const BrowserFrame: React.FC<FrameProps> = ({ src, alt, eager, sizes, cla
   const { width, height } = shotSize(src);
   return (
     <figure
-      className={`overflow-hidden rounded-md border border-white/[0.12] bg-[#111114] shadow-[0_24px_48px_-12px_rgba(0,0,0,0.85),0_0_0_1px_rgba(0,0,0,0.6)] ${className}`}
+      className={`overflow-hidden rounded-lg border border-border bg-surface-2 shadow-[0_24px_48px_-12px_rgba(0,0,0,0.85),0_0_0_1px_rgba(0,0,0,0.6)] ${className}`}
       style={style}
     >
-      <div aria-hidden="true" className="flex h-5 items-center gap-1 border-b border-white/[0.08] bg-[#18181b] px-2">
-        <span className="h-1.5 w-1.5 rounded-full bg-[#3f3f46]" />
-        <span className="h-1.5 w-1.5 rounded-full bg-[#3f3f46]" />
-        <span className="h-1.5 w-1.5 rounded-full bg-[#3f3f46]" />
+      <div aria-hidden="true" className="flex h-5 items-center gap-1 border-b border-border bg-neutral-900 px-2">
+        <span className="h-1.5 w-1.5 rounded-full bg-neutral-700" />
+        <span className="h-1.5 w-1.5 rounded-full bg-neutral-700" />
+        <span className="h-1.5 w-1.5 rounded-full bg-neutral-700" />
         <span className="ml-2 h-2 flex-1 rounded-sm bg-white/[0.05]" />
       </div>
       <Image
@@ -55,6 +56,8 @@ export const BrowserFrame: React.FC<FrameProps> = ({ src, alt, eager, sizes, cla
         height={height}
         sizes={sizes}
         loading={eager ? 'eager' : 'lazy'}
+        preload={eager}
+        fetchPriority={eager ? 'high' : 'auto'}
         className="block h-auto w-full"
         style={{ aspectRatio: `${width} / ${height}` }}
       />
@@ -67,7 +70,7 @@ export const PhoneFrame: React.FC<FrameProps> = ({ src, alt, eager, sizes, class
   const { width, height } = shotSize(src);
   return (
     <figure
-      className={`overflow-hidden rounded-[14px] border-[3px] border-[#27272a] bg-[#111114] shadow-[0_24px_48px_-12px_rgba(0,0,0,0.85)] ${className}`}
+      className={`overflow-hidden rounded-[14px] border-[3px] border-border bg-surface-2 shadow-[0_24px_48px_-12px_rgba(0,0,0,0.85)] ${className}`}
       style={style}
     >
       <Image
@@ -77,6 +80,8 @@ export const PhoneFrame: React.FC<FrameProps> = ({ src, alt, eager, sizes, class
         height={height}
         sizes={sizes}
         loading={eager ? 'eager' : 'lazy'}
+        preload={eager}
+        fetchPriority={eager ? 'high' : 'auto'}
         className="block h-auto w-full"
         style={{ aspectRatio: `${width} / ${height}` }}
       />
@@ -85,7 +90,7 @@ export const PhoneFrame: React.FC<FrameProps> = ({ src, alt, eager, sizes, class
 };
 
 const LIFT =
-  'transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-safe:group-hover:-translate-y-1 motion-safe:group-focus-within:-translate-y-1';
+  'transition-transform duration-300 ease-out-expo motion-safe:group-hover:-translate-y-1 motion-safe:group-focus-within:-translate-y-1';
 
 /**
  * The project screenshot(s) layered over a card poster, sitting high so most of each frame shows.

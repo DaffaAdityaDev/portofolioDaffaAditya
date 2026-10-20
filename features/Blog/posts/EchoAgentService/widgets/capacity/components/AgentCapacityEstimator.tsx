@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Calculator } from 'lucide-react';
-import type { AgentLoad } from '@/features/Blog/posts/EchoAgentService/widgets/capacity/types';
+import type { AgentLoad } from '../types';
 import ResultTile from '@/features/Blog/components/ResultTile';
 import SliderField from '@/features/Blog/components/SliderField';
 import WidgetFrame from '@/features/Blog/components/WidgetFrame';
@@ -85,7 +85,7 @@ const AgentCapacityEstimator: React.FC = () => {
         </div>
       </div>
 
-      <div className="border-t border-neutral-800 px-4 py-2 text-xs text-neutral-500">
+      <div className="border-t border-border px-4 py-2 text-xs text-neutral-500">
         The defaults are assumptions for this post, not measurements. Push the users up and watch which number outgrows its limit first.
       </div>
     </WidgetFrame>

@@ -1,5 +1,5 @@
 import type { FlowScenario, StepTone } from '@/features/Blog/flow/types';
-import type { LbEdgeId, LbNodeId, LbScenarioId, LbStep } from '@/features/Blog/posts/VideoSharing/widgets/loadBalancer/types';
+import type { LbEdgeId, LbNodeId, LbScenarioId, LbStep } from './types';
 
 const step = (
   id: string,

@@ -7,7 +7,7 @@ export interface ToggleButtonProps extends Omit<ActionButtonProps, 'variant' | '
 }
 
 /**
- * One option in a picker row (mono, uppercase): solid red when selected, bordered otherwise.
+ * One option in a picker row (mono, uppercase): solid accent when selected, bordered otherwise.
  * Announces its state with `aria-pressed`, so wrap a row of them in `role="group"` with a label.
  */
 const ToggleButton: React.FC<ToggleButtonProps> = ({ selected, className, ...props }) => (

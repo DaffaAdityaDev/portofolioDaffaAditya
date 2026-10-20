@@ -18,19 +18,20 @@ export default function Document({ __NEXT_DATA__ }: DocumentProps) {
   }
 
   return (
-    // The site is dark-only: `dark` drives the `dark:` variant (no theme provider needed).
-    <Html className="scroll-smooth dark" lang="en" style={{ colorScheme: 'dark' }}>
+    // The site is dark-only: one palette in globals.css, and colorScheme dark for native controls and scrollbars.
+    <Html className="scroll-smooth" lang="en" style={{ colorScheme: 'dark' }}>
       <Head>
         {/* Security and Rendering headers */}
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="theme-color" content="#000000" />
+        <meta name="theme-color" content="#0a0a0a" />
         <link rel="icon" href="/svg/selflogo.svg" type="image/svg+xml" />
         
         {/* Analytics with performance optimization */}
         {GA_MEASUREMENT_ID && (
           <>
-            {/* Performance: Preconnect to external domains */}
-            <link rel="preconnect" href="https://www.googletagmanager.com" />
+            {/* DNS only: the GA script loads lazyOnload, so a full preconnect would spend a TLS
+                handshake during the critical load on a request made long after it. */}
+            <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
             {/* Sends the first page view. Client-side navigations are counted by GA4 Enhanced
                 Measurement ("page changes based on browser history events", on by default), so
                 _app does not send its own, which would count every navigation twice. */}
@@ -57,7 +58,7 @@ export default function Document({ __NEXT_DATA__ }: DocumentProps) {
           </>
         )}
       </Head>
-      <body className="bg-[#0a0a0a] text-white overflow-x-hidden antialiased">
+      <body className="bg-background text-white overflow-x-hidden antialiased">
         <Main />
         <NextScript />
       </body>

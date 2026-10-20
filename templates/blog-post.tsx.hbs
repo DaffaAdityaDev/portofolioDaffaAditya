@@ -1,23 +1,48 @@
 import React from 'react';
-import CodeBlock from '../components/CodeBlock';
-import CustomImage from '../components/CustomImage';
+import Callout from '../../components/Callout';
+import CodeBlock from '../../components/CodeBlock';
+import Reveal from '../../components/Reveal';
+// import { lazyOnView } from '../../components/LazyOnView';
 
-export default function {{pascalCase title}}() {
+// Interactive widgets live in ./widgets/. Anything below the first screen loads with lazyOnView:
+// its HTML is in the static page, its JS loads when it scrolls near.
+// const ExampleWidget = lazyOnView(() => import('./widgets/example/components/ExampleWidget'));
+
+export default function {{pascalCase id}}() {
   return (
     <div className="blog-content-static">
-      <p>Write your blog post content here in React JSX formatting.</p>
+      <p>Open with the problem or the moment that made this post worth writing.</p>
 
-      <h2>Headings</h2>
-      <p>Standard text paragraph goes here.</p>
+      <p>Say what the reader walks away with. You will get:</p>
+      <ul>
+        <li><strong>The first takeaway</strong>, and why it matters.</li>
+        <li><strong>The second takeaway</strong>, with an example.</li>
+        <li><strong>Something to try</strong>, such as a widget to play with.</li>
+      </ul>
 
-      <CodeBlock className="language-javascript">
-{`console.log('Hello, world!');`}
-      </CodeBlock>
+      <Reveal>
+        <h2>The first section</h2>
 
-      <CustomImage 
-        src="{{image}}" 
-        alt="Alt text" 
-      />
+        <p>One idea per section. Keep paragraphs short and concrete.</p>
+
+        <Callout variant="tip" title="A short title">
+          A side note the reader should not miss.
+        </Callout>
+
+        <CodeBlock language="typescript" title="example.ts">
+{`export const add = (a: number, b: number): number => a + b;`}
+        </CodeBlock>
+      </Reveal>
+
+      {/* <ExampleWidget /> */}
+
+      <Reveal>
+        <h2>What to keep</h2>
+        <ul>
+          <li><strong>The first takeaway.</strong> One sentence on how to apply it.</li>
+          <li><strong>The second takeaway.</strong> One sentence on how to apply it.</li>
+        </ul>
+      </Reveal>
     </div>
   );
 }

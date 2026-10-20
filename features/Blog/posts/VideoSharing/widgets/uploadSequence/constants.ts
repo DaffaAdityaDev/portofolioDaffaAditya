@@ -1,5 +1,5 @@
 import type { SequenceLane, SequenceLegendEntry, SequenceStep } from '@/features/Blog/sequence/types';
-import type { UploadLaneId } from '@/features/Blog/posts/VideoSharing/widgets/uploadSequence/types';
+import type { UploadLaneId } from './types';
 
 export const UPLOAD_LANES: Record<UploadLaneId, SequenceLane> = {
   client: { label: 'Client', caption: 'app or browser', x: 130 },

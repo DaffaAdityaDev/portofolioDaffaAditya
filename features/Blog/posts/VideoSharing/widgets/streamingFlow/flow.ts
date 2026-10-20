@@ -1,6 +1,6 @@
 import type { FlowConfig } from '@/features/Blog/flow/types';
-import type { StreamStep } from '@/features/Blog/posts/VideoSharing/widgets/streamingFlow/types';
-import { useStreamingFlowStore } from '@/features/Blog/posts/VideoSharing/widgets/streamingFlow/store';
+import type { StreamStep } from './types';
+import { useStreamingFlowStore } from './store';
 import {
   STREAM_EDGE_LABELS,
   STREAM_EDGES,

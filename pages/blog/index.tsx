@@ -1,15 +1,27 @@
-import dynamic from 'next/dynamic';
 import BlogList from '@/features/Blog/BlogList';
-import type { IBlogProps } from '@/types/blog';
+import type { PostSummary } from '@/types/blog';
 import { getSortedPostsData } from '@/lib/posts';
 import Seo from '@/components/Seo';
+// Below the fold: static HTML, JS loaded as the page nears the bottom.
+import Footer from '@/components/Layout/LazyFooter';
 import { siteConfig } from '@/config/metadata.config';
 
-const Footer = dynamic(() => import('@/components/Layout/Footer'), { ssr: true });
-
 export async function getStaticProps() {
-  const posts = getSortedPostsData();
-  
+  // Only what the list renders goes into the page data.
+  const posts: PostSummary[] = getSortedPostsData().map(
+    ({ id, category, image, title, description, date, updated, timeToRead }) => ({
+      id,
+      category,
+      image,
+      title,
+      description,
+      date,
+      // getStaticProps cannot serialize undefined.
+      ...(updated && { updated }),
+      timeToRead,
+    }),
+  );
+
   return {
     props: {
       posts,
@@ -18,7 +30,7 @@ export async function getStaticProps() {
 }
 
 export interface BlogPageProps {
-  posts: IBlogProps[];
+  posts: PostSummary[];
 }
 
 const BLOG_DESCRIPTION = 'Engineering thoughts, tutorials, and insights by Daffa Aditya.';
@@ -28,12 +40,12 @@ const Blog: React.FC<BlogPageProps> = ({ posts }) => {
     <>
       <Seo
         path="/blog"
-        title="Blog | Daffa Aditya"
+        title="Blog"
         description={BLOG_DESCRIPTION}
         jsonLd={{
           '@context': 'https://schema.org',
           '@type': 'Blog',
-          name: 'Blog | Daffa Aditya',
+          name: `Blog | ${siteConfig.name}`,
           description: BLOG_DESCRIPTION,
           url: `${siteConfig.url}/blog`,
           author: { '@type': 'Person', name: siteConfig.title, url: siteConfig.url },
@@ -42,12 +54,13 @@ const Blog: React.FC<BlogPageProps> = ({ posts }) => {
             headline: post.title,
             url: `${siteConfig.url}/blog/post/${post.id}`,
             datePublished: post.date,
+            dateModified: post.updated ?? post.date,
           })),
         }}
       />
 
-      <div className="min-h-screen bg-[#0a0a0a] text-white font-sans selection:bg-red-600 selection:text-white flex flex-col">
-        <main className="flex-1 pt-16 relative z-10 bg-[#0a0a0a]">
+      <div className="min-h-screen bg-background text-white font-sans selection:bg-red-600 selection:text-white flex flex-col">
+        <main className="flex-1 pt-16 relative z-10 bg-background">
            <BlogList posts={posts} />
         </main>
         <Footer />

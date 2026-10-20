@@ -4,7 +4,7 @@ import type {
   ShieldNodeId,
   ShieldScenarioId,
   ShieldStep,
-} from '@/features/Blog/posts/VideoSharing/widgets/originShield/types';
+} from './types';
 
 const step = (
   id: string,

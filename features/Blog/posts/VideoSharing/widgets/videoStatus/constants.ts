@@ -1,5 +1,5 @@
 import type { FlowEdgeLabel, FlowEdgeLayout, FlowNodeLayout } from '@/features/Blog/flow/types';
-import type { StatusEdgeId, StatusNodeId } from '@/features/Blog/posts/VideoSharing/widgets/videoStatus/types';
+import type { StatusEdgeId, StatusNodeId } from './types';
 
 // The happy path runs left to right along the middle row; every way out of it drops below.
 export const STATUS_NODES: Record<StatusNodeId, FlowNodeLayout> = {

@@ -35,7 +35,7 @@ const PlaygroundPreview: React.FC<PlaygroundPreviewProps> = ({
     />
 
     {status === 'loading' && (
-      <div className="absolute inset-0 flex items-center justify-center bg-[#0d0d0d] font-mono text-xs uppercase tracking-wider text-neutral-500">
+      <div className="absolute inset-0 flex items-center justify-center bg-surface-1 font-mono text-xs uppercase tracking-wider text-neutral-500">
         Starting preview
       </div>
     )}
@@ -43,7 +43,7 @@ const PlaygroundPreview: React.FC<PlaygroundPreviewProps> = ({
     {status === 'unresponsive' && (
       <div
         role="alert"
-        className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[#0d0d0d]/95 p-6 text-center font-mono text-xs text-neutral-400"
+        className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-surface-1/95 p-6 text-center font-mono text-xs text-muted-foreground"
       >
         <div className="max-w-xs leading-relaxed">
           {needsPageReload
@@ -52,7 +52,7 @@ const PlaygroundPreview: React.FC<PlaygroundPreviewProps> = ({
               ? 'The preview stopped responding. A loop in the code may never end.'
               : 'The preview did not load. Check your connection and try again.'}
         </div>
-        <div className="flex items-center gap-1 border border-neutral-800 bg-neutral-900/50">
+        <div className="flex items-center gap-1 rounded-lg border border-border bg-neutral-900/50">
           {needsPageReload ? (
             <ToolbarButton label="Reload page" onClick={() => window.location.reload()}>
               <RefreshCw className="size-3.5" aria-hidden="true" />
@@ -75,7 +75,7 @@ const PlaygroundPreview: React.FC<PlaygroundPreviewProps> = ({
     )}
 
     {status !== 'loading' && status !== 'unresponsive' && (
-      <div className="absolute bottom-1 right-1 border border-neutral-800 bg-neutral-900/90">
+      <div className="absolute bottom-1 right-1 rounded-lg border border-border bg-neutral-900/90">
         <ToolbarButton label="Reload preview" onClick={onReload}>
           <RefreshCw className="size-3.5" aria-hidden="true" />
         </ToolbarButton>

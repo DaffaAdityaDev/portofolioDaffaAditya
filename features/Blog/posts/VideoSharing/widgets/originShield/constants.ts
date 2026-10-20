@@ -1,5 +1,5 @@
 import type { FlowEdgeLabel, FlowEdgeLayout, FlowNodeLayout } from '@/features/Blog/flow/types';
-import type { ShieldEdgeId, ShieldNodeId } from '@/features/Blog/posts/VideoSharing/widgets/originShield/types';
+import type { ShieldEdgeId, ShieldNodeId } from './types';
 
 export const SHIELD_NODES: Record<ShieldNodeId, FlowNodeLayout> = {
   viewersA: { x: 10, y: 44, label: 'Viewers', caption: 'Jakarta' },

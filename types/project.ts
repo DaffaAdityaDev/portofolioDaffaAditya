@@ -116,6 +116,8 @@ export interface Engagement {
   projectSlugs: string[];
   /** Hero image (public path). */
   image: string;
+  /** 1200x630 share image (public path). Falls back to the site's default OG image. */
+  ogImage?: string;
   color: ColorSpec;
   links?: EngagementLink[];
   /** Short owner-confirmed figure for the index row. When missing the row shows the role. */

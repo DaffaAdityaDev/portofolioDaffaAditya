@@ -4,47 +4,34 @@ import type { ReactNode, Ref } from 'react';
 /** Groups on the blog page. Labels and order live in BLOG_CATEGORIES (features/Blog/constants.ts). */
 export type BlogCategory = 'system-design' | 'tech' | 'blog';
 
-export interface IBlogProps {
+/** One post's metadata, as listed in POSTS_DATA (features/Blog/constants.ts). */
+export interface PostData {
+  /** Public URL slug, kebab-case: /blog/post/<id>. */
   id: string;
   category: BlogCategory;
-  image: string;
+  /** Page h1 and card title. */
   title: string;
+  /** Shorter <title> for search results when `title` runs past ~45 characters (the site suffix adds 15). */
+  seoTitle?: string;
+  /** Imperative, at most ~155 characters: the meta description and the card text. */
   description: string;
+  /** Published, YYYY-MM-DD. */
   date: string;
+  /** Last meaningful content update, YYYY-MM-DD. */
+  updated?: string;
   timeToRead: number;
-}
-
-export interface IParams {
-  id: string;
-}
-
-export interface IBreadcrumbItem {
-  title: string;
-  href: string;
-}
-
-export interface BlogPostMeta {
-  id?: string;
-  category?: BlogCategory;
-  title: string;
-  description: string;
-  date: string;
   /** 16:9 thumbnail, used by the blog card. */
-  image?: string;
+  image: string;
   /** Text-free variant for the post hero, where the page renders its own title. Falls back to `image`. */
   heroImage?: string;
   /** 1200x630 link preview (Open Graph / Twitter). Falls back to `image`. */
   ogImage?: string;
-  timeToRead?: number;
+  /** False keeps a draft out of the list, the sitemap and the build. Defaults to true. */
+  production?: boolean;
 }
 
-export interface PostData {
-  id: string;
-  date: string;
-  category: BlogCategory;
-  production?: boolean;
-  [key: string]: unknown;
-} 
+/** What the blog list needs from a post. */
+export type PostSummary = Pick<PostData, 'id' | 'category' | 'image' | 'title' | 'description' | 'date' | 'updated' | 'timeToRead'>;
 
 export interface CustomImageProps {
   src: string;

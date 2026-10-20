@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { buildBriefHtml, buildBriefSheetRow, buildBriefSubject, buildBriefText, validateBrief } from '@/features/Freelance/utils/brief';
-import { EMPTY_BRIEF, MIN_FILL_MS, TURNSTILE_SITE_KEY } from '@/features/Freelance/constants/inquiry';
-import type { BriefFormData } from '@/types/freelance';
+import { BUDGET_OPTIONS, MIN_FILL_MS, TIMELINE_OPTIONS, TURNSTILE_SITE_KEY } from '@/features/Freelance/constants/inquiry';
+import type { BriefContent } from '@/types/freelance';
 
 /**
  * Receives the /freelance project brief, emails it through Resend (https://resend.com) and appends it
@@ -16,6 +16,21 @@ const RATE_WINDOW_MS = 10 * 60 * 1000;
 const RATE_SWEEP_SIZE = 1000;
 const SHEET_TIMEOUT_MS = 8000;
 const EMAIL_TIMEOUT_MS = 8000;
+/** Every field the brief outputs read. A Record, so a new brief field without an entry here fails to compile. */
+const BRIEF_FIELDS: Record<keyof BriefContent, true> = {
+  name: true,
+  email: true,
+  company: true,
+  service: true,
+  serviceOther: true,
+  budget: true,
+  timeline: true,
+  message: true,
+  website: true,
+};
+// The form shows one currency's labels, so a budget from either list is valid.
+const BUDGETS = new Set(Object.values(BUDGET_OPTIONS).flat());
+const TIMELINES = new Set<string>(TIMELINE_OPTIONS.map((t) => t.id));
 // Per-instance memory only: enough to slow a single abusive client, not a global limit.
 const recent = new Map<string, number[]>();
 
@@ -81,7 +96,7 @@ async function checkTurnstile(token: string, secret: string, ip: string): Promis
   }
 }
 
-async function sendEmail(brief: BriefFormData, apiKey: string, to: string): Promise<void> {
+async function sendEmail(brief: BriefContent, apiKey: string, to: string): Promise<void> {
   const sent = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
@@ -103,7 +118,7 @@ async function sendEmail(brief: BriefFormData, apiKey: string, to: string): Prom
  * which returns the script's JSON. The row is already written by then. The secret travels in the body
  * because doPost cannot read request headers.
  */
-async function appendToSheet(brief: BriefFormData, url: string, secret: string): Promise<void> {
+async function appendToSheet(brief: BriefContent, url: string, secret: string): Promise<void> {
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -137,8 +152,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // Only known fields, as strings, so nothing unexpected reaches the email or the sheet.
   const body = (req.body ?? {}) as Record<string, unknown>;
   const brief = Object.fromEntries(
-    Object.keys(EMPTY_BRIEF).map((key) => [key, typeof body[key] === 'string' ? (body[key] as string).slice(0, 4000) : '']),
-  ) as unknown as BriefFormData;
+    Object.keys(BRIEF_FIELDS).map((key) => [key, typeof body[key] === 'string' ? (body[key] as string).slice(0, 4000) : '']),
+  ) as unknown as BriefContent;
+  // The form only offers listed options: an unknown budget becomes "Not given", an unknown timeline "Flexible".
+  if (!BUDGETS.has(brief.budget)) brief.budget = '';
+  if (!TIMELINES.has(brief.timeline)) brief.timeline = 'flexible';
 
   // Bots fill the hidden field; pretend success so they do not retry.
   if (brief.website) return res.status(200).json({ ok: true, openMailApp: false });

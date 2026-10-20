@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '@/utils/cn';
-import { FLOW_METER_LABEL_CLASS } from '@/features/Blog/flow/constants';
+import { WIDGET_LABEL_CLASS } from '@/features/Blog/components/widgetStyles';
 import { useFlow } from '@/features/Blog/flow/hooks/useFlow';
 import { ORIGIN_SHIELD_FLOW } from '../flow';
 
@@ -15,7 +15,7 @@ const OriginRequests: React.FC = () => {
 
   return (
     <div aria-live="polite">
-      <div className={cn('mb-1', FLOW_METER_LABEL_CLASS)}>Requests for segment 1 reaching the origin</div>
+      <div className={cn('mb-1', WIDGET_LABEL_CLASS)}>Requests for segment 1 reaching the origin</div>
       <div
         className={cn(
           'font-mono text-2xl font-bold tabular-nums transition-colors duration-300',

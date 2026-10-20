@@ -15,7 +15,7 @@ export const CornerBrackets: React.FC<{ className?: string }> = ({ className = '
 export const ArrowSquare: React.FC<{ size?: 'md' | 'lg' }> = ({ size = 'md' }) => (
   <span
     aria-hidden="true"
-    className={`flex shrink-0 items-center justify-center border border-white/20 bg-[rgba(6,6,8,0.6)] text-zinc-100 transition-[background-color,border-color,color,transform] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:border-[var(--cs-accent)] group-hover:bg-[var(--cs-accent)] group-hover:text-[#0a0a0a] group-focus-within:border-[var(--cs-accent)] group-focus-within:bg-[var(--cs-accent)] group-focus-within:text-[#0a0a0a] motion-safe:group-hover:translate-x-0.5 motion-safe:group-focus-within:translate-x-0.5 ${
+    className={`flex shrink-0 items-center justify-center rounded-lg border border-border-strong bg-surface-1/60 text-neutral-100 transition-[background-color,border-color,color,transform] duration-200 ease-out-expo group-hover:border-[var(--cs-accent)] group-hover:bg-[var(--cs-accent)] group-hover:text-background group-focus-within:border-[var(--cs-accent)] group-focus-within:bg-[var(--cs-accent)] group-focus-within:text-background motion-safe:group-hover:translate-x-0.5 motion-safe:group-focus-within:translate-x-0.5 ${
       size === 'lg' ? 'h-14 w-14' : 'h-11 w-11'
     }`}
   >

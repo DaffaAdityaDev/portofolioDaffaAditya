@@ -9,7 +9,7 @@ import type {
   ArchitectureNode,
   ArchitectureNodeId,
   ArchitectureViewOption,
-} from '@/features/Blog/posts/VideoSharing/widgets/architecture/types';
+} from './types';
 
 export const ARCHITECTURE_DIAGRAM = {
   width: 830,

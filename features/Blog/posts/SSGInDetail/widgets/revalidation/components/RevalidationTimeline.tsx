@@ -5,7 +5,7 @@ import WidgetFrame from '@/features/Blog/components/WidgetFrame';
 import ToggleButton from '@/features/Blog/components/ToggleButton';
 import SliderField from '@/features/Blog/components/SliderField';
 import AnimatedNumber from '@/features/Blog/components/AnimatedNumber';
-import { FLOW_METER_LABEL_CLASS } from '@/features/Blog/flow/constants';
+import { WIDGET_LABEL_CLASS } from '@/features/Blog/components/widgetStyles';
 import { RENDER_MODE_ORDER, RENDER_MODES, TIMELINE } from '../constants';
 import { useRevalidationTimeline } from '../hooks/useRevalidationTimeline';
 import TimelineChart from './TimelineChart';
@@ -15,7 +15,7 @@ const formatSeconds = (value: number) => `${value} s`;
 
 const Stat: React.FC<{ label: string; value: number; isBad?: boolean }> = ({ label, value, isBad }) => (
   <div>
-    <div className={cn('mb-0.5', FLOW_METER_LABEL_CLASS)}>{label}</div>
+    <div className={cn('mb-0.5', WIDGET_LABEL_CLASS)}>{label}</div>
     <AnimatedNumber
       value={value}
       format={formatCount}

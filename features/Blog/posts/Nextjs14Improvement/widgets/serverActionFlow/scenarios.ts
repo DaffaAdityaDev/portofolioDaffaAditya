@@ -4,7 +4,7 @@ import type {
   ActionNodeId,
   ActionScenarioId,
   ActionStep,
-} from '@/features/Blog/posts/Nextjs14Improvement/widgets/serverActionFlow/types';
+} from './types';
 
 const step = (
   id: string,

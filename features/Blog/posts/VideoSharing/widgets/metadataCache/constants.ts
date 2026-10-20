@@ -1,5 +1,5 @@
 import type { FlowEdgeLabel, FlowEdgeLayout, FlowNodeLayout } from '@/features/Blog/flow/types';
-import type { CacheEdgeId, CacheNodeId } from '@/features/Blog/posts/VideoSharing/widgets/metadataCache/types';
+import type { CacheEdgeId, CacheNodeId } from './types';
 
 export const CACHE_NODES: Record<CacheNodeId, FlowNodeLayout> = {
   viewers: { x: 10, y: 134, label: 'Viewers', caption: 'watch pages' },

@@ -1,9 +1,9 @@
 import React from 'react';
-import Callout from '../../components/Callout';
-import CodeBlock from '../../components/CodeBlock';
-import Reveal from '../../components/Reveal';
-import { lazyOnView } from '../../components/LazyOnView';
-import BlogTable from '../../components/BlogTable';
+import Callout from '@/features/Blog/components/Callout';
+import CodeBlock from '@/features/Blog/components/CodeBlock';
+import Reveal from '@/features/Blog/components/Reveal';
+import { lazyOnView } from '@/features/Blog/components/LazyOnView';
+import BlogTable from '@/features/Blog/components/BlogTable';
 
 // Every widget sits below the first screen: its HTML is in the static page, its JS loads on scroll.
 const FallbackModesVisualizer = lazyOnView(() => import('./widgets/fallback/components/FallbackModesVisualizer'));
@@ -16,10 +16,10 @@ export default function SSGInDetail() {
 
       <p>Static Site Generation (SSG) moves that work to build time. The HTML is made once, stored, and served as a plain file. You will see:</p>
       <ul>
-        <li>when a page needs <strong>getStaticProps</strong>, <strong>getStaticPaths</strong>, or neither,</li>
-        <li>how <strong>ISR</strong> keeps built pages up to date, on a timer or when your CMS says so,</li>
-        <li>what <strong>fallback</strong> does for pages you did not build,</li>
-        <li>and when SSG is the wrong choice.</li>
+        <li><strong>When a page needs getStaticProps</strong>, getStaticPaths, or neither.</li>
+        <li><strong>How ISR keeps built pages up to date</strong>, on a timer or when your CMS says so.</li>
+        <li><strong>What fallback does</strong> for pages you did not build.</li>
+        <li><strong>When SSG is the wrong choice</strong>, and what to use instead.</li>
       </ul>
 
       <p>The examples use the Next.js <strong>Pages Router</strong>. If you use the App Router, the ideas are the same, and a table near the end maps each name to its App Router version.</p>

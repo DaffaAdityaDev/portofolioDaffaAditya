@@ -1,16 +1,15 @@
 import React from 'react';
 import type { GetStaticProps } from 'next';
-import dynamic from 'next/dynamic';
 import Seo from '@/components/Seo';
+// Below the fold: static HTML, JS loaded as the page nears the bottom.
+import Footer from '@/components/Layout/LazyFooter';
+import Container from '@/components/ui/Container';
 import { ENGAGEMENTS, ENGAGEMENT_KIND_LABELS, getEngagementProjects, projectTitle } from '@/features/Projects/engagements';
 import CaseStudyCard, { type CaseStudyCardData } from '@/features/Projects/components/CaseStudyCard';
 import CaseStudyIndexHeader, { type KindCount } from '@/features/Projects/components/CaseStudyIndexHeader';
 import { filled, filledList } from '@/features/Projects/components/Engagement/utils';
 import type { ShotItem } from '@/features/Projects/components/CaseStudyArt/ProductShot';
 import type { Engagement, EngagementKind } from '@/types/project';
-
-// Below the fold: the site footer closes the page, as on the blog.
-const Footer = dynamic(() => import('@/components/Layout/Footer'), { ssr: true });
 
 interface CaseStudiesIndexProps {
   cards: CaseStudyCardData[];
@@ -67,15 +66,15 @@ export default function CaseStudiesIndex({ cards, totalCount, kindCounts }: Case
     <>
       <Seo
         path="/case-studies"
-        title="Case Studies | Daffa Aditya"
+        title="Case Studies"
         description="Case studies grouped by company: the problem, my decisions, what I shipped and the impact."
       />
 
-      <div className="overflow-x-clip bg-[#0a0a0a] font-sans text-zinc-100 selection:bg-red-500/30 selection:text-red-300">
-        <main className="mx-auto max-w-[1320px] px-4 pb-10 pt-24 sm:px-6 md:pt-28 lg:px-10">
+      <div className="overflow-x-clip bg-background font-sans text-neutral-100 selection:bg-accent-brand/30 selection:text-red-300">
+        <Container as="main" wide className="pb-10 pt-24 md:pt-28">
           <CaseStudyIndexHeader totalCount={totalCount} kindCounts={kindCounts} />
 
-          <section aria-labelledby="cs-index-heading" className="mt-8 border-t border-[#1f1f23] pt-6 md:mt-10">
+          <section aria-labelledby="cs-index-heading" className="mt-8 border-t border-border pt-6 md:mt-10">
             <h2 id="cs-index-heading" className="sr-only">
               Index
             </h2>
@@ -92,7 +91,7 @@ export default function CaseStudiesIndex({ cards, totalCount, kindCounts }: Case
               })}
             </ul>
           </section>
-        </main>
+        </Container>
         {/* Inside the clipping wrapper so nothing in the footer can widen the page on a phone. */}
         <Footer />
       </div>

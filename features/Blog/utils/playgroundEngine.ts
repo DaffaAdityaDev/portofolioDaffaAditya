@@ -276,8 +276,8 @@ export function compileModule(path: string, source: string): string {
 
 /** Exposes a CommonJS module to `import` syntax, both default and named imports. */
 export function toInteropModule(namespace: unknown): unknown {
-  const module = (namespace as { default?: unknown })?.default ?? namespace;
-  return { ...(module as object), default: module, __esModule: true };
+  const value = (namespace as { default?: unknown })?.default ?? namespace;
+  return { ...(value as object), default: value, __esModule: true };
 }
 
 /** The stack trace of a thrown value, if it has one. Never throws, even for a revoked proxy. */
@@ -437,18 +437,18 @@ export function runPlaygroundProject({
     if (cached) return cached.exports;
 
     // Cached before it runs, so circular imports get the partly filled exports, as in Node.
-    const module = { exports: {} as unknown };
-    cache.set(path, module);
+    const record = { exports: {} as unknown };
+    cache.set(path, record);
     const extension = extensionOf(path);
 
-    if (extension === 'css') return module.exports;
+    if (extension === 'css') return record.exports;
     if (extension === 'json') {
       try {
-        module.exports = JSON.parse(files[path]);
+        record.exports = JSON.parse(files[path]);
       } catch (error) {
         throw new PlaygroundError({ kind: 'compile', message: `Invalid JSON: ${(error as Error).message}`, file: path });
       }
-      return module.exports;
+      return record.exports;
     }
 
     const code = compiled.get(path);
@@ -473,8 +473,8 @@ export function runPlaygroundProject({
       if (error instanceof SyntaxError) throw locatedError('compile', `SyntaxError: ${error.message}`, path, files[path]);
       throw error;
     }
-    factory(requireFrom, module, module.exports, loopGuard, iterableGuard)();
-    return module.exports;
+    factory(requireFrom, record, record.exports, loopGuard, iterableGuard)();
+    return record.exports;
   }
 
   let exports: unknown;

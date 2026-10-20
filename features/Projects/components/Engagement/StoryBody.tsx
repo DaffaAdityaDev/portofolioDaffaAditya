@@ -8,7 +8,7 @@ function renderBlock(block: StoryBlock, i: number, skip: Set<string>) {
   switch (block.kind) {
     case 'p':
       return (
-        <p key={i} className="mt-6 text-[17px] leading-relaxed text-zinc-300">
+        <p key={i} className="mt-6 text-[17px] leading-relaxed text-neutral-300">
           {block.text}
         </p>
       );
@@ -20,7 +20,7 @@ function renderBlock(block: StoryBlock, i: number, skip: Set<string>) {
       );
     case 'list':
       return (
-        <ul key={i} className="mt-6 list-disc space-y-2 pl-5 text-[17px] leading-relaxed text-zinc-300 marker:text-zinc-600">
+        <ul key={i} className="mt-6 list-disc space-y-2 pl-5 text-[17px] leading-relaxed text-neutral-300 marker:text-neutral-600">
           {block.items.map((item, j) => (
             <li key={j}>{item}</li>
           ))}
@@ -36,9 +36,9 @@ function renderBlock(block: StoryBlock, i: number, skip: Set<string>) {
             width={1600}
             height={1000}
             sizes={FIGURE_SIZES}
-            className="h-auto w-full rounded-lg border border-white/10"
+            className="h-auto w-full rounded-lg border border-border"
           />
-          {block.caption && <figcaption className="mt-3 text-sm text-zinc-500">{block.caption}</figcaption>}
+          {block.caption && <figcaption className="mt-3 text-sm text-neutral-500">{block.caption}</figcaption>}
         </figure>
       );
     default:

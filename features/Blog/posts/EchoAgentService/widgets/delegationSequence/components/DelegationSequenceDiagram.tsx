@@ -1,7 +1,7 @@
 import React from 'react';
 import { GitFork } from 'lucide-react';
 import type { SequenceDefinition } from '@/features/Blog/sequence/types';
-import type { DelegationLaneId } from '@/features/Blog/posts/EchoAgentService/widgets/delegationSequence/types';
+import type { DelegationLaneId } from '../types';
 import SequenceDiagram from '@/features/Blog/sequence/components/SequenceDiagram';
 import { DELEGATION_LANES, DELEGATION_LEGEND, DELEGATION_STEPS } from '../constants';
 

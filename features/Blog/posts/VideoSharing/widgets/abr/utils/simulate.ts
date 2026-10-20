@@ -1,4 +1,4 @@
-import type { AbrResult, AbrSegment, QualityMode } from '@/features/Blog/posts/VideoSharing/widgets/abr/types';
+import type { AbrResult, AbrSegment, QualityMode } from '../types';
 import { ABR, ABR_LADDER } from '../constants';
 
 /** Highest rung whose bitrate fits in the bandwidth the player dares to use. */

@@ -1,7 +1,7 @@
 import React from 'react';
 import { cn } from '@/utils/cn';
-import type { CdnResult } from '@/features/Blog/posts/VideoSharing/widgets/streamingFlow/types';
-import { FLOW_METER_LABEL_CLASS } from '@/features/Blog/flow/constants';
+import type { CdnResult } from '../types';
+import { WIDGET_BADGE_CLASS, WIDGET_BADGE_IDLE_CLASS, WIDGET_LABEL_CLASS } from '@/features/Blog/components/widgetStyles';
 import { useFlow } from '@/features/Blog/flow/hooks/useFlow';
 import {
   CDN_RESULT_LABELS,
@@ -12,7 +12,7 @@ import {
 } from '../constants';
 import { STREAM_FLOW } from '../flow';
 
-const METER_LABEL_CLASS = cn('mb-1', FLOW_METER_LABEL_CLASS);
+const METER_LABEL_CLASS = cn('mb-1', WIDGET_LABEL_CLASS);
 
 const CDN_RESULT_CLASS: Record<CdnResult, string> = {
   hit: 'border-emerald-400 text-emerald-400',
@@ -33,8 +33,8 @@ const QualityLadder: React.FC<{ quality: number }> = ({ quality }) => (
         <div
           key={label}
           className={cn(
-            'flex-1 border py-0.5 text-center font-mono text-[10px] transition-colors duration-300',
-            index === quality ? 'border-sky-400 bg-sky-400/15 text-sky-300' : 'border-neutral-800 text-neutral-400 ',
+            'flex-1 rounded-lg border py-0.5 text-center font-mono text-2xs transition-colors duration-300',
+            index === quality ? 'border-sky-400 bg-sky-400/15 text-sky-300' : 'border-border text-muted-foreground',
           )}
         >
           {label}
@@ -56,7 +56,7 @@ const BufferMeter: React.FC<{ seconds: number }> = ({ seconds }) => {
         <span className={isLow ? 'text-red-500' : undefined}>{seconds}s ahead</span>
       </div>
       <div
-        className="h-5 border border-neutral-800"
+        className="h-5 border border-border"
         role="img"
         aria-label={`Buffer: ${seconds} seconds ahead${isLow ? ', almost empty' : ''}`}
       >
@@ -72,12 +72,7 @@ const BufferMeter: React.FC<{ seconds: number }> = ({ seconds }) => {
 const CdnBadge: React.FC<{ result?: CdnResult }> = ({ result }) => (
   <div>
     <div className={METER_LABEL_CLASS}>CDN answer</div>
-    <span
-      className={cn(
-        'inline-block border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider transition-colors duration-300',
-        result ? CDN_RESULT_CLASS[result] : 'border-neutral-800 text-neutral-400 ',
-      )}
-    >
+    <span className={cn(WIDGET_BADGE_CLASS, result ? CDN_RESULT_CLASS[result] : WIDGET_BADGE_IDLE_CLASS)}>
       {result ? CDN_RESULT_LABELS[result] : 'None yet'}
     </span>
   </div>

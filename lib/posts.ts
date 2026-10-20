@@ -1,43 +1,21 @@
 import { POSTS_DATA } from '@/features/Blog/constants';
-import type { PostData } from 'types/blog';
+import type { PostData } from '@/types/blog';
+
+const isPublished = (post: PostData): boolean => post.production !== false;
+
+/** Newest first; posts from the same day by id, so the order never depends on the list's order. */
+const byDateDesc = (a: PostData, b: PostData): number =>
+  b.date.localeCompare(a.date) || a.id.localeCompare(b.id);
 
 export function getSortedPostsData(limit?: number): PostData[] {
-  // Filter out posts where production is false
-  const productionPosts = POSTS_DATA.filter(post => post.production !== false);
-
-  // Sort posts by date
-  const sortedPosts = productionPosts.sort((a, b) => {
-    if (a.date < b.date) {
-      return 1;
-    } else {
-      return -1;
-    }
-  });
-
+  const sortedPosts = POSTS_DATA.filter(isPublished).sort(byDateDesc);
   return limit ? sortedPosts.slice(0, limit) : sortedPosts;
 }
 
 export function getAllPostIds() {
-  const productionPosts = POSTS_DATA.filter(post => post.production !== false);
-
-  return productionPosts.map((post) => {
-    return {
-      params: {
-        id: post.id,
-      },
-    };
-  });
+  return POSTS_DATA.filter(isPublished).map((post) => ({ params: { id: post.id } }));
 }
 
-export async function getPostData(id: string) {
-  const post = POSTS_DATA.find((p) => p.id === id);
-  if (!post) {
-    throw new Error(`Post not found: ${id}`);
-  }
-  return post;
-}
-
-export function getPostsCount() {
-  const allPosts = getSortedPostsData();
-  return allPosts.length;
+export function getPostData(id: string): PostData | undefined {
+  return POSTS_DATA.find((post) => post.id === id);
 }

@@ -1,13 +1,13 @@
 import React from 'react';
 import { cn } from '@/utils/cn';
-import type { VideoStatus } from '@/features/Blog/posts/VideoSharing/widgets/uploadFlow/types';
+import type { VideoStatus } from '../types';
 import {
   UPLOAD_CHUNKS_TOTAL,
   UPLOAD_SEGMENTS_TOTAL,
   VIDEO_STATUS_FLOW,
   VIDEO_STATUS_LABELS,
 } from '../constants';
-import { FLOW_METER_LABEL_CLASS } from '@/features/Blog/flow/constants';
+import { WIDGET_BADGE_CLASS, WIDGET_BADGE_IDLE_CLASS, WIDGET_LABEL_CLASS } from '@/features/Blog/components/widgetStyles';
 import { useFlow } from '@/features/Blog/flow/hooks/useFlow';
 import { UPLOAD_FLOW } from '../flow';
 
@@ -24,7 +24,7 @@ interface CellStripProps {
 /** A row of small cells, filled from the left. Used for chunks and segments. */
 const CellStrip: React.FC<CellStripProps> = ({ label, total, filled, failedIndex, stalledIndex }) => (
   <div>
-    <div className={cn('mb-1 flex justify-between', FLOW_METER_LABEL_CLASS)}>
+    <div className={cn('mb-1 flex justify-between', WIDGET_LABEL_CLASS)}>
       <span>{label}</span>
       <span>
         {filled}/{total}
@@ -42,7 +42,7 @@ const CellStrip: React.FC<CellStripProps> = ({ label, total, filled, failedIndex
               index < filled && !isFailed && 'border-sky-400 bg-sky-400',
               isFailed && 'border-red-500 bg-red-500/40',
               isStalled && 'border-dashed border-red-500',
-              index >= filled && !isFailed && !isStalled && 'border-neutral-700 bg-transparent ',
+              index >= filled && !isFailed && !isStalled && 'border-border-strong bg-transparent',
             )}
           />
         );
@@ -71,17 +71,12 @@ const StatusFlow: React.FC<{ status: VideoStatus }> = ({ status }) => {
 
   return (
     <div>
-      <div className={cn('mb-1', FLOW_METER_LABEL_CLASS)}>Video status</div>
+      <div className={cn('mb-1', WIDGET_LABEL_CLASS)}>Video status</div>
       <div className="flex flex-wrap items-center gap-1.5" role="status" aria-label={`Video status: ${status}`}>
         {flow.map((item, index) => (
           <React.Fragment key={item}>
             {index > 0 && <span className="text-neutral-700" aria-hidden="true">&rarr;</span>}
-            <span
-              className={cn(
-                'border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider transition-colors duration-300',
-                item === status ? STATUS_COLOR_CLASS[item] : 'border-neutral-800 text-neutral-400 ',
-              )}
-            >
+            <span className={cn(WIDGET_BADGE_CLASS, item === status ? STATUS_COLOR_CLASS[item] : WIDGET_BADGE_IDLE_CLASS)}>
               {VIDEO_STATUS_LABELS[item]}
             </span>
           </React.Fragment>

@@ -146,16 +146,16 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   return (
     <div
       ref={rootRef}
-      className="code-block my-6 overflow-hidden rounded-sm border border-neutral-800 bg-[#0d0d0d]"
+      className="code-block my-6 overflow-hidden rounded-lg border border-border bg-surface-1"
       data-line-numbers={showLineNumbers}
       data-wrap={isWrapped}
     >
-      <div className="flex items-center justify-between border-b border-neutral-800 bg-neutral-900/50 py-1 pl-3 pr-1 font-mono text-xs">
-        <div className="flex min-w-0 items-center gap-2 text-neutral-400">
-          <FileCode2 className="size-3.5 shrink-0 text-red-500" aria-hidden="true" />
+      <div className="flex items-center justify-between border-b border-border bg-neutral-900/50 py-1 pl-3 pr-1 font-mono text-xs">
+        <div className="flex min-w-0 items-center gap-2 text-muted-foreground">
+          <FileCode2 className="size-3.5 shrink-0 text-accent-brand" aria-hidden="true" />
           <span className="truncate">{title ?? languageLabel}</span>
           {title && (
-            <span className="hidden shrink-0 border border-neutral-800 px-1.5 py-px text-[10px] uppercase tracking-wider text-neutral-400 sm:inline">
+            <span className="hidden shrink-0 rounded-lg border border-border px-1.5 py-px text-2xs uppercase tracking-wider text-muted-foreground sm:inline">
               {languageLabel}
             </span>
           )}
@@ -184,7 +184,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           role="region"
           aria-label={`${title ?? languageLabel} code`}
           tabIndex={0}
-          className="overflow-x-auto py-4 font-mono text-[13px] leading-[1.7] text-neutral-300 outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-red-500"
+          className="overflow-x-auto py-4 font-mono text-[13px] leading-[1.7] text-neutral-300 outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent-brand"
         >
           <code className="block w-max min-w-full">
             {visibleLines.map((line, index) => (
@@ -199,7 +199,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
         </pre>
         {isCollapsed && (
           <div
-            className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-linear-to-t from-[#0d0d0d] to-transparent"
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-linear-to-t from-surface-1 to-transparent"
             aria-hidden="true"
           />
         )}
@@ -211,8 +211,8 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           onClick={() => setIsExpanded((value) => !value)}
           aria-expanded={isExpanded}
           className={cn(
-            'flex w-full cursor-pointer items-center justify-center gap-2 border-t border-neutral-800 bg-neutral-900/50 py-2 font-mono text-[11px] uppercase tracking-wider text-neutral-500 transition-colors',
-            'hover:text-white focus-visible:outline focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-red-500',
+            'flex w-full cursor-pointer items-center justify-center gap-2 border-t border-border bg-neutral-900/50 py-2 font-mono text-2xs uppercase tracking-wider text-neutral-500 transition-colors',
+            'hover:text-white focus-inset',
           )}
         >
           {isExpanded ? (

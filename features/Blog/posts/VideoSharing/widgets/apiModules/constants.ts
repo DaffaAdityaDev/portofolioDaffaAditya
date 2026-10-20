@@ -15,7 +15,7 @@ import {
   Zap,
 } from 'lucide-react';
 import type { FlowEdgeLabel } from '@/features/Blog/flow/types';
-import type { ApiModuleEdge, ApiModuleNode, ApiModuleNodeId } from '@/features/Blog/posts/VideoSharing/widgets/apiModules/types';
+import type { ApiModuleEdge, ApiModuleNode, ApiModuleNodeId } from './types';
 
 export const API_MODULES_DIAGRAM = {
   width: 840,

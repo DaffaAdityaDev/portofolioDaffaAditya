@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import {
   buildField,
@@ -66,6 +66,8 @@ const MAX_CELLS = 16_000;
 const MAX_CELLS_TRACE = 48_000;
 const TRACE_CELL = 6;
 const FRAME_MS = 1000 / 30;
+/** Device-pixel cap on phones and other small or touch screens: the dot look holds at 1.5x and the canvases shrink ~44%. */
+const MAX_DPR_COARSE = 1.5;
 const DRIFT_MS = 1000 / 12;
 const DRIFT_AMPLITUDE = 0.015;
 const DRIFT_PERIOD_S = 20;
@@ -108,8 +110,9 @@ const makeCanvas = (width: number, height: number): HTMLCanvasElement => {
 
 /**
  * Imperative part of DotMatrixArt. Nothing is loaded or computed until the box is near the
- * viewport. The still frame (cells) and the HUD layer are baked offscreen; an animated frame is
- * two blits plus the few cells that change (scan band) and the signal. It never reads the pointer.
+ * viewport. The still frame (cells) is baked offscreen; an animated frame is one blit plus the few
+ * cells that change (scan band), the HUD hairlines (drawn live, cheaper than a second full-size
+ * layer) and the signal. It never reads the pointer.
  */
 function createEngine(opts: EngineOptions): Engine {
   const { wrap, canvas, seed, ramp, signal, renderer, imageSrc, imageFit, composition, motion } = opts;
@@ -141,7 +144,6 @@ function createEngine(opts: EngineOptions): Engine {
   let atlas: GlyphAtlas | null = null;
   let art: HTMLCanvasElement | null = null;
   let artCtx: CanvasRenderingContext2D | null = null;
-  let hud: HTMLCanvasElement | null = null;
   let bloom: HTMLCanvasElement | null = null;
   let sig = { x: 0, y: 0, w: 1, h: 1 };
 
@@ -176,7 +178,8 @@ function createEngine(opts: EngineOptions): Engine {
     const w = rect.width;
     const h = rect.height;
     if (w < 1 || h < 1) return null;
-    const nextDpr = Math.min(window.devicePixelRatio || 1, 2);
+    const small = window.innerWidth < 768 || window.matchMedia('(pointer: coarse)').matches;
+    const nextDpr = Math.min(window.devicePixelRatio || 1, small ? MAX_DPR_COARSE : 2);
     let nextCell = opts.cell ?? (trace ? TRACE_CELL : composition === 'hero' && w >= 768 ? 10 : 8);
     const maxCells = trace ? MAX_CELLS_TRACE : MAX_CELLS;
     while (Math.ceil(w / nextCell) * Math.ceil(h / nextCell) > maxCells) nextCell += 1;
@@ -197,12 +200,6 @@ function createEngine(opts: EngineOptions): Engine {
     if (artCtx) {
       artCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
       drawGrid(artCtx, renderer, levels, cols, rows, cell, ramp, atlas);
-    }
-    hud = makeCanvas(Math.round(cols * cell * dpr), Math.round(rows * cell * dpr));
-    const hudCtx = hud.getContext('2d');
-    if (hudCtx) {
-      hudCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      drawHudGrid(hudCtx, cols, rows, cell);
     }
     bloom = bakeBloom(levels, cols, rows, ramp);
   };
@@ -283,13 +280,14 @@ function createEngine(opts: EngineOptions): Engine {
   /* ---------------- drawing ---------------- */
 
   const blitBase = () => {
-    if (!art || !hud) return;
+    if (!art) return;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.drawImage(art, 0, 0, cols * cell, rows * cell);
   };
 
+  /** Expects the dpr transform already set (by `blitBase` or the boot frame). */
   const blitHud = () => {
-    if (hud) ctx.drawImage(hud, 0, 0, cols * cell, rows * cell);
+    drawHudGrid(ctx, cols, rows, cell);
   };
 
   /** Glow over the cells, then the HUD grid. */
@@ -509,10 +507,7 @@ export default function DotMatrixArt({
   const effectiveMotion: DotMatrixMotion = reduced ? 'none' : motion;
   const rampKey = ramp.join(',');
 
-  const placeholder = useMemo(
-    () => placeholderStyle(seed, rampKey.split(',') as DotMatrixRamp, composition),
-    [seed, rampKey, composition],
-  );
+  const placeholder = placeholderStyle(seed, ramp, composition);
 
   useEffect(() => {
     const wrap = wrapRef.current;

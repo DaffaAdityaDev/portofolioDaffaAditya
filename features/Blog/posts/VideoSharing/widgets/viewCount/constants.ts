@@ -1,5 +1,5 @@
 import type { FlowEdgeLabel, FlowEdgeLayout, FlowNodeLayout } from '@/features/Blog/flow/types';
-import type { CountEdgeId, CountNodeId } from '@/features/Blog/posts/VideoSharing/widgets/viewCount/types';
+import type { CountEdgeId, CountNodeId } from './types';
 
 export const COUNT_NODES: Record<CountNodeId, FlowNodeLayout> = {
   player: { x: 10, y: 54, label: 'Player', caption: 'a real viewer' },

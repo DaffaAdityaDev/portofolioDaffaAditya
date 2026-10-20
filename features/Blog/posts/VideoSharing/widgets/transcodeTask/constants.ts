@@ -1,5 +1,5 @@
 import type { FlowEdgeLabel, FlowEdgeLayout, FlowNodeLayout } from '@/features/Blog/flow/types';
-import type { LeaseState, TaskEdgeId, TaskNodeId } from '@/features/Blog/posts/VideoSharing/widgets/transcodeTask/types';
+import type { LeaseState, TaskEdgeId, TaskNodeId } from './types';
 
 /** First attempt plus three retries, then the dead-letter queue. */
 export const TASK_MAX_ATTEMPTS = 4;
