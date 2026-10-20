@@ -3,5 +3,5 @@
 // The hash busts the one-week cache on /assets when the PDF changes.
 export const RESUME_PDF = {
   path: '/assets/resume/Daffa_Aditya_Rahman_CV.pdf',
-  hash: '9682574cc6',
+  hash: 'b5e5290f8e',
 } as const;

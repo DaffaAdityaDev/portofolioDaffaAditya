@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { AUTO_COMPILE_DELAY_MS, AUTO_COMPILE_STORAGE_KEY, CV_API, DEFAULT_CV_MAIN, isReadOnlyPath } from '../constants';
+import { AUTO_COMPILE_DELAY_MS, AUTO_COMPILE_STORAGE_KEY, CV_API, DEFAULT_CV_MAIN, isReadOnlyPath, pdfFileName } from '../constants';
 import type { CvCompileFailure, CvCompileStatus, CvFileBuffer, CvPublishResult, CvPublishStatus } from '../types';
 
 const messageOf = (err: unknown): string => (err instanceof Error ? err.message : String(err));
@@ -56,6 +56,8 @@ export interface UseCvEditorReturn {
   compileFailure: CvCompileFailure | null;
   /** blob: URL of the last PDF that compiled. Kept while a later compile fails. */
   pdfUrl: string | null;
+  /** Download file name of that PDF (from the main it was compiled from). */
+  pdfName: string | null;
   /** Saves every edited file, then compiles the selected main. */
   compile: () => Promise<void>;
   publishStatus: CvPublishStatus;
@@ -86,6 +88,7 @@ export function useCvEditor(): UseCvEditorReturn {
   const [compileMs, setCompileMs] = useState<number | null>(null);
   const [compileFailure, setCompileFailure] = useState<CvCompileFailure | null>(null);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [pdfName, setPdfName] = useState<string | null>(null);
   const [publishStatus, setPublishStatus] = useState<CvPublishStatus>('idle');
   const [published, setPublished] = useState<CvPublishResult | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
@@ -141,7 +144,9 @@ export function useCvEditor(): UseCvEditorReturn {
       if (res.ok) {
         const blob = await res.blob();
         if (controller.signal.aborted) return;
-        setPdfUrl(URL.createObjectURL(blob));
+        // A named File (not a bare Blob) so viewers that read the object's name save it properly.
+        setPdfUrl(URL.createObjectURL(new File([blob], pdfFileName(target), { type: 'application/pdf' })));
+        setPdfName(pdfFileName(target));
         setCompileFailure(null);
         setCompileStatus('ok');
       } else {
@@ -340,6 +345,7 @@ export function useCvEditor(): UseCvEditorReturn {
     compileMs,
     compileFailure,
     pdfUrl,
+    pdfName,
     compile,
     publishStatus,
     published,

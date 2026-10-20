@@ -73,7 +73,7 @@ const CvEditor: React.FC = () => {
         <section aria-label="Preview" className="flex h-[85vh] min-h-0 flex-col lg:h-auto">
           {editor.compileFailure && <CompileErrorPanel failure={editor.compileFailure} />}
           <div className="min-h-0 flex-1">
-            <PdfPreview pdfUrl={editor.pdfUrl} status={editor.compileStatus} />
+            <PdfPreview pdfUrl={editor.pdfUrl} pdfName={editor.pdfName} status={editor.compileStatus} />
           </div>
         </section>
       </div>

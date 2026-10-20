@@ -9,6 +9,12 @@ export const CV_API = {
 /** Main file compiled and opened first; it is the one the site's resume PDF is built from. */
 export const DEFAULT_CV_MAIN = 'cv.tex';
 
+/** Download name of a compiled main: cv.tex -> Daffa_Aditya_Rahman_CV.pdf, cv_indo.tex -> ..._CV_INDO.pdf. */
+export const pdfFileName = (main: string): string => {
+  const variant = main.replace(/\.tex$/, '').replace(/^cv_?/, '');
+  return `Daffa_Aditya_Rahman_CV${variant ? `_${variant.toUpperCase()}` : ''}.pdf`;
+};
+
 /** The public PDF is the resume, so only CV documents may replace it. */
 export const PUBLISHABLE_MAINS = ['cv.tex', 'cv_indo.tex'] as const;
 
