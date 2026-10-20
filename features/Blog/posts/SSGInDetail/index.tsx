@@ -16,10 +16,10 @@ export default function SSGInDetail() {
 
       <p>Static Site Generation (SSG) moves that work to build time. The HTML is made once, stored, and served as a plain file. You will see:</p>
       <ul>
-        <li><strong>When a page needs getStaticProps</strong>, getStaticPaths, or neither.</li>
-        <li><strong>How ISR keeps built pages up to date</strong>, on a timer or when your CMS says so.</li>
-        <li><strong>What fallback does</strong> for pages you did not build.</li>
-        <li><strong>When SSG is the wrong choice</strong>, and what to use instead.</li>
+        <li>when a page needs <strong>getStaticProps</strong>, <strong>getStaticPaths</strong>, or neither,</li>
+        <li>how <strong>ISR</strong> keeps built pages up to date, on a timer or when your CMS says so,</li>
+        <li>what <strong>fallback</strong> does for pages you did not build,</li>
+        <li>and when SSG is the wrong choice.</li>
       </ul>
 
       <p>The examples use the Next.js <strong>Pages Router</strong>. If you use the App Router, the ideas are the same, and a table near the end maps each name to its App Router version.</p>

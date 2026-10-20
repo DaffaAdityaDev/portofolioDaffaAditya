@@ -26,6 +26,10 @@ interface PostContent {
  * import() calls resolve to the same chunk, so `load` adds nothing to download in the browser.
  */
 const POSTS = {
+  'nextjs-16-turbopack-server-actions-cache-components': {
+    Content: dynamic(() => import('@/features/Blog/posts/Nextjs16')),
+    load: () => import('@/features/Blog/posts/Nextjs16'),
+  },
   'scaling-ai-agents-as-a-service': {
     Content: dynamic(() => import('@/features/Blog/posts/EchoAgentService')),
     load: () => import('@/features/Blog/posts/EchoAgentService'),
@@ -38,7 +42,7 @@ const POSTS = {
     Content: dynamic(() => import('@/features/Blog/posts/SolidPrinciples')),
     load: () => import('@/features/Blog/posts/SolidPrinciples'),
   },
-  'nextjs-14-to-16': {
+  'nextjs-14-first-look': {
     Content: dynamic(() => import('@/features/Blog/posts/Nextjs14Improvement')),
     load: () => import('@/features/Blog/posts/Nextjs14Improvement'),
   },

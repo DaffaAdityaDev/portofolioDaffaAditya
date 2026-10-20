@@ -18,6 +18,20 @@ export const BLOG_CATEGORY_LABELS = Object.fromEntries(
  */
 export const POSTS_DATA = [
   {
+    id: 'nextjs-16-turbopack-server-actions-cache-components',
+    category: 'tech',
+    title: 'Next.js 16: Turbopack, Server Actions and Cache Components',
+    seoTitle: 'Next.js 16: Turbopack, Actions, Cache Components',
+    date: '2026-10-20',
+    timeToRead: 9,
+    description:
+      'Learn how Next.js 16 builds with Turbopack, handles forms with Server Actions and useActionState, and mixes static and dynamic UI with Cache Components.',
+    image: '/image/blogs/nextjs-16-turbopack-server-actions-cache-components/banner.webp',
+    heroImage: '/image/blogs/nextjs-16-turbopack-server-actions-cache-components/hero.webp',
+    ogImage: '/image/blogs/nextjs-16-turbopack-server-actions-cache-components/og.jpg',
+    production: true,
+  },
+  {
     id: 'scaling-ai-agents-as-a-service',
     category: 'system-design',
     title: 'Scaling AI Agents as a Service',
@@ -58,18 +72,17 @@ export const POSTS_DATA = [
     production: true,
   },
   {
-    id: 'nextjs-14-to-16',
+    id: 'nextjs-14-first-look',
     category: 'tech',
-    title: 'Next.js 14 to 16: Turbopack, Server Actions and PPR',
-    seoTitle: 'Next.js 14 to 16: Turbopack, Actions and PPR',
+    title: 'Next.js 14 First Look: Turbopack, Server Actions and Partial Prerendering',
+    seoTitle: 'Next.js 14 First Look: Turbopack, Actions, PPR',
     date: '2024-02-28',
-    updated: '2026-10-20',
-    timeToRead: 10,
+    timeToRead: 8,
     description:
-      'Learn what Turbopack, Server Actions and Partial Prerendering do and what changed by Next.js 16: useActionState, await cookies() and Cache Components.',
-    image: '/image/blogs/nextjs-14-to-16/banner.webp',
-    heroImage: '/image/blogs/nextjs-14-to-16/hero.webp',
-    ogImage: '/image/blogs/nextjs-14-to-16/og.jpg',
+      'What Turbopack, Server Actions and Partial Prerendering do in Next.js 14, why they exist, and what changed in Next.js 15 and 16.',
+    image: '/image/blogs/nextjs-14-first-look/banner.webp',
+    heroImage: '/image/blogs/nextjs-14-first-look/hero.webp',
+    ogImage: '/image/blogs/nextjs-14-first-look/og.jpg',
     production: true,
   },
   {

@@ -10,9 +10,11 @@ interface CustomImageProps {
    */
   width?: number;
   height?: number;
+  /** Text under the image. Defaults to the alt text. */
+  caption?: string;
 }
 
-const CustomImage: React.FC<CustomImageProps> = ({ src, alt, width = 1200, height = 675 }) => {
+const CustomImage: React.FC<CustomImageProps> = ({ src, alt, width = 1200, height = 675, caption = alt }) => {
   return (
     <div className="my-8 rounded-lg border border-border bg-background p-2">
       <Image
@@ -24,7 +26,7 @@ const CustomImage: React.FC<CustomImageProps> = ({ src, alt, width = 1200, heigh
         className="w-full h-auto object-cover rounded"
         loading="lazy"
       />
-      {alt && <div className="mt-2 text-center text-xs font-mono text-neutral-500 uppercase">{alt}</div>}
+      {caption && <div className="mt-2 text-center text-xs font-mono text-neutral-500 uppercase">{caption}</div>}
     </div>
   );
 };

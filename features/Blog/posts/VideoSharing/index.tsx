@@ -42,7 +42,7 @@ export default function VideoSharing() {
         <li><strong>Press Go viral</strong> at the end and see which part breaks first.</li>
       </ul>
 
-      <p>The working code is in the <a href="https://github.com/DaffaAdityaDev/streaming_video.git" target="_blank" rel="noopener noreferrer">streaming_video repository on GitHub</a>.</p>
+      <p>It takes about 45 minutes. The working code is in the <a href="https://github.com/DaffaAdityaDev/streaming_video.git" target="_blank" rel="noopener noreferrer">streaming_video repository on GitHub</a>.</p>
 
       <Reveal>
         <h2>Requirements</h2>
@@ -893,7 +893,7 @@ export default function VideoSharing() {
       </Reveal>
 
       <Reveal>
-        <h2>What to keep</h2>
+        <h2>What we learned</h2>
 
         <p>Pressing play looked simple at the start. It took a whole post to make it survive real users, real networks and real failures. Here is what to keep.</p>
 
