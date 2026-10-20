@@ -1,5 +1,27 @@
+# A plain-text summary of this site for LLMs and agents: https://daffaaditya.id/llms.txt
+# Expanded version: https://daffaaditya.id/llms-full.txt
+
+# AI crawlers and assistants are welcome. A crawler that matches a named group skips the * group,
+# so this group repeats its rules.
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: PerplexityBot
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: CCBot
+Allow: /
+Disallow: /api/
+
+# Everyone else. /api/ holds form and dev-only endpoints; /sitemap.xml and /llms*.txt are
+# served from root URLs, so they stay crawlable. /playground-runtime is not blocked on purpose:
+# it carries noindex, which a crawler can only see if it may fetch the page.
 User-agent: *
 Allow: /
+Disallow: /api/
 
 # Sitemaps
 Sitemap: https://daffaaditya.id/sitemap.xml

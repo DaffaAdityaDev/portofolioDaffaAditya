@@ -25,7 +25,9 @@ export default function Document({ __NEXT_DATA__ }: DocumentProps) {
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="theme-color" content="#0a0a0a" />
         <link rel="icon" href="/svg/selflogo.svg" type="image/svg+xml" />
-        
+        {/* Points LLMs and agents at the plain-text summary of the site (lib/llms.ts). */}
+        <link rel="alternate" type="text/markdown" href="/llms.txt" title="LLM-readable summary" />
+
         {/* Analytics with performance optimization */}
         {GA_MEASUREMENT_ID && (
           <>

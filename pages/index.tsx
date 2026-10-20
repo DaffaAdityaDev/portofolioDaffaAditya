@@ -1,5 +1,6 @@
-import type { NextPage } from 'next';
-import { SAME_AS, siteConfig } from '@/config/metadata.config';
+import type { GetStaticProps, NextPage } from 'next';
+import { siteConfig } from '@/config/metadata.config';
+import { buildPersonJsonLd } from '@/lib/profile';
 import dynamic from 'next/dynamic';
 import Hero from '@/features/Hero';
 import React, { useRef, useState } from 'react';
@@ -30,29 +31,30 @@ const Marquee = lazyOnView(() => import('@/components/ui/Marquee'));
 const ArchitecturalSpine = dynamic(() => import('@/components/ui/ArchitecturalSpine'), { ssr: false });
 
 
-const HOME_STRUCTURED_DATA = [
-  {
-    '@context': 'https://schema.org',
-    '@type': 'Person',
-    name: siteConfig.name,
-    jobTitle: 'Software Engineer',
-    url: siteConfig.url,
-    image: `${siteConfig.url}${siteConfig.profileImage}`,
-    email: `mailto:${siteConfig.links.email}`,
-    address: { '@type': 'PostalAddress', addressLocality: 'Jakarta', addressCountry: 'ID' },
-    sameAs: SAME_AS,
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: siteConfig.name,
-    url: siteConfig.url,
-    description: siteConfig.description,
-    author: { '@type': 'Person', name: siteConfig.name, url: siteConfig.url },
-  },
-];
+interface HomeProps {
+  /** Person + WebSite. Built in getStaticProps, so Next drops the data modules it reads from the page's JS. */
+  structuredData: Record<string, unknown>[];
+}
 
-const Home: NextPage = () => {
+export const getStaticProps: GetStaticProps<HomeProps> = async () => {
+  return {
+    props: {
+      structuredData: [
+        buildPersonJsonLd(),
+        {
+          '@context': 'https://schema.org',
+          '@type': 'WebSite',
+          name: siteConfig.name,
+          url: siteConfig.url,
+          description: siteConfig.description,
+          author: { '@type': 'Person', name: siteConfig.name, url: siteConfig.url },
+        },
+      ],
+    },
+  };
+};
+
+const Home: NextPage<HomeProps> = ({ structuredData }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   // The spine finds its sections by id once, on mount. Remount it when the lazy sections replace the static ones.
   const [spineKey, setSpineKey] = useState(0);
@@ -73,7 +75,7 @@ const Home: NextPage = () => {
         title={`${siteConfig.name} | Software Engineer`}
         fullTitle
         description={siteConfig.description}
-        jsonLd={HOME_STRUCTURED_DATA}
+        jsonLd={structuredData}
       />
 
       <div className="min-h-screen bg-background text-white font-sans selection:bg-red-600 selection:text-white overflow-x-hidden relative flex flex-col">

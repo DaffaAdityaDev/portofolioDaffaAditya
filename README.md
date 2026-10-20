@@ -17,6 +17,7 @@ Live site: https://daffaaditya.id
 | `/resume` | Resume page with the self-hosted PDF (see [Resume PDF](#resume-pdf)) and a download link. |
 | `/404` | Custom 404 page (noindex). |
 | `/api/brief` | Receives the `/freelance` brief form. See [Freelance brief](#freelance-brief). |
+| `/llms.txt`, `/llms-full.txt` | LLM-readable summaries. See [For crawlers and AI](#for-crawlers-and-ai). |
 | `/sitemap.xml` | Sitemap built at request time by `/api/sitemap.xml` (rewrite in `next.config.js`). `robots.txt` points here. |
 | `/playground-runtime` | Preview runtime for the blog's live React editor, loaded in a sandboxed iframe. Bare page (no site shell), noindex, not in the sitemap. |
 | `/cv` | **Dev only.** Local Awesome-CV LaTeX editor. See [CV editor](#cv-editor-dev-only). |
@@ -36,6 +37,13 @@ Each channel is on when its env vars are set, and the brief counts as delivered 
 ### Resume PDF
 
 `/resume` serves a self-hosted PDF from `public/assets/resume/`, built from `cv-src/cv.tex` (Awesome-CV). `features/Resume/resumePdf.ts` holds its path and a content hash that busts the cache; it is generated, not edited by hand. Rebuild it with the `/cv` editor's Publish button or `bun run cv:build` (`scripts/cv-build.ts`, same code path), then commit the PDF and `resumePdf.ts`.
+
+### For crawlers and AI
+
+- `/llms.txt` and `/llms-full.txt`: [llmstxt.org](https://llmstxt.org) markdown summaries (short and expanded) for LLMs and agents, served by `/api/llms.txt` and `/api/llms-full.txt` through rewrites in `next.config.js`. `lib/llms.ts` builds both from the data modules (experience, engagements, resume, published posts, `siteConfig`), so they follow the site; never edit a copy by hand. `_document.tsx` links `/llms.txt` as `rel="alternate"`.
+- `/sitemap.xml`: see the table above.
+- JSON-LD: the home page has `Person` (role, employer, education, skills, profiles; built by `lib/profile.ts`) and `WebSite`.
+- `public/robots.txt` allows all crawlers, AI crawlers by name, and blocks only `/api/`.
 
 ### CV editor (dev only)
 
