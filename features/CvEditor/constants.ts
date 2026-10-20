@@ -9,8 +9,8 @@ export const CV_API = {
 /** Main file compiled and opened first; it is the one the site's resume PDF is built from. */
 export const DEFAULT_CV_MAIN = 'cv.tex';
 
-/** The public PDF is the resume, so only CV documents may replace it (never coverletter.tex). */
-export const PUBLISHABLE_MAINS = ['cv.tex', 'cv_indo.tex', 'resume.tex'] as const;
+/** The public PDF is the resume, so only CV documents may replace it. */
+export const PUBLISHABLE_MAINS = ['cv.tex', 'cv_indo.tex'] as const;
 
 export const isPublishable = (main: string): boolean => (PUBLISHABLE_MAINS as readonly string[]).includes(main);
 

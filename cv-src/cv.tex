@@ -20,6 +20,9 @@
 % A4 paper size by default, use 'letterpaper' for US letter
 \documentclass[13pt, a4paper]{awesome-cv}
 
+% \needspace keeps a section's heading together with its content across page breaks
+\usepackage{needspace}
+
 % Configure page margins with geometry
 \geometry{left=1.4cm, top=.8cm, right=1.4cm, bottom=1.8cm, footskip=.5cm}
 
@@ -57,11 +60,11 @@
 \position{Software Engineer}
 \address{Indonesia, DKI Jakarta}
 
-\mobile{0881-5346-656}
+\mobile{(+62) 881-5346-656}
 \email{daffaaditya.me@gmail.com}
 \homepage{daffaaditya.id}
-\github{github.com/DaffaAdityaDev}
-\linkedin{linkedin.com/in/daffaadityarahman-14b588192}
+\github{DaffaAdityaDev}
+\linkedin{daffaadityarahman-14b588192}
 % \gitlab{gitlab-id}
 % \stackoverflow{SO-id}{SO-name}
 % \twitter{@twit}
@@ -98,9 +101,12 @@
 \input{cv/summary.tex}
 \input{cv/experience.tex}
 % \input{cv/projects.tex}
-\input{cv/skills.tex}
-% \vspace{20cm}
+% \needspace moves a section to the next page with its heading when the whole block does not fit,
+% so no heading strands at the bottom of a page. Education is shorter, so it fills page 1 first.
+\needspace{9\baselineskip}
 \input{cv/education.tex}
+\needspace{11\baselineskip}
+\input{cv/skills.tex}
 
 
 %-------------------------------------------------------------------------------
