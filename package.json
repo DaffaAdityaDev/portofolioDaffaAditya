@@ -6,15 +6,16 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "dev:turbo": "next dev --turbopack",
-    "build": "next build",
-    "build:prod": "next build",
+    "build": "tsx scripts/blog-avif.ts --check && next build",
+    "build:prod": "tsx scripts/blog-avif.ts --check && next build",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit -p .",
     "format:check": "prettier --check . --ignore-path .prettierignore",
     "format:fix": "prettier --write . --ignore-path .prettierignore",
     "new-post": "plop blog-post",
-    "cv:build": "tsx scripts/cv-build.ts"
+    "cv:build": "tsx scripts/cv-build.ts",
+    "blog:avif": "tsx scripts/blog-avif.ts"
   },
   "dependencies": {
     "clsx": "^2.1.0",

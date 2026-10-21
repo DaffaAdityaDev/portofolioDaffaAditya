@@ -6,14 +6,10 @@ import { BLOG_CATEGORY_LABELS } from './constants';
 import { chipClasses } from '@/components/ui/chip';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import BlogPicture from './components/BlogPicture';
 
-/** Each banner ships with a 640px wide copy next to it: banner.webp and banner-640.webp. */
-const SMALL_IMAGE_WIDTH = 640;
-const IMAGE_WIDTH = 1280;
 /** Card width in the 1, 2 and 3 column grid of BlogList. */
 const IMAGE_SIZES = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw';
-
-const smallVariant = (src: string) => src.replace(/(\.\w+)$/, `-${SMALL_IMAGE_WIDTH}$1`);
 
 interface BlogCardProps extends PostSummary {
   /** First card on the page: load its image eagerly, as it is likely the LCP element. */
@@ -48,15 +44,12 @@ const BlogCard = ({ priority = false, ...props }: BlogCardProps) => {
         {/* Image Container */}
         <div className="aspect-video w-full overflow-hidden border-b border-border relative">
           <div className="absolute inset-0 bg-neutral-900 animate-pulse" />
-          <img
+          <BlogPicture
             src={image}
-            srcSet={`${smallVariant(image)} ${SMALL_IMAGE_WIDTH}w, ${image} ${IMAGE_WIDTH}w`}
             sizes={IMAGE_SIZES}
+            preload={priority}
             alt={title}
-            width={IMAGE_WIDTH}
-            height={720}
             loading={priority ? 'eager' : 'lazy'}
-            fetchPriority={priority ? 'high' : undefined}
             decoding={priority ? undefined : 'async'}
             className="w-full h-full object-fill group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100 relative z-10"
             style={{ viewTransitionName: `blog-image-${id}` }}

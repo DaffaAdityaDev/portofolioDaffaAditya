@@ -15,16 +15,10 @@ import { TocSheet, TocSidebar } from './components/TableOfContents';
 import { BLOG_CATEGORY_LABELS, TOC_MIN_ITEMS } from './constants';
 import { chipClasses } from '@/components/ui/chip';
 import { useTableOfContents } from './hooks/useTableOfContents';
+import BlogPicture from './components/BlogPicture';
 
 /** The hero fills the viewport width. */
 const HERO_SIZES = '100vw';
-
-/**
- * Every blog hero and banner is 1280px wide with a 640px copy next to it
- * (`hero.webp` and `hero-640.webp`). Other images get no srcset.
- */
-const blogImageSrcSet = (src: string): string | undefined =>
-  /^\/image\/blogs\/.+\.webp$/.test(src) ? `${src.replace(/\.webp$/, '-640.webp')} 640w, ${src} 1280w` : undefined;
 
 interface PostLayoutProps {
   meta: PostData;
@@ -42,7 +36,6 @@ export default function PostLayout({ meta, toc: initialToc, children }: PostLayo
 
   const pageTitle = meta.seoTitle ?? meta.title;
   const heroImage = meta.heroImage ?? meta.image;
-  const heroSrcSet = heroImage ? blogImageSrcSet(heroImage) : undefined;
   const path = `/blog/post/${meta.id}`;
   const shareImage = meta.ogImage ?? meta.image;
 
@@ -82,16 +75,12 @@ export default function PostLayout({ meta, toc: initialToc, children }: PostLayo
           <div className="relative z-10 w-full flex flex-col items-center">
             {heroImage && (
               <div className="w-full h-[40vh] lg:h-[60vh] relative overflow-hidden border-b border-border">
-                <img
+                <BlogPicture
                   src={heroImage}
-                  srcSet={heroSrcSet}
-                  sizes={heroSrcSet ? HERO_SIZES : undefined}
+                  sizes={HERO_SIZES}
+                  preload
                   // Decorative: dimmed behind the h1, which already carries the title.
                   alt=""
-                  width={1280}
-                  height={720}
-                  // React hoists a matching <link rel=preload imageSrcSet> into <head> for a high-priority <img>.
-                  fetchPriority="high"
                   className="absolute inset-0 w-full h-full object-cover opacity-60"
                   style={{ viewTransitionName: `blog-image-${meta.id}` }}
                 />
