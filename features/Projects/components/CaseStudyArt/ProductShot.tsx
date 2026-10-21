@@ -10,6 +10,8 @@ const SHOT_SIZES: Record<string, { width: number; height: number }> = {
   '/image/projects/artifyo.webp': { width: 1899, height: 999 },
   '/image/projects/aliman.webp': { width: 1905, height: 999 },
   '/image/projects/recyclops.webp': { width: 414, height: 882 },
+  '/image/projects/echo-chat.webp': { width: 1600, height: 1048 },
+  '/image/projects/filmyuk-hero.webp': { width: 1600, height: 900 },
 };
 const FALLBACK_SIZE = { width: 1600, height: 900 };
 
@@ -35,9 +37,27 @@ interface FrameProps extends ShotItem {
   style?: React.CSSProperties;
 }
 
-/** A screenshot in a minimal browser window: three dots, a slim bar, a soft drop shadow. */
-export const BrowserFrame: React.FC<FrameProps> = ({ src, alt, eager, sizes, className = '', style }) => {
+/** The screenshot itself, at its intrinsic size so it reserves its box before it loads. */
+const ShotImage: React.FC<Pick<FrameProps, 'src' | 'alt' | 'eager' | 'sizes'>> = ({ src, alt, eager, sizes }) => {
   const { width, height } = shotSize(src);
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      sizes={sizes}
+      loading={eager ? 'eager' : 'lazy'}
+      preload={eager}
+      fetchPriority={eager ? 'high' : 'auto'}
+      className="block h-auto w-full"
+      style={{ aspectRatio: `${width} / ${height}` }}
+    />
+  );
+};
+
+/** A screenshot in a minimal browser window: three dots, a slim bar, a soft drop shadow. */
+const BrowserFrame: React.FC<FrameProps> = ({ src, alt, eager, sizes, className = '', style }) => {
   return (
     <figure
       className={`overflow-hidden rounded-lg border border-border bg-surface-2 shadow-[0_24px_48px_-12px_rgba(0,0,0,0.85),0_0_0_1px_rgba(0,0,0,0.6)] ${className}`}
@@ -49,42 +69,19 @@ export const BrowserFrame: React.FC<FrameProps> = ({ src, alt, eager, sizes, cla
         <span className="h-1.5 w-1.5 rounded-full bg-neutral-700" />
         <span className="ml-2 h-2 flex-1 rounded-sm bg-white/[0.05]" />
       </div>
-      <Image
-        src={src}
-        alt={alt}
-        width={width}
-        height={height}
-        sizes={sizes}
-        loading={eager ? 'eager' : 'lazy'}
-        preload={eager}
-        fetchPriority={eager ? 'high' : 'auto'}
-        className="block h-auto w-full"
-        style={{ aspectRatio: `${width} / ${height}` }}
-      />
+      <ShotImage src={src} alt={alt} eager={eager} sizes={sizes} />
     </figure>
   );
 };
 
 /** A portrait screenshot in a slim phone body. */
-export const PhoneFrame: React.FC<FrameProps> = ({ src, alt, eager, sizes, className = '', style }) => {
-  const { width, height } = shotSize(src);
+const PhoneFrame: React.FC<FrameProps> = ({ src, alt, eager, sizes, className = '', style }) => {
   return (
     <figure
       className={`overflow-hidden rounded-[14px] border-[3px] border-border bg-surface-2 shadow-[0_24px_48px_-12px_rgba(0,0,0,0.85)] ${className}`}
       style={style}
     >
-      <Image
-        src={src}
-        alt={alt}
-        width={width}
-        height={height}
-        sizes={sizes}
-        loading={eager ? 'eager' : 'lazy'}
-        preload={eager}
-        fetchPriority={eager ? 'high' : 'auto'}
-        className="block h-auto w-full"
-        style={{ aspectRatio: `${width} / ${height}` }}
-      />
+      <ShotImage src={src} alt={alt} eager={eager} sizes={sizes} />
     </figure>
   );
 };

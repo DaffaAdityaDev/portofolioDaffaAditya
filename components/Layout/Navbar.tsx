@@ -9,6 +9,7 @@ import { EASE_OUT_EXPO } from '@/constant/animations';
 import { buttonClasses } from '@/components/ui/Button';
 import StatusBadge from '@/components/ui/StatusBadge';
 import type { NavItem, SocialLink } from '@/types/navigation';
+import { replaceUrl } from '@/utils/url';
 
 // The open mobile sheet only loads when needed; the trigger warms it on pointerdown/focus.
 const loadMobileMenu = () => import('./MobileMenu');
@@ -153,7 +154,7 @@ const Navbar = () => {
    */
   const replaceInPageUrl = (hash: string) => {
     const url = `/${hash}`;
-    window.history.replaceState({ ...window.history.state, as: url }, '', url);
+    replaceUrl(url);
     setInPageHash(hash);
   };
 

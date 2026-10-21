@@ -39,7 +39,7 @@ export interface Project {
 /* Engagement case studies: one page per company or client.            */
 /* ------------------------------------------------------------------ */
 
-/** Same buckets as Project.nature. An internship is a role detail, not a kind. */
+/** Usually matches Project.nature, but can differ (Recyclops: a capstone filed under work). An internship is a role detail, not a kind. */
 export type EngagementKind = 'work' | 'freelance' | 'side';
 
 export interface EngagementLink {

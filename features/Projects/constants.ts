@@ -158,6 +158,50 @@ export const projectsData: Project[] = [
       "Built role-based dashboards for school treasurers."
     ]
   },
+  {
+    id: 8,
+    title: "Echo",
+    slug: "echo",
+    client: "Side project",
+    description: "A self-hosted chat and agent workspace: bring your own model provider key and Echo runs a tool-using agent loop against it, streaming answers as it works and pausing protected tools for your approval. A Next.js UI, a Go API and a Bun agent service in one repo.",
+    year: "2026",
+    type: "WEB_APP",
+    category: "AI",
+    featured: true,
+    link: "/case-studies/echo",
+    liveLink: "https://github.com/DaffaAdityaDev/echo",
+    image: "/image/projects/echo-chat.webp",
+    color: "from-purple-600 to-indigo-900",
+    tech: ["Go", "Bun", "Nextjs", "TypeScript", "PostgreSQL"],
+    nature: "side",
+    achievements: [
+      "Built an agent loop with guards for repeated tool calls, cost and step budgets, context compaction and human approval for protected tools.",
+      "Split the system into a Next.js UI, a Go API for users, sessions and settings, and a Bun agent service that runs the model loop.",
+      "Kept provider keys encrypted at rest and the JWT in an httpOnly cookie, so the browser never calls the backend directly."
+    ]
+  },
+  {
+    id: 9,
+    title: "Filmyuk",
+    slug: "filmyuk",
+    client: "Side project",
+    description: "A self-hosted, YouTube-style video platform: uploads are transcoded from 144p up to 4K by a Kafka-driven FFmpeg worker, stored in S3-compatible storage and streamed with HTTP range requests, with live transcode progress in the creator studio.",
+    year: "2023",
+    type: "WEB_APP",
+    category: "WEB_APP",
+    featured: true,
+    link: "/case-studies/filmyuk",
+    liveLink: "https://github.com/DaffaAdityaDev/streaming_video",
+    image: "/image/projects/filmyuk-hero.webp",
+    color: "from-red-600 to-rose-900",
+    tech: ["Go", "Kafka", "FFmpeg", "PostgreSQL", "Nextjs"],
+    nature: "side",
+    achievements: [
+      "Split upload and transcoding into a Go API and a video-processor worker connected by Kafka.",
+      "Transcoded every rendition that fits the source, from 144p up to 4K, with FFmpeg and optional GPU encoding.",
+      "Streamed live transcode progress to the video owner over WebSockets."
+    ]
+  },
 ];
 
 /**
@@ -231,6 +275,26 @@ export const CASE_STUDIES_META: Record<string, CaseStudyMeta> = {
       pillsBorder: 'border-emerald-500/15',
       pillsText: 'text-emerald-400',
       pillsBg: 'bg-emerald-500/5'
+    }
+  },
+  'echo': {
+    metric: 'Bring your own model',
+    color: {
+      accent: 'purple',
+      glow: 'from-purple-500/0 via-purple-500/5 to-purple-500/0',
+      pillsBorder: 'border-purple-500/15',
+      pillsText: 'text-purple-400',
+      pillsBg: 'bg-purple-500/5'
+    }
+  },
+  'filmyuk': {
+    metric: '144p to 4K',
+    color: {
+      accent: 'red',
+      glow: 'from-red-500/0 via-red-500/5 to-red-500/0',
+      pillsBorder: 'border-red-500/15',
+      pillsText: 'text-red-400',
+      pillsBg: 'bg-red-500/5'
     }
   },
   'aliman-bulus': {

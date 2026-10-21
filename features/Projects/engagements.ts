@@ -18,6 +18,19 @@ export const ENGAGEMENT_KIND_LABELS: Record<EngagementKind, string> = {
   side: 'Side project',
 };
 
+/** How the index groups the kinds: work and freelance read as one track, side projects stand apart. */
+export interface EngagementGroup {
+  id: string;
+  title: string;
+  note: string;
+  kinds: EngagementKind[];
+}
+
+export const ENGAGEMENT_GROUPS: EngagementGroup[] = [
+  { id: 'work', title: 'Work', note: 'Jobs, freelance and programs, grouped by company', kinds: ['work', 'freelance'] },
+  { id: 'side-projects', title: 'Side projects', note: 'Built on my own time', kinds: ['side'] },
+];
+
 export const ENGAGEMENTS: Engagement[] = [
   {
     slug: 'run-system',
@@ -329,6 +342,76 @@ export const ENGAGEMENTS: Engagement[] = [
     ],
   },
   {
+    slug: 'recyclops',
+    title: 'Recyclops',
+    summary:
+      'An Android app my Bangkit Academy capstone team built that classifies waste with machine learning, shows people where to take it, and rewards them with points for recycling.',
+    kind: 'work',
+    projectSlugs: ['recyclops'],
+    image: '/image/projects/recyclops.webp',
+    color: CASE_STUDIES_META['recyclops'].color,
+    links: [{ label: 'Source on GitHub', href: 'https://github.com/DaffaAdityaDev/recyclops' }],
+    headlineMetric: 'Works offline',
+    context: {
+      company: 'Bangkit Academy',
+      companyType: 'Team capstone project',
+      role: 'Android Developer',
+      period: '2023',
+      stack: ['Android', 'Kotlin', 'Firebase', 'Google Maps API'],
+    },
+    problem: [
+      'Many people want to recycle but do not know how to sort an item or where to take it.',
+      'The app had to answer both on the spot: sort the item, scan its barcode, and find the nearest recycling point.',
+      'It had to work on a weak signal and catch up with the server once the connection returned.',
+    ],
+    responsibilities: [
+      'Build the native Android app in Kotlin, with Firebase as the backend.',
+      'Connect the machine learning model that classifies waste from a photo, so users know how to sort an item.',
+      'Add camera barcode scanning and routing to the nearest recycling point.',
+      'Build the points system that rewards each recycling action.',
+      'Make the app work offline and sync to Firebase when back online.',
+    ],
+    shipped: [
+      { title: 'Waste classification', detail: 'A machine learning model classifies an item from a photo, so users know how to sort it before they throw it away.' },
+      { title: 'Camera barcode scanning', detail: 'Users scan a product barcode with the phone camera to look it up.' },
+      { title: 'Route to the nearest recycling point', detail: 'The app uses the user location to find and route to the closest recycling point.' },
+      { title: 'Points and carbon savings tracker', detail: 'Each recycling action earns points and adds to an estimate of carbon saved.' },
+      { title: 'Community map and leaderboard', detail: 'Users see recycling activity on a map and compare points with others.' },
+      { title: 'Offline sync for weak connections', detail: 'Actions are saved on the device and sync to Firebase when the connection returns.' },
+    ],
+    impact: [
+      { label: 'Works in low-connectivity areas', note: 'Actions are saved on the device and sync to Firebase later.' },
+    ],
+    story: [
+      { kind: 'h', text: 'The idea' },
+      {
+        kind: 'p',
+        text: 'Most people are willing to recycle. What stops them is two small questions: how do I sort this, and where do I take it? Recyclops is an Android app I built with my team as our Bangkit Academy capstone in 2023, to answer both on the spot, and to reward people with points so the habit sticks.',
+      },
+      { kind: 'h', text: 'What it does' },
+      {
+        kind: 'p',
+        text: 'A user takes a photo of an item and a machine learning model tells them how to sort it, or they scan its barcode with the phone camera to look it up. When the bag is full, the app finds the nearest recycling point and routes them there with Google Maps. Every recycling action earns points.',
+      },
+      {
+        kind: 'image',
+        src: '/image/projects/recyclops.webp',
+        alt: 'Recyclops Android app screens',
+        caption: 'Recyclops on Android.',
+      },
+      { kind: 'h', text: 'How I built it' },
+      {
+        kind: 'p',
+        text: 'We built it as a native Android app in Kotlin, with Firebase as the backend, and I connected the waste classification model to the app. Recycling points are often in places with a weak signal, so the app works offline: each action is saved on the device first and syncs to Firebase once the connection is back. Nothing a user does gets lost because of a bad connection.',
+      },
+      { kind: 'h', text: 'How it went' },
+      {
+        kind: 'p',
+        text: 'The app covers the full loop, from sorting an item to dropping it off and getting points for it, and it keeps working where the signal drops. The source code is public on GitHub.',
+      },
+    ],
+  },
+  {
     slug: 'artifyo',
     title: 'Artifyo',
     summary:
@@ -538,72 +621,195 @@ export const ENGAGEMENTS: Engagement[] = [
     ],
   },
   {
-    slug: 'recyclops',
-    title: 'Recyclops',
+    slug: 'echo',
+    title: 'Echo',
     summary:
-      'An Android app my Bangkit Academy capstone team built that classifies waste with machine learning, shows people where to take it, and rewards them with points for recycling.',
+      'A self-hosted chat and agent workspace I built: bring your own model provider key, and Echo runs a tool-using agent loop against it, streaming answers as it works and pausing protected tools for your approval.',
     kind: 'side',
-    projectSlugs: ['recyclops'],
-    image: '/image/projects/recyclops.webp',
-    color: CASE_STUDIES_META['recyclops'].color,
-    links: [{ label: 'Source on GitHub', href: 'https://github.com/DaffaAdityaDev/recyclops' }],
-    headlineMetric: 'Works offline',
+    projectSlugs: ['echo'],
+    image: '/image/projects/echo-chat.webp',
+    color: CASE_STUDIES_META['echo'].color,
+    links: [
+      { label: 'Source on GitHub', href: 'https://github.com/DaffaAdityaDev/echo' },
+      { label: 'Blog: scaling AI agents as a service', href: '/blog/post/scaling-ai-agents-as-a-service' },
+    ],
+    headlineMetric: 'Bring your own model',
     context: {
-      company: 'Bangkit Academy',
-      companyType: 'Team capstone project',
-      role: 'Android Developer',
-      period: '2023',
-      stack: ['Android', 'Kotlin', 'Firebase', 'Google Maps API'],
+      company: 'Personal project',
+      companyType: 'Self-hosted AI agent harness',
+      role: 'Solo developer',
+      period: '2026',
+      stack: ['Go', 'Fiber', 'Bun', 'Hono', 'Next.js', 'PostgreSQL', 'Redis'],
     },
     problem: [
-      'Many people want to recycle but do not know how to sort an item or where to take it.',
-      'The app had to answer both on the spot: sort the item, scan its barcode, and find the nearest recycling point.',
-      'It had to work on a weak signal and catch up with the server once the connection returned.',
+      'Hosted chat apps lock you to one model vendor and decide for you what an agent may do.',
+      'An agent picks its own next step, so it can also loop on the same tool or burn through a budget unless something watches it.',
+      'Some tool calls should never run without a person saying yes first.',
     ],
     responsibilities: [
-      'Build the native Android app in Kotlin, with Firebase as the backend.',
-      'Connect the machine learning model that classifies waste from a photo, so users know how to sort an item.',
-      'Add camera barcode scanning and routing to the nearest recycling point.',
-      'Build the points system that rewards each recycling action.',
-      'Make the app work offline and sync to Firebase when back online.',
+      'Design the three-service architecture and the contracts between the services.',
+      'Build the agent loop, its guards and the human-approval step.',
+      'Build the Go API for auth, sessions, settings, versioned prompts and memory.',
+      'Build the Next.js UI that streams the agent\'s answers as they arrive.',
+    ],
+    decisions: [
+      {
+        title: 'Three services instead of one app',
+        problem: 'The model loop, the user data and the UI change at different speeds and have different runtime needs.',
+        choice: 'A Next.js UI, a Go API that owns users, sessions and settings, and a Bun agent service that runs one mission per chat turn.',
+        why: 'The agent can be scaled or swapped without touching user data, and the API stays a plain Go service.',
+      },
+      {
+        title: 'The browser never calls the backend',
+        choice: 'Every request goes through Next.js route handlers, which keep the JWT in an httpOnly cookie and forward it as a bearer token.',
+        why: 'Tokens never reach client-side JavaScript, and chat still streams back to the browser as SSE.',
+      },
+      {
+        title: 'Guard the loop, not just the prompt',
+        choice: 'The harness checks for repeated tool calls, enforces cost and step budgets, compacts long context and holds protected tools for human approval.',
+        why: 'A prompt can ask the model to behave; only the harness can stop it.',
+      },
     ],
     shipped: [
-      { title: 'Waste classification', detail: 'A machine learning model classifies an item from a photo, so users know how to sort it before they throw it away.' },
-      { title: 'Camera barcode scanning', detail: 'Users scan a product barcode with the phone camera to look it up.' },
-      { title: 'Route to the nearest recycling point', detail: 'The app uses the user location to find and route to the closest recycling point.' },
-      { title: 'Points and carbon savings tracker', detail: 'Each recycling action earns points and adds to an estimate of carbon saved.' },
-      { title: 'Community map and leaderboard', detail: 'Users see recycling activity on a map and compare points with others.' },
-      { title: 'Offline sync for weak connections', detail: 'Actions are saved on the device and sync to Firebase when the connection returns.' },
-    ],
-    impact: [
-      { label: 'Works in low-connectivity areas', note: 'Actions are saved on the device and sync to Firebase later.' },
+      { title: 'Bring-your-own-key providers', detail: 'OpenAI, Anthropic, opencode-go or a local LM Studio, with keys encrypted at rest.' },
+      { title: 'Streaming agent loop', detail: 'One mission per chat turn, streamed to the UI as SSE while the agent works.' },
+      { title: 'Human approval for protected tools', detail: 'Tool calls marked as protected wait for the user before they run.' },
+      { title: 'Built-in and MCP tools', detail: 'web_search, write_todos and delegate_task built in, with MCP tools as an option.' },
+      { title: 'Versioned system prompts', detail: 'Prompts are versioned on the API, so behaviour changes without a redeploy.' },
+      { title: 'Session memory', detail: 'A background worker summarises long sessions and prunes old turns.' },
     ],
     story: [
       { kind: 'h', text: 'The idea' },
       {
         kind: 'p',
-        text: 'Most people are willing to recycle. What stops them is two small questions: how do I sort this, and where do I take it? Recyclops is an Android app I built with my team as our Bangkit Academy capstone in 2023, to answer both on the spot, and to reward people with points so the habit sticks.',
-      },
-      { kind: 'h', text: 'What it does' },
-      {
-        kind: 'p',
-        text: 'A user takes a photo of an item and a machine learning model tells them how to sort it, or they scan its barcode with the phone camera to look it up. When the bag is full, the app finds the nearest recycling point and routes them there with Google Maps. Every recycling action earns points.',
+        text: 'I wanted a chat and agent workspace I could run myself, on whichever model I chose. Echo is that: you bring your own provider key (OpenAI, Anthropic, opencode-go or a local LM Studio), and Echo runs a tool-using agent loop against it. Answers stream in as the agent works, and tool calls marked as protected wait for your approval before they run.',
       },
       {
         kind: 'image',
-        src: '/image/projects/recyclops.webp',
-        alt: 'Recyclops Android app screens',
-        caption: 'Recyclops on Android.',
+        src: '/image/projects/echo-chat.webp',
+        alt: 'Echo chat view with a streamed answer',
+        caption: 'The chat view, with an answer streaming in.',
       },
-      { kind: 'h', text: 'How I built it' },
+      { kind: 'h', text: 'How it is built' },
       {
         kind: 'p',
-        text: 'We built it as a native Android app in Kotlin, with Firebase as the backend, and I connected the waste classification model to the app. Recycling points are often in places with a weak signal, so the app works offline: each action is saved on the device first and syncs to Firebase once the connection is back. Nothing a user does gets lost because of a bad connection.',
+        text: 'Echo is three services in one repo. The web app is Next.js; the browser never calls the backend directly, because every request goes through route handlers that keep the JWT in an httpOnly cookie. The backend is Go with Fiber and owns auth, sessions, per-user settings with provider keys encrypted at rest, versioned system prompts and a small memory API. The agent service is Bun with Hono and runs one mission per chat turn, calling back into the backend for memory and prompts with a short-lived service JWT.',
       },
-      { kind: 'h', text: 'How it went' },
+      {
+        kind: 'image',
+        src: '/image/projects/echo-architecture.webp',
+        alt: 'Architecture: browser to web to backend to agent, with Postgres, Redis and LLM providers',
+        caption: 'Browser, web, backend and agent, with Postgres, Redis and the model providers.',
+      },
+      { kind: 'h', text: 'The harness' },
       {
         kind: 'p',
-        text: 'The app covers the full loop, from sorting an item to dropping it off and getting points for it, and it keeps working where the signal drops. The source code is public on GitHub.',
+        text: 'An agent decides its own next step, so it can also decide to do something expensive forever. Every mission runs inside a harness that watches the loop: it stops repeated tool calls, enforces cost and step budgets, compacts the context when it grows, and holds protected tools until the user approves them. Built-in tools are web search, a todo list and delegation to a sub-agent, and MCP tools can be plugged in.',
+      },
+      { kind: 'h', text: 'Where it is now' },
+      {
+        kind: 'p',
+        text: 'Postgres is the only hard dependency; Redis is used for locks and caching and can be turned off. I wrote up how the agent service scales, including the approval flow across replicas, in a separate blog post. The source is on GitHub.',
+      },
+    ],
+  },
+  {
+    slug: 'filmyuk',
+    title: 'Filmyuk',
+    summary:
+      'A self-hosted, YouTube-style video platform I built: uploads are transcoded from 144p up to 4K by a Kafka-driven FFmpeg worker and streamed back, with live transcode progress in the creator studio.',
+    kind: 'side',
+    projectSlugs: ['filmyuk'],
+    image: '/image/projects/filmyuk-hero.webp',
+    color: CASE_STUDIES_META['filmyuk'].color,
+    links: [
+      { label: 'Source on GitHub', href: 'https://github.com/DaffaAdityaDev/streaming_video' },
+      {
+        label: 'Blog: designing a distributed video streaming system',
+        href: '/blog/post/designing-a-distributed-video-streaming-system',
+      },
+    ],
+    headlineMetric: '144p to 4K',
+    context: {
+      company: 'Personal project',
+      companyType: 'Video streaming platform',
+      role: 'Solo developer',
+      period: '2023 - now',
+      stack: ['Go', 'Fiber', 'Kafka', 'FFmpeg', 'PostgreSQL', 'Next.js'],
+    },
+    problem: [
+      'Video is the hard case for a web app: uploads are large, transcoding is slow and CPU-heavy, and playback has to start fast at the right quality.',
+      'Transcoding cannot block the upload request, but creators still want to see how their video is doing.',
+    ],
+    responsibilities: [
+      'Build the Go API and the transcoding worker, and the Kafka contract between them.',
+      'Design the storage and streaming path, from upload to range-request playback.',
+      'Build the Next.js frontend: feed, watch page, channel pages and the creator studio.',
+      'Rewrite the first version, built on Express and TypeScript, in Go.',
+    ],
+    decisions: [
+      {
+        title: 'Transcode in a separate worker behind Kafka',
+        problem: 'Transcoding a video can take minutes and would tie up the API.',
+        choice: 'The API stores the raw upload and publishes a job to Kafka; a video-processor worker transcodes it and publishes progress back.',
+        why: 'Uploads return straight away, and the worker can be scaled on its own.',
+      },
+      {
+        title: 'Degrade instead of failing',
+        choice: 'If S3 or Kafka is not configured, or a publish fails, the API transcodes in-process with the same FFmpeg code, with a cap on concurrent jobs.',
+        why: 'The platform still works on a single machine and keeps working when a dependency is down.',
+      },
+      {
+        title: 'Only encode what the source can fill',
+        choice: 'The worker transcodes every rendition up to the source resolution, from 144p to 4K, with H.264 and fast-start enabled, and GPU encoding as an option.',
+        why: 'No upscaled renditions wasting storage, and playback can start before the whole file loads.',
+      },
+    ],
+    shipped: [
+      { title: 'Upload and transcoding pipeline', detail: 'Raw uploads go to S3-compatible storage; a Kafka job drives the FFmpeg worker, with retries and exponential backoff.' },
+      { title: 'Quality selection on playback', detail: 'A quality selector on the watch page, with HTTP range requests and presigned S3 URLs.' },
+      { title: 'Live transcode progress', detail: 'Progress events reach only the video owner\'s WebSocket connections in the studio.' },
+      { title: 'Feed and search', detail: 'Latest and popular sorting, pagination, and trigram search indexes on Postgres.' },
+      { title: 'Channels and comments', detail: 'Public channel pages, profile editing, custom thumbnails and comments.' },
+      { title: 'Token auth with rotation', detail: 'Short-lived access tokens, rotated refresh tokens and per-IP rate limits on login.' },
+    ],
+    story: [
+      { kind: 'h', text: 'The idea' },
+      {
+        kind: 'p',
+        text: 'Filmyuk is a YouTube-style video platform I build and run myself. Creators upload a video, it is transcoded into every quality the source can fill, from 144p up to 4K, and viewers watch it with a quality selector. I started it in 2023 to learn what a video platform has to do behind the play button.',
+      },
+      {
+        kind: 'image',
+        src: '/image/projects/filmyuk-hero.webp',
+        alt: 'Filmyuk home feed on desktop and mobile',
+        caption: 'The home feed on desktop and mobile.',
+      },
+      { kind: 'h', text: 'How it works' },
+      {
+        kind: 'p',
+        text: 'The Go API stores the raw upload in S3-compatible storage and publishes a job to Kafka. A separate video-processor worker picks it up, makes a thumbnail, transcodes each rendition with FFmpeg, uploads them and updates the video row. It publishes progress as it goes, and the API forwards each event only to the WebSocket connections of the video\'s owner, so the studio shows progress live.',
+      },
+      {
+        kind: 'image',
+        src: '/image/projects/filmyuk-studio.webp',
+        alt: 'Filmyuk studio with live transcode progress',
+        caption: 'The studio, with transcode progress updating live.',
+      },
+      {
+        kind: 'p',
+        text: 'Playback uses HTTP range requests. The stream looks for the requested quality on local disk first, then in S3 through a presigned URL, and falls back to the default quality if that rendition is not there. If Kafka or S3 is not set up, the API transcodes in-process with the same FFmpeg code, so the whole platform also runs on one machine.',
+      },
+      {
+        kind: 'image',
+        src: '/image/projects/filmyuk-watch.webp',
+        alt: 'Filmyuk watch page with the quality selector',
+        caption: 'The watch page.',
+      },
+      { kind: 'h', text: 'The rewrite' },
+      {
+        kind: 'p',
+        text: 'The first version was Express and TypeScript, with a Bull queue and Socket.IO. I rewrote the backend in Go, as a workspace with an API service, a worker and shared packages, and moved the queue to Kafka. What is still missing is on the list: a dead-letter topic for jobs that keep failing, CI, and end-to-end tests.',
       },
     ],
   },
