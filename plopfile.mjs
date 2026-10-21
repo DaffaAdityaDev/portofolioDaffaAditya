@@ -135,7 +135,7 @@ export default function plopfile(plop) {
         ].join('$2'),
       },
       () =>
-        'Next: add banner.webp + banner-640.webp, hero.webp + hero-640.webp (1280px and 640px wide) and og.jpg (1200x630) to public/image/blogs/<slug>/, then run `bun run blog:avif`.',
+        'Next: add banner.webp + hero.webp (1280x720) and og.jpg (1200x630) to public/image/blogs/<slug>/, then run `bun run blog:avif` for the AVIF copies.',
     ],
   });
 }
